@@ -1,7 +1,5 @@
 apply plugin: 'com.android.library'
-
 apply plugin: 'kotlin-android'
-
 apply plugin: 'kotlin-android-extensions'
 
 
@@ -29,6 +27,13 @@ dependencies {
     implementation "com.android.support:appcompat-v7:$supportLibVersion"
 
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
+
+    api "com.google.code.gson:gson:2.8.2"
+
+    implementation('com.github.markusressel:TypedPreferences:v2.1.0') {
+        exclude module: 'app'
+        transitive = true
+    }
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
