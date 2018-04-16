@@ -1,17 +1,17 @@
 package de.markusressel.kutepreferences.library.preference
 
-import de.markusressel.kutepreferences.library.KutePreference
 import de.markusressel.kutepreferences.library.persistence.KutePreferenceDataProvider
 
 /**
- * Base class for KutePreference implementations
+ * Base class for KutePreferenceListItem implementations
  */
 abstract class KutePreferenceBase<DataType : Any>(
         override var currentValue: DataType? = null,
         /**
          * Data provider for accessing and storing the preference value state
          */
-        private val dataProvider: KutePreferenceDataProvider) : KutePreference<DataType> {
+        private val dataProvider: KutePreferenceDataProvider)
+    : KutePreferenceItem<DataType> {
 
     override fun getPersistedValue(): DataType {
         return dataProvider.getValue(this)

@@ -1,7 +1,7 @@
 package de.markusressel.kutepreferences.library.persistence
 
 import android.content.Context
-import de.markusressel.kutepreferences.library.KutePreference
+import de.markusressel.kutepreferences.library.preference.KutePreferenceItem
 import de.markusressel.typedpreferences.PreferenceItem
 import de.markusressel.typedpreferences.PreferencesHandlerBase
 
@@ -12,7 +12,7 @@ constructor(context: Context) : PreferencesHandlerBase(context) {
     override var sharedPreferencesName: String? = null
         get() = "kute_preferences"
 
-    fun <PreferenceType : Any> getPreferenceItem(kutePreference: KutePreference<PreferenceType>): PreferenceItem<PreferenceType> {
+    fun <PreferenceType : Any> getPreferenceItem(kutePreference: KutePreferenceItem<PreferenceType>): PreferenceItem<PreferenceType> {
         val key = context.getString(kutePreference.key)
 
         return currentPreferenceItems.getOrPut(key) {

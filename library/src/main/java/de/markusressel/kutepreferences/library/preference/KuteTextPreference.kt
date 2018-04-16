@@ -13,22 +13,25 @@ class KuteTextPreference(override val key: Int,
                          val maxLength: Int? = null,
                          val regex: String? = null,
                          override val defaultValue: String,
-                         dataProvider: KutePreferenceDataProvider) : KutePreferenceBase<String>(dataProvider = dataProvider), KutePreferenceView {
+                         dataProvider: KutePreferenceDataProvider)
+    : KutePreferenceBase<String>(dataProvider = dataProvider),
+        KutePreferenceView,
+        KutePreferenceOnClick<String> {
 
     override fun inflateListLayout(layoutInflater: LayoutInflater): ViewGroup {
-        val layout = layoutInflater.inflate(R.layout.list_item_kute_preference_text, null, false) as ViewGroup
+        val layout = layoutInflater.inflate(R.layout.kute_preference__list_item__text, null, false) as ViewGroup
 
-        val nameTextView: TextView = layout.findViewById(R.id.name)
+        val nameTextView: TextView = layout.findViewById(R.id.kute_preferences__preference__name)
         nameTextView.text = name
 
-        val descriptionTextView: TextView = layout.findViewById(R.id.description)
+        val descriptionTextView: TextView = layout.findViewById(R.id.kute_preferences__preference__description)
         descriptionTextView.text = getDescription(getPersistedValue())
 
         return layout
     }
 
-    override fun getChildren(): List<KutePreferenceView> {
-        return emptyList()
+    override fun onClick(kutePreference: KutePreferenceItem<String>) {
+
     }
 
 }

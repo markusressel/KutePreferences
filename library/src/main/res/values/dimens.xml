@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <dimen name="list_padding_horizontal">8dp</dimen>
-    <dimen name="list_padding_vertical">4dp</dimen>
+    <dimen name="kute_preferences__list_padding__horizontal">8dp</dimen>
+    <dimen name="kute_preferences__list_padding__vertical">4dp</dimen>
+
+    <dimen name="kute_preferences__category__text_size__title">24sp</dimen>
+    <dimen name="kute_preferences__category__text_size__description">12sp</dimen>
+
+    <dimen name="kute_preferences__divider__text_size__name">16sp</dimen>
+
+    <dimen name="kute_preferences__preference__text_size__title">20sp</dimen>
+    <dimen name="kute_preferences__preference__text_size__description">12sp</dimen>
 
 </resources>

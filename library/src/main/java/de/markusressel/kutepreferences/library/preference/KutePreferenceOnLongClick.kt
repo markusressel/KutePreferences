@@ -1,12 +1,12 @@
-package de.markusressel.kutepreferences.library
+package de.markusressel.kutepreferences.library.preference
 
 /**
  * Interface for Preferences
  */
-interface KutePreference<DataType : Any> {
+interface KutePreferenceOnLongClick<DataType : Any> {
 
     /**
-     * A unique identifier for this KutePreference (used for persistence)
+     * A unique identifier for this KutePreferenceListItem (used for persistence)
      */
     val key: Int
 
@@ -40,18 +40,18 @@ interface KutePreference<DataType : Any> {
     }
 
     /**
-     * Restore the current value of this KutePreference to it's previously persisted value.
+     * Restore the current value of this KutePreferenceListItem to it's previously persisted value.
      * If there is no persisted value the default value will be used instead.
      */
     fun restore()
 
     /**
-     * Save the current value of this KutePreference into persistence
+     * Save the current value of this KutePreferenceListItem into persistence
      */
     fun save()
 
     /**
-     * Reset the current value (and persisted) value of this KutePreference to the default value
+     * Reset the current value (and persisted) value of this KutePreferenceListItem to the default value
      */
     fun reset()
 

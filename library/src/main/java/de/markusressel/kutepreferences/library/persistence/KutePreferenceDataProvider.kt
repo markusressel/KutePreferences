@@ -1,6 +1,6 @@
 package de.markusressel.kutepreferences.library.persistence
 
-import de.markusressel.kutepreferences.library.KutePreference
+import de.markusressel.kutepreferences.library.preference.KutePreferenceItem
 
 /**
  * Data provider responsible for storing and retrieving
@@ -15,11 +15,11 @@ interface KutePreferenceDataProvider {
      *
      * @param the new value to store
      */
-    fun <DataType : Any> storeValue(kutePreference: KutePreference<DataType>, newValue: DataType)
+    fun <DataType : Any> storeValue(kutePreference: KutePreferenceItem<DataType>, newValue: DataType)
 
     /**
      * @return the currently persisted value
      */
-    fun <DataType : Any> getValue(kutePreference: KutePreference<DataType>): DataType
+    fun <DataType : Any> getValue(kutePreference: KutePreferenceItem<DataType>): DataType
 
 }

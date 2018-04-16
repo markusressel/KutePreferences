@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="KutePreference"></style>
+
+    <style name="KutePreference.ListItem">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingTop">@dimen/kute_preferences__list_padding__vertical</item>
+        <item name="android:paddingBottom">@dimen/kute_preferences__list_padding__vertical</item>
+        <item name="android:paddingStart">@dimen/kute_preferences__list_padding__horizontal</item>
+        <item name="android:paddingLeft">@dimen/kute_preferences__list_padding__horizontal</item>
+        <item name="android:paddingRight">@dimen/kute_preferences__list_padding__horizontal</item>
+        <item name="android:paddingEnd">@dimen/kute_preferences__list_padding__horizontal</item>
+    </style>
+
+    <style name="KutePreference.ListItem.Category" />
+
+    <style name="KutePreference.ListItem.Category.Title">
+        <item name="android:textSize">@dimen/kute_preferences__category__text_size__title</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">?attr/colorAccent</item>
+    </style>
+
+    <style name="KutePreference.ListItem.Category.Description">
+        <item name="android:textSize">@dimen/kute_preferences__category__text_size__description
+        </item>
+    </style>
+
+    <style name="KutePreference.ListItem.Divider"></style>
+
+    <style name="KutePreference.ListItem.Divider.Title">
+        <item name="android:textSize">@dimen/kute_preferences__divider__text_size__name
+        </item>
+    </style>
+
+    <style name="KutePreference.ListItem.Divider.Line">
+        <item name="android:layout_height">1dp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:background">?attr/colorAccent</item>
+    </style>
+
+    <style name="KutePreference.ListItem.Preference">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="KutePreference.ListItem.Preference.Name">
+        <item name="android:textSize">@dimen/kute_preferences__preference__text_size__title</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="KutePreference.ListItem.Preference.Description">
+        <item name="android:textSize">@dimen/kute_preferences__preference__text_size__description
+        </item>
+    </style>
+
+</resources>

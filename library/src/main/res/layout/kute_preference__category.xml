@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/KutePreference.ListItem"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/kute_preference_category__name"
+        style="@style/KutePreference.ListItem.Category.Title"
+        android:text="Category" />
+
+    <TextView
+        android:id="@+id/kute_preference_category__description"
+        style="@style/KutePreference.ListItem.Category.Description"
+        android:text="This is a short description of the category contents" />
+
+</LinearLayout>

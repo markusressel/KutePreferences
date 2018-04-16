@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/KutePreference.ListItem"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/kute_preference_divider__name"
+        style="@style/KutePreference.ListItem.Divider.Title"
+        android:text="Divider" />
+
+    <View style="@style/KutePreference.ListItem.Divider.Line" />
+
+</LinearLayout>
