@@ -14,7 +14,8 @@ class KuteTextPreference(override val key: Int,
                          val maxLength: Int? = null,
                          val regex: String? = null,
                          override val defaultValue: String,
-                         override val dataProvider: KutePreferenceDataProvider)
+                         override val dataProvider: KutePreferenceDataProvider,
+                         override val onPreferenceChangedListener: ((oldValue: String, newValue: String) -> Unit)? = null)
     : KutePreferenceBase<String>(),
         KutePreferenceView,
         KutePreferenceOnClick<String> {

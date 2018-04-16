@@ -11,7 +11,8 @@ import de.markusressel.kutepreferences.library.view.KutePreferenceView
 class KuteTogglePreference(override val key: Int,
                            override val name: String,
                            override val defaultValue: Boolean,
-                           override val dataProvider: KutePreferenceDataProvider)
+                           override val dataProvider: KutePreferenceDataProvider,
+                           override val onPreferenceChangedListener: ((oldValue: Boolean, newValue: Boolean) -> Unit)? = null)
     : KutePreferenceBase<Boolean>(),
         KutePreferenceView {
 

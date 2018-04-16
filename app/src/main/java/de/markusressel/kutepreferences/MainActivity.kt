@@ -1,7 +1,9 @@
 package de.markusressel.kutepreferences
 
+import android.content.Context
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.widget.Toast
 import de.markusressel.kutepreferences.library.KutePreferenceLayoutGenerator
 import de.markusressel.kutepreferences.library.KutePreferenceListItem
 import de.markusressel.kutepreferences.library.persistence.DefaultKutePreferenceDataProvider
@@ -30,7 +32,14 @@ class MainActivity : AppCompatActivity() {
                 key = R.string.key_demo_toggle_pref,
                 dataProvider = dataProvider,
                 name = "Sample Toggle Pref",
-                defaultValue = false)
+                defaultValue = false,
+                onPreferenceChangedListener = { old, new ->
+                    Toast.makeText(
+                            this@MainActivity as Context,
+                            "Old: $old New: $new",
+                            Toast.LENGTH_SHORT)
+                            .show()
+                })
 
         val pageItems: Array<KutePreferenceListItem> = arrayOf(
                 SimpleKutePreferenceCategory(

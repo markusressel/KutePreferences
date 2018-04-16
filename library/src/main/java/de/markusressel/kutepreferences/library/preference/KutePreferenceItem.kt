@@ -1,5 +1,7 @@
 package de.markusressel.kutepreferences.library.preference
 
+import android.support.annotation.CallSuper
+import android.support.annotation.CheckResult
 import de.markusressel.kutepreferences.library.KutePreferenceListItem
 import de.markusressel.kutepreferences.library.persistence.KutePreferenceDataProvider
 
@@ -22,14 +24,13 @@ interface KutePreferenceItem<DataType : Any> : KutePreferenceListItem {
      * The description of this KutePreference according to it's persisted value
      */
     val description: String
-        get() {
-            return constructDescription(persistedValue)
-        }
+        get() = constructDescription(persistedValue)
 
     /**
      * @param currentValue the current value
      * @return the description for this preference according to the current value
      */
+    @CheckResult
     fun constructDescription(currentValue: DataType): String {
         return "Value: '$currentValue'"
     }
@@ -44,7 +45,13 @@ interface KutePreferenceItem<DataType : Any> : KutePreferenceListItem {
      */
     var persistedValue: DataType
         get() = dataProvider.getValue(this)
-        set(value) = dataProvider.storeValue(this, value)
+        set(newValue) {
+            val oldValue = persistedValue
+            if (oldValue != newValue) {
+                dataProvider.storeValue(this, newValue)
+                onPreferenceChangedListener?.invoke(oldValue, newValue)
+            }
+        }
 
     /**
      * Persistence for this PreferenceItem
@@ -54,8 +61,14 @@ interface KutePreferenceItem<DataType : Any> : KutePreferenceListItem {
     /**
      * Reset the current value (and persisted) value of this KutePreferenceListItem to the default value
      */
+    @CallSuper
     fun reset() {
         persistedValue = defaultValue
     }
+
+    /**
+     * An optional listener for value changes
+     */
+    val onPreferenceChangedListener: ((oldValue: DataType, newValue: DataType) -> Unit)?
 
 }
