@@ -1,6 +1,7 @@
 package de.markusressel.kutepreferences.library
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import de.markusressel.kutepreferences.library.preference.KutePreferenceItem
@@ -23,32 +24,43 @@ class KutePreferenceLayoutGenerator(context: Context) {
     /**
      * Generates a ViewGroup for the given preferences
      */
-    fun generatePage(vararg kutePreference: de.markusressel.kutepreferences.library.KutePreferenceListItem): ViewGroup {
+    fun generatePage(vararg kutePreference: KutePreferenceListItem): ViewGroup {
         // find the layout where list items should be inserted
         val listItemLayout: ViewGroup = rootLayout.findViewById(R.id.kute_preferences__list_item_root)
 
+        val keySet: MutableSet<Int> = mutableSetOf()
         kutePreference.forEach {
             // recurses through child items
-            inflateAndAppend(it, listItemLayout)
+            inflateAndAppend(it, listItemLayout, keySet)
         }
 
         return rootLayout
     }
 
-    private fun inflateAndAppend(it: de.markusressel.kutepreferences.library.KutePreferenceListItem, layoutToAppendTo: ViewGroup) {
+    private fun inflateAndAppend(it: KutePreferenceListItem, layoutToAppendTo: ViewGroup,
+                                 keySet: MutableSet<Int>) {
         when (it) {
             is KutePreferenceCategory -> {
                 inflateAndAppend(it, layoutToAppendTo)
                 it.getChildren().forEach {
-                    inflateAndAppend(it, layoutToAppendTo)
+                    inflateAndAppend(it, layoutToAppendTo, keySet)
                 }
             }
             is KutePreferenceDivider -> {
                 inflateAndAppend(it, layoutToAppendTo)
             }
             is KutePreferenceItem<*> -> {
+                checkKeyDuplication(it.key, keySet)
                 inflateAndAppend(it, layoutToAppendTo)
             }
+        }
+    }
+
+    private fun checkKeyDuplication(key: Int, keySet: MutableSet<Int>) {
+        if (keySet.contains(key)) {
+            Log.w("KutePreferences", "Duplicate key '$key' found! Did you accidentally add a KutePreference twice or reused an existing key?")
+        } else {
+            keySet.add(key)
         }
     }
 
