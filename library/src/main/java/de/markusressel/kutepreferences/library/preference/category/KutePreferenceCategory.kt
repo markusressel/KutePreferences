@@ -1,11 +1,12 @@
 package de.markusressel.kutepreferences.library.preference.category
 
 import de.markusressel.kutepreferences.library.KutePreferenceListItem
+import de.markusressel.kutepreferences.library.preference.KutePreferenceOnClick
 
 /**
  * Interface for a KutePreference category that holds a set preferences
  */
-interface KutePreferenceCategory : KutePreferenceListItem {
+interface KutePreferenceCategory : KutePreferenceListItem, KutePreferenceOnClick<Void> {
 
     /**
      * The name of this category

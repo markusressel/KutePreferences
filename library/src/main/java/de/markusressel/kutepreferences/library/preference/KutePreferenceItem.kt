@@ -1,6 +1,7 @@
 package de.markusressel.kutepreferences.library.preference
 
 import de.markusressel.kutepreferences.library.KutePreferenceListItem
+import de.markusressel.kutepreferences.library.persistence.KutePreferenceDataProvider
 
 /**
  * Interface for Preferences
@@ -18,43 +19,43 @@ interface KutePreferenceItem<DataType : Any> : KutePreferenceListItem {
     val name: String
 
     /**
+     * The description of this KutePreference according to it's persisted value
+     */
+    val description: String
+        get() {
+            return constructDescription(persistedValue)
+        }
+
+    /**
+     * @param currentValue the current value
+     * @return the description for this preference according to the current value
+     */
+    fun constructDescription(currentValue: DataType): String {
+        return "Value: '$currentValue'"
+    }
+
+    /**
      * The default value of this preference
      */
     val defaultValue: DataType
 
     /**
-     * The current value of this preference
-     * that might be altered from the persisted value
-     */
-    var currentValue: DataType?
-
-    /**
      * The persisted value of this preference
      */
-    fun getPersistedValue(): DataType
+    var persistedValue: DataType
+        get() = dataProvider.getValue(this)
+        set(value) = dataProvider.storeValue(this, value)
 
     /**
-     * @param value the currently persisted value
-     * @return the description for this preference according to the current value
+     * Persistence for this PreferenceItem
      */
-    fun getDescription(value: DataType): String {
-        return "$value"
-    }
-
-    /**
-     * Restore the current value of this KutePreferenceListItem to it's previously persisted value.
-     * If there is no persisted value the default value will be used instead.
-     */
-    fun restore()
-
-    /**
-     * Save the current value of this KutePreferenceListItem into persistence
-     */
-    fun save()
+    val dataProvider: KutePreferenceDataProvider
 
     /**
      * Reset the current value (and persisted) value of this KutePreferenceListItem to the default value
      */
-    fun reset()
+    fun reset() {
+        persistedValue = defaultValue
+    }
 
 }

@@ -6,6 +6,7 @@ import android.widget.TextView
 import de.markusressel.kutepreferences.library.R
 import de.markusressel.kutepreferences.library.persistence.KutePreferenceDataProvider
 import de.markusressel.kutepreferences.library.view.KutePreferenceView
+import de.markusressel.kutepreferences.library.view.KuteTextPreferenceEditDialog
 
 class KuteTextPreference(override val key: Int,
                          override val name: String,
@@ -13,8 +14,8 @@ class KuteTextPreference(override val key: Int,
                          val maxLength: Int? = null,
                          val regex: String? = null,
                          override val defaultValue: String,
-                         dataProvider: KutePreferenceDataProvider)
-    : KutePreferenceBase<String>(dataProvider = dataProvider),
+                         override val dataProvider: KutePreferenceDataProvider)
+    : KutePreferenceBase<String>(),
         KutePreferenceView,
         KutePreferenceOnClick<String> {
 
@@ -25,13 +26,15 @@ class KuteTextPreference(override val key: Int,
         nameTextView.text = name
 
         val descriptionTextView: TextView = layout.findViewById(R.id.kute_preferences__preference__description)
-        descriptionTextView.text = getDescription(getPersistedValue())
+        descriptionTextView.text = description
 
         return layout
     }
 
     override fun onClick(kutePreference: KutePreferenceItem<String>) {
+        // TODO: show edit dialog
 
+        KuteTextPreferenceEditDialog(this, persistedValue)
     }
 
 }

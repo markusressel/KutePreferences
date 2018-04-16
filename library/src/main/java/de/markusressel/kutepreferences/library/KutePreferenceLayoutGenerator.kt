@@ -43,8 +43,12 @@ class KutePreferenceLayoutGenerator(context: Context) {
                     inflateAndAppend(it, layoutToAppendTo)
                 }
             }
-            is KutePreferenceDivider -> inflateAndAppend(it, layoutToAppendTo)
-            is KutePreferenceItem<*> -> inflateAndAppend(it, layoutToAppendTo)
+            is KutePreferenceDivider -> {
+                inflateAndAppend(it, layoutToAppendTo)
+            }
+            is KutePreferenceItem<*> -> {
+                inflateAndAppend(it, layoutToAppendTo)
+            }
         }
     }
 

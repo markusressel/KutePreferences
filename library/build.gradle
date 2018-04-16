@@ -2,7 +2,6 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
-
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
@@ -30,7 +29,7 @@ dependencies {
 
     api "com.google.code.gson:gson:2.8.2"
 
-    implementation('com.github.markusressel:TypedPreferences:v2.1.0') {
+    implementation('com.github.markusressel:TypedPreferences:v2.1.1') {
         exclude module: 'app'
         transitive = true
     }

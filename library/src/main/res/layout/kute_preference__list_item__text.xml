@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/KutePreference.ListItem"
+    style="@style/KutePreferences.ListItem"
     android:orientation="horizontal">
 
     <LinearLayout
@@ -10,12 +10,12 @@
 
         <TextView
             android:id="@+id/kute_preferences__preference__name"
-            style="@style/KutePreference.ListItem.Preference.Name"
+            style="@style/KutePreferences.Preference.Name"
             android:text="Demo Text Preference" />
 
         <TextView
             android:id="@+id/kute_preferences__preference__description"
-            style="@style/KutePreference.ListItem.Preference.Description"
+            style="@style/KutePreferences.Preference.Description"
             android:text="Description of Demo Text Preference" />
 
     </LinearLayout>

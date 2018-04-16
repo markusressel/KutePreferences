@@ -11,8 +11,8 @@ import de.markusressel.kutepreferences.library.view.KutePreferenceView
 class KuteTogglePreference(override val key: Int,
                            override val name: String,
                            override val defaultValue: Boolean,
-                           dataProvider: KutePreferenceDataProvider)
-    : KutePreferenceBase<Boolean>(dataProvider = dataProvider),
+                           override val dataProvider: KutePreferenceDataProvider)
+    : KutePreferenceBase<Boolean>(),
         KutePreferenceView {
 
     override fun inflateListLayout(layoutInflater: LayoutInflater): ViewGroup {
@@ -22,13 +22,15 @@ class KuteTogglePreference(override val key: Int,
         nameTextView.text = name
 
         val descriptionTextView: TextView = layout.findViewById(R.id.kute_preferences__preference__description)
-        descriptionTextView.text = getDescription(getPersistedValue())
+        descriptionTextView.text = description
 
         val switchView: Switch = layout.findViewById(R.id.kute_preferences__preference__toggle__switch)
-        switchView.isChecked = getPersistedValue()
+        switchView.isChecked = persistedValue
         switchView.setOnCheckedChangeListener { _, newValue ->
-            currentValue = newValue
-            save()
+            persistedValue = newValue
+
+            // update description
+            descriptionTextView.text = description
         }
 
         return layout
