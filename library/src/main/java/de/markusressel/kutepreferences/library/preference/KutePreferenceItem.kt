@@ -1,5 +1,6 @@
 package de.markusressel.kutepreferences.library.preference
 
+import android.content.Context
 import android.support.annotation.CallSuper
 import android.support.annotation.CheckResult
 import de.markusressel.kutepreferences.library.KutePreferenceListItem
@@ -8,7 +9,7 @@ import de.markusressel.kutepreferences.library.persistence.KutePreferenceDataPro
 /**
  * Interface for Preferences
  */
-interface KutePreferenceItem<DataType : Any> : KutePreferenceListItem {
+interface KutePreferenceItem<DataType : Any> : KutePreferenceListItem, KutePreferenceLongClickListener {
 
     /**
      * A unique identifier for this KutePreference (used for persistence)
@@ -50,6 +51,7 @@ interface KutePreferenceItem<DataType : Any> : KutePreferenceListItem {
             if (oldValue != newValue) {
                 dataProvider.storeValue(this, newValue)
                 onPreferenceChangedListener?.invoke(oldValue, newValue)
+                updateDescription()
             }
         }
 
@@ -70,5 +72,15 @@ interface KutePreferenceItem<DataType : Any> : KutePreferenceListItem {
      * An optional listener for value changes
      */
     val onPreferenceChangedListener: ((oldValue: DataType, newValue: DataType) -> Unit)?
+
+    override fun onLongClick(context: Context) {
+        reset()
+    }
+
+    /**
+     * Called when the value of this preference has changed
+     * and the description needs to be updated.
+     */
+    fun updateDescription()
 
 }

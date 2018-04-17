@@ -1,13 +1,15 @@
 package de.markusressel.kutepreferences.library.preference
 
+import android.content.Context
+
 /**
  * Interface for Preferences
  */
-interface KutePreferenceOnClick<DataType : Any> {
+interface KutePreferenceClickListener {
 
     /**
      * Called when a KutePreferenceListItem is clicked
      */
-    fun onClick(kutePreference: KutePreferenceItem<DataType>)
+    fun onClick(context: Context)
 
 }

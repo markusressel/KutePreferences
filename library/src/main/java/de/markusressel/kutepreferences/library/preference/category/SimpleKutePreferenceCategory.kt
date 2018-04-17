@@ -1,12 +1,12 @@
 package de.markusressel.kutepreferences.library.preference.category
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import de.markusressel.kutepreferences.library.KutePreferenceListItem
 import de.markusressel.kutepreferences.library.R
-import de.markusressel.kutepreferences.library.preference.KutePreferenceItem
 
 /**
  * The default implementation of a KutePreferenceCategory
@@ -25,10 +25,6 @@ class SimpleKutePreferenceCategory(
         val descriptionView: TextView = layout.findViewById(R.id.kute_preference_category__description)
         descriptionView.text = description
 
-        layout.setOnClickListener {
-            Toast.makeText(layoutInflater.context, "$name clicked!", Toast.LENGTH_SHORT).show()
-        }
-
         return layout
     }
 
@@ -37,8 +33,8 @@ class SimpleKutePreferenceCategory(
     }
 
 
-    override fun onClick(kutePreference: KutePreferenceItem<Void>) {
-
+    override fun onClick(context: Context) {
+        Toast.makeText(context, "$name clicked!", Toast.LENGTH_SHORT).show()
     }
 
 }

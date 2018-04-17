@@ -1,45 +1,30 @@
-package de.markusressel.kutepreferences
+package de.markusressel.kutepreferences.view
 
-import android.content.Context
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
-import android.widget.Toast
+import de.markusressel.kutepreferences.R
+import de.markusressel.kutepreferences.dagger.DaggerSupportActivityBase
 import de.markusressel.kutepreferences.library.KutePreferenceLayoutGenerator
 import de.markusressel.kutepreferences.library.KutePreferenceListItem
 import de.markusressel.kutepreferences.library.persistence.DefaultKutePreferenceDataProvider
 import de.markusressel.kutepreferences.library.persistence.KutePreferenceDataProvider
-import de.markusressel.kutepreferences.library.preference.KuteTextPreference
-import de.markusressel.kutepreferences.library.preference.KuteTogglePreference
 import de.markusressel.kutepreferences.library.preference.category.SimpleKutePreferenceCategory
 import de.markusressel.kutepreferences.library.preference.category.SimpleKutePreferenceDivider
+import de.markusressel.kutepreferences.preferences.KutePreferencesHolder
 import kotlinx.android.synthetic.main.activity_main.*
+import javax.inject.Inject
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : DaggerSupportActivityBase() {
+
+    @Inject
+    lateinit var kutePreferencesHolder: KutePreferencesHolder
+
+    override val style: Int
+        get() = DEFAULT
+    override val layoutRes: Int
+        get() = R.layout.activity_main
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        val dataProvider = createDataProvider()
-
-        val textPreference = KuteTextPreference(
-                key = R.string.key_demo_text_pref,
-                dataProvider = dataProvider,
-                name = "Sample Text Pref",
-                defaultValue = "Sample value")
-
-        val togglePreference = KuteTogglePreference(
-                key = R.string.key_demo_toggle_pref,
-                dataProvider = dataProvider,
-                name = "Sample Toggle Pref",
-                defaultValue = false,
-                onPreferenceChangedListener = { old, new ->
-                    Toast.makeText(
-                            this@MainActivity as Context,
-                            "Old: $old New: $new",
-                            Toast.LENGTH_SHORT)
-                            .show()
-                })
 
         val pageItems: Array<KutePreferenceListItem> = arrayOf(
                 SimpleKutePreferenceCategory(
@@ -50,14 +35,14 @@ class MainActivity : AppCompatActivity() {
                                         name = "Category 2",
                                         description = "Description of this category",
                                         childPreferences = listOf(
-                                                togglePreference
+                                                kutePreferencesHolder.togglePreference
                                         )
                                 ),
-                                textPreference,
-                                textPreference,
+                                kutePreferencesHolder.textPreference,
+                                kutePreferencesHolder.textPreference,
                                 SimpleKutePreferenceDivider("Test Divider"),
-                                textPreference,
-                                textPreference
+                                kutePreferencesHolder.textPreference,
+                                kutePreferencesHolder.textPreference
                         )
                 ))
 
@@ -67,6 +52,12 @@ class MainActivity : AppCompatActivity() {
 
         contentFrame.addView(kutePreferencePage)
     }
+
+
+    private fun accessStoredValues() {
+        val textValue = kutePreferencesHolder.textPreference.persistedValue
+    }
+
 
     private fun createDataProvider(): KutePreferenceDataProvider {
         return DefaultKutePreferenceDataProvider(this)

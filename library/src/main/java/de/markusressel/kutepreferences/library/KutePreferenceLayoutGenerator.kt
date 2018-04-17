@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import de.markusressel.kutepreferences.library.preference.KutePreferenceClickListener
 import de.markusressel.kutepreferences.library.preference.KutePreferenceItem
 import de.markusressel.kutepreferences.library.preference.category.KutePreferenceCategory
 import de.markusressel.kutepreferences.library.preference.category.KutePreferenceDivider
@@ -37,21 +38,28 @@ class KutePreferenceLayoutGenerator(context: Context) {
         return rootLayout
     }
 
-    private fun inflateAndAppend(it: KutePreferenceListItem, layoutToAppendTo: ViewGroup,
+    private fun inflateAndAppend(kutePreferenceListItem: KutePreferenceListItem, layoutToAppendTo: ViewGroup,
                                  keySet: MutableSet<Int>) {
-        when (it) {
+        var layout: ViewGroup? = null
+        when (kutePreferenceListItem) {
             is KutePreferenceCategory -> {
-                inflateAndAppend(it, layoutToAppendTo)
-                it.getChildren().forEach {
+                layout = inflateAndAppend(kutePreferenceListItem, layoutToAppendTo)
+                kutePreferenceListItem.getChildren().forEach {
                     inflateAndAppend(it, layoutToAppendTo, keySet)
                 }
             }
             is KutePreferenceDivider -> {
-                inflateAndAppend(it, layoutToAppendTo)
+                layout = inflateAndAppend(kutePreferenceListItem, layoutToAppendTo)
             }
             is KutePreferenceItem<*> -> {
-                checkKeyDuplication(it.key, keySet)
-                inflateAndAppend(it, layoutToAppendTo)
+                checkKeyDuplication(kutePreferenceListItem.key, keySet)
+                layout = inflateAndAppend(kutePreferenceListItem, layoutToAppendTo)
+            }
+        }
+
+        if (kutePreferenceListItem is KutePreferenceClickListener) {
+            layout?.setOnClickListener {
+                kutePreferenceListItem.onClick(layoutInflater.context)
             }
         }
     }
@@ -64,19 +72,22 @@ class KutePreferenceLayoutGenerator(context: Context) {
         }
     }
 
-    private fun inflateAndAppend(it: KutePreferenceCategory, layoutToAppendTo: ViewGroup) {
+    private fun inflateAndAppend(it: KutePreferenceCategory, layoutToAppendTo: ViewGroup): ViewGroup {
         val layout = it.inflateListLayout(layoutInflater)
         append(layout, layoutToAppendTo)
+        return layout
     }
 
-    private fun inflateAndAppend(it: KutePreferenceDivider, layoutToAppendTo: ViewGroup) {
+    private fun inflateAndAppend(it: KutePreferenceDivider, layoutToAppendTo: ViewGroup): ViewGroup {
         val layout = it.inflateListLayout(layoutInflater)
         append(layout, layoutToAppendTo)
+        return layout
     }
 
-    private fun inflateAndAppend(it: KutePreferenceItem<*>, layoutToAppendTo: ViewGroup) {
+    private fun inflateAndAppend(it: KutePreferenceItem<*>, layoutToAppendTo: ViewGroup): ViewGroup {
         val layout = it.inflateListLayout(layoutInflater)
         append(layout, layoutToAppendTo)
+        return layout
     }
 
     private fun append(viewToAppend: ViewGroup, layoutToAppendTo: ViewGroup) {

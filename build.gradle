@@ -16,6 +16,9 @@ buildscript {
         // DEPENDENCIES
         supportLibVersion = "27.1.1"
         constraintLayoutVersion = "1.1.0"
+
+        javaxAnnotationVersion = "10.0-b28"
+        dagger2Version = "2.11"
     }
 
     repositories {

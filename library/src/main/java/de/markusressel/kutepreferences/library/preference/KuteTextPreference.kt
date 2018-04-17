@@ -1,5 +1,6 @@
 package de.markusressel.kutepreferences.library.preference
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
@@ -18,7 +19,9 @@ class KuteTextPreference(override val key: Int,
                          override val onPreferenceChangedListener: ((oldValue: String, newValue: String) -> Unit)? = null)
     : KutePreferenceBase<String>(),
         KutePreferenceView,
-        KutePreferenceOnClick<String> {
+        KutePreferenceClickListener {
+
+    var descriptionTextView: TextView? = null
 
     override fun inflateListLayout(layoutInflater: LayoutInflater): ViewGroup {
         val layout = layoutInflater.inflate(R.layout.kute_preference__list_item__text, null, false) as ViewGroup
@@ -26,16 +29,19 @@ class KuteTextPreference(override val key: Int,
         val nameTextView: TextView = layout.findViewById(R.id.kute_preferences__preference__name)
         nameTextView.text = name
 
-        val descriptionTextView: TextView = layout.findViewById(R.id.kute_preferences__preference__description)
-        descriptionTextView.text = description
+        descriptionTextView = layout.findViewById(R.id.kute_preferences__preference__description)
+        descriptionTextView?.text = description
 
         return layout
     }
 
-    override fun onClick(kutePreference: KutePreferenceItem<String>) {
+    override fun onClick(context: Context) {
         // TODO: show edit dialog
-
         KuteTextPreferenceEditDialog(this, persistedValue)
+    }
+
+    override fun updateDescription() {
+        descriptionTextView?.text = description
     }
 
 }

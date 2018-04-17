@@ -16,25 +16,29 @@ class KuteTogglePreference(override val key: Int,
     : KutePreferenceBase<Boolean>(),
         KutePreferenceView {
 
+    var descriptionTextView: TextView? = null
+
     override fun inflateListLayout(layoutInflater: LayoutInflater): ViewGroup {
         val layout = layoutInflater.inflate(R.layout.kute_preference__list_item__toggle, null, false) as ViewGroup
 
         val nameTextView: TextView = layout.findViewById(R.id.kute_preferences__preference__name)
         nameTextView.text = name
 
-        val descriptionTextView: TextView = layout.findViewById(R.id.kute_preferences__preference__description)
-        descriptionTextView.text = description
+        descriptionTextView = layout.findViewById(R.id.kute_preferences__preference__description)
+        descriptionTextView?.text = description
 
         val switchView: Switch = layout.findViewById(R.id.kute_preferences__preference__toggle__switch)
         switchView.isChecked = persistedValue
         switchView.setOnCheckedChangeListener { _, newValue ->
             persistedValue = newValue
-
-            // update description
-            descriptionTextView.text = description
         }
 
         return layout
+    }
+
+    override fun updateDescription() {
+        // update description
+        descriptionTextView?.text = description
     }
 
 }
