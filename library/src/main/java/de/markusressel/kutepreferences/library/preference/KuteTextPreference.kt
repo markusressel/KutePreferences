@@ -40,7 +40,9 @@ class KuteTextPreference(override val key: Int,
         KuteTextPreferenceEditDialog(this, persistedValue)
     }
 
-    override fun updateDescription() {
+    override fun onPreferenceChanged(oldValue: String, newValue: String) {
+        super.onPreferenceChanged(oldValue, newValue)
+
         descriptionTextView?.text = description
     }
 

@@ -15,7 +15,7 @@ class KutePreferencesHolder @Inject constructor() {
     @Inject
     lateinit var context: Context
 
-    val dataProvider by lazy {
+    private val dataProvider by lazy {
         DefaultKutePreferenceDataProvider(context)
     }
 

@@ -50,8 +50,7 @@ interface KutePreferenceItem<DataType : Any> : KutePreferenceListItem, KutePrefe
             val oldValue = persistedValue
             if (oldValue != newValue) {
                 dataProvider.storeValue(this, newValue)
-                onPreferenceChangedListener?.invoke(oldValue, newValue)
-                updateDescription()
+                onPreferenceChanged(oldValue, newValue)
             }
         }
 
@@ -73,14 +72,16 @@ interface KutePreferenceItem<DataType : Any> : KutePreferenceListItem, KutePrefe
      */
     val onPreferenceChangedListener: ((oldValue: DataType, newValue: DataType) -> Unit)?
 
+    /**
+     * Called when the persisted value of this KutePreference changes it's value
+     */
+    @CallSuper
+    fun onPreferenceChanged(oldValue: DataType, newValue: DataType) {
+        onPreferenceChangedListener?.invoke(oldValue, newValue)
+    }
+
     override fun onLongClick(context: Context) {
         reset()
     }
-
-    /**
-     * Called when the value of this preference has changed
-     * and the description needs to be updated.
-     */
-    fun updateDescription()
 
 }
