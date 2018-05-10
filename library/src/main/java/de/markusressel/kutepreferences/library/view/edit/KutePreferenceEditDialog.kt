@@ -1,5 +1,6 @@
-package de.markusressel.kutepreferences.library.view
+package de.markusressel.kutepreferences.library.view.edit
 
+import android.content.Context
 import de.markusressel.kutepreferences.library.preference.KutePreferenceItem
 
 interface KutePreferenceEditDialog<DataType : Any> {
@@ -10,50 +11,48 @@ interface KutePreferenceEditDialog<DataType : Any> {
     val preferenceItem: KutePreferenceItem<DataType>
 
     /**
-     * The current value of this preference
-     * that might be altered from the persisted value
-     */
-    var currentValue: DataType?
-
-    /**
      * The persisted value of this preference
      */
     var persistedValue: DataType
         get() {
-            return preferenceItem.persistedValue
+            return preferenceItem
+                    .persistedValue
         }
         set(value) {
-            preferenceItem.persistedValue = value
+            preferenceItem
+                    .persistedValue = value
         }
+
+    /**
+     * Called when the currentValue changes
+     * Update your GUI here.
+     */
+    fun onCurrentValueChanged(oldValue: DataType?, newValue: DataType?)
 
     /**
      * Restore the current value of this KutePreferenceListItem to it's previously persisted value.
      * If there is no persisted value the default value will be used instead.
      */
-    fun restore() {
-        currentValue = persistedValue
-    }
+    fun restore()
 
     /**
      * Save the current value of this KutePreferenceListItem into persistence
      */
-    fun save() {
-        currentValue?.let {
-            persistedValue = it
-        }
-    }
+    fun save()
 
     /**
      * Reset the current value (and persisted) value of this KutePreferenceListItem to the default value
      */
-    fun reset() {
-        currentValue = preferenceItem.defaultValue
-        save()
-    }
+    fun reset()
+
+    /**
+     * Closes the dialog without any save actions
+     */
+    fun dismiss()
 
     /**
      * Show this dialog
      */
-    fun show()
+    fun show(context: Context)
 
 }

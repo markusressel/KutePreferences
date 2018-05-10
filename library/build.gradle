@@ -24,17 +24,44 @@ android {
 
 dependencies {
     implementation "com.android.support:appcompat-v7:$supportLibVersion"
+    implementation "com.android.support:design:$supportLibVersion"
 
-    implementation"org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
-    api "com.google.code.gson:gson:2.8.2"
+    implementation 'androidx.core:core-ktx:0.3'
 
+    implementation "com.google.code.gson:gson:2.8.2"
     implementation('com.github.markusressel:TypedPreferences:v2.1.1') {
         exclude module: 'app'
         transitive = true
     }
 
+    // Material Dialogs
+    implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
+    implementation 'com.afollestad.material-dialogs:commons:0.9.6.0'
+
+    // RxJava (RxKotlin actually)
+    implementation "io.reactivex.rxjava2:rxjava:2.1.9"
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
+    implementation "io.reactivex.rxjava2:rxkotlin:${rootProject.ext.rxKotlinVersion}"
+
+    // RxBinding
+    // RxJava binding APIs for Android UI widgets from the platform and support libraries.
+    implementation "com.jakewharton.rxbinding2:rxbinding:${rootProject.ext.rxBindingVersion}"
+    implementation "com.jakewharton.rxbinding2:rxbinding-appcompat-v7:${rootProject.ext.rxBindingVersion}"
+    implementation "com.jakewharton.rxbinding2:rxbinding-design:${rootProject.ext.rxBindingVersion}"
+
+    // RxLifecycle to prevent memory leaks
+    def rxLifecycleVersion = rootProject.ext.rxLifecycleVersion
+    implementation "com.trello.rxlifecycle2:rxlifecycle:$rxLifecycleVersion"
+    implementation "com.trello.rxlifecycle2:rxlifecycle-kotlin:$rxLifecycleVersion"
+    implementation "com.trello.rxlifecycle2:rxlifecycle-android:$rxLifecycleVersion"
+    implementation "com.trello.rxlifecycle2:rxlifecycle-android-lifecycle-kotlin:$rxLifecycleVersion"
+
+    // RxBus (event bus)
+    implementation 'com.eightbitlab:rxbus:1.0.2'
+
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.1'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 }

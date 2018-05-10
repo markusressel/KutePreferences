@@ -2,8 +2,8 @@
 
 buildscript {
     ext {
-        kotlin_version = '1.2.31'
-        gradle_plugin_version = '3.1.1'
+        kotlin_version = '1.2.41'
+        gradle_plugin_version = '3.1.2'
 
         minSdkVersion = 22
         versionName = "0.0.1"
@@ -19,6 +19,10 @@ buildscript {
 
         javaxAnnotationVersion = "10.0-b28"
         dagger2Version = "2.11"
+
+        rxKotlinVersion = "2.2.0"
+        rxBindingVersion = "2.1.1"
+        rxLifecycleVersion = "2.2.1"
     }
 
     repositories {
@@ -60,4 +64,7 @@ compileTestKotlin {
 configurations.all() {
     resolutionStrategy.force "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     resolutionStrategy.force "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+
+    resolutionStrategy.force "com.android.support:support-v4:$supportLibVersion"
+    resolutionStrategy.force "com.android.support:appcompat-v7:$supportLibVersion"
 }

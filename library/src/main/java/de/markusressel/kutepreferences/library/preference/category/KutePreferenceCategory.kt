@@ -21,6 +21,6 @@ interface KutePreferenceCategory : KutePreferenceListItem, KutePreferenceClickLi
     /**
      * Get the list of child KutePreferences of this category
      */
-    fun getChildren(): List<KutePreferenceListItem>
+    fun getChildren(): Array<KutePreferenceListItem>
 
 }

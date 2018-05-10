@@ -9,13 +9,17 @@ class DefaultKutePreferenceDataProvider(context: Context) : KutePreferenceDataPr
     private val preferenceHandler = PreferenceHandler(context)
 
     override fun <DataType : Any> storeValue(kutePreference: KutePreferenceItem<DataType>, newValue: DataType) {
-        val preferenceItem: PreferenceItem<DataType> = preferenceHandler.getPreferenceItem(kutePreference)
-        preferenceHandler.setValue(preferenceItem, newValue)
+        val preferenceItem: PreferenceItem<DataType> = preferenceHandler
+                .getPreferenceItem(kutePreference)
+        preferenceHandler
+                .setValue(preferenceItem, newValue)
     }
 
     override fun <DataType : Any> getValue(kutePreference: KutePreferenceItem<DataType>): DataType {
-        val preferenceItem: PreferenceItem<DataType> = preferenceHandler.getPreferenceItem(kutePreference)
-        return preferenceHandler.getValue(preferenceItem)
+        val preferenceItem: PreferenceItem<DataType> = preferenceHandler
+                .getPreferenceItem(kutePreference)
+        return preferenceHandler
+                .getValue(preferenceItem)
     }
 
 }

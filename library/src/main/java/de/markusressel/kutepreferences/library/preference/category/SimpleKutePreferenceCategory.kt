@@ -13,9 +13,9 @@ import de.markusressel.kutepreferences.library.R
  */
 class SimpleKutePreferenceCategory(
         override val name: String,
-        override val description: String,
-        private val childPreferences: List<KutePreferenceListItem>)
+        override val description: String, private val childPreferences: Array<KutePreferenceListItem>)
     : KutePreferenceCategory {
+
     override fun inflateListLayout(layoutInflater: LayoutInflater): ViewGroup {
         val layout = layoutInflater.inflate(R.layout.kute_preference__category, null, false) as ViewGroup
 
@@ -28,7 +28,7 @@ class SimpleKutePreferenceCategory(
         return layout
     }
 
-    override fun getChildren(): List<KutePreferenceListItem> {
+    override fun getChildren(): Array<KutePreferenceListItem> {
         return childPreferences
     }
 
