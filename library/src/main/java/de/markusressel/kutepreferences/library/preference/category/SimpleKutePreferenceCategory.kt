@@ -11,9 +11,7 @@ import de.markusressel.kutepreferences.library.R
 /**
  * The default implementation of a KutePreferenceCategory
  */
-class SimpleKutePreferenceCategory(
-        override val name: String,
-        override val description: String, private val childPreferences: Array<KutePreferenceListItem>)
+class SimpleKutePreferenceCategory(override val id: Long, override val name: String, override val description: String, private val childPreferences: List<KutePreferenceListItem>)
     : KutePreferenceCategory {
 
     override fun inflateListLayout(layoutInflater: LayoutInflater): ViewGroup {
@@ -28,7 +26,7 @@ class SimpleKutePreferenceCategory(
         return layout
     }
 
-    override fun getChildren(): Array<KutePreferenceListItem> {
+    override fun getChildren(): List<KutePreferenceListItem> {
         return childPreferences
     }
 

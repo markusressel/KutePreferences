@@ -10,7 +10,7 @@ import de.markusressel.kutepreferences.library.R
 /**
  * The default implementation of a KutePreferenceCategory
  */
-class SimpleKutePreferenceDivider(override val name: String) : KutePreferenceDivider {
+class SimpleKutePreferenceDivider(override val id: Long, override val name: String) : KutePreferenceDivider {
 
     override fun inflateListLayout(layoutInflater: LayoutInflater): ViewGroup {
         val layout = layoutInflater.inflate(R.layout.kute_preference__divider, null, false) as ViewGroup

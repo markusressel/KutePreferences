@@ -20,12 +20,30 @@ import de.markusressel.kutepreferences.library.view.event.CategoryEvent
  */
 class KutePreferencesContentFragment : Fragment() {
 
+    private val mainFragment by lazy { parentFragment as KutePreferencesMainFragment }
+
     private val rootLayout: ViewGroup by lazy {
         layoutInflater.inflate(R.layout.kute_preference__content_fragment, null, false) as ViewGroup
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val preferenceItems = arguments?.get(KEY_PREFERENCE_ITEMS) as Array<KutePreferenceListItem>
+        val preferenceItemIds = arguments
+                ?.getLongArray(KEY_PREFERENCE_IDS)
+
+        val preferenceItems: Array<KutePreferenceListItem> = if (preferenceItemIds != null) {
+            mainFragment
+                    .kutePreferencesTree
+                    .searchRecursive {
+                        preferenceItemIds
+                                .contains(it.id)
+                    }
+                    .toTypedArray()
+        } else {
+            mainFragment
+                    .kutePreferencesTree
+                    .items
+                    .toTypedArray()
+        }
 
         val generatePage = generatePage(*preferenceItems)
         return generatePage
@@ -101,14 +119,14 @@ class KutePreferencesContentFragment : Fragment() {
     }
 
     companion object {
-        private const val KEY_PREFERENCE_ITEMS = "KEY_PREFERENCE_ITEMS"
+        private const val KEY_PREFERENCE_IDS = "KEY_PREFERENCE_IDS"
 
-        fun newInstance(preferenceItems: Array<KutePreferenceListItem>): KutePreferencesContentFragment {
+        fun newInstance(preferenceIds: List<Long> = emptyList()): KutePreferencesContentFragment {
             val fragment = KutePreferencesContentFragment()
 
             val bundle = Bundle()
             bundle
-                    .putSerializable(KEY_PREFERENCE_ITEMS, preferenceItems)
+                    .putLongArray(KEY_PREFERENCE_IDS, preferenceIds.toLongArray())
             fragment
                     .arguments = bundle
 

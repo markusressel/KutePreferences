@@ -9,10 +9,8 @@ import com.eightbitlab.rxbus.Bus
 import com.eightbitlab.rxbus.registerInBus
 import com.jakewharton.rxbinding2.support.v7.widget.RxSearchView
 import com.trello.rxlifecycle2.kotlin.bindToLifecycle
-import de.markusressel.kutepreferences.library.KutePreferenceListItem
 import de.markusressel.kutepreferences.library.R
-import de.markusressel.kutepreferences.library.preference.KutePreferenceItem
-import de.markusressel.kutepreferences.library.preference.category.KutePreferenceCategory
+import de.markusressel.kutepreferences.library.preference.KutePreferencesTree
 import de.markusressel.kutepreferences.library.view.event.CategoryEvent
 import io.reactivex.rxkotlin.subscribeBy
 import kotlinx.android.synthetic.main.kute_preference__main_fragment.*
@@ -24,11 +22,13 @@ import java.util.concurrent.TimeUnit
  */
 abstract class KutePreferencesMainFragment : Fragment() {
 
+    lateinit var kutePreferencesTree: KutePreferencesTree
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super
                 .onCreate(savedInstanceState)
 
-        PREFERENCE_TREE = initPreferenceTree()
+        kutePreferencesTree = initPreferenceTree()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -46,14 +46,19 @@ abstract class KutePreferencesMainFragment : Fragment() {
                 .debounce(500, TimeUnit.MILLISECONDS)
                 .subscribeBy(onNext = {
                     if (it.isBlank()) {
-                        replaceContent(PREFERENCE_TREE)
+                        showTopLevel()
                     } else {
-                        val preferences = findPreferences(it.toString())
-                        replaceContent(preferences)
+                        val preferenceIds = kutePreferencesTree
+                                .findPreferences(it.toString())
+                                .map {
+                                    it
+                                            .id
+                                }
+                        replaceContent(preferenceIds)
                     }
                 }, onError = {})
 
-        replaceContent(PREFERENCE_TREE)
+        showTopLevel()
     }
 
     override fun onStart() {
@@ -62,14 +67,28 @@ abstract class KutePreferencesMainFragment : Fragment() {
         Bus
                 .observe<CategoryEvent>()
                 .subscribe {
-                    replaceContent(it.category.getChildren())
+                    val preferenceIds = kutePreferencesTree
+                            .getCategoryItems(it.category.id)
+                            .map {
+                                it
+                                        .id
+                            }
+
+                    replaceContent(preferenceIds)
                 }
                 .registerInBus(this)
     }
 
-    private fun replaceContent(children: Array<KutePreferenceListItem>) {
+    private fun showTopLevel() {
+        replaceContent(kutePreferencesTree.items.map {
+            it
+                    .id
+        })
+    }
+
+    private fun replaceContent(preferenceIds: List<Long>) {
         val fragment = KutePreferencesContentFragment
-                .newInstance(children)
+                .newInstance(preferenceIds)
 
         childFragmentManager
                 .beginTransaction()
@@ -89,43 +108,6 @@ abstract class KutePreferencesMainFragment : Fragment() {
     /**
      * Initialize your preferences tree here
      */
-    abstract fun initPreferenceTree(): Array<KutePreferenceListItem>
-
-    /**
-     * Find preferences containing a given text
-     */
-    private fun findPreferences(text: String): Array<KutePreferenceListItem> {
-        val result: MutableList<KutePreferenceListItem> = mutableListOf()
-
-        fun filter(items: Array<KutePreferenceListItem>) {
-            items
-                    .forEach {
-                        when (it) {
-                            is KutePreferenceItem<*> -> with(it) {
-                                if (name.contains(text, true) or description.contains(text, true)) {
-                                    result
-                                            .add(it)
-                                }
-                            }
-                            is KutePreferenceCategory -> with(it) {
-                                if (it.name.contains(text, true) or it.description.contains(text, true)) {
-                                    result
-                                            .add(it)
-                                }
-                                filter(it.getChildren())
-                            }
-                        }
-                    }
-        }
-
-        filter(PREFERENCE_TREE)
-
-        return result
-                .toTypedArray()
-    }
-
-    companion object {
-        var PREFERENCE_TREE: Array<KutePreferenceListItem> = emptyArray()
-    }
+    abstract fun initPreferenceTree(): KutePreferencesTree
 
 }
