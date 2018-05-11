@@ -99,7 +99,7 @@ abstract class KutePreferencesMainFragment : Fragment() {
     }
 
     private fun showTopLevel() {
-        replaceContent(kutePreferencesTree.items.map {
+        replaceContent(kutePreferencesTree.treeItems.map {
             it
                     .key
         })

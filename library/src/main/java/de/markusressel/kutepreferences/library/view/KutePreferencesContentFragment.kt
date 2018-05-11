@@ -42,7 +42,7 @@ class KutePreferencesContentFragment : Fragment() {
         } else {
             mainFragment
                     .kutePreferencesTree
-                    .items
+                    .treeItems
                     .toTypedArray()
         }
 
@@ -70,7 +70,8 @@ class KutePreferencesContentFragment : Fragment() {
         return rootLayout
     }
 
-    private fun inflate(kutePreferenceListItem: KutePreferenceListItem, layoutToAppendTo: ViewGroup, keySet: MutableSet<Int>) {
+    private fun inflate(kutePreferenceListItem: KutePreferenceListItem, layoutToAppendTo: ViewGroup,
+                        keySet: MutableSet<Int>) {
         val layout: ViewGroup = when (kutePreferenceListItem) {
             is KutePreferenceItem<*> -> {
                 checkKeyDuplication(kutePreferenceListItem.key, keySet)
@@ -104,7 +105,8 @@ class KutePreferencesContentFragment : Fragment() {
     private fun checkKeyDuplication(key: Int, keySet: MutableSet<Int>) {
         if (keySet.contains(key)) {
             Log
-                    .w("KutePreferences", "Duplicate key '$key' found! Did you accidentally add a KutePreference twice or reused an existing key?")
+                    .w("KutePreferences",
+                            "Duplicate key '$key' found! Did you accidentally add a KutePreference twice or reused an existing key?")
         } else {
             keySet
                     .add(key)

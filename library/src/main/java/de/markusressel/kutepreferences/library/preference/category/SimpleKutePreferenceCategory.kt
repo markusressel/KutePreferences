@@ -13,7 +13,10 @@ import de.markusressel.kutepreferences.library.R
 /**
  * The default implementation of a KutePreferenceCategory
  */
-class SimpleKutePreferenceCategory(override val key: Int, val icon: Drawable, override val name: String, override val description: String, private val childPreferences: List<KutePreferenceListItem>) : KutePreferenceCategory {
+class SimpleKutePreferenceCategory(
+        override val key: Int, val icon: Drawable, override val name: String, override val description: String,
+        override val children: List<KutePreferenceListItem>) :
+        KutePreferenceCategory {
 
     override fun inflateListLayout(layoutInflater: LayoutInflater): ViewGroup {
         val layout = layoutInflater.inflate(R.layout.kute_preference__category, null, false) as ViewGroup
@@ -35,11 +38,6 @@ class SimpleKutePreferenceCategory(override val key: Int, val icon: Drawable, ov
 
         return layout
     }
-
-    override fun getChildren(): List<KutePreferenceListItem> {
-        return childPreferences
-    }
-
 
     override fun onClick(context: Context) {
         Toast

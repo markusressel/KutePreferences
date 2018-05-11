@@ -19,8 +19,8 @@ interface KutePreferenceCategory : KutePreferenceListItem, KutePreferenceClickLi
     val description: String
 
     /**
-     * Get the list of child KutePreferences of this category
+     * A list of child items of this category
      */
-    fun getChildren(): List<KutePreferenceListItem>
+    val children: List<KutePreferenceListItem>
 
 }

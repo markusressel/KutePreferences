@@ -24,26 +24,55 @@ class PreferencesFragment : KutePreferencesMainFragment() {
     }
 
     private val textPreference by lazy {
-        KuteTextPreference(key = R.string.key_demo_text_pref, name = "Sample Text Pref", defaultValue = "Sample value", dataProvider = dataProvider)
+        KuteTextPreference(key = R.string.key_demo_text_pref,
+                name = "Sample Text Pref",
+                defaultValue = "Sample value",
+                dataProvider = dataProvider)
     }
 
     private val textPreference2 by lazy {
-        KuteTextPreference(key = R.string.key_demo_text_pref_2, name = "Sample Text Pref 2", defaultValue = "Sample value", dataProvider = dataProvider)
+        KuteTextPreference(key = R.string.key_demo_text_pref_2,
+                name = "Sample Text Pref 2",
+                defaultValue = "Sample value",
+                dataProvider = dataProvider)
     }
 
     private val togglePreference by lazy {
-        KuteTogglePreference(key = R.string.key_demo_toggle_pref, name = "Sample Toggle Pref", defaultValue = false, onPreferenceChangedListener = { old, new ->
-            Toast
-                    .makeText(context, "Old: $old New: $new", Toast.LENGTH_SHORT)
-                    .show()
-        }, dataProvider = dataProvider)
+        KuteTogglePreference(key = R.string.key_demo_toggle_pref,
+                name = "Sample Toggle Pref",
+                defaultValue = false,
+                onPreferenceChangedListener = { old, new ->
+                    Toast
+                            .makeText(context, "Old: $old New: $new", Toast.LENGTH_SHORT)
+                            .show()
+                },
+                dataProvider = dataProvider)
     }
 
     override fun initPreferenceTree(): KutePreferencesTree {
-        return KutePreferencesTree(listOf(SimpleKutePreferenceCategory(key = R.string.key_category_battery, icon = getIcon(MaterialDesignIconic.Icon.gmi_battery), name = "Battery", description = "Everything about your battery", childPreferences = listOf(SimpleKutePreferenceDivider(key = R.string.key_divider_test, name = "Test Divider"), textPreference)), SimpleKutePreferenceCategory(key = R.string.key_category_wifi, icon = getIcon(MaterialDesignIconic.Icon.gmi_wifi), name = "Network", description = "Wi-Fi, mobile, hotspot", childPreferences = listOf(togglePreference)), textPreference2))
+        return KutePreferencesTree(
+                SimpleKutePreferenceCategory(
+                        key = R.string.key_category_battery,
+                        icon = getIcon(MaterialDesignIconic.Icon.gmi_battery),
+                        name = "Battery",
+                        description = "Everything about your battery",
+                        children = listOf(
+                                SimpleKutePreferenceDivider(
+                                        key = R.string.key_divider_test,
+                                        name = "Test Divider"),
+                                textPreference)),
+                SimpleKutePreferenceCategory(key = R.string.key_category_wifi,
+                        icon = getIcon(MaterialDesignIconic.Icon.gmi_wifi),
+                        name = "Network",
+                        description = "Wi-Fi, mobile, hotspot",
+                        children = listOf(togglePreference
+                        )
+                ),
+                textPreference2)
     }
 
-    fun getIcon(icon: IIcon, @ColorInt color: Int = Color.GRAY, sizeDp: Int = 36, paddingDp: Int = 0): Drawable {
+    private fun getIcon(icon: IIcon, @ColorInt color: Int = Color.GRAY, sizeDp: Int = 36,
+                        paddingDp: Int = 0): Drawable {
         return IconicsDrawable(activity as Context, icon)
                 .sizeDp(sizeDp)
                 .paddingDp(paddingDp)

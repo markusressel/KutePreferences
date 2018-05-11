@@ -4,7 +4,9 @@ import android.support.annotation.StringRes
 import de.markusressel.kutepreferences.library.KutePreferenceListItem
 import de.markusressel.kutepreferences.library.preference.category.KutePreferenceCategory
 
-class KutePreferencesTree(val items: List<KutePreferenceListItem>) {
+class KutePreferencesTree(vararg items: KutePreferenceListItem) {
+
+    val treeItems = items.asList()
 
     /**
      * Find preferences containing a given text
@@ -27,13 +29,13 @@ class KutePreferencesTree(val items: List<KutePreferenceListItem>) {
                                     result
                                             .add(it)
                                 }
-                                filter(it.getChildren())
+                                filter(it.children)
                             }
                         }
                     }
         }
 
-        filter(items)
+        filter(treeItems)
 
         return result
     }
@@ -43,11 +45,11 @@ class KutePreferencesTree(val items: List<KutePreferenceListItem>) {
      * Returns a list of all items in a category
      */
     fun getCategoryItems(@StringRes key: Int): List<KutePreferenceListItem> {
-        val category = getCategory(key, items)
+        val category = getCategory(key, treeItems)
         category
                 ?.let {
                     return it
-                            .getChildren()
+                            .children
                 }
 
         return emptyList()
@@ -61,7 +63,7 @@ class KutePreferencesTree(val items: List<KutePreferenceListItem>) {
                             if (it.key == key) {
                                 return it
                             }
-                            getCategory(key, it.getChildren())
+                            getCategory(key, it.children)
                         }
                     }
                 }
@@ -82,7 +84,7 @@ class KutePreferencesTree(val items: List<KutePreferenceListItem>) {
                                     result
                                             .add(it)
                                 }
-                                innerFilter(it.getChildren())
+                                innerFilter(it.children)
                             }
                             else -> {
                                 if (filter(it)) {
@@ -94,7 +96,7 @@ class KutePreferencesTree(val items: List<KutePreferenceListItem>) {
                     }
         }
 
-        innerFilter(items)
+        innerFilter(treeItems)
         return result
     }
 

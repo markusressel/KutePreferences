@@ -25,5 +25,11 @@
         <pair source="c" header="h" fileNamingConvention="NONE" />
       </extensions>
     </Objective-C-extensions>
+    <codeStyleSettings language="kotlin">
+      <option name="CALL_PARAMETERS_WRAP" value="5" />
+      <option name="METHOD_PARAMETERS_WRAP" value="1" />
+      <option name="EXTENDS_LIST_WRAP" value="1" />
+      <option name="METHOD_CALL_CHAIN_WRAP" value="5" />
+    </codeStyleSettings>
   </code_scheme>
 </component>
