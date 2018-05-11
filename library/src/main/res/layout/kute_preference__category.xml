@@ -1,16 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/KutePreferences.ListItem"
-    android:orientation="vertical">
+    style="@style/KutePreferences.Category"
+    android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/kute_preference_category__name"
-        style="@style/KutePreferences.Category.Title"
-        android:text="Category" />
+    <ImageView
+        android:id="@+id/kute_preference__category__icon"
+        android:layout_width="48dp"
+        android:layout_height="48dp" />
 
-    <TextView
-        android:id="@+id/kute_preference_category__description"
-        style="@style/KutePreferences.Category.Description"
-        android:text="This is a short description of the category contents" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/kute_preference__category__name"
+            style="@style/KutePreferences.Category.Title"
+            android:text="Category" />
+
+        <TextView
+            android:id="@+id/kute_preference__category__description"
+            style="@style/KutePreferences.Category.Description"
+            android:text="This is a short description of the category contents" />
+
+    </LinearLayout>
+
 
 </LinearLayout>

@@ -23,6 +23,8 @@ buildscript {
         rxKotlinVersion = "2.2.0"
         rxBindingVersion = "2.1.1"
         rxLifecycleVersion = "2.2.1"
+
+        iconicsVersion = "3.0.3"
     }
 
     repositories {

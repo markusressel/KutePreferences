@@ -18,7 +18,7 @@
 
     <style name="KutePreferences.Category">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">@dimen/kute_preferences__preference__item_height</item>
+        <item name="android:layout_height">@dimen/kute_preferences__category__item_height</item>
     </style>
 
     <style name="KutePreferences.Category.Title">
@@ -60,6 +60,7 @@
     <style name="KutePreferences.Preference.Name">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">wrap_content</item>
+        <item name="android:textColor">?android:textColorPrimary</item>
         <item name="android:textSize">@dimen/kute_preferences__preference__text_size__title</item>
         <item name="android:textStyle">bold</item>
     </style>
@@ -67,6 +68,7 @@
     <style name="KutePreferences.Preference.Description">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">wrap_content</item>
+        <item name="android:textColor">?android:textColorSecondary</item>
         <item name="android:textSize">@dimen/kute_preferences__preference__text_size__description
         </item>
     </style>

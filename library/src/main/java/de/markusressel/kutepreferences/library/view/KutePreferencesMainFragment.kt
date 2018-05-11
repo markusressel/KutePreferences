@@ -80,6 +80,24 @@ abstract class KutePreferencesMainFragment : Fragment() {
                 .registerInBus(this)
     }
 
+    private fun showSearchResults() {
+        kute_preferences__search_result_layout
+                .visibility = View
+                .VISIBLE
+        kute_preferences__content_layout
+                .visibility = View
+                .GONE
+    }
+
+    private fun hideSearchResults() {
+        kute_preferences__search_result_layout
+                .visibility = View
+                .GONE
+        kute_preferences__content_layout
+                .visibility = View
+                .VISIBLE
+    }
+
     private fun showTopLevel() {
         replaceContent(kutePreferencesTree.items.map {
             it

@@ -46,6 +46,12 @@ dependencies {
     implementation "com.google.dagger:dagger-android:$dagger2Version"
     implementation "com.google.dagger:dagger-android-support:$dagger2Version"
 
+    //the core iconcis library (without any widgets)
+    implementation "com.mikepenz:iconics-core:${iconicsVersion}@aar"
+    //this adds all ui view widgets (IconicsButton, IconicsImageView, ...)
+    implementation "com.mikepenz:iconics-views:${iconicsVersion}@aar"
+    implementation 'com.mikepenz:material-design-iconic-typeface:+@aar'
+
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'

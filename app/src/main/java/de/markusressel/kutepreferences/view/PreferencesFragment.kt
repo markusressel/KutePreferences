@@ -1,7 +1,13 @@
 package de.markusressel.kutepreferences.view
 
 import android.content.Context
+import android.graphics.Color
+import android.graphics.drawable.Drawable
+import android.support.annotation.ColorInt
 import android.widget.Toast
+import com.mikepenz.iconics.IconicsDrawable
+import com.mikepenz.iconics.typeface.IIcon
+import com.mikepenz.material_design_iconic_typeface_library.MaterialDesignIconic
 import de.markusressel.kutepreferences.R
 import de.markusressel.kutepreferences.library.persistence.DefaultKutePreferenceDataProvider
 import de.markusressel.kutepreferences.library.preference.KutePreferencesTree
@@ -37,7 +43,14 @@ class PreferencesFragment : KutePreferencesMainFragment() {
     }
 
     override fun initPreferenceTree(): KutePreferencesTree {
-        return KutePreferencesTree(listOf(SimpleKutePreferenceCategory(id = idCounter.getAndIncrement(), name = "Category 1", description = "Description of this category", childPreferences = listOf(SimpleKutePreferenceDivider(id = idCounter.getAndIncrement(), name = "Test Divider"), textPreference)), SimpleKutePreferenceCategory(id = idCounter.getAndIncrement(), name = "Category 2", description = "Description of this category", childPreferences = listOf(togglePreference)), textPreference2))
+        return KutePreferencesTree(listOf(SimpleKutePreferenceCategory(id = idCounter.getAndIncrement(), icon = getIcon(MaterialDesignIconic.Icon.gmi_bluetooth), name = "Bluetooth", description = "Description of this category", childPreferences = listOf(SimpleKutePreferenceDivider(id = idCounter.getAndIncrement(), name = "Test Divider"), textPreference)), SimpleKutePreferenceCategory(id = idCounter.getAndIncrement(), icon = getIcon(MaterialDesignIconic.Icon.gmi_wifi), name = "WiFi", description = "Description of this category", childPreferences = listOf(togglePreference)), textPreference2))
+    }
+
+    fun getIcon(icon: IIcon, @ColorInt color: Int = Color.GRAY, sizeDp: Int = 48, paddingDp: Int = 8): Drawable {
+        return IconicsDrawable(activity as Context, icon)
+                .sizeDp(sizeDp)
+                .paddingDp(paddingDp)
+                .color(color)
     }
 
 }
