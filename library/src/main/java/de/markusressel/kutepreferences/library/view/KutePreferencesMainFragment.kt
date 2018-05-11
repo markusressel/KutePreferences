@@ -42,6 +42,7 @@ abstract class KutePreferencesMainFragment : Fragment() {
 
         RxSearchView
                 .queryTextChanges(kute_preferences__search)
+                .skipInitialValue()
                 .bindToLifecycle(kute_preferences__search)
                 .debounce(500, TimeUnit.MILLISECONDS)
                 .subscribeBy(onNext = {
@@ -109,5 +110,18 @@ abstract class KutePreferencesMainFragment : Fragment() {
      * Initialize your preferences tree here
      */
     abstract fun initPreferenceTree(): KutePreferencesTree
+
+    /**
+     * Call this from your activity to ensure back navigation behaviour is working
+     */
+    fun onBackPressed(): Boolean {
+        return if (childFragmentManager.backStackEntryCount > 0) {
+            childFragmentManager
+                    .popBackStack()
+            true
+        } else {
+            false
+        }
+    }
 
 }

@@ -56,6 +56,8 @@ class KutePreferencesContentFragment : Fragment() {
         // find the layout where list items should be inserted
         val listItemLayout: ViewGroup = rootLayout
                 .findViewById(R.id.kute_preferences__list_item_root)
+        listItemLayout
+                .removeAllViews()
 
         val keySet: MutableSet<Int> = mutableSetOf()
         kutePreference
