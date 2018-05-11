@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit
 
 /**
  * The main class for all preferences.
- * All navigation between categories, subcategories and dividers are managed in here.
+ * All navigation between categories, subcategories and dividers is managed in here.
  */
 abstract class KutePreferencesMainFragment : Fragment() {
 
@@ -33,7 +33,7 @@ abstract class KutePreferencesMainFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater
-                .inflate(R.layout.kute_preference__main_fragment, null, false)
+                .inflate(R.layout.kute_preference__main_fragment, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -44,7 +44,7 @@ abstract class KutePreferencesMainFragment : Fragment() {
                 .queryTextChanges(kute_preferences__search)
                 .skipInitialValue()
                 .bindToLifecycle(kute_preferences__search)
-                .debounce(500, TimeUnit.MILLISECONDS)
+                .debounce(800, TimeUnit.MILLISECONDS)
                 .subscribeBy(onNext = {
                     if (it.isBlank()) {
                         showTopLevel()
@@ -93,7 +93,7 @@ abstract class KutePreferencesMainFragment : Fragment() {
 
         childFragmentManager
                 .beginTransaction()
-                .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
+                .setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out)
                 .replace(R.id.kute_preferences__content_layout, fragment)
                 .addToBackStack(null)
                 .commit()
@@ -112,10 +112,12 @@ abstract class KutePreferencesMainFragment : Fragment() {
     abstract fun initPreferenceTree(): KutePreferencesTree
 
     /**
-     * Call this from your activity to ensure back navigation behaviour is working
+     * Call this from your activity's {@link AppCompatActivity.onBackPressed()} to ensure
+     * back navigation behaviour is working es expected
+     * @return true if a navigation happened, false otherwise
      */
     fun onBackPressed(): Boolean {
-        return if (childFragmentManager.backStackEntryCount > 0) {
+        return if (childFragmentManager.backStackEntryCount > 1) {
             childFragmentManager
                     .popBackStack()
             true

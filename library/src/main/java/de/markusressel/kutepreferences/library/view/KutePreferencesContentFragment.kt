@@ -22,11 +22,12 @@ class KutePreferencesContentFragment : Fragment() {
 
     private val mainFragment by lazy { parentFragment as KutePreferencesMainFragment }
 
-    private val rootLayout: ViewGroup by lazy {
-        layoutInflater.inflate(R.layout.kute_preference__content_fragment, null, false) as ViewGroup
-    }
+
+    private lateinit var rootLayout: ViewGroup
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        rootLayout = layoutInflater.inflate(R.layout.kute_preference__content_fragment, container, false) as ViewGroup
+
         val preferenceItemIds = arguments
                 ?.getLongArray(KEY_PREFERENCE_IDS)
 
@@ -125,6 +126,10 @@ class KutePreferencesContentFragment : Fragment() {
 
         fun newInstance(preferenceIds: List<Long> = emptyList()): KutePreferencesContentFragment {
             val fragment = KutePreferencesContentFragment()
+            fragment
+                    .allowReturnTransitionOverlap = true
+            fragment
+                    .allowEnterTransitionOverlap = true
 
             val bundle = Bundle()
             bundle
