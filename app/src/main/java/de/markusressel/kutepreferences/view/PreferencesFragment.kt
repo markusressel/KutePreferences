@@ -16,26 +16,23 @@ import de.markusressel.kutepreferences.library.preference.category.SimpleKutePre
 import de.markusressel.kutepreferences.library.preference.text.KuteTextPreference
 import de.markusressel.kutepreferences.library.preference.toggle.KuteTogglePreference
 import de.markusressel.kutepreferences.library.view.KutePreferencesMainFragment
-import java.util.concurrent.atomic.AtomicLong
 
 class PreferencesFragment : KutePreferencesMainFragment() {
-
-    val idCounter = AtomicLong()
 
     val dataProvider by lazy {
         DefaultKutePreferenceDataProvider(activity as Context)
     }
 
     private val textPreference by lazy {
-        KuteTextPreference(id = idCounter.getAndIncrement(), key = R.string.key_demo_text_pref, name = "Sample Text Pref", defaultValue = "Sample value", dataProvider = dataProvider)
+        KuteTextPreference(key = R.string.key_demo_text_pref, name = "Sample Text Pref", defaultValue = "Sample value", dataProvider = dataProvider)
     }
 
     private val textPreference2 by lazy {
-        KuteTextPreference(id = idCounter.getAndIncrement(), key = R.string.key_demo_text_pref, name = "Sample Text Pref 2", defaultValue = "Sample value", dataProvider = dataProvider)
+        KuteTextPreference(key = R.string.key_demo_text_pref_2, name = "Sample Text Pref 2", defaultValue = "Sample value", dataProvider = dataProvider)
     }
 
     private val togglePreference by lazy {
-        KuteTogglePreference(id = idCounter.getAndIncrement(), key = R.string.key_demo_toggle_pref, name = "Sample Toggle Pref", defaultValue = false, onPreferenceChangedListener = { old, new ->
+        KuteTogglePreference(key = R.string.key_demo_toggle_pref, name = "Sample Toggle Pref", defaultValue = false, onPreferenceChangedListener = { old, new ->
             Toast
                     .makeText(context, "Old: $old New: $new", Toast.LENGTH_SHORT)
                     .show()
@@ -43,10 +40,10 @@ class PreferencesFragment : KutePreferencesMainFragment() {
     }
 
     override fun initPreferenceTree(): KutePreferencesTree {
-        return KutePreferencesTree(listOf(SimpleKutePreferenceCategory(id = idCounter.getAndIncrement(), icon = getIcon(MaterialDesignIconic.Icon.gmi_battery), name = "Battery", description = "Everything about your battery", childPreferences = listOf(SimpleKutePreferenceDivider(id = idCounter.getAndIncrement(), name = "Test Divider"), textPreference)), SimpleKutePreferenceCategory(id = idCounter.getAndIncrement(), icon = getIcon(MaterialDesignIconic.Icon.gmi_wifi), name = "Network", description = "Wi-Fi, mobile, hotspot", childPreferences = listOf(togglePreference)), textPreference2))
+        return KutePreferencesTree(listOf(SimpleKutePreferenceCategory(key = R.string.key_category_battery, icon = getIcon(MaterialDesignIconic.Icon.gmi_battery), name = "Battery", description = "Everything about your battery", childPreferences = listOf(SimpleKutePreferenceDivider(key = R.string.key_divider_test, name = "Test Divider"), textPreference)), SimpleKutePreferenceCategory(key = R.string.key_category_wifi, icon = getIcon(MaterialDesignIconic.Icon.gmi_wifi), name = "Network", description = "Wi-Fi, mobile, hotspot", childPreferences = listOf(togglePreference)), textPreference2))
     }
 
-    fun getIcon(icon: IIcon, @ColorInt color: Int = Color.GRAY, sizeDp: Int = 48, paddingDp: Int = 8): Drawable {
+    fun getIcon(icon: IIcon, @ColorInt color: Int = Color.GRAY, sizeDp: Int = 36, paddingDp: Int = 0): Drawable {
         return IconicsDrawable(activity as Context, icon)
                 .sizeDp(sizeDp)
                 .paddingDp(paddingDp)

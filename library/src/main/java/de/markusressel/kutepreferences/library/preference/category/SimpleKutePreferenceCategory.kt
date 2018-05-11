@@ -13,7 +13,7 @@ import de.markusressel.kutepreferences.library.R
 /**
  * The default implementation of a KutePreferenceCategory
  */
-class SimpleKutePreferenceCategory(override val id: Long, val icon: Drawable, override val name: String, override val description: String, private val childPreferences: List<KutePreferenceListItem>) : KutePreferenceCategory {
+class SimpleKutePreferenceCategory(override val key: Int, val icon: Drawable, override val name: String, override val description: String, private val childPreferences: List<KutePreferenceListItem>) : KutePreferenceCategory {
 
     override fun inflateListLayout(layoutInflater: LayoutInflater): ViewGroup {
         val layout = layoutInflater.inflate(R.layout.kute_preference__category, null, false) as ViewGroup

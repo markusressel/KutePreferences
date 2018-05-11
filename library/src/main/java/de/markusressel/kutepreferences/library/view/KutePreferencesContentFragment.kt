@@ -29,14 +29,14 @@ class KutePreferencesContentFragment : Fragment() {
         rootLayout = layoutInflater.inflate(R.layout.kute_preference__content_fragment, container, false) as ViewGroup
 
         val preferenceItemIds = arguments
-                ?.getLongArray(KEY_PREFERENCE_IDS)
+                ?.getIntArray(KEY_PREFERENCE_IDS)
 
         val preferenceItems: Array<KutePreferenceListItem> = if (preferenceItemIds != null) {
             mainFragment
                     .kutePreferencesTree
                     .searchRecursive {
                         preferenceItemIds
-                                .contains(it.id)
+                                .contains(it.key)
                     }
                     .toTypedArray()
         } else {
@@ -124,7 +124,7 @@ class KutePreferencesContentFragment : Fragment() {
     companion object {
         private const val KEY_PREFERENCE_IDS = "KEY_PREFERENCE_IDS"
 
-        fun newInstance(preferenceIds: List<Long> = emptyList()): KutePreferencesContentFragment {
+        fun newInstance(preferenceIds: List<Int> = emptyList()): KutePreferencesContentFragment {
             val fragment = KutePreferencesContentFragment()
             fragment
                     .allowReturnTransitionOverlap = true
@@ -133,7 +133,7 @@ class KutePreferencesContentFragment : Fragment() {
 
             val bundle = Bundle()
             bundle
-                    .putLongArray(KEY_PREFERENCE_IDS, preferenceIds.toLongArray())
+                    .putIntArray(KEY_PREFERENCE_IDS, preferenceIds.toIntArray())
             fragment
                     .arguments = bundle
 

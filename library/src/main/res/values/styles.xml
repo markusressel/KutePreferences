@@ -8,17 +8,24 @@
         <item name="android:background">?attr/selectableItemBackground</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:gravity">center_vertical</item>
-        <item name="android:paddingTop">@dimen/kute_preferences__list_padding__vertical</item>
-        <item name="android:paddingBottom">@dimen/kute_preferences__list_padding__vertical</item>
-        <item name="android:paddingStart">@dimen/kute_preferences__list_padding__horizontal</item>
-        <item name="android:paddingLeft">@dimen/kute_preferences__list_padding__horizontal</item>
-        <item name="android:paddingRight">@dimen/kute_preferences__list_padding__horizontal</item>
-        <item name="android:paddingEnd">@dimen/kute_preferences__list_padding__horizontal</item>
     </style>
 
     <style name="KutePreferences.Category">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="KutePreferences.Category.Base">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/kute_preferences__category__item_height</item>
+        <item name="android:background">?attr/selectableItemBackground</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+
+    <style name="KutePreferences.Category.Icon">
+        <item name="android:layout_height">@dimen/kute_preferences__category__icon_size</item>
+        <item name="android:layout_width">@dimen/kute_preferences__category__icon_size</item>
+        <item name="android:layout_margin">12dp</item>
     </style>
 
     <style name="KutePreferences.Category.Title">
@@ -33,6 +40,7 @@
         </item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
+        <item name="android:maxLines">2</item>
     </style>
 
     <style name="KutePreferences.Divider">
@@ -57,6 +65,12 @@
         <item name="android:layout_height">@dimen/kute_preferences__preference__item_height</item>
     </style>
 
+    <style name="KutePreferences.Preference.Icon">
+        <item name="android:layout_height">@dimen/kute_preferences__preference__icon_size</item>
+        <item name="android:layout_width">@dimen/kute_preferences__preference__icon_size</item>
+        <item name="android:layout_margin">12dp</item>
+    </style>
+
     <style name="KutePreferences.Preference.Name">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">wrap_content</item>
@@ -71,6 +85,7 @@
         <item name="android:textColor">?android:textColorSecondary</item>
         <item name="android:textSize">@dimen/kute_preferences__preference__text_size__description
         </item>
+        <item name="android:maxLines">2</item>
     </style>
 
 </resources>

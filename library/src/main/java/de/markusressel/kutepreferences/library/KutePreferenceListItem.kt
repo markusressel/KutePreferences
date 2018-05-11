@@ -1,14 +1,16 @@
 package de.markusressel.kutepreferences.library
 
+import android.support.annotation.StringRes
 import android.view.LayoutInflater
 import android.view.ViewGroup
 
 interface KutePreferenceListItem {
 
     /**
-     * Identifier for this preference item
+     * A unique identifier for this KutePreference
      */
-    val id: Long
+    @get:StringRes
+    val key: Int
 
     /**
      * Inflate the layout for this KutePreferenceListItem that will be visible in the overview list

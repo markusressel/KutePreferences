@@ -9,7 +9,7 @@ import de.markusressel.kutepreferences.library.persistence.KutePreferenceDataPro
 import de.markusressel.kutepreferences.library.preference.KutePreferenceBase
 import de.markusressel.kutepreferences.library.preference.KutePreferenceClickListener
 
-class KuteTextPreference(override val id: Long, override val key: Int, override val name: String, val minLength: Int? = null, val maxLength: Int? = null, val regex: String? = null, override val defaultValue: String, override val dataProvider: KutePreferenceDataProvider, override val onPreferenceChangedListener: ((oldValue: String, newValue: String) -> Unit)? = null) : KutePreferenceBase<String>(), KutePreferenceClickListener {
+class KuteTextPreference(override val key: Int, override val name: String, val minLength: Int? = null, val maxLength: Int? = null, val regex: String? = null, override val defaultValue: String, override val dataProvider: KutePreferenceDataProvider, override val onPreferenceChangedListener: ((oldValue: String, newValue: String) -> Unit)? = null) : KutePreferenceBase<String>(), KutePreferenceClickListener {
 
     override val layoutRes: Int
         get() = R.layout.kute_preference__list_item__text

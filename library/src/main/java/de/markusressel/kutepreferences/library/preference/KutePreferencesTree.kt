@@ -1,5 +1,6 @@
 package de.markusressel.kutepreferences.library.preference
 
+import android.support.annotation.StringRes
 import de.markusressel.kutepreferences.library.KutePreferenceListItem
 import de.markusressel.kutepreferences.library.preference.category.KutePreferenceCategory
 
@@ -41,8 +42,8 @@ class KutePreferencesTree(val items: List<KutePreferenceListItem>) {
     /**
      * Returns a list of all items in a category
      */
-    fun getCategoryItems(id: Long): List<KutePreferenceListItem> {
-        val category = getCategory(id, items)
+    fun getCategoryItems(@StringRes key: Int): List<KutePreferenceListItem> {
+        val category = getCategory(key, items)
         category
                 ?.let {
                     return it
@@ -52,15 +53,15 @@ class KutePreferencesTree(val items: List<KutePreferenceListItem>) {
         return emptyList()
     }
 
-    fun getCategory(id: Long, items: List<KutePreferenceListItem>): KutePreferenceCategory? {
+    fun getCategory(@StringRes key: Int, items: List<KutePreferenceListItem>): KutePreferenceCategory? {
         items
                 .forEach {
                     when (it) {
                         is KutePreferenceCategory -> {
-                            if (it.id == id) {
+                            if (it.key == key) {
                                 return it
                             }
-                            getCategory(id, it.getChildren())
+                            getCategory(key, it.getChildren())
                         }
                     }
                 }

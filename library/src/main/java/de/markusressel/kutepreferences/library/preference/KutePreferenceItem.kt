@@ -12,11 +12,6 @@ import de.markusressel.kutepreferences.library.persistence.KutePreferenceDataPro
 interface KutePreferenceItem<DataType : Any> : KutePreferenceListItem, KutePreferenceLongClickListener {
 
     /**
-     * A unique identifier for this KutePreference (used for persistence)
-     */
-    val key: Int
-
-    /**
      * The name of this preference
      */
     val name: String

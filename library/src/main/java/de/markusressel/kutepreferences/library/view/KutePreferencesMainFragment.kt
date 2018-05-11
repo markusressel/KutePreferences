@@ -53,7 +53,7 @@ abstract class KutePreferencesMainFragment : Fragment() {
                                 .findPreferences(it.toString())
                                 .map {
                                     it
-                                            .id
+                                            .key
                                 }
                         replaceContent(preferenceIds)
                     }
@@ -69,10 +69,10 @@ abstract class KutePreferencesMainFragment : Fragment() {
                 .observe<CategoryEvent>()
                 .subscribe {
                     val preferenceIds = kutePreferencesTree
-                            .getCategoryItems(it.category.id)
+                            .getCategoryItems(it.category.key)
                             .map {
                                 it
-                                        .id
+                                        .key
                             }
 
                     replaceContent(preferenceIds)
@@ -101,11 +101,11 @@ abstract class KutePreferencesMainFragment : Fragment() {
     private fun showTopLevel() {
         replaceContent(kutePreferencesTree.items.map {
             it
-                    .id
+                    .key
         })
     }
 
-    private fun replaceContent(preferenceIds: List<Long>) {
+    private fun replaceContent(preferenceIds: List<Int>) {
         val fragment = KutePreferencesContentFragment
                 .newInstance(preferenceIds)
 
