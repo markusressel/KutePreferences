@@ -62,7 +62,7 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:textColor">?android:textColorPrimary</item>
         <item name="android:textSize">@dimen/kute_preferences__preference__text_size__title</item>
-        <item name="android:textStyle">bold</item>
+        <item name="android:textStyle">normal</item>
     </style>
 
     <style name="KutePreferences.Preference.Description">

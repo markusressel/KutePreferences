@@ -43,7 +43,7 @@ class PreferencesFragment : KutePreferencesMainFragment() {
     }
 
     override fun initPreferenceTree(): KutePreferencesTree {
-        return KutePreferencesTree(listOf(SimpleKutePreferenceCategory(id = idCounter.getAndIncrement(), icon = getIcon(MaterialDesignIconic.Icon.gmi_bluetooth), name = "Bluetooth", description = "Description of this category", childPreferences = listOf(SimpleKutePreferenceDivider(id = idCounter.getAndIncrement(), name = "Test Divider"), textPreference)), SimpleKutePreferenceCategory(id = idCounter.getAndIncrement(), icon = getIcon(MaterialDesignIconic.Icon.gmi_wifi), name = "WiFi", description = "Description of this category", childPreferences = listOf(togglePreference)), textPreference2))
+        return KutePreferencesTree(listOf(SimpleKutePreferenceCategory(id = idCounter.getAndIncrement(), icon = getIcon(MaterialDesignIconic.Icon.gmi_battery), name = "Battery", description = "Everything about your battery", childPreferences = listOf(SimpleKutePreferenceDivider(id = idCounter.getAndIncrement(), name = "Test Divider"), textPreference)), SimpleKutePreferenceCategory(id = idCounter.getAndIncrement(), icon = getIcon(MaterialDesignIconic.Icon.gmi_wifi), name = "Network", description = "Wi-Fi, mobile, hotspot", childPreferences = listOf(togglePreference)), textPreference2))
     }
 
     fun getIcon(icon: IIcon, @ColorInt color: Int = Color.GRAY, sizeDp: Int = 48, paddingDp: Int = 8): Drawable {
