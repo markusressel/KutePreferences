@@ -1,6 +1,7 @@
 package de.markusressel.kutepreferences.library.preference
 
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.support.annotation.CallSuper
 import android.support.annotation.CheckResult
 import de.markusressel.kutepreferences.library.KutePreferenceListItem
@@ -12,9 +13,14 @@ import de.markusressel.kutepreferences.library.persistence.KutePreferenceDataPro
 interface KutePreferenceItem<DataType : Any> : KutePreferenceListItem, KutePreferenceLongClickListener {
 
     /**
-     * The name of this preference
+     * Optional icon of this KutePreference
      */
-    val name: String
+    val icon: Drawable?
+
+    /**
+     * The title of this KutePreference
+     */
+    val title: String
 
     /**
      * The description of this KutePreference according to it's persisted value
@@ -23,6 +29,8 @@ interface KutePreferenceItem<DataType : Any> : KutePreferenceListItem, KutePrefe
         get() = constructDescription(persistedValue)
 
     /**
+     * Override this method if you want to provide a more sophisticated description
+     *
      * @param currentValue the current value
      * @return the description for this preference according to the current value
      */

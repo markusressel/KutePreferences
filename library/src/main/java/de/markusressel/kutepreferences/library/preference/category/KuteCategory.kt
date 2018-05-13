@@ -11,10 +11,13 @@ import de.markusressel.kutepreferences.library.KutePreferenceListItem
 import de.markusressel.kutepreferences.library.R
 
 /**
- * The default implementation of a KutePreferenceCategory
+ * The default implementation of a KutePreference Category
  */
-class SimpleKutePreferenceCategory(
-        override val key: Int, val icon: Drawable, override val name: String, override val description: String,
+class KuteCategory(
+        override val key: Int,
+        val icon: Drawable,
+        override val title: String,
+        override val description: String,
         override val children: List<KutePreferenceListItem>) :
         KutePreferenceCategory {
 
@@ -27,9 +30,9 @@ class SimpleKutePreferenceCategory(
                 .setImageDrawable(icon)
 
         val nameView: TextView = layout
-                .findViewById(R.id.kute_preference__category__name)
+                .findViewById(R.id.kute_preference__category__title)
         nameView
-                .text = name
+                .text = title
 
         val descriptionView: TextView = layout
                 .findViewById(R.id.kute_preference__category__description)
@@ -41,7 +44,7 @@ class SimpleKutePreferenceCategory(
 
     override fun onClick(context: Context) {
         Toast
-                .makeText(context, "$name clicked!", Toast.LENGTH_SHORT)
+                .makeText(context, "$title clicked!", Toast.LENGTH_SHORT)
                 .show()
     }
 

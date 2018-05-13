@@ -9,9 +9,9 @@ import de.markusressel.kutepreferences.library.preference.KutePreferenceClickLis
 interface KutePreferenceCategory : KutePreferenceListItem, KutePreferenceClickListener {
 
     /**
-     * The name of this category
+     * The title of this category
      */
-    val name: String
+    val title: String
 
     /**
      * A short description of the contents of this category

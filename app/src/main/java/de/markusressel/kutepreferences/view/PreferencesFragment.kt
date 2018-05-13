@@ -11,35 +11,38 @@ import com.mikepenz.material_design_iconic_typeface_library.MaterialDesignIconic
 import de.markusressel.kutepreferences.R
 import de.markusressel.kutepreferences.library.persistence.DefaultKutePreferenceDataProvider
 import de.markusressel.kutepreferences.library.preference.KutePreferencesTree
-import de.markusressel.kutepreferences.library.preference.category.SimpleKutePreferenceCategory
-import de.markusressel.kutepreferences.library.preference.category.SimpleKutePreferenceDivider
+import de.markusressel.kutepreferences.library.preference.category.KuteCategory
+import de.markusressel.kutepreferences.library.preference.category.KuteDivider
+import de.markusressel.kutepreferences.library.preference.number.KuteNumberPreference
 import de.markusressel.kutepreferences.library.preference.text.KuteTextPreference
 import de.markusressel.kutepreferences.library.preference.toggle.KuteTogglePreference
 import de.markusressel.kutepreferences.library.view.KutePreferencesMainFragment
 
 class PreferencesFragment : KutePreferencesMainFragment() {
 
-    val dataProvider by lazy {
+    private val dataProvider by lazy {
         DefaultKutePreferenceDataProvider(activity as Context)
     }
 
     private val textPreference by lazy {
         KuteTextPreference(key = R.string.key_demo_text_pref,
-                name = "Sample Text Pref",
-                defaultValue = "Sample value",
+                title = "Name",
+                defaultValue = "My Battery",
                 dataProvider = dataProvider)
     }
 
     private val textPreference2 by lazy {
         KuteTextPreference(key = R.string.key_demo_text_pref_2,
-                name = "Sample Text Pref 2",
-                defaultValue = "Sample value",
+                icon = getIcon(MaterialDesignIconic.Icon.gmi_nature_people),
+                title = "Device Owner",
+                defaultValue = "Markus Ressel",
                 dataProvider = dataProvider)
     }
 
     private val togglePreference by lazy {
         KuteTogglePreference(key = R.string.key_demo_toggle_pref,
-                name = "Sample Toggle Pref",
+                icon = getIcon(MaterialDesignIconic.Icon.gmi_airplane),
+                title = "Airplane Mode",
                 defaultValue = false,
                 onPreferenceChangedListener = { old, new ->
                     Toast
@@ -49,26 +52,39 @@ class PreferencesFragment : KutePreferencesMainFragment() {
                 dataProvider = dataProvider)
     }
 
+    private val numberPreference by lazy {
+        KuteNumberPreference(key = R.string.key_demo_number_pref,
+                icon = getIcon(MaterialDesignIconic.Icon.gmi_time_countdown),
+                title = "Connection Timeout",
+                defaultValue = 2000,
+                dataProvider = dataProvider)
+    }
+
     override fun initPreferenceTree(): KutePreferencesTree {
         return KutePreferencesTree(
-                SimpleKutePreferenceCategory(
+                KuteCategory(
                         key = R.string.key_category_battery,
                         icon = getIcon(MaterialDesignIconic.Icon.gmi_battery),
-                        name = "Battery",
+                        title = "Battery",
                         description = "Everything about your battery",
                         children = listOf(
-                                SimpleKutePreferenceDivider(
+                                KuteDivider(
                                         key = R.string.key_divider_test,
-                                        name = "Test Divider"),
-                                textPreference)),
-                SimpleKutePreferenceCategory(key = R.string.key_category_wifi,
-                        icon = getIcon(MaterialDesignIconic.Icon.gmi_wifi),
-                        name = "Network",
-                        description = "Wi-Fi, mobile, hotspot",
-                        children = listOf(togglePreference
+                                        title = "Test Divider"),
+                                textPreference
                         )
                 ),
-                textPreference2)
+                KuteCategory(key = R.string.key_category_wifi,
+                        icon = getIcon(MaterialDesignIconic.Icon.gmi_wifi),
+                        title = "Network",
+                        description = "Wi-Fi, mobile, hotspot",
+                        children = listOf(
+                                togglePreference,
+                                numberPreference
+                        )
+                ),
+                textPreference2
+        )
     }
 
     private fun getIcon(icon: IIcon, @ColorInt color: Int = Color.GRAY, sizeDp: Int = 36,

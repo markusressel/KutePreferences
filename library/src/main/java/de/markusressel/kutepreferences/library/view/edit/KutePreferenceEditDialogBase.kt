@@ -76,7 +76,7 @@ abstract class KutePreferenceEditDialogBase<DataType : Any> : KutePreferenceEdit
         dialog = MaterialDialog
                 .Builder(context)
                 .customView(dialogContentView, false)
-                .title(preferenceItem.name)
+                .title(preferenceItem.title)
                 .neutralText(android.R.string.cancel)
                 .onNeutral { dialog, which ->
                     dismiss()

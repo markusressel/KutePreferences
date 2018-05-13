@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        style="@style/KutePreferences.ListItem"
+        android:orientation="horizontal">
+
+    <ImageView
+            android:id="@+id/kute_preference__preference__icon"
+            style="@style/KutePreferences.Preference.Icon"/>
+
+    <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+        <TextView
+                android:id="@+id/kute_preferences__preference__title"
+                style="@style/KutePreferences.Preference.Title"
+                android:text="Demo Toggle Preference"/>
+
+        <TextView
+                android:id="@+id/kute_preferences__preference__description"
+                style="@style/KutePreferences.Preference.Description"
+                android:text="Description of Demo Toggle Preference"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp">
+
+        <Switch
+                android:id="@+id/kute_preferences__preference__toggle__switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+</LinearLayout>

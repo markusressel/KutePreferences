@@ -71,7 +71,7 @@
         <item name="android:layout_margin">12dp</item>
     </style>
 
-    <style name="KutePreferences.Preference.Name">
+    <style name="KutePreferences.Preference.Title">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:textColor">?android:textColorPrimary</item>

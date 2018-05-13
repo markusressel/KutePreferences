@@ -1,26 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/KutePreferences.Category.Base"
-    android:orientation="horizontal">
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        style="@style/KutePreferences.Category.Base"
+        android:orientation="horizontal">
 
     <ImageView
-        android:id="@+id/kute_preference__category__icon"
-        style="@style/KutePreferences.Category.Icon" />
+            android:id="@+id/kute_preference__category__icon"
+            style="@style/KutePreferences.Category.Icon"/>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
         <TextView
-            android:id="@+id/kute_preference__category__name"
-            style="@style/KutePreferences.Category.Title"
-            android:text="Category" />
+                android:id="@+id/kute_preference__category__title"
+                style="@style/KutePreferences.Category.Title"
+                android:text="Category"/>
 
         <TextView
-            android:id="@+id/kute_preference__category__description"
-            style="@style/KutePreferences.Category.Description"
-            android:text="This is a short description of the category contents" />
+                android:id="@+id/kute_preference__category__description"
+                style="@style/KutePreferences.Category.Description"
+                android:text="This is a short description of the category contents"/>
 
     </LinearLayout>
 

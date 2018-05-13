@@ -5,8 +5,8 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-    <EditText
-            android:id="@+id/kute_preferences__preference__text__edit_name"
+    <NumberPicker
+            android:id="@+id/kute_preferences__preference__number__picker"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 

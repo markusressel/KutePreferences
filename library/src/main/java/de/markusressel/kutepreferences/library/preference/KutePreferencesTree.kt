@@ -19,13 +19,13 @@ class KutePreferencesTree(vararg items: KutePreferenceListItem) {
                     .forEach {
                         when (it) {
                             is KutePreferenceItem<*> -> with(it) {
-                                if (name.contains(text, true) or description.contains(text, true)) {
+                                if (title.contains(text, true) or description.contains(text, true)) {
                                     result
                                             .add(it)
                                 }
                             }
                             is KutePreferenceCategory -> with(it) {
-                                if (it.name.contains(text, true) or it.description.contains(text, true)) {
+                                if (it.title.contains(text, true) or it.description.contains(text, true)) {
                                     result
                                             .add(it)
                                 }

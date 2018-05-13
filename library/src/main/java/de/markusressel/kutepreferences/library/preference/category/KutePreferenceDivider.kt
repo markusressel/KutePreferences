@@ -9,8 +9,8 @@ import de.markusressel.kutepreferences.library.preference.KutePreferenceClickLis
 interface KutePreferenceDivider : KutePreferenceListItem, KutePreferenceClickListener {
 
     /**
-     * The name of this category
+     * The title of this divider
      */
-    val name: String
+    val title: String
 
 }

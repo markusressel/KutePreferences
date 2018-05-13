@@ -8,24 +8,26 @@ import android.widget.Toast
 import de.markusressel.kutepreferences.library.R
 
 /**
- * The default implementation of a KutePreferenceCategory
+ * The default implementation of a KutePreference Divider
  */
-class SimpleKutePreferenceDivider(override val key: Int, override val name: String) : KutePreferenceDivider {
+class KuteDivider(
+        override val key: Int,
+        override val title: String) : KutePreferenceDivider {
 
     override fun inflateListLayout(layoutInflater: LayoutInflater): ViewGroup {
         val layout = layoutInflater.inflate(R.layout.kute_preference__divider, null, false) as ViewGroup
 
         val nameView: TextView = layout
-                .findViewById(R.id.kute_preference_divider__name)
+                .findViewById(R.id.kute_preference_divider__title)
         nameView
-                .text = name
+                .text = title
 
         return layout
     }
 
     override fun onClick(context: Context) {
         Toast
-                .makeText(context, "$name clicked!", Toast.LENGTH_SHORT)
+                .makeText(context, "$title clicked!", Toast.LENGTH_SHORT)
                 .show()
     }
 }
