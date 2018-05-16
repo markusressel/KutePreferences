@@ -10,9 +10,9 @@ import de.markusressel.kutepreferences.library.preference.KutePreferenceClickLis
 class KuteTextPreference(override val key: Int,
                          override val icon: Drawable? = null,
                          override val title: String,
-                         val minLength: Int? = null,
-                         val maxLength: Int? = null,
-                         val regex: String? = null,
+                         private val minLength: Int? = null,
+                         private val maxLength: Int? = null,
+                         private val regex: String? = null,
                          override val defaultValue: String,
                          override val dataProvider: KutePreferenceDataProvider,
                          override val onPreferenceChangedListener: ((oldValue: String, newValue: String) -> Unit)? = null) :
@@ -22,7 +22,7 @@ class KuteTextPreference(override val key: Int,
         get() = R.layout.kute_preference__text__list_item
 
     override fun onClick(context: Context) {
-        val dialog = KuteTextPreferenceEditDialog(this)
+        val dialog = KuteTextPreferenceEditDialog(this, minLength, maxLength, regex)
         dialog
                 .show(context)
     }

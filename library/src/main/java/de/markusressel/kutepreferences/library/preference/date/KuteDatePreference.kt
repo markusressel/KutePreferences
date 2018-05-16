@@ -12,8 +12,8 @@ import java.util.*
 class KuteDatePreference(override val key: Int,
                          override val icon: Drawable? = null,
                          override val title: String,
-                         val mininum: Long? = null,
-                         val maximum: Long? = null,
+                         private val mininum: Long? = null,
+                         private val maximum: Long? = null,
                          override val defaultValue: Long,
                          override val dataProvider: KutePreferenceDataProvider,
                          override val onPreferenceChangedListener: ((oldValue: Long, newValue: Long) -> Unit)? = null) :

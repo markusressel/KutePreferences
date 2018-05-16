@@ -9,7 +9,8 @@ import java.util.*
 
 class KuteDatePreferenceEditDialog(
         override val preferenceItem: KutePreferenceItem<Long>,
-        val mininum: Long?, val maximum: Long?) :
+        private val mininum: Long?,
+        private val maximum: Long?) :
         KutePreferenceEditDialogBase<Long>() {
 
     override val contentLayoutRes: Int

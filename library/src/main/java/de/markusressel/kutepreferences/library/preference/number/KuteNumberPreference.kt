@@ -10,8 +10,8 @@ import de.markusressel.kutepreferences.library.preference.KutePreferenceClickLis
 class KuteNumberPreference(override val key: Int,
                            override val icon: Drawable? = null,
                            override val title: String,
-                           val mininum: Int? = null,
-                           val maximum: Int? = null,
+                           private val mininum: Int? = null,
+                           private val maximum: Int? = null,
                            override val defaultValue: Long,
                            override val dataProvider: KutePreferenceDataProvider,
                            override val onPreferenceChangedListener: ((oldValue: Long, newValue: Long) -> Unit)? = null) :
