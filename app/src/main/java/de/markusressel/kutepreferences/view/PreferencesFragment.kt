@@ -11,6 +11,7 @@ import com.mikepenz.material_design_iconic_typeface_library.MaterialDesignIconic
 import de.markusressel.kutepreferences.R
 import de.markusressel.kutepreferences.library.persistence.DefaultKutePreferenceDataProvider
 import de.markusressel.kutepreferences.library.preference.KutePreferencesTree
+import de.markusressel.kutepreferences.library.preference.action.KuteAction
 import de.markusressel.kutepreferences.library.preference.category.KuteCategory
 import de.markusressel.kutepreferences.library.preference.category.KuteDivider
 import de.markusressel.kutepreferences.library.preference.date.KuteDatePreference
@@ -80,6 +81,15 @@ class PreferencesFragment : KutePreferencesMainFragment() {
                 dataProvider = dataProvider)
     }
 
+    private val kuteAction by lazy {
+        KuteAction(key = R.string.key_demo_action,
+                icon = getIcon(MaterialDesignIconic.Icon.gmi_calendar),
+                title = "Demo Action",
+                onClickAction = {
+                    Toast.makeText(it, "Action clicked!", Toast.LENGTH_SHORT).show()
+                })
+    }
+
     override fun initPreferenceTree(): KutePreferencesTree {
         return KutePreferencesTree(
                 KuteCategory(
@@ -105,7 +115,8 @@ class PreferencesFragment : KutePreferencesMainFragment() {
                 ),
                 textPreference2,
                 sliderPreference,
-                datePreference
+                datePreference,
+                kuteAction
         )
     }
 

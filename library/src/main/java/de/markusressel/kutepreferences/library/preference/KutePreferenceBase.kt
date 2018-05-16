@@ -3,6 +3,7 @@ package de.markusressel.kutepreferences.library.preference
 import android.support.annotation.CallSuper
 import android.support.annotation.LayoutRes
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
@@ -41,7 +42,14 @@ abstract class KutePreferenceBase<DataType : Any> : KutePreferenceItem<DataType>
 
         descriptionTextView = layout
                 .findViewById(R.id.kute_preferences__preference__description)
-        descriptionTextView?.text = description
+
+        descriptionTextView?.let {
+            if (description.isBlank()) {
+                it.visibility = View.GONE
+            } else {
+                it.text = description
+            }
+        }
 
         return layout
     }
