@@ -11,17 +11,17 @@ class KuteNumberPreferenceEditDialog(override val preferenceItem: KutePreference
     override val contentLayoutRes: Int
         get() = R.layout.kute_preference__number__edit_dialog
 
-    var numberPicketView: NumberPicker? = null
+    var numberPickerView: NumberPicker? = null
 
     var userInput: Long = 0
 
     override fun onContentViewCreated(contentView: View) {
-        numberPicketView = contentView
+        numberPickerView = contentView
                 .findViewById(R.id.kute_preferences__preference__number__picker)
 
         userInput = persistedValue
 
-        numberPicketView?.let {
+        numberPickerView?.let {
             it.maxValue = Int.MAX_VALUE
             it.minValue = 0
 
@@ -38,7 +38,7 @@ class KuteNumberPreferenceEditDialog(override val preferenceItem: KutePreference
     override fun onCurrentValueChanged(oldValue: Long?, newValue: Long?) {
         if (oldValue != newValue && newValue != userInput) {
             newValue?.let {
-                numberPicketView
+                numberPickerView
                         ?.value = it.toInt()
             }
         }
