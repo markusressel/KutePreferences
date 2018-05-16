@@ -9,18 +9,18 @@ import de.markusressel.kutepreferences.library.preference.KutePreferenceClickLis
 import java.text.DateFormat
 import java.util.*
 
-class KuteDatePreference(override val key: Int,
-                         override val icon: Drawable? = null,
-                         override val title: String,
-                         private val mininum: Long? = null,
-                         private val maximum: Long? = null,
-                         override val defaultValue: Long,
-                         override val dataProvider: KutePreferenceDataProvider,
-                         override val onPreferenceChangedListener: ((oldValue: Long, newValue: Long) -> Unit)? = null) :
+open class KuteDatePreference(override val key: Int,
+                              override val icon: Drawable? = null,
+                              override val title: String,
+                              private val mininum: Long? = null,
+                              private val maximum: Long? = null,
+                              override val defaultValue: Long,
+                              override val dataProvider: KutePreferenceDataProvider,
+                              override val onPreferenceChangedListener: ((oldValue: Long, newValue: Long) -> Unit)? = null) :
         KutePreferenceBase<Long>(), KutePreferenceClickListener {
 
     override val layoutRes: Int
-        get() = R.layout.kute_preference__date__list_item
+        get() = R.layout.kute_preference__default__list_item
 
     private val dateFormatter = DateFormat.getDateInstance(DateFormat.LONG)
 

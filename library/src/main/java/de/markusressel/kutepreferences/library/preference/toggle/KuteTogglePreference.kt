@@ -10,12 +10,12 @@ import de.markusressel.kutepreferences.library.persistence.KutePreferenceDataPro
 import de.markusressel.kutepreferences.library.preference.KutePreferenceBase
 import de.markusressel.kutepreferences.library.preference.KutePreferenceClickListener
 
-class KuteTogglePreference(override val key: Int,
-                           override val icon: Drawable? = null,
-                           override val title: String,
-                           override val defaultValue: Boolean,
-                           override val dataProvider: KutePreferenceDataProvider,
-                           override val onPreferenceChangedListener: ((oldValue: Boolean, newValue: Boolean) -> Unit)? = null) :
+open class KuteTogglePreference(override val key: Int,
+                                override val icon: Drawable? = null,
+                                override val title: String,
+                                override val defaultValue: Boolean,
+                                override val dataProvider: KutePreferenceDataProvider,
+                                override val onPreferenceChangedListener: ((oldValue: Boolean, newValue: Boolean) -> Unit)? = null) :
         KutePreferenceBase<Boolean>(), KutePreferenceClickListener {
 
     override val layoutRes: Int

@@ -15,6 +15,7 @@ import de.markusressel.kutepreferences.library.preference.category.KuteCategory
 import de.markusressel.kutepreferences.library.preference.category.KuteDivider
 import de.markusressel.kutepreferences.library.preference.date.KuteDatePreference
 import de.markusressel.kutepreferences.library.preference.number.KuteNumberPreference
+import de.markusressel.kutepreferences.library.preference.number.KuteSliderPreference
 import de.markusressel.kutepreferences.library.preference.text.KuteTextPreference
 import de.markusressel.kutepreferences.library.preference.toggle.KuteTogglePreference
 import de.markusressel.kutepreferences.library.view.KutePreferencesMainFragment
@@ -62,6 +63,15 @@ class PreferencesFragment : KutePreferencesMainFragment() {
                 dataProvider = dataProvider)
     }
 
+    private val sliderPreference by lazy {
+        KuteSliderPreference(key = R.string.key_demo_slider_pref,
+                icon = getIcon(MaterialDesignIconic.Icon.gmi_volume_up),
+                title = "Volume",
+                maximum = 7,
+                defaultValue = 5,
+                dataProvider = dataProvider)
+    }
+
     private val datePreference by lazy {
         KuteDatePreference(key = R.string.key_demo_date_pref,
                 icon = getIcon(MaterialDesignIconic.Icon.gmi_calendar),
@@ -94,6 +104,7 @@ class PreferencesFragment : KutePreferencesMainFragment() {
                         )
                 ),
                 textPreference2,
+                sliderPreference,
                 datePreference
         )
     }

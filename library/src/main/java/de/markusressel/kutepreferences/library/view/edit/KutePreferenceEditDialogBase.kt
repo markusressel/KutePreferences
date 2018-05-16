@@ -37,8 +37,13 @@ abstract class KutePreferenceEditDialogBase<DataType : Any> : KutePreferenceEdit
         set(newValue) {
             val oldValue = currentValue
             field = newValue
-            onCurrentValueChanged(oldValue, currentValue)
+
+            if (oldValue != newValue && newValue != userInput) {
+                onCurrentValueChanged(oldValue, currentValue, newValue == userInput)
+            }
         }
+
+    lateinit var userInput: DataType
 
     override fun dismiss() {
         dialog
@@ -65,6 +70,8 @@ abstract class KutePreferenceEditDialogBase<DataType : Any> : KutePreferenceEdit
      * Show this dialog
      */
     override fun show(context: Context) {
+        userInput = persistedValue
+
         val layoutInflater = LayoutInflater
                 .from(context)
 

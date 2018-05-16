@@ -16,12 +16,12 @@
         <TextView
                 android:id="@+id/kute_preferences__preference__title"
                 style="@style/KutePreferences.Preference.Title"
-                android:text="Demo Number Preference"/>
+            android:text="Preference Title" />
 
         <TextView
                 android:id="@+id/kute_preferences__preference__description"
                 style="@style/KutePreferences.Preference.Description"
-                android:text="Description of Demo Number Preference"/>
+            android:text="Preference Description" />
 
     </LinearLayout>
 

@@ -13,7 +13,7 @@ import de.markusressel.kutepreferences.library.R
 /**
  * The default implementation of a KutePreference Category
  */
-class KuteCategory(
+open class KuteCategory(
         override val key: Int,
         private val icon: Drawable,
         override val title: String,

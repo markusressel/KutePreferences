@@ -19,8 +19,6 @@ class KuteTextPreferenceEditDialog(
     override val contentLayoutRes: Int
         get() = R.layout.kute_preference__text__edit_dialog
 
-    var userInput: String = ""
-
     var editTextView: EditText? = null
 
     override fun onContentViewCreated(contentView: View) {
@@ -46,8 +44,8 @@ class KuteTextPreferenceEditDialog(
         }
     }
 
-    override fun onCurrentValueChanged(oldValue: String?, newValue: String?) {
-        if (oldValue != newValue && newValue != userInput) {
+    override fun onCurrentValueChanged(oldValue: String?, newValue: String?, byUser: Boolean) {
+        if (!byUser) {
             editTextView
                     ?.setText(newValue)
         }

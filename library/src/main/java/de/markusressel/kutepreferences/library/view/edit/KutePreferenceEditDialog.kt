@@ -27,7 +27,7 @@ interface KutePreferenceEditDialog<DataType : Any> {
      * Called when the currentValue changes
      * Update your GUI here.
      */
-    fun onCurrentValueChanged(oldValue: DataType?, newValue: DataType?)
+    fun onCurrentValueChanged(oldValue: DataType?, newValue: DataType?, byUser: Boolean)
 
     /**
      * Restore the current value of this KutePreferenceListItem to it's previously persisted value.

@@ -18,8 +18,6 @@ class KuteDatePreferenceEditDialog(
 
     var calendarView: CalendarView? = null
 
-    var userInput: Long = 0
-
     override fun onContentViewCreated(contentView: View) {
         calendarView = contentView
                 .findViewById(R.id.kute_preferences__preference__date__calendar_view)
@@ -50,8 +48,8 @@ class KuteDatePreferenceEditDialog(
         }
     }
 
-    override fun onCurrentValueChanged(oldValue: Long?, newValue: Long?) {
-        if (oldValue != newValue && newValue != userInput) {
+    override fun onCurrentValueChanged(oldValue: Long?, newValue: Long?, byUser: Boolean) {
+        if (!byUser) {
             newValue?.let {
                 calendarView
                         ?.setDate(it, true, true)

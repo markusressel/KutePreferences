@@ -13,8 +13,6 @@ class KuteNumberPreferenceEditDialog(override val preferenceItem: KutePreference
 
     var numberPickerView: NumberPicker? = null
 
-    var userInput: Long = 0
-
     override fun onContentViewCreated(contentView: View) {
         numberPickerView = contentView
                 .findViewById(R.id.kute_preferences__preference__number__picker)
@@ -35,8 +33,8 @@ class KuteNumberPreferenceEditDialog(override val preferenceItem: KutePreference
         }
     }
 
-    override fun onCurrentValueChanged(oldValue: Long?, newValue: Long?) {
-        if (oldValue != newValue && newValue != userInput) {
+    override fun onCurrentValueChanged(oldValue: Long?, newValue: Long?, byUser: Boolean) {
+        if (!byUser) {
             newValue?.let {
                 numberPickerView
                         ?.value = it.toInt()
