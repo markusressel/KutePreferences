@@ -19,7 +19,7 @@ class KuteTextPreferenceEditDialog(
     override val contentLayoutRes: Int
         get() = R.layout.kute_preference__text__edit_dialog
 
-    var editTextView: EditText? = null
+    private var editTextView: EditText? = null
 
     override fun onContentViewCreated(contentView: View) {
         editTextView = contentView

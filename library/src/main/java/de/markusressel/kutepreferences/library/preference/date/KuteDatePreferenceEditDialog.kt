@@ -9,7 +9,7 @@ import java.util.*
 
 class KuteDatePreferenceEditDialog(
         override val preferenceItem: KutePreferenceItem<Long>,
-        private val mininum: Long?,
+        private val minimum: Long?,
         private val maximum: Long?) :
         KutePreferenceEditDialogBase<Long>() {
 
@@ -25,8 +25,8 @@ class KuteDatePreferenceEditDialog(
         userInput = persistedValue
 
         calendarView?.let { c ->
-            if (mininum != null) {
-                c.minDate = mininum
+            if (minimum != null) {
+                c.minDate = minimum
             } else {
                 c.minDate = 0
             }

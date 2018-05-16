@@ -9,7 +9,7 @@ import de.markusressel.kutepreferences.library.view.edit.KutePreferenceEditDialo
 class KuteSliderPreferenceEditDialog(
         override val preferenceItem: KutePreferenceItem<Int>,
         private val defaultValue: Int,
-        private val mininum: Int?,
+        private val minimum: Int?,
         private val maximum: Int?) :
         KutePreferenceEditDialogBase<Int>() {
     override val contentLayoutRes: Int

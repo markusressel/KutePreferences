@@ -10,18 +10,19 @@ import de.markusressel.kutepreferences.library.persistence.KutePreferenceDataPro
 import de.markusressel.kutepreferences.library.preference.KutePreferenceBase
 import de.markusressel.kutepreferences.library.preference.KutePreferenceClickListener
 
-open class KuteTogglePreference(override val key: Int,
-                                override val icon: Drawable? = null,
-                                override val title: String,
-                                override val defaultValue: Boolean,
-                                override val dataProvider: KutePreferenceDataProvider,
-                                override val onPreferenceChangedListener: ((oldValue: Boolean, newValue: Boolean) -> Unit)? = null) :
+open class KuteTogglePreference(
+        override val key: Int,
+        override val icon: Drawable? = null,
+        override val title: String,
+        override val defaultValue: Boolean,
+        override val dataProvider: KutePreferenceDataProvider,
+        override val onPreferenceChangedListener: ((oldValue: Boolean, newValue: Boolean) -> Unit)? = null) :
         KutePreferenceBase<Boolean>(), KutePreferenceClickListener {
 
     override val layoutRes: Int
         get() = R.layout.kute_preference__toggle__list_item
 
-    var switchView: Switch? = null
+    private var switchView: Switch? = null
 
     override fun inflateListLayout(layoutInflater: LayoutInflater): ViewGroup {
         val layout = super.inflateListLayout(layoutInflater)
