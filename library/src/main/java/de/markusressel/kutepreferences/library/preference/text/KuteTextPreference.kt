@@ -5,7 +5,6 @@ import android.graphics.drawable.Drawable
 import de.markusressel.kutepreferences.library.R
 import de.markusressel.kutepreferences.library.persistence.KutePreferenceDataProvider
 import de.markusressel.kutepreferences.library.preference.KutePreferenceBase
-import de.markusressel.kutepreferences.library.preference.KutePreferenceClickListener
 
 open class KuteTextPreference(override val key: Int,
                               override val icon: Drawable? = null,
@@ -16,7 +15,7 @@ open class KuteTextPreference(override val key: Int,
                               override val defaultValue: String,
                               override val dataProvider: KutePreferenceDataProvider,
                               override val onPreferenceChangedListener: ((oldValue: String, newValue: String) -> Unit)? = null) :
-        KutePreferenceBase<String>(), KutePreferenceClickListener {
+        KutePreferenceBase<String>() {
 
     override val layoutRes: Int
         get() = R.layout.kute_preference__default__list_item

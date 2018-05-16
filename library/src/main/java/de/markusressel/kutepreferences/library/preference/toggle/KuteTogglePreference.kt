@@ -8,7 +8,6 @@ import android.widget.Switch
 import de.markusressel.kutepreferences.library.R
 import de.markusressel.kutepreferences.library.persistence.KutePreferenceDataProvider
 import de.markusressel.kutepreferences.library.preference.KutePreferenceBase
-import de.markusressel.kutepreferences.library.preference.KutePreferenceClickListener
 
 open class KuteTogglePreference(
         override val key: Int,
@@ -17,7 +16,7 @@ open class KuteTogglePreference(
         override val defaultValue: Boolean,
         override val dataProvider: KutePreferenceDataProvider,
         override val onPreferenceChangedListener: ((oldValue: Boolean, newValue: Boolean) -> Unit)? = null) :
-        KutePreferenceBase<Boolean>(), KutePreferenceClickListener {
+        KutePreferenceBase<Boolean>() {
 
     override val layoutRes: Int
         get() = R.layout.kute_preference__toggle__list_item

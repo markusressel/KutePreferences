@@ -1,6 +1,5 @@
 package de.markusressel.kutepreferences.library.preference
 
-import android.content.Context
 import android.graphics.drawable.Drawable
 import android.support.annotation.CallSuper
 import android.support.annotation.CheckResult
@@ -10,7 +9,8 @@ import de.markusressel.kutepreferences.library.persistence.KutePreferenceDataPro
 /**
  * Interface for Preferences
  */
-interface KutePreferenceItem<DataType : Any> : KutePreferenceListItem, KutePreferenceLongClickListener {
+interface KutePreferenceItem<DataType : Any> : KutePreferenceListItem, KutePreferenceClickListener,
+        KutePreferenceLongClickListener {
 
     /**
      * Optional icon of this KutePreference
@@ -83,10 +83,6 @@ interface KutePreferenceItem<DataType : Any> : KutePreferenceListItem, KutePrefe
     fun onPreferenceChanged(oldValue: DataType, newValue: DataType) {
         onPreferenceChangedListener
                 ?.invoke(oldValue, newValue)
-    }
-
-    override fun onLongClick(context: Context) {
-        reset()
     }
 
 }

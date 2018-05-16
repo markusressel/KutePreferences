@@ -5,7 +5,6 @@ import android.graphics.drawable.Drawable
 import de.markusressel.kutepreferences.library.R
 import de.markusressel.kutepreferences.library.persistence.KutePreferenceDataProvider
 import de.markusressel.kutepreferences.library.preference.KutePreferenceBase
-import de.markusressel.kutepreferences.library.preference.KutePreferenceClickListener
 import java.text.DateFormat
 import java.util.*
 
@@ -17,7 +16,7 @@ open class KuteDatePreference(override val key: Int,
                               override val defaultValue: Long,
                               override val dataProvider: KutePreferenceDataProvider,
                               override val onPreferenceChangedListener: ((oldValue: Long, newValue: Long) -> Unit)? = null) :
-        KutePreferenceBase<Long>(), KutePreferenceClickListener {
+        KutePreferenceBase<Long>() {
 
     override val layoutRes: Int
         get() = R.layout.kute_preference__default__list_item

@@ -31,23 +31,20 @@ class KutePreferencesContentFragment : Fragment() {
         val preferenceItemIds = arguments
                 ?.getIntArray(KEY_PREFERENCE_IDS)
 
-        val preferenceItems: Array<KutePreferenceListItem> = if (preferenceItemIds != null) {
+        val preferenceItems: List<KutePreferenceListItem> = if (preferenceItemIds != null) {
             mainFragment
                     .kutePreferencesTree
                     .searchRecursive {
                         preferenceItemIds
                                 .contains(it.key)
                     }
-                    .toTypedArray()
         } else {
             mainFragment
                     .kutePreferencesTree
                     .treeItems
-                    .toTypedArray()
         }
 
-        val generatePage = generatePage(*preferenceItems)
-        return generatePage
+        return generatePage(*preferenceItems.toTypedArray())
     }
 
     /**
@@ -63,7 +60,7 @@ class KutePreferencesContentFragment : Fragment() {
         val keySet: MutableSet<Int> = mutableSetOf()
         kutePreference
                 .forEach {
-                    // recurses through child items
+                    // does NOT recurse through child items as we only want to inflate the current tree layer
                     inflate(it, listItemLayout, keySet)
                 }
 
@@ -72,21 +69,17 @@ class KutePreferencesContentFragment : Fragment() {
 
     private fun inflate(kutePreferenceListItem: KutePreferenceListItem, layoutToAppendTo: ViewGroup,
                         keySet: MutableSet<Int>) {
-        val layout: ViewGroup = when (kutePreferenceListItem) {
+        when (kutePreferenceListItem) {
             is KutePreferenceItem<*> -> {
                 checkKeyDuplication(kutePreferenceListItem.key, keySet)
-                inflate(kutePreferenceListItem)
             }
-            else -> {
-                inflate(kutePreferenceListItem)
+            is KutePreferenceCategory -> {
+                checkKeyDuplication(kutePreferenceListItem.key, keySet)
             }
         }
 
-        layout
-                .let {
-                    layoutToAppendTo
-                            .addView(it)
-                }
+        val layout: ViewGroup = inflate(kutePreferenceListItem)
+        layoutToAppendTo.addView(layout)
 
         if (kutePreferenceListItem is KutePreferenceClickListener) {
             layout
@@ -113,11 +106,6 @@ class KutePreferencesContentFragment : Fragment() {
         }
     }
 
-    private fun inflate(it: KutePreferenceItem<*>): ViewGroup {
-        return it
-                .inflateListLayout(layoutInflater)
-    }
-
     private fun inflate(it: KutePreferenceListItem): ViewGroup {
         return it
                 .inflateListLayout(layoutInflater)
@@ -128,10 +116,10 @@ class KutePreferencesContentFragment : Fragment() {
 
         fun newInstance(preferenceIds: List<Int> = emptyList()): KutePreferencesContentFragment {
             val fragment = KutePreferencesContentFragment()
-            fragment
-                    .allowReturnTransitionOverlap = true
-            fragment
-                    .allowEnterTransitionOverlap = true
+//            fragment
+//                    .allowReturnTransitionOverlap = true
+//            fragment
+//                    .allowEnterTransitionOverlap = true
 
             val bundle = Bundle()
             bundle

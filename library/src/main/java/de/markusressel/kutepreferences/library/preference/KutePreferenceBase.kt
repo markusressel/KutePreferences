@@ -1,5 +1,6 @@
 package de.markusressel.kutepreferences.library.preference
 
+import android.content.Context
 import android.support.annotation.CallSuper
 import android.support.annotation.LayoutRes
 import android.view.LayoutInflater
@@ -43,15 +44,15 @@ abstract class KutePreferenceBase<DataType : Any> : KutePreferenceItem<DataType>
         descriptionTextView = layout
                 .findViewById(R.id.kute_preferences__preference__description)
 
-        descriptionTextView?.let {
-            if (description.isBlank()) {
-                it.visibility = View.GONE
-            } else {
-                it.text = description
-            }
-        }
+        updateDescription()
 
         return layout
+    }
+
+    override fun onClick(context: Context) {
+    }
+
+    override fun onLongClick(context: Context) {
     }
 
     @CallSuper
@@ -59,8 +60,18 @@ abstract class KutePreferenceBase<DataType : Any> : KutePreferenceItem<DataType>
         super
                 .onPreferenceChanged(oldValue, newValue)
 
-        descriptionTextView
-                ?.text = description
+        updateDescription()
+    }
+
+    private fun updateDescription() {
+        descriptionTextView?.let {
+            if (description.isBlank()) {
+                it.visibility = View.GONE
+            } else {
+                it.visibility = View.VISIBLE
+                it.text = description
+            }
+        }
     }
 
 }
