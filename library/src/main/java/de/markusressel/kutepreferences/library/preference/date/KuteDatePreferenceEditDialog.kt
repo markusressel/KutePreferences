@@ -5,8 +5,11 @@ import android.widget.CalendarView
 import de.markusressel.kutepreferences.library.R
 import de.markusressel.kutepreferences.library.preference.KutePreferenceItem
 import de.markusressel.kutepreferences.library.view.edit.KutePreferenceEditDialogBase
+import java.util.*
 
-class KuteDatePreferenceEditDialog(override val preferenceItem: KutePreferenceItem<Long>) :
+class KuteDatePreferenceEditDialog(
+        override val preferenceItem: KutePreferenceItem<Long>,
+        val mininum: Long?, val maximum: Long?) :
         KutePreferenceEditDialogBase<Long>() {
 
     override val contentLayoutRes: Int
@@ -22,14 +25,24 @@ class KuteDatePreferenceEditDialog(override val preferenceItem: KutePreferenceIt
 
         userInput = persistedValue
 
-        calendarView?.let {
-            it.minDate = 0
-            it.maxDate = Long.MAX_VALUE
+        calendarView?.let { c ->
+            if (mininum != null) {
+                c.minDate = mininum
+            } else {
+                c.minDate = 0
+            }
 
-            it.setDate(persistedValue, true, true)
+            if (maximum != null) {
+                c.maxDate = maximum
+            } else {
+                c.maxDate = Long.MAX_VALUE
+            }
 
-            it.setOnDateChangeListener { calendarView, year, month, dayofmonth ->
-                val newValue = calendarView.date
+            c.setDate(persistedValue, true, true)
+
+            c.setOnDateChangeListener { calendarView, year, month, dayOfMonth ->
+                val calendar = GregorianCalendar(year, month, dayOfMonth)
+                val newValue = calendar.timeInMillis
                 userInput = newValue
                 currentValue = newValue
             }
