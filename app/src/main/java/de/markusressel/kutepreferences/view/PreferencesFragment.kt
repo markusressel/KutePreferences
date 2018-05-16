@@ -83,8 +83,8 @@ class PreferencesFragment : KutePreferencesMainFragment() {
 
     private val kuteAction by lazy {
         KuteAction(key = R.string.key_demo_action,
-                icon = getIcon(MaterialDesignIconic.Icon.gmi_calendar),
-                title = "Demo Action",
+                icon = getIcon(MaterialDesignIconic.Icon.gmi_info),
+                title = "About",
                 onClickAction = {
                     Toast.makeText(it, "Action clicked!", Toast.LENGTH_SHORT).show()
                 })
