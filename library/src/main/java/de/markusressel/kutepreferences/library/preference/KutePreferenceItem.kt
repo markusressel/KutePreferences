@@ -36,7 +36,7 @@ interface KutePreferenceItem<DataType : Any> : KutePreferenceListItem, KutePrefe
      */
     @CheckResult
     fun constructDescription(currentValue: DataType): String {
-        return "Value: '$currentValue'"
+        return "$currentValue"
     }
 
     /**
