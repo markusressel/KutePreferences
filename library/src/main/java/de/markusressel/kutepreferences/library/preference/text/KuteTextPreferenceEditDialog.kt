@@ -1,5 +1,7 @@
 package de.markusressel.kutepreferences.library.preference.text
 
+import android.content.Context
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.EditText
 import com.jakewharton.rxbinding2.widget.RxTextView
@@ -21,7 +23,7 @@ class KuteTextPreferenceEditDialog(
 
     private var editTextView: EditText? = null
 
-    override fun onContentViewCreated(contentView: View) {
+    override fun onContentViewCreated(context: Context, layoutInflater: LayoutInflater, contentView: View) {
         editTextView = contentView
                 .findViewById(R.id.kute_preferences__preference__text__edit_name)
         editTextView

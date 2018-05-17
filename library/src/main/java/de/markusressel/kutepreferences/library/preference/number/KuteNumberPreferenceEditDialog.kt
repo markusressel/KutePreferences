@@ -1,5 +1,7 @@
 package de.markusressel.kutepreferences.library.preference.number
 
+import android.content.Context
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.NumberPicker
 import de.markusressel.kutepreferences.library.R
@@ -13,7 +15,7 @@ class KuteNumberPreferenceEditDialog(override val preferenceItem: KutePreference
 
     var numberPickerView: NumberPicker? = null
 
-    override fun onContentViewCreated(contentView: View) {
+    override fun onContentViewCreated(context: Context, layoutInflater: LayoutInflater, contentView: View) {
         numberPickerView = contentView
                 .findViewById(R.id.kute_preferences__preference__number__picker)
 

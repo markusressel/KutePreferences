@@ -26,7 +26,7 @@ interface KutePreferenceItem<DataType : Any> : KutePreferenceListItem, KutePrefe
      * The description of this KutePreference according to it's persisted value
      */
     val description: String
-        get() = constructDescription(persistedValue)
+        get() = createDescription(persistedValue)
 
     /**
      * Override this method if you want to provide a more sophisticated description.
@@ -38,14 +38,14 @@ interface KutePreferenceItem<DataType : Any> : KutePreferenceListItem, KutePrefe
      * @return the description for this preference according to the current value
      */
     @CheckResult
-    fun constructDescription(currentValue: DataType): String {
+    fun createDescription(currentValue: DataType): String {
         return "$currentValue"
     }
 
     /**
      * The default value of this preference
      */
-    val defaultValue: DataType
+    fun getDefaultValue(): DataType
 
     /**
      * The persisted value of this preference
@@ -71,7 +71,7 @@ interface KutePreferenceItem<DataType : Any> : KutePreferenceListItem, KutePrefe
      */
     @CallSuper
     fun reset() {
-        persistedValue = defaultValue
+        persistedValue = getDefaultValue()
     }
 
     /**

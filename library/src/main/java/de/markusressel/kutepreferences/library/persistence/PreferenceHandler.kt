@@ -12,11 +12,12 @@ constructor(context: Context) : PreferencesHandlerBase(context) {
     override var sharedPreferencesName: String? = null
         get() = "kute_preferences"
 
-    fun <PreferenceType : Any> getPreferenceItem(kutePreference: KutePreferenceItem<PreferenceType>): PreferenceItem<PreferenceType> {
+    fun <PreferenceType : Any> getPreferenceItem(
+            kutePreference: KutePreferenceItem<PreferenceType>): PreferenceItem<PreferenceType> {
         val key = context.getString(kutePreference.key)
 
         return currentPreferenceItems.getOrPut(key) {
-            PreferenceItem(kutePreference.key, kutePreference.defaultValue)
+            PreferenceItem(kutePreference.key, kutePreference.getDefaultValue())
         } as PreferenceItem<PreferenceType>
     }
 

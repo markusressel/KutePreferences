@@ -6,21 +6,24 @@ import de.markusressel.kutepreferences.library.R
 import de.markusressel.kutepreferences.library.persistence.KutePreferenceDataProvider
 import de.markusressel.kutepreferences.library.preference.KutePreferenceBase
 
-class KuteSliderPreference(override val key: Int,
-                           override val icon: Drawable? = null,
-                           override val title: String,
-                           private val mininum: Int? = null,
-                           private val maximum: Int? = null,
-                           override val defaultValue: Int,
-                           override val dataProvider: KutePreferenceDataProvider,
-                           override val onPreferenceChangedListener: ((oldValue: Int, newValue: Int) -> Unit)? = null) :
+class KuteSliderPreference(
+        override val key: Int,
+        override val icon: Drawable? = null,
+        override val title: String,
+        private val minimum: Int? = null,
+        private val maximum: Int? = null,
+        private val defaultValue: Int,
+        override val dataProvider: KutePreferenceDataProvider,
+        override val onPreferenceChangedListener: ((oldValue: Int, newValue: Int) -> Unit)? = null) :
         KutePreferenceBase<Int>() {
 
     override val layoutRes: Int
         get() = R.layout.kute_preference__default__list_item
 
+    override fun getDefaultValue(): Int = defaultValue
+
     override fun onClick(context: Context) {
-        val dialog = KuteSliderPreferenceEditDialog(this, defaultValue, mininum, maximum)
+        val dialog = KuteSliderPreferenceEditDialog(this, minimum, maximum)
         dialog
                 .show(context)
     }

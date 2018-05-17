@@ -13,13 +13,15 @@ open class KuteTogglePreference(
         override val key: Int,
         override val icon: Drawable? = null,
         override val title: String,
-        override val defaultValue: Boolean,
+        private val defaultValue: Boolean,
         override val dataProvider: KutePreferenceDataProvider,
         override val onPreferenceChangedListener: ((oldValue: Boolean, newValue: Boolean) -> Unit)? = null) :
         KutePreferenceBase<Boolean>() {
 
     override val layoutRes: Int
         get() = R.layout.kute_preference__toggle__list_item
+
+    override fun getDefaultValue(): Boolean = defaultValue
 
     private var switchView: Switch? = null
 

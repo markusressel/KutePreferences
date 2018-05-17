@@ -17,6 +17,7 @@ import de.markusressel.kutepreferences.library.preference.category.KuteDivider
 import de.markusressel.kutepreferences.library.preference.date.KuteDatePreference
 import de.markusressel.kutepreferences.library.preference.number.KuteNumberPreference
 import de.markusressel.kutepreferences.library.preference.number.KuteSliderPreference
+import de.markusressel.kutepreferences.library.preference.select.KuteSingleSelectPreference
 import de.markusressel.kutepreferences.library.preference.text.KuteTextPreference
 import de.markusressel.kutepreferences.library.preference.toggle.KuteTogglePreference
 import de.markusressel.kutepreferences.library.view.KutePreferencesMainFragment
@@ -82,6 +83,21 @@ class PreferencesFragment : KutePreferencesMainFragment() {
                 dataProvider = dataProvider)
     }
 
+    private val singleSelectPreference by lazy {
+        KuteSingleSelectPreference(
+                context = activity as Context,
+                key = R.string.key_demo_single_select,
+                icon = getIcon(MaterialDesignIconic.Icon.gmi_select_all),
+                title = "Selection",
+                defaultValue = R.string.key_single_select_1,
+                possibleValues = mapOf(
+                        R.string.key_single_select_1 to R.string.title_single_select_1,
+                        R.string.key_single_select_2 to R.string.title_single_select_2,
+                        R.string.key_single_select_3 to R.string.title_single_select_3
+                ),
+                dataProvider = dataProvider)
+    }
+
     private val kuteAction by lazy {
         KuteAction(key = R.string.key_demo_action,
                 icon = getIcon(MaterialDesignIconic.Icon.gmi_info),
@@ -117,7 +133,8 @@ class PreferencesFragment : KutePreferencesMainFragment() {
                 textPreference2,
                 sliderPreference,
                 datePreference,
-                kuteAction
+                kuteAction,
+                singleSelectPreference
         )
     }
 

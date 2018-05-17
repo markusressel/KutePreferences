@@ -1,5 +1,7 @@
 package de.markusressel.kutepreferences.library.preference.number
 
+import android.content.Context
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.SeekBar
 import de.markusressel.kutepreferences.library.R
@@ -8,7 +10,6 @@ import de.markusressel.kutepreferences.library.view.edit.KutePreferenceEditDialo
 
 class KuteSliderPreferenceEditDialog(
         override val preferenceItem: KutePreferenceItem<Int>,
-        private val defaultValue: Int,
         private val minimum: Int?,
         private val maximum: Int?) :
         KutePreferenceEditDialogBase<Int>() {
@@ -17,7 +18,7 @@ class KuteSliderPreferenceEditDialog(
 
     var seekBar: SeekBar? = null
 
-    override fun onContentViewCreated(contentView: View) {
+    override fun onContentViewCreated(context: Context, layoutInflater: LayoutInflater, contentView: View) {
         seekBar = contentView
                 .findViewById(R.id.kute_preferences__preference__seekbar)
 

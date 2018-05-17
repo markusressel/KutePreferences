@@ -1,5 +1,7 @@
 package de.markusressel.kutepreferences.library.preference.date
 
+import android.content.Context
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.CalendarView
 import de.markusressel.kutepreferences.library.R
@@ -18,7 +20,7 @@ class KuteDatePreferenceEditDialog(
 
     var calendarView: CalendarView? = null
 
-    override fun onContentViewCreated(contentView: View) {
+    override fun onContentViewCreated(context: Context, layoutInflater: LayoutInflater, contentView: View) {
         calendarView = contentView
                 .findViewById(R.id.kute_preferences__preference__date__calendar_view)
 

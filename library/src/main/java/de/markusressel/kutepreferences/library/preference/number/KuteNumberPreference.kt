@@ -12,7 +12,7 @@ open class KuteNumberPreference(
         override val title: String,
         private val minimum: Int? = null,
         private val maximum: Int? = null,
-        override val defaultValue: Long,
+        private val defaultValue: Long,
         val unit: String? = null, override val dataProvider: KutePreferenceDataProvider,
         override val onPreferenceChangedListener: ((oldValue: Long, newValue: Long) -> Unit)? = null) :
         KutePreferenceBase<Long>() {
@@ -20,7 +20,9 @@ open class KuteNumberPreference(
     override val layoutRes: Int
         get() = R.layout.kute_preference__default__list_item
 
-    override fun constructDescription(currentValue: Long): String {
+    override fun getDefaultValue(): Long = defaultValue
+
+    override fun createDescription(currentValue: Long): String {
         unit?.let {
             return "$currentValue $it"
         }

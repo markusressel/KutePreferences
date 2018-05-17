@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="title_single_select_1">First</string>
+    <string name="title_single_select_2">Second</string>
+    <string name="title_single_select_3">Third</string>
+
+</resources>

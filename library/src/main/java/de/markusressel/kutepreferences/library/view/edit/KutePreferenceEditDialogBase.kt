@@ -62,8 +62,7 @@ abstract class KutePreferenceEditDialogBase<DataType : Any> : KutePreferenceEdit
     }
 
     override fun reset() {
-        currentValue = preferenceItem
-                .defaultValue
+        currentValue = preferenceItem.getDefaultValue()
     }
 
     /**
@@ -78,7 +77,7 @@ abstract class KutePreferenceEditDialogBase<DataType : Any> : KutePreferenceEdit
         val dialogContentView = layoutInflater
                 .inflate(contentLayoutRes, null)
 
-        onContentViewCreated(dialogContentView)
+        onContentViewCreated(context, layoutInflater, dialogContentView)
 
         dialog = MaterialDialog
                 .Builder(context)
@@ -105,6 +104,6 @@ abstract class KutePreferenceEditDialogBase<DataType : Any> : KutePreferenceEdit
      * Called when the content view has been created.
      * Find your views here and set listeners, properties, etc.
      */
-    abstract fun onContentViewCreated(contentView: View)
+    abstract fun onContentViewCreated(context: Context, layoutInflater: LayoutInflater, contentView: View)
 
 }

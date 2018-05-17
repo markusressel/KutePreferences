@@ -8,14 +8,15 @@ import de.markusressel.kutepreferences.library.preference.KutePreferenceBase
 import java.text.DateFormat
 import java.util.*
 
-open class KuteDatePreference(override val key: Int,
-                              override val icon: Drawable? = null,
-                              override val title: String,
-                              private val mininum: Long? = null,
-                              private val maximum: Long? = null,
-                              override val defaultValue: Long,
-                              override val dataProvider: KutePreferenceDataProvider,
-                              override val onPreferenceChangedListener: ((oldValue: Long, newValue: Long) -> Unit)? = null) :
+open class KuteDatePreference(
+        override val key: Int,
+        override val icon: Drawable? = null,
+        override val title: String,
+        private val minimum: Long? = null,
+        private val maximum: Long? = null,
+        private val defaultValue: Long,
+        override val dataProvider: KutePreferenceDataProvider,
+        override val onPreferenceChangedListener: ((oldValue: Long, newValue: Long) -> Unit)? = null) :
         KutePreferenceBase<Long>() {
 
     override val layoutRes: Int
@@ -23,13 +24,15 @@ open class KuteDatePreference(override val key: Int,
 
     private val dateFormatter = DateFormat.getDateInstance(DateFormat.LONG)
 
+    override fun getDefaultValue(): Long = defaultValue
+
     override fun onClick(context: Context) {
-        val dialog = KuteDatePreferenceEditDialog(this, mininum, maximum)
+        val dialog = KuteDatePreferenceEditDialog(this, minimum, maximum)
         dialog
                 .show(context)
     }
 
-    override fun constructDescription(currentValue: Long): String {
+    override fun createDescription(currentValue: Long): String {
         return dateFormatter.format(Date(currentValue))
     }
 

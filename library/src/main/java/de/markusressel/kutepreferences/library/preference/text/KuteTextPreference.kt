@@ -12,10 +12,12 @@ open class KuteTextPreference(override val key: Int,
                               private val minLength: Int? = null,
                               private val maxLength: Int? = null,
                               private val regex: String? = null,
-                              override val defaultValue: String,
+                              private val defaultValue: String,
                               override val dataProvider: KutePreferenceDataProvider,
                               override val onPreferenceChangedListener: ((oldValue: String, newValue: String) -> Unit)? = null) :
         KutePreferenceBase<String>() {
+
+    override fun getDefaultValue(): String = defaultValue
 
     override val layoutRes: Int
         get() = R.layout.kute_preference__default__list_item
