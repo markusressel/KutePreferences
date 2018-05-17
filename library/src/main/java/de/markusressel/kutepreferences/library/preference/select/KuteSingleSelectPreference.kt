@@ -30,4 +30,12 @@ open class KuteSingleSelectPreference(
                 .show(context)
     }
 
+    override fun createDescription(currentValue: String): String {
+        return possibleValues.filter {
+            context.getString(it.key) == currentValue
+        }.map {
+            context.getString(it.value)
+        }.first()
+    }
+
 }
