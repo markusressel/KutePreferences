@@ -26,9 +26,9 @@ dependencies {
     implementation "com.android.support:appcompat-v7:$supportLibVersion"
     implementation "com.android.support:design:$supportLibVersion"
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    implementation "androidx.core:core-ktx:$androidKtxVersion"
 
-    implementation 'androidx.core:core-ktx:0.3'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
     implementation "com.google.code.gson:gson:2.8.2"
     implementation('com.github.markusressel:TypedPreferences:v2.1.1') {

@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.support.annotation.ColorInt
 import android.widget.Toast
+import androidx.core.widget.toast
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.IIcon
 import com.mikepenz.material_design_iconic_typeface_library.MaterialDesignIconic
@@ -59,9 +60,7 @@ class PreferencesFragment : KutePreferencesMainFragment() {
                 title = "Airplane Mode",
                 defaultValue = false,
                 onPreferenceChangedListener = { old, new ->
-                    Toast
-                            .makeText(context, "Old: $old New: $new", Toast.LENGTH_SHORT)
-                            .show()
+                    context?.toast("Old: $old New: $new", Toast.LENGTH_SHORT)
                 },
                 dataProvider = dataProvider)
     }
@@ -112,7 +111,7 @@ class PreferencesFragment : KutePreferencesMainFragment() {
                 icon = getIcon(MaterialDesignIconic.Icon.gmi_info),
                 title = "About",
                 onClickAction = {
-                    Toast.makeText(it, "Action clicked!", Toast.LENGTH_SHORT).show()
+                    context?.toast("Action clicked!", Toast.LENGTH_SHORT)
                 })
     }
 

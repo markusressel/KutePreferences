@@ -36,6 +36,12 @@ dependencies {
     implementation "com.android.support:appcompat-v7:$supportLibVersion"
     implementation "com.android.support.constraint:constraint-layout:$constraintLayoutVersion"
 
+    // Android KTX
+
+    implementation "androidx.core:core-ktx:$androidKtxVersion"
+//    implementation "androidx.fragment:fragment-ktx:$androidKtxVersion"
+//    implementation "androidx.collection:collection-ktx:$androidKtxVersion"
+
     compileOnly "org.glassfish:javax.annotation:$javaxAnnotationVersion"
 
     // Dagger 2

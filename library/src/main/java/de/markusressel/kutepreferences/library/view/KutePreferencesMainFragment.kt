@@ -40,6 +40,12 @@ abstract class KutePreferencesMainFragment : Fragment() {
         super
                 .onViewCreated(view, savedInstanceState)
 
+        showTopLevel()
+    }
+
+    override fun onResume() {
+        super.onResume()
+
         RxSearchView
                 .queryTextChanges(kute_preferences__search)
                 .skipInitialValue()
@@ -58,8 +64,6 @@ abstract class KutePreferencesMainFragment : Fragment() {
                         replaceContent(preferenceIds)
                     }
                 }, onError = {})
-
-        showTopLevel()
     }
 
     override fun onStart() {
