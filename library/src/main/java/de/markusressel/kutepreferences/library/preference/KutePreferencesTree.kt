@@ -2,42 +2,53 @@ package de.markusressel.kutepreferences.library.preference
 
 import android.support.annotation.StringRes
 import de.markusressel.kutepreferences.library.KutePreferenceListItem
+import de.markusressel.kutepreferences.library.KuteSearchProvider
 import de.markusressel.kutepreferences.library.preference.category.KutePreferenceCategory
 
 class KutePreferencesTree(vararg items: KutePreferenceListItem) {
 
-    val treeItems = items.asList()
+    private val topLevelItems = items.asList()
+    private val treeAsList = creatListOfAllItems(topLevelItems)
+
+    private fun creatListOfAllItems(treeItems: List<KutePreferenceListItem>): List<KutePreferenceListItem> {
+        val result: MutableList<KutePreferenceListItem> = mutableListOf()
+
+        fun traverse(items: List<KutePreferenceListItem>) {
+            items.forEach {
+                when (it) {
+                    is KutePreferenceCategory -> with(it) {
+                        result
+                                .add(it)
+                        traverse(it.children)
+                    }
+                    else -> {
+                        result
+                                .add(it)
+                    }
+                }
+            }
+        }
+
+        traverse(treeItems)
+
+        return result
+    }
 
     /**
      * Find preferences containing a given text
      */
     fun findPreferences(text: String): List<KutePreferenceListItem> {
-        val result: MutableList<KutePreferenceListItem> = mutableListOf()
-
-        fun filter(items: List<KutePreferenceListItem>) {
-            items
-                    .forEach {
-                        when (it) {
-                            is KutePreferenceItem<*> -> with(it) {
-                                if (title.contains(text, true) or description.contains(text, true)) {
-                                    result
-                                            .add(it)
-                                }
-                            }
-                            is KutePreferenceCategory -> with(it) {
-                                if (it.title.contains(text, true) or it.description.contains(text, true)) {
-                                    result
-                                            .add(it)
-                                }
-                                filter(it.children)
-                            }
-                        }
-                    }
+        return treeAsList.filter {
+            it is KuteSearchProvider
+        }.map {
+            it as KuteSearchProvider
+        }.filter {
+            it.getSearchableItems().any {
+                it.contains(text, true)
+            }
+        }.map {
+            it as KutePreferenceListItem
         }
-
-        filter(treeItems)
-
-        return result
     }
 
 
@@ -45,7 +56,7 @@ class KutePreferencesTree(vararg items: KutePreferenceListItem) {
      * Returns a list of all items in a category
      */
     fun getCategoryItems(@StringRes key: Int): List<KutePreferenceListItem> {
-        val category = getCategory(key, treeItems)
+        val category = getCategory(key, treeAsList)
         category
                 ?.let {
                     return it
@@ -55,49 +66,24 @@ class KutePreferencesTree(vararg items: KutePreferenceListItem) {
         return emptyList()
     }
 
-    fun getCategory(@StringRes key: Int, items: List<KutePreferenceListItem>): KutePreferenceCategory? {
-        items
-                .forEach {
-                    when (it) {
-                        is KutePreferenceCategory -> {
-                            if (it.key == key) {
-                                return it
-                            }
-                            getCategory(key, it.children)
-                        }
-                    }
-                }
-
-        return null
+    private fun getCategory(@StringRes key: Int, items: List<KutePreferenceListItem>): KutePreferenceCategory? {
+        return items.filter {
+            it is KutePreferenceCategory
+        }.filter {
+            it.key == key
+        }.map {
+            it as KutePreferenceCategory
+        }.firstOrNull()
     }
 
     fun searchRecursive(filter: (KutePreferenceListItem) -> Boolean): List<KutePreferenceListItem> {
-        val result: MutableList<KutePreferenceListItem> = mutableListOf()
-
-        fun innerFilter(items: List<KutePreferenceListItem>) {
-            items
-                    .forEach {
-                        when (it) {
-
-                            is KutePreferenceCategory -> with(it) {
-                                if (filter(it)) {
-                                    result
-                                            .add(it)
-                                }
-                                innerFilter(it.children)
-                            }
-                            else -> {
-                                if (filter(it)) {
-                                    result
-                                            .add(it)
-                                }
-                            }
-                        }
-                    }
+        return treeAsList.filter {
+            filter(it)
         }
+    }
 
-        innerFilter(treeItems)
-        return result
+    fun getTopLevelItems(): List<KutePreferenceListItem> {
+        return topLevelItems
     }
 
 }

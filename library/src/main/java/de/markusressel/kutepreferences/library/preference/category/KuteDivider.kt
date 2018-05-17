@@ -30,4 +30,8 @@ open class KuteDivider(
                 .makeText(context, "$title clicked!", Toast.LENGTH_SHORT)
                 .show()
     }
+
+    override fun getSearchableItems(): Set<String> {
+        return setOf(title)
+    }
 }

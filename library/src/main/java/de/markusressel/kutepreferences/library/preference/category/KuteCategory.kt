@@ -20,7 +20,6 @@ open class KuteCategory(
         override val description: String,
         override val children: List<KutePreferenceListItem>) :
         KutePreferenceCategory {
-
     override fun inflateListLayout(layoutInflater: LayoutInflater): ViewGroup {
         val layout = layoutInflater.inflate(R.layout.kute_preference__category, null, false) as ViewGroup
 
@@ -46,6 +45,10 @@ open class KuteCategory(
         Toast
                 .makeText(context, "$title clicked!", Toast.LENGTH_SHORT)
                 .show()
+    }
+
+    override fun getSearchableItems(): Set<String> {
+        return setOf(title, description)
     }
 
 }

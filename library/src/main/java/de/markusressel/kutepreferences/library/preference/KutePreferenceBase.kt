@@ -8,12 +8,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import de.markusressel.kutepreferences.library.KuteSearchProvider
 import de.markusressel.kutepreferences.library.R
 
 /**
  * Base class for KutePreferenceListItem implementations
  */
-abstract class KutePreferenceBase<DataType : Any> : KutePreferenceItem<DataType> {
+abstract class KutePreferenceBase<DataType : Any> : KutePreferenceItem<DataType>, KuteSearchProvider {
 
     @get:LayoutRes
     abstract val layoutRes: Int
@@ -72,6 +73,10 @@ abstract class KutePreferenceBase<DataType : Any> : KutePreferenceItem<DataType>
                 it.text = description
             }
         }
+    }
+
+    override fun getSearchableItems(): Set<String> {
+        return setOf(title, description)
     }
 
 }

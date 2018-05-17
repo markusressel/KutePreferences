@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import de.markusressel.kutepreferences.library.KutePreferenceListItem
+import de.markusressel.kutepreferences.library.KuteSearchProvider
 import de.markusressel.kutepreferences.library.R
 import de.markusressel.kutepreferences.library.preference.KutePreferenceClickListener
 
@@ -14,8 +15,7 @@ open class KuteAction(override val key: Int,
                       val icon: Drawable? = null,
                       val title: String,
                       val onClickAction: (Context) -> Unit) :
-        KutePreferenceListItem, KutePreferenceClickListener {
-
+        KutePreferenceListItem, KutePreferenceClickListener, KuteSearchProvider {
     val layoutRes: Int
         get() = R.layout.kute_preference__action__list_item
 
@@ -40,6 +40,10 @@ open class KuteAction(override val key: Int,
 
     override fun onClick(context: Context) {
         onClickAction(context)
+    }
+
+    override fun getSearchableItems(): Set<String> {
+        return setOf(title)
     }
 
 }

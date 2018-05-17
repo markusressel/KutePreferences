@@ -41,7 +41,7 @@ class KutePreferencesContentFragment : Fragment() {
         } else {
             mainFragment
                     .kutePreferencesTree
-                    .treeItems
+                    .getTopLevelItems()
         }
 
         return generatePage(*preferenceItems.toTypedArray())
