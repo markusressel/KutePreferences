@@ -6,14 +6,15 @@ import de.markusressel.kutepreferences.library.R
 import de.markusressel.kutepreferences.library.persistence.KutePreferenceDataProvider
 import de.markusressel.kutepreferences.library.preference.KutePreferenceBase
 
-open class KuteNumberPreference(override val key: Int,
-                           override val icon: Drawable? = null,
-                           override val title: String,
-                           private val mininum: Int? = null,
-                           private val maximum: Int? = null,
-                           override val defaultValue: Long,
-                           val unit: String? = null,override val dataProvider: KutePreferenceDataProvider,
-                           override val onPreferenceChangedListener: ((oldValue: Long, newValue: Long) -> Unit)? = null) :
+open class KuteNumberPreference(
+        override val key: Int,
+        override val icon: Drawable? = null,
+        override val title: String,
+        private val minimum: Int? = null,
+        private val maximum: Int? = null,
+        override val defaultValue: Long,
+        val unit: String? = null, override val dataProvider: KutePreferenceDataProvider,
+        override val onPreferenceChangedListener: ((oldValue: Long, newValue: Long) -> Unit)? = null) :
         KutePreferenceBase<Long>() {
 
     override val layoutRes: Int
