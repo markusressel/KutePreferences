@@ -56,6 +56,7 @@ class PreferencesFragment : KutePreferencesMainFragment() {
         KuteNumberPreference(key = R.string.key_demo_number_pref,
                 icon = getIcon(MaterialDesignIconic.Icon.gmi_time_countdown),
                 title = "Connection Timeout",
+                unit = "ms",
                 defaultValue = 2000,
                 dataProvider = dataProvider)
     }

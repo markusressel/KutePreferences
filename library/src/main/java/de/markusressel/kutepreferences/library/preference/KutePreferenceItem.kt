@@ -29,7 +29,10 @@ interface KutePreferenceItem<DataType : Any> : KutePreferenceListItem, KutePrefe
         get() = constructDescription(persistedValue)
 
     /**
-     * Override this method if you want to provide a more sophisticated description
+     * Override this method if you want to provide a more sophisticated description.
+     *
+     * Note: Remember that according to material design guidelines the description should always
+     * reflect the currently saved value of a preference.
      *
      * @param currentValue the current value
      * @return the description for this preference according to the current value

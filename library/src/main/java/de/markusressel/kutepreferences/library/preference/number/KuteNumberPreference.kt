@@ -17,6 +17,7 @@ class KuteNumberPreference(override val key: Int,
                            val mininum: Int? = null,
                            val maximum: Int? = null,
                            override val defaultValue: Long,
+                           val unit: String? = null,
                            override val dataProvider: KutePreferenceDataProvider,
                            override val onPreferenceChangedListener: ((oldValue: Long, newValue: Long) -> Unit)? = null) :
         KutePreferenceBase<Long>(), KutePreferenceClickListener {
@@ -48,6 +49,14 @@ class KuteNumberPreference(override val key: Int,
                 ?.text = description
 
         return layout
+    }
+
+    override fun constructDescription(currentValue: Long): String {
+        unit?.let {
+            return "$currentValue $it"
+        }
+
+        return "$currentValue"
     }
 
     override fun onClick(context: Context) {
