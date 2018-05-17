@@ -13,7 +13,8 @@ open class KuteNumberPreference(
         private val minimum: Int? = null,
         private val maximum: Int? = null,
         private val defaultValue: Long,
-        val unit: String? = null, override val dataProvider: KutePreferenceDataProvider,
+        val unit: String? = null,
+        override val dataProvider: KutePreferenceDataProvider,
         override val onPreferenceChangedListener: ((oldValue: Long, newValue: Long) -> Unit)? = null) :
         KutePreferenceBase<Long>() {
 

@@ -14,7 +14,7 @@ import de.markusressel.kutepreferences.library.preference.KutePreferenceClickLis
 open class KuteAction(override val key: Int,
                       val icon: Drawable? = null,
                       val title: String,
-                      val onClickAction: (Context) -> Unit) :
+                      val onClickAction: (Context, KuteAction) -> Unit) :
         KutePreferenceListItem, KutePreferenceClickListener, KuteSearchProvider {
     val layoutRes: Int
         get() = R.layout.kute_preference__action__list_item
@@ -39,7 +39,7 @@ open class KuteAction(override val key: Int,
     }
 
     override fun onClick(context: Context) {
-        onClickAction(context)
+        onClickAction(context, this)
     }
 
     override fun getSearchableItems(): Set<String> {

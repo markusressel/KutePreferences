@@ -33,14 +33,14 @@ class PreferencesFragment : KutePreferencesMainFragment() {
     private val textPreference by lazy {
         KuteTextPreference(key = R.string.key_demo_text_pref,
                 icon = getIcon(MaterialDesignIconic.Icon.gmi_battery),
-                title = "Name",
-                defaultValue = "My Battery",
+                title = getString(R.string.title_demo_text_pref),
+                defaultValue = getString(R.string.default_value_demo_text_pref),
                 dataProvider = dataProvider)
     }
 
     private val textPreference2 by lazy {
         KuteTextPreference(key = R.string.key_demo_text_pref_2,
-                title = "Device Owner",
+                title = getString(R.string.title_demo_text_pref_2),
                 defaultValue = "Markus Ressel",
                 dataProvider = dataProvider)
     }
@@ -48,7 +48,7 @@ class PreferencesFragment : KutePreferencesMainFragment() {
     private val passwordPreference by lazy {
         KuteTextPreference(key = R.string.key_demo_text_pref_password,
                 icon = getIcon(MaterialDesignIconic.Icon.gmi_lock),
-                title = "Password",
+                title = getString(R.string.title_demo_text_pref_password),
                 defaultValue = "",
                 isPassword = true,
                 dataProvider = dataProvider)
@@ -57,7 +57,7 @@ class PreferencesFragment : KutePreferencesMainFragment() {
     private val togglePreference by lazy {
         KuteTogglePreference(key = R.string.key_demo_toggle_pref,
                 icon = getIcon(MaterialDesignIconic.Icon.gmi_airplane),
-                title = "Airplane Mode",
+                title = getString(R.string.title_demo_toggle_pref),
                 defaultValue = false,
                 onPreferenceChangedListener = { old, new ->
                     context?.toast("Old: $old New: $new", Toast.LENGTH_SHORT)
@@ -68,7 +68,7 @@ class PreferencesFragment : KutePreferencesMainFragment() {
     private val numberPreference by lazy {
         KuteNumberPreference(key = R.string.key_demo_number_pref,
                 icon = getIcon(MaterialDesignIconic.Icon.gmi_time_countdown),
-                title = "Connection Timeout",
+                title = getString(R.string.title_demo_number_pref),
                 unit = "ms",
                 defaultValue = 2000,
                 dataProvider = dataProvider)
@@ -77,7 +77,7 @@ class PreferencesFragment : KutePreferencesMainFragment() {
     private val sliderPreference by lazy {
         KuteSliderPreference(key = R.string.key_demo_slider_pref,
                 icon = getIcon(MaterialDesignIconic.Icon.gmi_volume_up),
-                title = "Volume",
+                title = getString(R.string.title_demo_slider_pref),
                 maximum = 7,
                 defaultValue = 5,
                 dataProvider = dataProvider)
@@ -86,7 +86,7 @@ class PreferencesFragment : KutePreferencesMainFragment() {
     private val datePreference by lazy {
         KuteDatePreference(key = R.string.key_demo_date_pref,
                 icon = getIcon(MaterialDesignIconic.Icon.gmi_calendar),
-                title = "Day of Birth",
+                title = getString(R.string.title_demo_date_pref),
                 defaultValue = Date().time,
                 dataProvider = dataProvider)
     }
@@ -96,7 +96,7 @@ class PreferencesFragment : KutePreferencesMainFragment() {
                 context = activity as Context,
                 key = R.string.key_demo_single_select,
                 icon = getIcon(MaterialDesignIconic.Icon.gmi_select_all),
-                title = "Selection",
+                title = getString(R.string.title_demo_single_select),
                 defaultValue = R.string.key_single_select_1,
                 possibleValues = mapOf(
                         R.string.key_single_select_1 to R.string.title_single_select_1,
@@ -109,9 +109,9 @@ class PreferencesFragment : KutePreferencesMainFragment() {
     private val kuteAction by lazy {
         KuteAction(key = R.string.key_demo_action,
                 icon = getIcon(MaterialDesignIconic.Icon.gmi_info),
-                title = "About",
-                onClickAction = {
-                    context?.toast("Action clicked!", Toast.LENGTH_SHORT)
+                title = getString(R.string.title_demo_action),
+                onClickAction = { context, kuteAction ->
+                    context.toast("Action clicked!", Toast.LENGTH_SHORT)
                 })
     }
 
@@ -120,8 +120,8 @@ class PreferencesFragment : KutePreferencesMainFragment() {
                 KuteCategory(
                         key = R.string.key_category_battery,
                         icon = getIcon(MaterialDesignIconic.Icon.gmi_battery),
-                        title = "Battery",
-                        description = "Everything about your battery",
+                        title = getString(R.string.title_category_battery),
+                        description = getString(R.string.description_category_battery),
                         children = listOf(
                                 KuteDivider(
                                         key = R.string.key_divider_test,
@@ -129,10 +129,10 @@ class PreferencesFragment : KutePreferencesMainFragment() {
                                 textPreference
                         )
                 ),
-                KuteCategory(key = R.string.key_category_wifi,
+                KuteCategory(key = R.string.key_category_network,
                         icon = getIcon(MaterialDesignIconic.Icon.gmi_wifi),
-                        title = "Network",
-                        description = "Wi-Fi, mobile, hotspot",
+                        title = getString(R.string.title_category_network),
+                        description = getString(R.string.description_category_network),
                         children = listOf(
                                 togglePreference,
                                 numberPreference
@@ -140,8 +140,8 @@ class PreferencesFragment : KutePreferencesMainFragment() {
                 ),
                 KuteCategory(key = R.string.key_category_user,
                         icon = getIcon(MaterialDesignIconic.Icon.gmi_nature_people),
-                        title = "User",
-                        description = "Profile, Password, etc.",
+                        title = getString(R.string.title_category_user),
+                        description = getString(R.string.description_category_user),
                         children = listOf(
                                 textPreference2,
                                 singleSelectPreference,

@@ -2,7 +2,7 @@
 <resources>
 
     <string name="key_category_battery" translatable="false">key_category_battery</string>
-    <string name="key_category_wifi" translatable="false">key_category_wifi</string>
+    <string name="key_category_network" translatable="false">key_category_wifi</string>
     <string name="key_category_user" translatable="false">key_category_user</string>
     <string name="key_divider_test" translatable="false">key_divider_test</string>
 

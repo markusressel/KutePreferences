@@ -1,6 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <string name="title_demo_text_pref">Name</string>
+    <string name="default_value_demo_text_pref">My Battery</string>
+
+    <string name="title_demo_text_pref_2">Device Owner</string>
+
+    <string name="title_demo_text_pref_password">Password</string>
+
+    <string name="title_demo_toggle_pref">Airplane Mode</string>
+
+    <string name="title_demo_number_pref">Connection Timeout</string>
+
+    <string name="title_demo_slider_pref">Volume</string>
+
+    <string name="title_demo_date_pref">Day of Birth</string>
+
+    <string name="title_demo_single_select">Gender</string>
+
+    <string name="title_demo_action">About</string>
+
+    <string name="title_category_battery">Battery</string>
+    <string name="description_category_battery">Everything about your battery</string>
+
+    <string name="title_category_network">Network</string>
+    <string name="description_category_network">Wi-Fi, mobile, hotspot</string>
+
+    <string name="title_category_user">User</string>
+    <string name="description_category_user">Profile, Password, etc.</string>
+
     <string name="title_single_select_1">Male</string>
     <string name="title_single_select_2">Female</string>
     <string name="title_single_select_3">Other</string>
