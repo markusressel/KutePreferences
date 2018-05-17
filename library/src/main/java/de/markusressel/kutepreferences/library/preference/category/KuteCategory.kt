@@ -13,9 +13,9 @@ import de.markusressel.kutepreferences.library.R
 /**
  * The default implementation of a KutePreference Category
  */
-class KuteCategory(
+open class KuteCategory(
         override val key: Int,
-        val icon: Drawable,
+        private val icon: Drawable,
         override val title: String,
         override val description: String,
         override val children: List<KutePreferenceListItem>) :

@@ -10,7 +10,7 @@ import de.markusressel.kutepreferences.library.R
 /**
  * The default implementation of a KutePreference Divider
  */
-class KuteDivider(
+open class KuteDivider(
         override val key: Int,
         override val title: String) : KutePreferenceDivider {
 

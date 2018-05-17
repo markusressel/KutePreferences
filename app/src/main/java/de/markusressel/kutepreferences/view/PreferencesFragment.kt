@@ -11,12 +11,16 @@ import com.mikepenz.material_design_iconic_typeface_library.MaterialDesignIconic
 import de.markusressel.kutepreferences.R
 import de.markusressel.kutepreferences.library.persistence.DefaultKutePreferenceDataProvider
 import de.markusressel.kutepreferences.library.preference.KutePreferencesTree
+import de.markusressel.kutepreferences.library.preference.action.KuteAction
 import de.markusressel.kutepreferences.library.preference.category.KuteCategory
 import de.markusressel.kutepreferences.library.preference.category.KuteDivider
+import de.markusressel.kutepreferences.library.preference.date.KuteDatePreference
 import de.markusressel.kutepreferences.library.preference.number.KuteNumberPreference
+import de.markusressel.kutepreferences.library.preference.number.KuteSliderPreference
 import de.markusressel.kutepreferences.library.preference.text.KuteTextPreference
 import de.markusressel.kutepreferences.library.preference.toggle.KuteTogglePreference
 import de.markusressel.kutepreferences.library.view.KutePreferencesMainFragment
+import java.util.*
 
 class PreferencesFragment : KutePreferencesMainFragment() {
 
@@ -61,6 +65,32 @@ class PreferencesFragment : KutePreferencesMainFragment() {
                 dataProvider = dataProvider)
     }
 
+    private val sliderPreference by lazy {
+        KuteSliderPreference(key = R.string.key_demo_slider_pref,
+                icon = getIcon(MaterialDesignIconic.Icon.gmi_volume_up),
+                title = "Volume",
+                maximum = 7,
+                defaultValue = 5,
+                dataProvider = dataProvider)
+    }
+
+    private val datePreference by lazy {
+        KuteDatePreference(key = R.string.key_demo_date_pref,
+                icon = getIcon(MaterialDesignIconic.Icon.gmi_calendar),
+                title = "Date",
+                defaultValue = Date().time,
+                dataProvider = dataProvider)
+    }
+
+    private val kuteAction by lazy {
+        KuteAction(key = R.string.key_demo_action,
+                icon = getIcon(MaterialDesignIconic.Icon.gmi_info),
+                title = "About",
+                onClickAction = {
+                    Toast.makeText(it, "Action clicked!", Toast.LENGTH_SHORT).show()
+                })
+    }
+
     override fun initPreferenceTree(): KutePreferencesTree {
         return KutePreferencesTree(
                 KuteCategory(
@@ -84,7 +114,10 @@ class PreferencesFragment : KutePreferencesMainFragment() {
                                 numberPreference
                         )
                 ),
-                textPreference2
+                textPreference2,
+                sliderPreference,
+                datePreference,
+                kuteAction
         )
     }
 

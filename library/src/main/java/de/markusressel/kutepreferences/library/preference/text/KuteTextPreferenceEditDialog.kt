@@ -9,15 +9,17 @@ import de.markusressel.kutepreferences.library.preference.KutePreferenceItem
 import de.markusressel.kutepreferences.library.view.edit.KutePreferenceEditDialogBase
 import io.reactivex.rxkotlin.subscribeBy
 
-class KuteTextPreferenceEditDialog(override val preferenceItem: KutePreferenceItem<String>) :
+class KuteTextPreferenceEditDialog(
+        override val preferenceItem: KutePreferenceItem<String>,
+        private val minLength: Int?,
+        private val maxLength: Int?,
+        private val regex: String?) :
         KutePreferenceEditDialogBase<String>() {
 
     override val contentLayoutRes: Int
-        get() = R.layout.kute_preference__edit_dialog
+        get() = R.layout.kute_preference__text__edit_dialog
 
-    var userInput: String = ""
-
-    var editTextView: EditText? = null
+    private var editTextView: EditText? = null
 
     override fun onContentViewCreated(contentView: View) {
         editTextView = contentView
@@ -42,8 +44,8 @@ class KuteTextPreferenceEditDialog(override val preferenceItem: KutePreferenceIt
         }
     }
 
-    override fun onCurrentValueChanged(oldValue: String?, newValue: String?) {
-        if (oldValue != newValue && newValue != userInput) {
+    override fun onCurrentValueChanged(oldValue: String?, newValue: String?, byUser: Boolean) {
+        if (!byUser) {
             editTextView
                     ?.setText(newValue)
         }
