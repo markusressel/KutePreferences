@@ -31,6 +31,7 @@ class PreferencesFragment : KutePreferencesMainFragment() {
 
     private val textPreference by lazy {
         KuteTextPreference(key = R.string.key_demo_text_pref,
+                icon = getIcon(MaterialDesignIconic.Icon.gmi_battery),
                 title = "Name",
                 defaultValue = "My Battery",
                 dataProvider = dataProvider)
@@ -38,9 +39,17 @@ class PreferencesFragment : KutePreferencesMainFragment() {
 
     private val textPreference2 by lazy {
         KuteTextPreference(key = R.string.key_demo_text_pref_2,
-                icon = getIcon(MaterialDesignIconic.Icon.gmi_nature_people),
                 title = "Device Owner",
                 defaultValue = "Markus Ressel",
+                dataProvider = dataProvider)
+    }
+
+    private val passwordPreference by lazy {
+        KuteTextPreference(key = R.string.key_demo_text_pref_password,
+                icon = getIcon(MaterialDesignIconic.Icon.gmi_lock),
+                title = "Password",
+                defaultValue = "",
+                isPassword = true,
                 dataProvider = dataProvider)
     }
 
@@ -78,7 +87,7 @@ class PreferencesFragment : KutePreferencesMainFragment() {
     private val datePreference by lazy {
         KuteDatePreference(key = R.string.key_demo_date_pref,
                 icon = getIcon(MaterialDesignIconic.Icon.gmi_calendar),
-                title = "Date",
+                title = "Day of Birth",
                 defaultValue = Date().time,
                 dataProvider = dataProvider)
     }
@@ -130,11 +139,19 @@ class PreferencesFragment : KutePreferencesMainFragment() {
                                 numberPreference
                         )
                 ),
-                textPreference2,
+                KuteCategory(key = R.string.key_category_user,
+                        icon = getIcon(MaterialDesignIconic.Icon.gmi_nature_people),
+                        title = "User",
+                        description = "Profile, Password, etc.",
+                        children = listOf(
+                                textPreference2,
+                                singleSelectPreference,
+                                datePreference,
+                                passwordPreference
+                        )
+                ),
                 sliderPreference,
-                datePreference,
-                kuteAction,
-                singleSelectPreference
+                kuteAction
         )
     }
 

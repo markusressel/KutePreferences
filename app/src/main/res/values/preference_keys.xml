@@ -3,10 +3,12 @@
 
     <string name="key_category_battery" translatable="false">key_category_battery</string>
     <string name="key_category_wifi" translatable="false">key_category_wifi</string>
+    <string name="key_category_user" translatable="false">key_category_user</string>
     <string name="key_divider_test" translatable="false">key_divider_test</string>
 
     <string name="key_demo_text_pref" translatable="false">key_demo_text_pref</string>
     <string name="key_demo_text_pref_2" translatable="false">key_demo_text_pref_2</string>
+    <string name="key_demo_text_pref_password" translatable="false">key_demo_text_pref_password</string>
 
     <string name="key_demo_number_pref" translatable="false">key_demo_number_pref</string>
     <string name="key_demo_slider_pref" translatable="false">key_demo_slider_pref</string>

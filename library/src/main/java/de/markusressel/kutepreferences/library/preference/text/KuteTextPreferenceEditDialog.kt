@@ -1,6 +1,7 @@
 package de.markusressel.kutepreferences.library.preference.text
 
 import android.content.Context
+import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.EditText
@@ -11,11 +12,13 @@ import de.markusressel.kutepreferences.library.preference.KutePreferenceItem
 import de.markusressel.kutepreferences.library.view.edit.KutePreferenceEditDialogBase
 import io.reactivex.rxkotlin.subscribeBy
 
+
 class KuteTextPreferenceEditDialog(
         override val preferenceItem: KutePreferenceItem<String>,
         private val minLength: Int?,
         private val maxLength: Int?,
-        private val regex: String?) :
+        private val regex: String?,
+        private val isPassword: Boolean) :
         KutePreferenceEditDialogBase<String>() {
 
     override val contentLayoutRes: Int
@@ -27,7 +30,13 @@ class KuteTextPreferenceEditDialog(
         editTextView = contentView
                 .findViewById(R.id.kute_preferences__preference__text__edit_name)
         editTextView
-                ?.setText(currentValue)
+                ?.let {
+                    it.setText(currentValue)
+                    if (isPassword) {
+                        it.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+                        it.setSelection(it.text.length)
+                    }
+                }
 
         userInput = persistedValue
 
