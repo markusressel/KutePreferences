@@ -18,6 +18,7 @@ import de.markusressel.kutepreferences.library.preference.category.KuteDivider
 import de.markusressel.kutepreferences.library.preference.date.KuteDatePreference
 import de.markusressel.kutepreferences.library.preference.number.KuteNumberPreference
 import de.markusressel.kutepreferences.library.preference.number.KuteSliderPreference
+import de.markusressel.kutepreferences.library.preference.select.KuteMultiSelectPreference
 import de.markusressel.kutepreferences.library.preference.select.KuteSingleSelectPreference
 import de.markusressel.kutepreferences.library.preference.text.KuteTextPreference
 import de.markusressel.kutepreferences.library.preference.toggle.KuteTogglePreference
@@ -106,6 +107,21 @@ class PreferencesFragment : KutePreferencesMainFragment() {
                 dataProvider = dataProvider)
     }
 
+    private val multiSelectPreference by lazy {
+        KuteMultiSelectPreference(
+                context = activity as Context,
+                key = R.string.key_demo_multi_select,
+                icon = getIcon(MaterialDesignIconic.Icon.gmi_select_all),
+                title = getString(R.string.title_demo_multi_select),
+                defaultValue = setOf(R.string.key_multi_select_1, R.string.key_multi_select_2),
+                possibleValues = mapOf(
+                        R.string.key_multi_select_1 to R.string.title_multi_select_1,
+                        R.string.key_multi_select_2 to R.string.title_multi_select_2,
+                        R.string.key_multi_select_3 to R.string.title_multi_select_3
+                ),
+                dataProvider = dataProvider)
+    }
+
     private val kuteAction by lazy {
         KuteAction(key = R.string.key_demo_action,
                 icon = getIcon(MaterialDesignIconic.Icon.gmi_info),
@@ -150,6 +166,7 @@ class PreferencesFragment : KutePreferencesMainFragment() {
                         )
                 ),
                 sliderPreference,
+                multiSelectPreference,
                 kuteAction
         )
     }

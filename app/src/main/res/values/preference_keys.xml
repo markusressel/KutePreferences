@@ -24,4 +24,9 @@
     <string name="key_single_select_2" translatable="false">key_single_select_2</string>
     <string name="key_single_select_3" translatable="false">key_single_select_3</string>
 
+    <string name="key_demo_multi_select" translatable="false">key_demo_multi_select</string>
+    <string name="key_multi_select_1" translatable="false">key_multi_select_1</string>
+    <string name="key_multi_select_2" translatable="false">key_multi_select_2</string>
+    <string name="key_multi_select_3" translatable="false">key_multi_select_3</string>
+
 </resources>

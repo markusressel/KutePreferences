@@ -16,8 +16,6 @@
 
     <string name="title_demo_date_pref">Day of Birth</string>
 
-    <string name="title_demo_single_select">Gender</string>
-
     <string name="title_demo_action">About</string>
 
     <string name="title_category_battery">Battery</string>
@@ -29,8 +27,14 @@
     <string name="title_category_user">User</string>
     <string name="description_category_user">Profile, Password, etc.</string>
 
+    <string name="title_demo_single_select">Gender</string>
     <string name="title_single_select_1">Male</string>
     <string name="title_single_select_2">Female</string>
     <string name="title_single_select_3">Other</string>
+
+    <string name="title_demo_multi_select">Music Genres</string>
+    <string name="title_multi_select_1">Jazz</string>
+    <string name="title_multi_select_2">Rock</string>
+    <string name="title_multi_select_3">House</string>
 
 </resources>
