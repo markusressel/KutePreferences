@@ -5,13 +5,11 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.eightbitlab.rxbus.Bus
-import com.eightbitlab.rxbus.registerInBus
 import com.jakewharton.rxbinding2.support.v7.widget.RxSearchView
 import com.trello.rxlifecycle2.kotlin.bindToLifecycle
+import de.markusressel.kutepreferences.library.KutePreferenceListItem
 import de.markusressel.kutepreferences.library.R
 import de.markusressel.kutepreferences.library.preference.KutePreferencesTree
-import de.markusressel.kutepreferences.library.view.event.CategoryEvent
 import io.reactivex.rxkotlin.subscribeBy
 import kotlinx.android.synthetic.main.kute_preference__main_fragment.*
 import java.util.concurrent.TimeUnit
@@ -66,24 +64,6 @@ abstract class KutePreferencesMainFragment : Fragment() {
                 }, onError = {})
     }
 
-    override fun onStart() {
-        super
-                .onStart()
-        Bus
-                .observe<CategoryEvent>()
-                .subscribe {
-                    val preferenceIds = kutePreferencesTree
-                            .getCategoryItems(it.category.key)
-                            .map {
-                                it
-                                        .key
-                            }
-
-                    replaceContent(preferenceIds)
-                }
-                .registerInBus(this)
-    }
-
     private fun showSearchResults() {
         kute_preferences__search_result_layout
                 .visibility = View
@@ -108,6 +88,21 @@ abstract class KutePreferencesMainFragment : Fragment() {
         })
     }
 
+    /**
+     * Show a specific category
+     *
+     * @param category the category to show
+     */
+    fun showCategory(category: KutePreferenceListItem) {
+        val preferenceIds = kutePreferencesTree
+                .getCategoryItems(category.key)
+                .map {
+                    it.key
+                }
+
+        replaceContent(preferenceIds)
+    }
+
     private fun replaceContent(preferenceIds: List<Int>) {
         val fragment = KutePreferencesContentFragment
                 .newInstance(preferenceIds)
@@ -118,13 +113,6 @@ abstract class KutePreferencesMainFragment : Fragment() {
                 .replace(R.id.kute_preferences__content_layout, fragment)
                 .addToBackStack(null)
                 .commit()
-    }
-
-    override fun onStop() {
-        super
-                .onStop()
-        Bus
-                .unregister(this)
     }
 
     /**

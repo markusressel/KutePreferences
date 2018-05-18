@@ -6,13 +6,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.eightbitlab.rxbus.Bus
 import de.markusressel.kutepreferences.library.KutePreferenceListItem
 import de.markusressel.kutepreferences.library.R
 import de.markusressel.kutepreferences.library.preference.KutePreferenceClickListener
 import de.markusressel.kutepreferences.library.preference.KutePreferenceItem
 import de.markusressel.kutepreferences.library.preference.category.KutePreferenceCategory
-import de.markusressel.kutepreferences.library.view.event.CategoryEvent
 
 /**
  * The main class for all preferences.
@@ -88,8 +86,7 @@ class KutePreferencesContentFragment : Fragment() {
                                 .onClick(layoutInflater.context)
 
                         if (kutePreferenceListItem is KutePreferenceCategory) {
-                            Bus
-                                    .send(CategoryEvent(kutePreferenceListItem))
+                            mainFragment.showCategory(kutePreferenceListItem)
                         }
                     }
         }
@@ -116,10 +113,10 @@ class KutePreferencesContentFragment : Fragment() {
 
         fun newInstance(preferenceIds: List<Int> = emptyList()): KutePreferencesContentFragment {
             val fragment = KutePreferencesContentFragment()
-//            fragment
-//                    .allowReturnTransitionOverlap = true
-//            fragment
-//                    .allowEnterTransitionOverlap = true
+            fragment
+                    .allowReturnTransitionOverlap = true
+            fragment
+                    .allowEnterTransitionOverlap = true
 
             val bundle = Bundle()
             bundle
