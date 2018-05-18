@@ -10,6 +10,9 @@ class KutePreferencesTree(vararg items: KutePreferenceListItem) {
     private val topLevelItems = items.asList()
     private val treeAsList = creatListOfAllItems(topLevelItems)
 
+    /**
+     * Traverses the whole tree and creates a list of all items in the tree
+     */
     private fun creatListOfAllItems(treeItems: List<KutePreferenceListItem>): List<KutePreferenceListItem> {
         val result: MutableList<KutePreferenceListItem> = mutableListOf()
 
@@ -35,9 +38,12 @@ class KutePreferencesTree(vararg items: KutePreferenceListItem) {
     }
 
     /**
-     * Find preferences containing a given text
+     * Finds KuteSearchProviders and analyzes them for the given text
+     *
+     * @param text text to search for
+     * @return list of items
      */
-    fun findPreferences(text: String): List<KutePreferenceListItem> {
+    fun findInSearchProviders(text: String): List<KutePreferenceListItem> {
         return treeAsList.filter {
             it is KuteSearchProvider
         }.map {
@@ -51,21 +57,20 @@ class KutePreferencesTree(vararg items: KutePreferenceListItem) {
         }
     }
 
-
     /**
      * Returns a list of all items in a category
+     *
+     * @param categoryKey key of the category
+     * @return list of items
      */
-    fun getCategoryItems(@StringRes key: Int): List<KutePreferenceListItem> {
-        val category = getCategory(key, treeAsList)
-        category
-                ?.let {
-                    return it
-                            .children
-                }
-
-        return emptyList()
+    fun getCategoryItems(@StringRes categoryKey: Int): List<KutePreferenceListItem> {
+        val category = getCategory(categoryKey, treeAsList)
+        return category?.children ?: emptyList()
     }
 
+    /**
+     * Find a category somewhere in the tree
+     */
     private fun getCategory(@StringRes key: Int, items: List<KutePreferenceListItem>): KutePreferenceCategory? {
         return items.filter {
             it is KutePreferenceCategory
@@ -76,12 +81,18 @@ class KutePreferencesTree(vararg items: KutePreferenceListItem) {
         }.firstOrNull()
     }
 
-    fun searchRecursive(filter: (KutePreferenceListItem) -> Boolean): List<KutePreferenceListItem> {
+    /**
+     *
+     */
+    fun findInTree(filter: (KutePreferenceListItem) -> Boolean): List<KutePreferenceListItem> {
         return treeAsList.filter {
             filter(it)
         }
     }
 
+    /**
+     * Get all top-level items of the tree
+     */
     fun getTopLevelItems(): List<KutePreferenceListItem> {
         return topLevelItems
     }

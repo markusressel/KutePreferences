@@ -54,7 +54,7 @@ abstract class KutePreferencesMainFragment : Fragment() {
                         showTopLevel()
                     } else {
                         val preferenceIds = kutePreferencesTree
-                                .findPreferences(it.toString())
+                                .findInSearchProviders(it.toString())
                                 .map {
                                     it
                                             .key

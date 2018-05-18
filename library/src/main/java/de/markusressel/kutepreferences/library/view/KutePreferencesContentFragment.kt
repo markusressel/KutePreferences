@@ -32,7 +32,7 @@ class KutePreferencesContentFragment : Fragment() {
         val preferenceItems: List<KutePreferenceListItem> = if (preferenceItemIds != null) {
             mainFragment
                     .kutePreferencesTree
-                    .searchRecursive {
+                    .findInTree {
                         preferenceItemIds
                                 .contains(it.key)
                     }
