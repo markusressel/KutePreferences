@@ -9,7 +9,7 @@ import de.markusressel.kutepreferences.library.preference.KutePreferenceItem
 import de.markusressel.kutepreferences.library.view.edit.KutePreferenceEditDialogBase
 import java.util.*
 
-class KuteDatePreferenceEditDialog(
+open class KuteDatePreferenceEditDialog(
         override val preferenceItem: KutePreferenceItem<Long>,
         private val minimum: Long?,
         private val maximum: Long?) :

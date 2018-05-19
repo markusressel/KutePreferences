@@ -12,8 +12,7 @@ import de.markusressel.kutepreferences.library.preference.KutePreferenceItem
 import de.markusressel.kutepreferences.library.view.edit.KutePreferenceEditDialogBase
 import io.reactivex.rxkotlin.subscribeBy
 
-
-class KuteTextPreferenceEditDialog(
+open class KuteTextPreferenceEditDialog(
         override val preferenceItem: KutePreferenceItem<String>,
         private val minLength: Int?,
         private val maxLength: Int?,

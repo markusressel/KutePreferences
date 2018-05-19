@@ -11,7 +11,7 @@ import de.markusressel.kutepreferences.library.preference.KutePreferenceItem
 import de.markusressel.kutepreferences.library.view.edit.KutePreferenceEditDialogBase
 
 
-class KuteMultiSelectPreferenceEditDialog(
+open class KuteMultiSelectPreferenceEditDialog(
         override val preferenceItem: KutePreferenceItem<Set<String>>,
         private val possibleValues: Map<Int, Int>) :
         KutePreferenceEditDialogBase<Set<String>>() {

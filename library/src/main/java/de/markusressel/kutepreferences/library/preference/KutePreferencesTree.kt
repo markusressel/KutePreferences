@@ -3,6 +3,7 @@ package de.markusressel.kutepreferences.library.preference
 import android.support.annotation.StringRes
 import de.markusressel.kutepreferences.library.KutePreferenceListItem
 import de.markusressel.kutepreferences.library.KuteSearchProvider
+import de.markusressel.kutepreferences.library.preference.category.KuteParent
 import de.markusressel.kutepreferences.library.preference.category.KutePreferenceCategory
 
 class KutePreferencesTree(vararg items: KutePreferenceListItem) {
@@ -19,7 +20,7 @@ class KutePreferencesTree(vararg items: KutePreferenceListItem) {
         fun traverse(items: List<KutePreferenceListItem>) {
             items.forEach {
                 when (it) {
-                    is KutePreferenceCategory -> with(it) {
+                    is KuteParent -> with(it) {
                         result
                                 .add(it)
                         traverse(it.children)

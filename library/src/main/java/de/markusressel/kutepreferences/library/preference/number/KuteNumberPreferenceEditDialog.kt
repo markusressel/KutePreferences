@@ -8,7 +8,7 @@ import de.markusressel.kutepreferences.library.R
 import de.markusressel.kutepreferences.library.preference.KutePreferenceItem
 import de.markusressel.kutepreferences.library.view.edit.KutePreferenceEditDialogBase
 
-class KuteNumberPreferenceEditDialog(override val preferenceItem: KutePreferenceItem<Long>) :
+open class KuteNumberPreferenceEditDialog(override val preferenceItem: KutePreferenceItem<Long>) :
         KutePreferenceEditDialogBase<Long>() {
     override val contentLayoutRes: Int
         get() = R.layout.kute_preference__number__edit_dialog

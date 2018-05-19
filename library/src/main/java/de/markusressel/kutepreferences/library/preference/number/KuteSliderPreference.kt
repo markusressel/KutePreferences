@@ -6,7 +6,7 @@ import de.markusressel.kutepreferences.library.R
 import de.markusressel.kutepreferences.library.persistence.KutePreferenceDataProvider
 import de.markusressel.kutepreferences.library.preference.KutePreferenceBase
 
-class KuteSliderPreference(
+open class KuteSliderPreference(
         override val key: Int,
         override val icon: Drawable? = null,
         override val title: String,

@@ -22,9 +22,8 @@ abstract class KutePreferencesMainFragment : Fragment() {
 
     lateinit var kutePreferencesTree: KutePreferencesTree
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super
-                .onCreate(savedInstanceState)
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
 
         kutePreferencesTree = initPreferenceTree()
     }

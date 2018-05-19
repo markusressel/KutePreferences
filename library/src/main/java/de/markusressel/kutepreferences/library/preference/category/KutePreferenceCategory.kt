@@ -7,7 +7,7 @@ import de.markusressel.kutepreferences.library.preference.KutePreferenceClickLis
 /**
  * Interface for a KutePreference category that holds a set preferences
  */
-interface KutePreferenceCategory : KutePreferenceListItem, KutePreferenceClickListener, KuteSearchProvider {
+interface KutePreferenceCategory : KutePreferenceListItem, KutePreferenceClickListener, KuteSearchProvider, KuteParent {
 
     /**
      * The title of this category
@@ -18,10 +18,5 @@ interface KutePreferenceCategory : KutePreferenceListItem, KutePreferenceClickLi
      * A short description of the contents of this category
      */
     val description: String
-
-    /**
-     * A list of child items of this category
-     */
-    val children: List<KutePreferenceListItem>
 
 }
