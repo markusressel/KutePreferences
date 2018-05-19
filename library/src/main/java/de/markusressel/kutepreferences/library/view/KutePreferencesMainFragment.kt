@@ -22,21 +22,15 @@ abstract class KutePreferencesMainFragment : Fragment() {
 
     lateinit var kutePreferencesTree: KutePreferencesTree
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
-        kutePreferencesTree = initPreferenceTree()
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater
                 .inflate(R.layout.kute_preference__main_fragment, container, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super
-                .onViewCreated(view, savedInstanceState)
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
 
+        kutePreferencesTree = initPreferenceTree()
         showTopLevel()
     }
 
