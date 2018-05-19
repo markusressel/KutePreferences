@@ -25,7 +25,9 @@ import dagger.Module
 import dagger.Provides
 import dagger.android.ContributesAndroidInjector
 import de.markusressel.kutepreferences.application.App
+import de.markusressel.kutepreferences.preferences.DaggerKutePreferenceFragmentBase
 import de.markusressel.kutepreferences.view.MainActivity
+import de.markusressel.kutepreferences.view.PreferencesFragment
 import javax.inject.Singleton
 
 /**
@@ -42,6 +44,12 @@ abstract class AppModule {
 
     @ContributesAndroidInjector
     internal abstract fun MainActivity(): MainActivity
+
+    @ContributesAndroidInjector
+    internal abstract fun DaggerKutePreferenceFragmentBase(): DaggerKutePreferenceFragmentBase
+
+    @ContributesAndroidInjector
+    internal abstract fun PreferencesFragment(): PreferencesFragment
 
     @Module
     companion object {

@@ -17,7 +17,7 @@ import de.markusressel.kutepreferences.library.R
 abstract class KutePreferenceBase<DataType : Any> : KutePreferenceItem<DataType>, KuteSearchProvider {
 
     @get:LayoutRes
-    abstract val layoutRes: Int
+    protected abstract val layoutRes: Int
 
     private var iconView: ImageView? = null
     private var nameTextView: TextView? = null
