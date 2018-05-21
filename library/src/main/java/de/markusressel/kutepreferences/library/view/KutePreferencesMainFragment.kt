@@ -9,8 +9,9 @@ import com.jakewharton.rxbinding2.support.v7.widget.RxSearchView
 import com.trello.rxlifecycle2.kotlin.bindToLifecycle
 import de.markusressel.kutepreferences.library.KutePreferenceListItem
 import de.markusressel.kutepreferences.library.R
-import de.markusressel.kutepreferences.library.R.id.*
 import de.markusressel.kutepreferences.library.preference.KutePreferencesTree
+import io.reactivex.rxkotlin.subscribeBy
+import kotlinx.android.synthetic.main.kute_preference__main_fragment.*
 import java.util.concurrent.TimeUnit
 
 /**
