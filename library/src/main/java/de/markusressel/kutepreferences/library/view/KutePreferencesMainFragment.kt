@@ -9,9 +9,8 @@ import com.jakewharton.rxbinding2.support.v7.widget.RxSearchView
 import com.trello.rxlifecycle2.kotlin.bindToLifecycle
 import de.markusressel.kutepreferences.library.KutePreferenceListItem
 import de.markusressel.kutepreferences.library.R
+import de.markusressel.kutepreferences.library.R.id.*
 import de.markusressel.kutepreferences.library.preference.KutePreferencesTree
-import io.reactivex.rxkotlin.subscribeBy
-import kotlinx.android.synthetic.main.kute_preference__main_fragment.*
 import java.util.concurrent.TimeUnit
 
 /**
@@ -118,7 +117,7 @@ abstract class KutePreferencesMainFragment : Fragment() {
      * back navigation behaviour is working es expected
      * @return true if a navigation happened, false otherwise
      */
-    fun onBackPressed(): Boolean {
+    open fun onBackPressed(): Boolean {
         return if (childFragmentManager.backStackEntryCount > 1) {
             childFragmentManager
                     .popBackStack()
