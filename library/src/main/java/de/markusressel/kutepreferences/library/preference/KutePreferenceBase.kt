@@ -19,9 +19,9 @@ abstract class KutePreferenceBase<DataType : Any> : KutePreferenceItem<DataType>
     @get:LayoutRes
     protected abstract val layoutRes: Int
 
-    private var iconView: ImageView? = null
-    private var nameTextView: TextView? = null
-    private var descriptionTextView: TextView? = null
+    protected var iconView: ImageView? = null
+    protected var nameTextView: TextView? = null
+    protected var descriptionTextView: TextView? = null
 
     @CallSuper
     override fun inflateListLayout(layoutInflater: LayoutInflater): ViewGroup {

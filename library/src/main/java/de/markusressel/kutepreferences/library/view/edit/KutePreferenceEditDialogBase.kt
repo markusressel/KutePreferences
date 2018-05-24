@@ -15,7 +15,7 @@ abstract class KutePreferenceEditDialogBase<DataType : Any> : KutePreferenceEdit
     /**
      * The dialog
      */
-    private var dialog: MaterialDialog? = null
+    protected var dialog: MaterialDialog? = null
 
     /**
      * Content layout resource to in
@@ -38,7 +38,7 @@ abstract class KutePreferenceEditDialogBase<DataType : Any> : KutePreferenceEdit
             val oldValue = currentValue
             field = newValue
 
-            if (oldValue != newValue && newValue != userInput) {
+            if (oldValue != newValue) {
                 onCurrentValueChanged(oldValue, currentValue, newValue == userInput)
             }
         }

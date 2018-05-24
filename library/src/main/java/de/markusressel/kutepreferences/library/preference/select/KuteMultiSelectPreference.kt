@@ -7,6 +7,9 @@ import de.markusressel.kutepreferences.library.R
 import de.markusressel.kutepreferences.library.persistence.KutePreferenceDataProvider
 import de.markusressel.kutepreferences.library.preference.KutePreferenceBase
 
+/**
+ * Implementation of a multi selection preference
+ */
 open class KuteMultiSelectPreference(
         val context: Context,
         override val key: Int,

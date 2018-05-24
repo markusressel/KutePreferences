@@ -13,6 +13,7 @@ import de.markusressel.kutepreferences.library.preference.number.KuteNumberPrefe
 import de.markusressel.kutepreferences.library.preference.number.KuteSliderPreference
 import de.markusressel.kutepreferences.library.preference.select.KuteMultiSelectPreference
 import de.markusressel.kutepreferences.library.preference.select.KuteSingleSelectPreference
+import de.markusressel.kutepreferences.library.preference.text.KutePasswordPreference
 import de.markusressel.kutepreferences.library.preference.text.KuteTextPreference
 import de.markusressel.kutepreferences.library.preference.toggle.KuteTogglePreference
 import java.util.*
@@ -48,11 +49,10 @@ class KutePreferencesHolder @Inject constructor(
     }
 
     val passwordPreference by lazy {
-        KuteTextPreference(key = R.string.key_demo_text_pref_password,
+        KutePasswordPreference(key = R.string.key_demo_text_pref_password,
                 icon = iconHelper.getIcon(MaterialDesignIconic.Icon.gmi_lock),
                 title = context.getString(R.string.title_demo_text_pref_password),
                 defaultValue = "",
-                isPassword = true,
                 dataProvider = dataProvider)
     }
 
@@ -60,6 +60,13 @@ class KutePreferencesHolder @Inject constructor(
         KuteTogglePreference(key = R.string.key_demo_toggle_pref,
                 icon = iconHelper.getIcon(MaterialDesignIconic.Icon.gmi_airplane),
                 title = context.getString(R.string.title_demo_toggle_pref),
+                descriptionFunction = {
+                    if (it) {
+                        "All radios in this device are disabled"
+                    } else {
+                        "Normal operation"
+                    }
+                },
                 defaultValue = false,
                 onPreferenceChangedListener = { old, new ->
                     context.toast("Old: $old New: $new", Toast.LENGTH_SHORT)

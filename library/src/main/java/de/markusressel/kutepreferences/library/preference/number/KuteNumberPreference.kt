@@ -6,6 +6,9 @@ import de.markusressel.kutepreferences.library.R
 import de.markusressel.kutepreferences.library.persistence.KutePreferenceDataProvider
 import de.markusressel.kutepreferences.library.preference.KutePreferenceBase
 
+/**
+ * Implementation of a Long preference for selecting a number
+ */
 open class KuteNumberPreference(
         override val key: Int,
         override val icon: Drawable? = null,

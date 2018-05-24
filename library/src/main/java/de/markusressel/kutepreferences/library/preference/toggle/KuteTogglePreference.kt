@@ -9,10 +9,14 @@ import de.markusressel.kutepreferences.library.R
 import de.markusressel.kutepreferences.library.persistence.KutePreferenceDataProvider
 import de.markusressel.kutepreferences.library.preference.KutePreferenceBase
 
+/**
+ * Implementation of a boolean preference
+ */
 open class KuteTogglePreference(
         override val key: Int,
         override val icon: Drawable? = null,
         override val title: String,
+        val descriptionFunction: ((Boolean) -> String)? = null,
         private val defaultValue: Boolean,
         override val dataProvider: KutePreferenceDataProvider,
         override val onPreferenceChangedListener: ((oldValue: Boolean, newValue: Boolean) -> Unit)? = null) :
@@ -51,6 +55,17 @@ open class KuteTogglePreference(
         // update switch state
         switchView
                 ?.isChecked = newValue
+    }
+
+    override fun createDescription(currentValue: Boolean): String {
+        descriptionFunction?.let {
+            return it(currentValue)
+        }
+
+        // if no specific description is given
+        // there is no additional value in a "true" or "false" description
+        // since it is already visible on the toggle
+        return ""
     }
 
 }

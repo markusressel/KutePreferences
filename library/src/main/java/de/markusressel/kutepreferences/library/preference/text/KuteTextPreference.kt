@@ -6,13 +6,13 @@ import de.markusressel.kutepreferences.library.R
 import de.markusressel.kutepreferences.library.persistence.KutePreferenceDataProvider
 import de.markusressel.kutepreferences.library.preference.KutePreferenceBase
 
+/**
+ * Implementation for a text preference
+ */
 open class KuteTextPreference(override val key: Int,
                               override val icon: Drawable? = null,
                               override val title: String,
-                              private val minLength: Int? = null,
-                              private val maxLength: Int? = null,
-                              private val regex: String? = null,
-                              private val isPassword: Boolean = false,
+                              protected val regex: String? = null,
                               private val defaultValue: String,
                               override val dataProvider: KutePreferenceDataProvider,
                               override val onPreferenceChangedListener: ((oldValue: String, newValue: String) -> Unit)? = null) :
@@ -24,17 +24,9 @@ open class KuteTextPreference(override val key: Int,
         get() = R.layout.kute_preference__default__list_item
 
     override fun onClick(context: Context) {
-        val dialog = KuteTextPreferenceEditDialog(this, minLength, maxLength, regex, isPassword)
+        val dialog = KuteTextPreferenceEditDialog(this, regex)
         dialog
                 .show(context)
-    }
-
-    override fun createDescription(currentValue: String): String {
-        return if (isPassword) {
-            "*".repeat(currentValue.length)
-        } else {
-            super.createDescription(currentValue)
-        }
     }
 
 }
