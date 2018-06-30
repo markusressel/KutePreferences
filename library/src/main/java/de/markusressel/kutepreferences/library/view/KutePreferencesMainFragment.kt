@@ -25,7 +25,7 @@ import java.util.concurrent.TimeUnit
  */
 abstract class KutePreferencesMainFragment : StateFragmentBase() {
 
-    lateinit var kutePreferencesTree: KutePreferencesTree
+    internal lateinit var kutePreferencesTree: KutePreferencesTree
 
     /**
      * Stack of previously visible preference items, including the current ones
@@ -42,10 +42,9 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
 
         kutePreferencesTree = initPreferenceTree()
 
-        if (backstack.isEmpty()) {
-            showTopLevel()
-        } else {
-            replaceContent(backstack.peek())
+        when {
+            backstack.isNotEmpty() -> showPreferenceItems(backstack.peek())
+            else -> showTopLevel()
         }
     }
 
@@ -56,11 +55,11 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
                 .queryTextChanges(kute_preferences__search)
                 .skipInitialValue()
                 .bindToLifecycle(kute_preferences__search)
-                .debounce(800, TimeUnit.MILLISECONDS)
+                .debounce(100, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(onNext = {
                     if (it.isBlank()) {
-                        replaceContent(backstack.peek())
+                        showPreferenceItems(backstack.peek())
                     } else {
                         val preferenceIds = kutePreferencesTree
                                 .findInSearchProviders(it.toString())
@@ -68,23 +67,15 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
                                     it
                                             .key
                                 }
-                        replaceContent(preferenceIds, false)
+                        showPreferenceItems(preferenceIds, false)
                     }
                 }, onError = {
                     Log.e(TAG, "Search error", it)
                 })
     }
 
-    private fun showSearchResults() {
-        // TODO:
-    }
-
-    private fun hideSearchResults() {
-        // TODO:
-    }
-
-    private fun showTopLevel() {
-        replaceContent(kutePreferencesTree.getTopLevelItems().map {
+    fun showTopLevel() {
+        showPreferenceItems(kutePreferencesTree.getTopLevelItems().map {
             it.key
         })
     }
@@ -101,15 +92,15 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
                     it.key
                 }
 
-        replaceContent(categoryItems)
+        showPreferenceItems(categoryItems)
     }
 
-    private fun replaceContent(backstackItem: BackstackItem) {
+    internal fun showPreferenceItems(backstackItem: BackstackItem) {
         kute_preferences__search.setQuery(backstackItem.searchText, false)
-        replaceContent(backstackItem.preferenceItemIds, false)
+        showPreferenceItems(backstackItem.preferenceItemIds, false)
     }
 
-    private fun replaceContent(preferenceIds: List<Int>, addToStack: Boolean = true) {
+    internal fun showPreferenceItems(preferenceIds: List<Int>, addToStack: Boolean = true) {
         if (addToStack) {
             backstack.push(BackstackItem(preferenceIds, kute_preferences__search.query.toString()))
         }
@@ -127,7 +118,7 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
     /**
      * Generates a ViewGroup for the given preferences
      */
-    private fun generatePage(kutePreference: List<KutePreferenceListItem>) {
+    internal fun generatePage(kutePreference: List<KutePreferenceListItem>) {
         // find the layout where list items should be inserted
         val listItemLayout: ViewGroup = kute_preferences__list_item_root
         listItemLayout
@@ -141,8 +132,8 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
                 }
     }
 
-    private fun inflate(kutePreferenceListItem: KutePreferenceListItem, layoutToAppendTo: ViewGroup,
-                        keySet: MutableSet<Int>) {
+    internal fun inflate(kutePreferenceListItem: KutePreferenceListItem, layoutToAppendTo: ViewGroup,
+                         keySet: MutableSet<Int>) {
         when (kutePreferenceListItem) {
             is KutePreferenceItem<*> -> {
                 checkKeyDuplication(kutePreferenceListItem.key, keySet)
@@ -152,7 +143,7 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
             }
         }
 
-        val layout: ViewGroup = inflate(kutePreferenceListItem)
+        val layout: ViewGroup = kutePreferenceListItem.inflateListLayout(layoutInflater)
         layoutToAppendTo.addView(layout)
 
         if (kutePreferenceListItem is KutePreferenceClickListener) {
@@ -179,11 +170,6 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
         }
     }
 
-    private fun inflate(it: KutePreferenceListItem): ViewGroup {
-        return it
-                .inflateListLayout(layoutInflater)
-    }
-
     /**
      * Initialize your preferences tree here
      */
@@ -192,15 +178,20 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
     /**
      * Call this from your activity's {@link AppCompatActivity.onBackPressed()} to ensure
      * back navigation behaviour is working es expected
-     * @return true if a navigation happened, false otherwise
+     * @return true if a navigation happened (aka the back button event was consumed), false otherwise
      */
     open fun onBackPressed(): Boolean {
-        return if (backstack.size > 1) {
-            backstack.pop()
-            replaceContent(backstack.peek())
-            true
-        } else {
-            false
+        return when {
+            kute_preferences__search.query.isNotEmpty() -> {
+                kute_preferences__search.setQuery("", false)
+                true
+            }
+            backstack.size > 1 -> {
+                backstack.pop()
+                showPreferenceItems(backstack.peek())
+                true
+            }
+            else -> false
         }
     }
 
