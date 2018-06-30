@@ -30,7 +30,7 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
     /**
      * Stack of previously visible preference items, including the current ones
      */
-    internal var stack: Stack<List<Int>> by savedInstanceState(Stack())
+    internal var backstack: Stack<BackstackItem> by savedInstanceState(Stack())
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater
@@ -42,10 +42,10 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
 
         kutePreferencesTree = initPreferenceTree()
 
-        if (stack.isEmpty()) {
+        if (backstack.isEmpty()) {
             showTopLevel()
         } else {
-            replaceContent(stack.peek())
+            replaceContent(backstack.peek())
         }
     }
 
@@ -60,7 +60,7 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(onNext = {
                     if (it.isBlank()) {
-                        showTopLevel()
+                        replaceContent(backstack.peek())
                     } else {
                         val preferenceIds = kutePreferencesTree
                                 .findInSearchProviders(it.toString())
@@ -68,7 +68,7 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
                                     it
                                             .key
                                 }
-                        replaceContent(preferenceIds)
+                        replaceContent(preferenceIds, false)
                     }
                 }, onError = {
                     Log.e(TAG, "Search error", it)
@@ -104,9 +104,14 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
         replaceContent(categoryItems)
     }
 
+    private fun replaceContent(backstackItem: BackstackItem) {
+        kute_preferences__search.setQuery(backstackItem.searchText, false)
+        replaceContent(backstackItem.preferenceItemIds, false)
+    }
+
     private fun replaceContent(preferenceIds: List<Int>, addToStack: Boolean = true) {
         if (addToStack) {
-            stack.push(preferenceIds)
+            backstack.push(BackstackItem(preferenceIds, kute_preferences__search.query.toString()))
         }
 
         val preferenceItems: List<KutePreferenceListItem> =
@@ -190,9 +195,9 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
      * @return true if a navigation happened, false otherwise
      */
     open fun onBackPressed(): Boolean {
-        return if (stack.size > 1) {
-            stack.pop()
-            replaceContent(stack.peek(), false)
+        return if (backstack.size > 1) {
+            backstack.pop()
+            replaceContent(backstack.peek())
             true
         } else {
             false
