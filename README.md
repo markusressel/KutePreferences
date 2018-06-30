@@ -22,7 +22,7 @@ To use this library just include it in your dependencies using
 in your project build.gradle file and
 
     dependencies {
-        compile('com.github.markusressel:KutePreferences:v0.0.1') {
+        compile('com.github.markusressel:KutePreferences:v1.0.0') {
             exclude module: 'app'
             transitive = true
         }
@@ -34,6 +34,7 @@ in your desired module ```build.gradle``` file.
 KuteTogglePreference 
 
 KuteTextPreference
+KutePasswordPreference
 
 KuteNumberPreference
 KuteSliderPreference
@@ -46,9 +47,7 @@ KuteMultiSelectPreference
 ## Other Types
 
 KuteAction
-
 KuteCategory
-
 KuteDivider
 
 ## KutePreferencesMainFragment
