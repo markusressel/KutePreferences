@@ -22,7 +22,6 @@ import dagger.Component
 import dagger.android.AndroidInjector
 import dagger.android.support.AndroidSupportInjectionModule
 import de.markusressel.kutepreferences.application.App
-import de.markusressel.kutepreferences.dagger.AppModule
 import javax.inject.Singleton
 
 @Singleton

@@ -9,15 +9,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <FrameLayout
-        android:id="@+id/kute_preferences__content_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
-    <FrameLayout
-        android:id="@+id/kute_preferences__search_result_layout"
+    <LinearLayout
+        android:id="@+id/kute_preferences__list_item_root"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone" />
+        android:animateLayoutChanges="true"
+        android:orientation="vertical" />
 
 </LinearLayout>
