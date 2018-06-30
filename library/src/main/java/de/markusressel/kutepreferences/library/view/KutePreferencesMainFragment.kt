@@ -13,6 +13,7 @@ import de.markusressel.kutepreferences.library.preference.KutePreferenceClickLis
 import de.markusressel.kutepreferences.library.preference.KutePreferenceItem
 import de.markusressel.kutepreferences.library.preference.KutePreferencesTree
 import de.markusressel.kutepreferences.library.preference.category.KutePreferenceCategory
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.subscribeBy
 import kotlinx.android.synthetic.main.kute_preference__main_fragment.*
 import java.util.*
@@ -56,6 +57,7 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
                 .skipInitialValue()
                 .bindToLifecycle(kute_preferences__search)
                 .debounce(800, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(onNext = {
                     if (it.isBlank()) {
                         showTopLevel()
@@ -68,7 +70,9 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
                                 }
                         replaceContent(preferenceIds)
                     }
-                }, onError = {})
+                }, onError = {
+                    Log.e(TAG, "Search error", it)
+                })
     }
 
     private fun showSearchResults() {
@@ -193,6 +197,10 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
         } else {
             false
         }
+    }
+
+    companion object {
+        const val TAG: String = "MainFragment"
     }
 
 }
