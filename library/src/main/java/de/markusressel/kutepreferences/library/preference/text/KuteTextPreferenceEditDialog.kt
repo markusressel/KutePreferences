@@ -29,11 +29,11 @@ open class KuteTextPreferenceEditDialog(
     override fun onContentViewCreated(context: Context, layoutInflater: LayoutInflater, contentView: View) {
         editTextView = contentView
                 .findViewById(R.id.kute_preferences__preference__text__edit_name)
-        editTextView?.setText(currentValue)
-
         userInput = persistedValue
 
         editTextView?.let {
+            it.setText(currentValue)
+            it.setSelection(it.text.length)
             RxTextView.textChanges(it)
                     .bindToLifecycle(it)
                     .subscribeBy(
@@ -43,7 +43,6 @@ open class KuteTextPreferenceEditDialog(
                                 userInput = newValue
                                 currentValue = newValue
                             }
-
                     )
         }
     }
