@@ -34,7 +34,6 @@ abstract class KutePreferenceBase<DataType : Any> : KutePreferenceItem<DataType>
                 it.setImageDrawable(icon)
             } else {
                 it.setImageResource(R.drawable.ic_settings_black_24dp)
-                it.alpha = 0.5F
             }
         }
 
