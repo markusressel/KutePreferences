@@ -10,10 +10,6 @@ install:
 script:
   - ./gradlew clean testDebug lintDebug --stacktrace
 
-#branches:
-#  except:
-#    - gh-pages
-
 #sudo: false
 
 before_install:
