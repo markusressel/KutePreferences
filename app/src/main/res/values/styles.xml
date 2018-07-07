@@ -6,6 +6,9 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+
+        <item name="kute_preferences__menu__icon_color">#fff</item>
+        <item name="kute_preferences__setting__default_icon_color">#BF000000</item>
     </style>
 
 </resources>

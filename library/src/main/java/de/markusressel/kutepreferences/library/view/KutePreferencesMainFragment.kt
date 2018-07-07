@@ -1,12 +1,14 @@
 package de.markusressel.kutepreferences.library.view
 
+import android.arch.lifecycle.Lifecycle
+import android.content.Context
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
+import android.support.v7.widget.SearchView
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import com.jakewharton.rxbinding2.support.v7.widget.RxSearchView
-import com.trello.rxlifecycle2.kotlin.bindToLifecycle
+import com.trello.rxlifecycle2.android.lifecycle.kotlin.bindUntilEvent
 import de.markusressel.kutepreferences.library.KutePreferenceListItem
 import de.markusressel.kutepreferences.library.R
 import de.markusressel.kutepreferences.library.preference.KutePreferenceClickListener
@@ -32,9 +34,49 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
      */
     internal var backstack: Stack<BackstackItem> by savedInstanceState(Stack())
 
+    private var searchView: SearchView? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater
                 .inflate(R.layout.kute_preference__main_fragment, container, false)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        inflater
+                ?.inflate(R.menu.kutepreferences__menu, menu)
+
+        val searchMenuItem = menu?.findItem(R.id.search)
+        searchMenuItem?.icon = ContextCompat.getDrawable(context as Context, R.drawable.ic_search_24px)
+
+        searchView = searchMenuItem?.actionView as SearchView?
+        searchView?.let {
+            RxSearchView
+                    .queryTextChanges(it)
+                    .skipInitialValue()
+                    .bindUntilEvent(this, Lifecycle.Event.ON_DESTROY)
+                    .debounce(100, TimeUnit.MILLISECONDS)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeBy(onNext = {
+                        if (it.isBlank()) {
+                            showPreferenceItems(backstack.peek())
+                        } else {
+                            val preferenceIds = kutePreferencesTree
+                                    .findInSearchProviders(it.toString())
+                                    .map {
+                                        it
+                                                .key
+                                    }
+                            showPreferenceItems(preferenceIds, false)
+                        }
+                    }, onError = {
+                        Log.e(TAG, "Error filtering list", it)
+                    })
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -46,32 +88,6 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
             backstack.isNotEmpty() -> showPreferenceItems(backstack.peek())
             else -> showTopLevel()
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-
-        RxSearchView
-                .queryTextChanges(kute_preferences__search)
-                .skipInitialValue()
-                .bindToLifecycle(kute_preferences__search)
-                .debounce(100, TimeUnit.MILLISECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeBy(onNext = {
-                    if (it.isBlank()) {
-                        showPreferenceItems(backstack.peek())
-                    } else {
-                        val preferenceIds = kutePreferencesTree
-                                .findInSearchProviders(it.toString())
-                                .map {
-                                    it
-                                            .key
-                                }
-                        showPreferenceItems(preferenceIds, false)
-                    }
-                }, onError = {
-                    Log.e(TAG, "Search error", it)
-                })
     }
 
     fun showTopLevel() {
@@ -96,13 +112,19 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
     }
 
     internal fun showPreferenceItems(backstackItem: BackstackItem) {
-        kute_preferences__search.setQuery(backstackItem.searchText, false)
+        searchView?.setQuery(backstackItem.searchText, false)
         showPreferenceItems(backstackItem.preferenceItemIds, false)
     }
 
     internal fun showPreferenceItems(preferenceIds: List<Int>, addToStack: Boolean = true) {
         if (addToStack) {
-            backstack.push(BackstackItem(preferenceIds, kute_preferences__search.query.toString()))
+            val query = if (searchView != null) {
+                searchView?.query.toString()
+            } else {
+                ""
+            }
+
+            backstack.push(BackstackItem(preferenceIds, query))
         }
 
         val preferenceItems: List<KutePreferenceListItem> =
@@ -181,11 +203,14 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
      * @return true if a navigation happened (aka the back button event was consumed), false otherwise
      */
     open fun onBackPressed(): Boolean {
-        return when {
-            kute_preferences__search.query.isNotEmpty() -> {
-                kute_preferences__search.setQuery("", false)
-                true
+        searchView?.let {
+            if (it.query.isNotEmpty()) {
+                it.setQuery("", false)
+                return true
             }
+        }
+
+        return when {
             backstack.size > 1 -> {
                 backstack.pop()
                 showPreferenceItems(backstack.peek())
