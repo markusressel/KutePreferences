@@ -44,7 +44,7 @@ class KutePreferencesHolder @Inject constructor(
     val textPreference2 by lazy {
         KuteTextPreference(key = R.string.key_demo_text_pref_2,
                 title = context.getString(R.string.title_demo_text_pref_2),
-                defaultValue = "Markus Ressel",
+                defaultValue = TEXT_PREFERENCE_2_DEFAULT_VALUE,
                 dataProvider = dataProvider)
     }
 
@@ -137,6 +137,10 @@ class KutePreferencesHolder @Inject constructor(
                 onClickAction = { context, kuteAction ->
                     context.toast("Action clicked!", Toast.LENGTH_SHORT)
                 })
+    }
+
+    companion object {
+        const val TEXT_PREFERENCE_2_DEFAULT_VALUE = "Markus Ressel"
     }
 
 }

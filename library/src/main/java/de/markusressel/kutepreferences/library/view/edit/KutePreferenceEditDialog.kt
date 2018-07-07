@@ -26,24 +26,28 @@ interface KutePreferenceEditDialog<DataType : Any> {
     /**
      * Called when the currentValue changes
      * Update your GUI here.
+     *
+     * @param oldValue the value before it changed
+     * @param newValue the value after it changed
+     * @param byUser true, if the change was initiated by the user, false otherwise
      */
     fun onCurrentValueChanged(oldValue: DataType?, newValue: DataType?, byUser: Boolean)
 
     /**
-     * Restore the current value of this KutePreferenceListItem to it's previously persisted value.
+     * Restore the current input value to the persisted value of the associated preference item.
      * If there is no persisted value the default value will be used instead.
      */
     fun restore()
 
     /**
-     * Save the current value of this KutePreferenceListItem into persistence
+     * Save the current input value using the data provider
      */
     fun save()
 
     /**
-     * Reset the current value (and persisted) value of this KutePreferenceListItem to the default value
+     * Reset the current dialog input value to the default value
      */
-    fun reset()
+    fun resetToDefault()
 
     /**
      * Closes the dialog without any save actions

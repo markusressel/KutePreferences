@@ -13,19 +13,19 @@ import de.markusressel.kutepreferences.library.R
 abstract class KutePreferenceEditDialogBase<DataType : Any> : KutePreferenceEditDialog<DataType> {
 
     /**
-     * The dialog
+     * The dialog itself
      */
     protected var dialog: MaterialDialog? = null
 
     /**
-     * Content layout resource to in
+     * Content layout resource to inflate
      */
     @get:LayoutRes
     abstract val contentLayoutRes: Int
 
     /**
-     * The current value of this preference
-     * that might be altered from the persisted value
+     * The current input value of this dialog.
+     * This might be altered from the persisted value of the preference item.
      */
     var currentValue: DataType? = null
         get() {
@@ -43,6 +43,9 @@ abstract class KutePreferenceEditDialogBase<DataType : Any> : KutePreferenceEdit
             }
         }
 
+    /**
+     * helper variable to figure out if a "current value" change was initiated by user or system
+     */
     lateinit var userInput: DataType
 
     override fun dismiss() {
@@ -61,7 +64,10 @@ abstract class KutePreferenceEditDialogBase<DataType : Any> : KutePreferenceEdit
                 }
     }
 
-    override fun reset() {
+    /**
+     * Resets the current input to the default value of the preference item
+     */
+    override fun resetToDefault() {
         currentValue = preferenceItem.getDefaultValue()
     }
 
@@ -84,16 +90,16 @@ abstract class KutePreferenceEditDialogBase<DataType : Any> : KutePreferenceEdit
                 .customView(dialogContentView, false)
                 .title(preferenceItem.title)
                 .neutralText(android.R.string.cancel)
-                .onNeutral { dialog, which ->
+                .onNeutral { _, _ ->
                     dismiss()
                 }
-                .negativeText(R.string.reset)
-                .onNegative { dialog, which ->
-                    reset()
+                .negativeText(R.string.default_value)
+                .onNegative { _, _ ->
+                    resetToDefault()
                 }
                 .autoDismiss(false)
                 .positiveText(R.string.save)
-                .onPositive { dialog, which ->
+                .onPositive { _, _ ->
                     save()
                     dismiss()
                 }
