@@ -9,7 +9,7 @@
     <string name="library_kutepreferences_libraryName">KutePreferences</string>
     <string name="library_kutepreferences_libraryDescription">A beautiful, clean and extensible Android preferences library written in Kotlin</string>
     <string name="library_kutepreferences_libraryWebsite">@string/library_kutepreferences_repositoryLink</string>
-    <string name="library_kutepreferences_libraryVersion">1.2.1</string>
+    <string name="library_kutepreferences_libraryVersion">1.2.2</string>
     <!-- OpenSource section -->
     <string name="library_kutepreferences_isOpenSource">true</string>
     <string name="library_kutepreferences_repositoryLink">https://github.com/markusressel/kutepreferences</string>

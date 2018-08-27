@@ -22,8 +22,7 @@ To use this library just include it in your dependencies using
 in your project build.gradle file and
 
     dependencies {
-        compile('com.github.markusressel:KutePreferences:v1.2.0') {
-            exclude module: 'app'
+        compile('com.github.markusressel.KutePreferences:library:v1.2.2') {
             transitive = true
         }
     }
