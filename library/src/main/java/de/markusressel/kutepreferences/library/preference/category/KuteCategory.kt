@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import de.markusressel.kutepreferences.library.KutePreferenceListItem
 import de.markusressel.kutepreferences.library.R
 
@@ -42,9 +41,6 @@ open class KuteCategory(
     }
 
     override fun onClick(context: Context) {
-        Toast
-                .makeText(context, "$title clicked!", Toast.LENGTH_SHORT)
-                .show()
     }
 
     override fun getSearchableItems(): Set<String> {
