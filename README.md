@@ -77,7 +77,7 @@ They work in conjunction with a data provider that defines how the state of the 
 Usually the preferences of your app are organized in some kind of tree.
 KutePreferences lets you specify the preference structre exactly as it is supposed to be: as a tree.
 
-## Included Preference Types
+### Included Preference Types
 
 | Name                       | Item Type    | Description |
 |----------------------------|--------------|-------------|
@@ -90,7 +90,7 @@ KutePreferences lets you specify the preference structre exactly as it is suppos
 | KuteSingleSelectPreference | List\<T\>      | Allows a single selection from a specified list of items. |
 | KuteMultiSelectPreference  | List\<T\>      | Allow to select multiple items from a specified list of items. |
 
-## Other Types
+### Other Types
 
 | Name                       | Item Type    | Description |
 |----------------------------|--------------|-------------|
@@ -98,7 +98,19 @@ KutePreferences lets you specify the preference structre exactly as it is suppos
 | KuteCategory               | A Category groups multiple preference items or even other category items. |
 | KuteDivider                | A simple divider of preference items inside a single preference category. |
 
+### Implement custom preferences
 
+If the integrated preference classes don't fit your needs you can easily create your own custom preference implementation.
+To do so you have to create an implementation of `KutePreferenceItem`. If it fit's your needs you can use `KutePreferenceBase` instead (which has some basic functionality implemented already).
+
+Important things to keep in mind if you implement your own preference item:
+
+* remember to update the description of a preference item to always reflect the currently persisted value
+* when defining layouts remember to use the existing styles like
+  * KutePreferences.Preference.Icon
+  * KutePreferences.Preference.Title
+  * KutePreferences.Preference.Description
+  * etc.
 
 
 
