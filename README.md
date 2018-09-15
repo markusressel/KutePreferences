@@ -30,26 +30,6 @@ in your project build.gradle file and
 
 in your desired module ```build.gradle``` file.
 
-## Included Preference Types
-KuteTogglePreference 
-
-KuteTextPreference
-KutePasswordPreference
-
-KuteNumberPreference
-KuteSliderPreference
-
-KuteDatePreference
-
-KuteSingleSelectPreference
-KuteMultiSelectPreference
-
-## Other Types
-
-KuteAction
-KuteCategory
-KuteDivider
-
 ## KutePreferencesMainFragment
 
 **KutePreferences** builds on ```android.support.v4.app.Fragment``` for increased flexibility.
@@ -88,6 +68,25 @@ class PreferencesFragment : KutePreferencesMainFragment() {
 ```
 
 As you can see the ```KutePreferencesTree``` is just a list of items that may or may not have child items.
+
+## Included Preference Types
+
+| Name                       | Item Type    | Description |
+|----------------------------|--------------|-------------|
+| KuteTogglePreference       | Boolean      | A simple on/off preference. |
+| KuteTextPreference         | String       | A simple text preference.   |
+| KutePasswordPreference     | String       | A simple password text preference. This type works exactly like `KuteTextPreference` but includes obscuring typed input. |
+| KuteNumberPreference       | Integer      | A preference for number values. |
+| KuteSliderPreference       | Integer      | Like `KuteNumberPreference` but with a slider GUI instead of a direct input field. |
+| KuteDatePreference         | Date         | Let's the user select and store a date. |
+| KuteSingleSelectPreference | List\<T\>      | Allows a single selection from a specified list of items. |
+| KuteMultiSelectPreference  | List\<T\>      | Allow to select multiple items from a specified list of items. |
+
+## Other Types
+
+   KuteAction
+   KuteCategory
+   KuteDivider
 
 
 # License
