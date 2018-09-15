@@ -34,7 +34,7 @@ in your project build.gradle file and
 
 in your desired module ```build.gradle``` file.
 
-## KutePreferencesMainFragment
+## Specify the preferences you need
 
 **KutePreferences** builds on ```android.support.v4.app.Fragment``` for increased flexibility.
 The first thing you have to do is create a class in your project that extends ```KutePreferencesMainFragment```
@@ -71,7 +71,11 @@ class PreferencesFragment : KutePreferencesMainFragment() {
 }
 ```
 
-As you can see the ```KutePreferencesTree``` is just a list of items that may or may not have child items.
+KutePreferenceItems are simple Objects that specify view behaviour.
+They work in conjunction with a data provider that defines how the state of the preference item is persisted.
+
+Usually the preferences of your app are organized in some kind of tree.
+KutePreferences lets you specify the preference structre exactly as it is supposed to be: as a tree.
 
 ## Included Preference Types
 
@@ -88,9 +92,14 @@ As you can see the ```KutePreferencesTree``` is just a list of items that may or
 
 ## Other Types
 
-   KuteAction
-   KuteCategory
-   KuteDivider
+| Name                       | Item Type    | Description |
+|----------------------------|--------------|-------------|
+| KuteAction                 | A simple `click` action provided with a name. |
+| KuteCategory               | A Category groups multiple preference items or even other category items. |
+| KuteDivider                | A simple divider of preference items inside a single preference category. |
+
+
+
 
 
 # License
