@@ -11,8 +11,8 @@ import de.markusressel.kutepreferences.library.preference.action.KuteAction
 import de.markusressel.kutepreferences.library.preference.date.KuteDatePreference
 import de.markusressel.kutepreferences.library.preference.number.KuteNumberPreference
 import de.markusressel.kutepreferences.library.preference.number.KuteSliderPreference
-import de.markusressel.kutepreferences.library.preference.select.KuteMultiSelectPreference
-import de.markusressel.kutepreferences.library.preference.select.KuteSingleSelectPreference
+import de.markusressel.kutepreferences.library.preference.select.multi.KuteMultiSelectPreference
+import de.markusressel.kutepreferences.library.preference.select.single.KuteSingleSelectStringPreference
 import de.markusressel.kutepreferences.library.preference.text.KutePasswordPreference
 import de.markusressel.kutepreferences.library.preference.text.KuteTextPreference
 import de.markusressel.kutepreferences.library.preference.toggle.KuteTogglePreference
@@ -101,7 +101,7 @@ class KutePreferencesHolder @Inject constructor(
     }
 
     val singleSelectPreference by lazy {
-        KuteSingleSelectPreference(
+        KuteSingleSelectStringPreference(
                 context = context,
                 key = R.string.key_demo_single_select,
                 icon = iconHelper.getIcon(MaterialDesignIconic.Icon.gmi_select_all),

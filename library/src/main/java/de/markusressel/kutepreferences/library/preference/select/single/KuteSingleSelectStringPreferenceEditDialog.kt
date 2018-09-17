@@ -1,4 +1,4 @@
-package de.markusressel.kutepreferences.library.preference.select
+package de.markusressel.kutepreferences.library.preference.select.single
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -8,12 +8,10 @@ import android.widget.RadioGroup
 import androidx.core.view.children
 import de.markusressel.kutepreferences.library.R
 import de.markusressel.kutepreferences.library.preference.KutePreferenceItem
-import de.markusressel.kutepreferences.library.view.edit.KutePreferenceEditDialogBase
 
-open class KuteSingleSelectPreferenceEditDialog(
-        override val preferenceItem: KutePreferenceItem<String>,
-        private val possibleValues: Map<Int, Int>) :
-        KutePreferenceEditDialogBase<String>() {
+class KuteSingleSelectStringPreferenceEditDialog(preferenceItem: KutePreferenceItem<String>,
+                                                 override val possibleValues: Map<Int, String>) :
+        KuteSingleSelectPreferenceEditDialog<String>(preferenceItem) {
 
     override val contentLayoutRes: Int
         get() = R.layout.kute_preference__single_select__edit_dialog
@@ -34,7 +32,7 @@ open class KuteSingleSelectPreferenceEditDialog(
                     false) as RadioButton
             radioButtonView.id = key
             radioButtonView.tag = radioGroupView!!.context.getString(key)
-            radioButtonView.text = radioGroupView!!.context.getString(title)
+            radioButtonView.text = title
             radioButtonView.setOnClickListener {
                 onRadioButtonClicked(it)
             }
@@ -43,11 +41,7 @@ open class KuteSingleSelectPreferenceEditDialog(
         }
 
         // initial selection
-        radioGroupView?.children?.forEach {
-            if (persistedValue == it.tag) {
-                radioGroupView?.check(it.id)
-            }
-        }
+        onCurrentValueChanged(null, persistedValue, false)
     }
 
     private fun onRadioButtonClicked(view: View) {

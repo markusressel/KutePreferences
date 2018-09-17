@@ -1,4 +1,4 @@
-package de.markusressel.kutepreferences.library.preference.select
+package de.markusressel.kutepreferences.library.preference.select.multi
 
 import android.content.Context
 import android.view.LayoutInflater

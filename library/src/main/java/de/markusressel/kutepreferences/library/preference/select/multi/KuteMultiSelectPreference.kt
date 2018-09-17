@@ -1,4 +1,4 @@
-package de.markusressel.kutepreferences.library.preference.select
+package de.markusressel.kutepreferences.library.preference.select.multi
 
 import android.content.Context
 import android.graphics.drawable.Drawable
@@ -25,10 +25,12 @@ open class KuteMultiSelectPreference(
     override val layoutRes: Int
         get() = R.layout.kute_preference__default__list_item
 
-    override fun getDefaultValue(): Set<String> = defaultValue.map { context.getString(it) }.toSet()
+    override fun getDefaultValue(): Set<String> = defaultValue.asSequence().map { context.getString(it) }.toSet()
 
     override fun onClick(context: Context) {
-        val dialog = KuteMultiSelectPreferenceEditDialog(this, possibleValues)
+        val dialog = KuteMultiSelectPreferenceEditDialog(
+                this,
+                possibleValues)
         dialog
                 .show(context)
     }

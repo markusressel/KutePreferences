@@ -79,6 +79,8 @@ KutePreferences lets you specify the preference structre exactly as it is suppos
 
 ### Included Preference Types
 
+KutePreferences includes implementation for most of the commonly needed preference items that you might encounter when building an app.
+
 | Name                       | Item Type    | Description |
 |----------------------------|--------------|-------------|
 | KuteTogglePreference       | Boolean      | A simple on/off preference. |
@@ -87,21 +89,32 @@ KutePreferences lets you specify the preference structre exactly as it is suppos
 | KuteNumberPreference       | Integer      | A preference for number values. |
 | KuteSliderPreference       | Integer      | Like `KuteNumberPreference` but with a slider GUI instead of a direct input field. |
 | KuteDatePreference         | Date         | Let's the user select and store a date. |
-| KuteSingleSelectPreference | List\<T\>      | Allows a single selection from a specified list of items. |
-| KuteMultiSelectPreference  | List\<T\>      | Allow to select multiple items from a specified list of items. |
+| KuteSingleSelectPreference | List\<T\>    | Allows a single selection from a specified list of items. |
+| KuteMultiSelectPreference  | List\<T\>    | Allow to select multiple items from a specified list of items. |
 
 ### Other Types
 
-| Name                       | Item Type    | Description |
-|----------------------------|--------------|-------------|
+If you want to implement other list items that don't need any persistence you can use one of these implementations:
+
+| Name                       | Description |
+|----------------------------|-------------|
 | KuteAction                 | A simple `click` action provided with a name. |
+
+### Grouping
+
+For better context preference items can be grouped in categories or divided by simple headlines.
+To do this you can use one of these classes:
+
+| Name                       | Description |
+|----------------------------|-------------|
 | KuteCategory               | A Category groups multiple preference items or even other category items. |
 | KuteDivider                | A simple divider of preference items inside a single preference category. |
 
 ### Implement custom preferences
 
 If the integrated preference classes don't fit your needs you can easily create your own custom preference implementation.
-To do so you have to create an implementation of `KutePreferenceItem`. If it fit's your needs you can use `KutePreferenceBase` instead (which has some basic functionality implemented already).
+To do so you have to create an implementation of `KutePreferenceItem`.
+You can use `KutePreferenceBase` instead (which has some basic functionality implemented already) if it fit's your needs.
 
 Important things to keep in mind if you implement your own preference item:
 
@@ -112,6 +125,10 @@ Important things to keep in mind if you implement your own preference item:
   * KutePreferences.Preference.Description
   * etc.
 
+# Contributing
+
+GitHub is for social coding: if you want to write code, I encourage contributions through pull requests from forks
+of this repository. Create GitHub tickets for bugs and new features and comment on the ones that you are interested in.
 
 
 # License
