@@ -16,7 +16,7 @@ buildscript {
         buildToolsVersion = "27.0.3"
 
         // DEPENDENCIES
-        androidKtxVersion = "1.0.0-alpha1"
+        androidKtxVersion = "1.0.0-rc02"
         supportLibVersion = "27.1.1"
 
         javaxAnnotationVersion = "10.0-b28"

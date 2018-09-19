@@ -29,8 +29,6 @@ dependencies {
     implementation "com.android.support:appcompat-v7:$supportLibVersion"
     implementation "com.android.support:design:$supportLibVersion"
 
-    implementation "androidx.core:core-ktx:$androidKtxVersion"
-
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
     implementation "com.google.code.gson:gson:2.8.5"

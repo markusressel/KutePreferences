@@ -51,6 +51,7 @@ class PreferencesFragment : DaggerKutePreferenceFragmentBase() {
                         children = listOf(
                                 kutePreferencesHolder.textPreference2,
                                 kutePreferencesHolder.singleSelectPreference,
+                                kutePreferencesHolder.colorPreference,
                                 kutePreferencesHolder.datePreference,
                                 kutePreferencesHolder.passwordPreference
                         )

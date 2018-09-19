@@ -5,8 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
-import androidx.core.view.children
 import de.markusressel.kutepreferences.library.R
+import de.markusressel.kutepreferences.library.extensions.children
 import de.markusressel.kutepreferences.library.preference.KutePreferenceItem
 import de.markusressel.kutepreferences.library.view.edit.KutePreferenceEditDialogBase
 

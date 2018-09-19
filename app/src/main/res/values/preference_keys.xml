@@ -13,6 +13,8 @@
     <string name="key_demo_number_pref" translatable="false">key_demo_number_pref</string>
     <string name="key_demo_slider_pref" translatable="false">key_demo_slider_pref</string>
 
+    <string name="key_demo_color_pref" translatable="false">key_demo_color_pref</string>
+
     <string name="key_demo_date_pref" translatable="false">key_demo_date_pref</string>
 
     <string name="key_demo_toggle_pref" translatable="false">key_demo_toggle_pref</string>

@@ -2,12 +2,12 @@ package de.markusressel.kutepreferences.preferences
 
 import android.content.Context
 import android.widget.Toast
-import androidx.core.widget.toast
 import com.mikepenz.material_design_iconic_typeface_library.MaterialDesignIconic
 import de.markusressel.kutepreferences.R
 import de.markusressel.kutepreferences.helper.IconHelper
 import de.markusressel.kutepreferences.library.persistence.DefaultKutePreferenceDataProvider
 import de.markusressel.kutepreferences.library.preference.action.KuteAction
+import de.markusressel.kutepreferences.library.preference.color.KuteColorPreference
 import de.markusressel.kutepreferences.library.preference.date.KuteDatePreference
 import de.markusressel.kutepreferences.library.preference.number.KuteNumberPreference
 import de.markusressel.kutepreferences.library.preference.number.KuteSliderPreference
@@ -69,7 +69,7 @@ class KutePreferencesHolder @Inject constructor(
                 },
                 defaultValue = false,
                 onPreferenceChangedListener = { old, new ->
-                    context.toast("Old: $old New: $new", Toast.LENGTH_SHORT)
+                    Toast.makeText(context, "Old: $old New: $new", Toast.LENGTH_SHORT).show()
                 },
                 dataProvider = dataProvider)
     }
@@ -89,6 +89,16 @@ class KutePreferencesHolder @Inject constructor(
                 title = context.getString(R.string.title_demo_slider_pref),
                 maximum = 7,
                 defaultValue = 5,
+                dataProvider = dataProvider)
+    }
+
+    val colorPreference by lazy {
+        KuteColorPreference(
+                context = context,
+                key = R.string.key_demo_color_pref,
+                icon = iconHelper.getIcon(MaterialDesignIconic.Icon.gmi_colorize),
+                title = context.getString(R.string.title_demo_color_pref),
+                defaultValue = R.color.colorAccent,
                 dataProvider = dataProvider)
     }
 
@@ -135,7 +145,7 @@ class KutePreferencesHolder @Inject constructor(
                 icon = iconHelper.getIcon(MaterialDesignIconic.Icon.gmi_info),
                 title = context.getString(R.string.title_demo_action),
                 onClickAction = { context, kuteAction ->
-                    context.toast("Action clicked!", Toast.LENGTH_SHORT)
+                    Toast.makeText(context, "Action clicked!", Toast.LENGTH_SHORT).show()
                 })
     }
 
