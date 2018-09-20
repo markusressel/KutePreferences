@@ -1,6 +1,7 @@
 package de.markusressel.kutepreferences.library.preference.color
 
 import android.content.Context
+import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.support.annotation.ColorRes
 import android.support.v4.content.ContextCompat
@@ -35,10 +36,10 @@ open class KuteColorPreference(
     }
 
     override fun createDescription(currentValue: Int): String {
-        val r = (currentValue shr 16 and 0xff) / 255.0f
-        val g = (currentValue shr 8 and 0xff) / 255.0f
-        val b = (currentValue and 0xff) / 255.0f
-        val a = (currentValue shr 24 and 0xff) / 255.0f
+        val a = Color.alpha(currentValue).toString(16)
+        val r = Color.red(currentValue).toString(16)
+        val g = Color.green(currentValue).toString(16)
+        val b = Color.blue(currentValue).toString(16)
 
         return "#$a$r$g$b"
     }
