@@ -4,6 +4,8 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.CalendarView
+import de.markusressel.kutepreferences.core.preference.KutePreferenceItem
+import de.markusressel.kutepreferences.core.view.edit.KutePreferenceEditDialogBase
 import de.markusressel.kutepreferences.preference.R
 import java.util.*
 
