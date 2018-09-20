@@ -63,7 +63,7 @@ abstract class KutePreferenceBase<DataType : Any> : KutePreferenceItem<DataType>
         updateDescription()
     }
 
-    private fun updateDescription() {
+    internal open fun updateDescription() {
         descriptionTextView?.let {
             if (description.isBlank()) {
                 it.visibility = View.GONE

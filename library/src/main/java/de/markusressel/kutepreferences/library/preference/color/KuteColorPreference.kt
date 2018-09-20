@@ -35,6 +35,11 @@ open class KuteColorPreference(
                 .show(context)
     }
 
+    override fun updateDescription() {
+        super.updateDescription()
+        descriptionTextView?.setTextColor(persistedValue)
+    }
+
     override fun createDescription(currentValue: Int): String {
         val a = Color.alpha(currentValue).toString(16)
         val r = Color.red(currentValue).toString(16)
