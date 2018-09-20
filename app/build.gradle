@@ -32,7 +32,13 @@ android {
 }
 
 dependencies {
-    implementation project(':library')
+    implementation project(':core')
+    implementation project(':boolean')
+    implementation project(':color')
+    implementation project(':date')
+    implementation project(':number')
+    implementation project(':selection')
+    implementation project(':text')
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
