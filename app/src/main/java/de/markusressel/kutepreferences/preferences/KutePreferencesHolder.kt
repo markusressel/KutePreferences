@@ -5,6 +5,7 @@ import android.widget.Toast
 import com.mikepenz.material_design_iconic_typeface_library.MaterialDesignIconic
 import de.markusressel.kutepreferences.R
 import de.markusressel.kutepreferences.helper.IconHelper
+import de.markusressel.kutepreferences.library.ktx.toast
 import de.markusressel.kutepreferences.library.persistence.DefaultKutePreferenceDataProvider
 import de.markusressel.kutepreferences.library.preference.action.KuteAction
 import de.markusressel.kutepreferences.library.preference.date.KuteDatePreference

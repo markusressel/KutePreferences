@@ -20,7 +20,9 @@ buildscript {
         supportLibVersion = "28.0.0"
 
         javaxAnnotationVersion = "10.0-b28"
-        dagger2Version = "2.17"
+
+        // v2.17 and up seems to have some issues with jetifier (androidx conversion tool)
+        dagger2Version = "2.16"
 
         rxKotlinVersion = "2.2.0"
         rxBindingVersion = "2.1.1"
