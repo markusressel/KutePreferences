@@ -7,6 +7,7 @@ import android.widget.RadioButton
 import android.widget.RadioGroup
 import androidx.core.view.children
 import de.markusressel.kutepreferences.library.R
+import de.markusressel.kutepreferences.library.ktx.forEachCompat
 import de.markusressel.kutepreferences.library.preference.KutePreferenceItem
 
 class KuteSingleSelectStringPreferenceEditDialog(preferenceItem: KutePreferenceItem<String>,
@@ -25,7 +26,7 @@ class KuteSingleSelectStringPreferenceEditDialog(preferenceItem: KutePreferenceI
         userInput = persistedValue
 
         // inflate option views
-        possibleValues.forEach { key, title ->
+        possibleValues.forEachCompat { key, title ->
             val radioButtonView: RadioButton = layoutInflater.inflate(
                     R.layout.kute_preferences__preference__single_select__item,
                     radioGroupView,

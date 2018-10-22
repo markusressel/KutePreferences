@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import androidx.core.view.children
 import de.markusressel.kutepreferences.library.R
+import de.markusressel.kutepreferences.library.ktx.forEachCompat
 import de.markusressel.kutepreferences.library.preference.KutePreferenceItem
 import de.markusressel.kutepreferences.library.view.edit.KutePreferenceEditDialogBase
 
@@ -28,7 +29,7 @@ open class KuteMultiSelectPreferenceEditDialog(
         userInput = persistedValue
 
         // inflate option views
-        possibleValues.forEach { key, title ->
+        possibleValues.forEachCompat { key, title ->
             val checkBoxView: CheckBox = layoutInflater.inflate(
                     R.layout.kute_preferences__preference__multi_select__item,
                     checkBoxLayout,
