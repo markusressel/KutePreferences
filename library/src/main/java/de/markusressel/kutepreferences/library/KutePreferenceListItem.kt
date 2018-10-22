@@ -1,8 +1,8 @@
 package de.markusressel.kutepreferences.library
 
-import android.support.annotation.StringRes
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.annotation.StringRes
 
 interface KutePreferenceListItem {
 

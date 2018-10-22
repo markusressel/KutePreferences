@@ -2,7 +2,6 @@ package de.markusressel.kutepreferences.preferences
 
 import android.content.Context
 import android.widget.Toast
-import androidx.core.widget.toast
 import com.mikepenz.material_design_iconic_typeface_library.MaterialDesignIconic
 import de.markusressel.kutepreferences.R
 import de.markusressel.kutepreferences.helper.IconHelper

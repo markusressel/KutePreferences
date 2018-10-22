@@ -4,7 +4,8 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.EditText
-import com.afollestad.materialdialogs.DialogAction
+import com.afollestad.materialdialogs.WhichButton
+import com.afollestad.materialdialogs.actions.getActionButton
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.trello.rxlifecycle2.kotlin.bindToLifecycle
 import de.markusressel.kutepreferences.library.R
@@ -65,7 +66,7 @@ open class KuteTextPreferenceEditDialog(
         // validate pattern if necessary
         val newValueMatchesPattern = value.matches(pattern)
 
-        val positiveDialogButton = dialog?.getActionButton(DialogAction.POSITIVE)
+        val positiveDialogButton = dialog?.getActionButton(WhichButton.POSITIVE)
 
         positiveDialogButton?.isEnabled = newValueMatchesPattern
     }

@@ -1,8 +1,8 @@
 package de.markusressel.kutepreferences.library.preference
 
 import android.graphics.drawable.Drawable
-import android.support.annotation.CallSuper
-import android.support.annotation.CheckResult
+import androidx.annotation.CallSuper
+import androidx.annotation.CheckResult
 import de.markusressel.kutepreferences.library.KutePreferenceListItem
 import de.markusressel.kutepreferences.library.persistence.KutePreferenceDataProvider
 

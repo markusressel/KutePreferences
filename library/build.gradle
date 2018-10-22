@@ -26,8 +26,11 @@ android {
 }
 
 dependencies {
-    implementation "com.android.support:appcompat-v7:$supportLibVersion"
-    implementation "com.android.support:design:$supportLibVersion"
+    //implementation "com.android.support:appcompat-v7:$supportLibVersion"
+    implementation "androidx.appcompat:appcompat:$androidKtxVersion"
+
+    //implementation "com.android.support:design:$supportLibVersion"
+    implementation "com.google.android.material:material:$androidKtxVersion"
 
     implementation "androidx.core:core-ktx:$androidKtxVersion"
 
@@ -40,8 +43,7 @@ dependencies {
     }
 
     // Material Dialogs
-    implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
-    implementation 'com.afollestad.material-dialogs:commons:0.9.6.0'
+    implementation 'com.afollestad.material-dialogs:core:2.0.0-beta4'
 
     // RxJava (RxKotlin actually)
     implementation "io.reactivex.rxjava2:rxjava:2.2.0"
@@ -62,8 +64,8 @@ dependencies {
     implementation "com.trello.rxlifecycle2:rxlifecycle-android-lifecycle-kotlin:$rxLifecycleVersion"
 
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    androidTestImplementation "androidx.test:runner:1.1.0-beta02"
+    androidTestImplementation "androidx.test.espresso:espresso-core:3.1.0-beta02"
 }
 
 // build a jar with source files

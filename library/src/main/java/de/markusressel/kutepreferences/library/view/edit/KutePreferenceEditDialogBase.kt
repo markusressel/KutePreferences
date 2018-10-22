@@ -1,10 +1,11 @@
 package de.markusressel.kutepreferences.library.view.edit
 
 import android.content.Context
-import android.support.annotation.LayoutRes
 import android.view.LayoutInflater
 import android.view.View
+import androidx.annotation.LayoutRes
 import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.customview.customView
 import de.markusressel.kutepreferences.library.R
 
 /**
@@ -85,25 +86,21 @@ abstract class KutePreferenceEditDialogBase<DataType : Any> : KutePreferenceEdit
 
         onContentViewCreated(context, layoutInflater, dialogContentView)
 
-        dialog = MaterialDialog
-                .Builder(context)
-                .customView(dialogContentView, false)
-                .title(preferenceItem.title)
-                .neutralText(android.R.string.cancel)
-                .onNeutral { _, _ ->
+        dialog = MaterialDialog(context).customView(view = dialogContentView, scrollable = false)
+                .noAutoDismiss()
+                .title(text = preferenceItem.title)
+                .neutralButton(res = android.R.string.cancel, click = {
                     dismiss()
-                }
-                .negativeText(R.string.default_value)
-                .onNegative { _, _ ->
+                })
+                .negativeButton(res = R.string.default_value, click = {
                     resetToDefault()
-                }
-                .autoDismiss(false)
-                .positiveText(R.string.save)
-                .onPositive { _, _ ->
+                })
+                .positiveButton(res = R.string.save, click = {
                     save()
                     dismiss()
-                }
-                .show()
+                })
+
+        dialog?.show()
     }
 
     /**

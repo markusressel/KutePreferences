@@ -1,13 +1,13 @@
 package de.markusressel.kutepreferences.library.preference
 
 import android.content.Context
-import android.support.annotation.CallSuper
-import android.support.annotation.LayoutRes
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.CallSuper
+import androidx.annotation.LayoutRes
 import de.markusressel.kutepreferences.library.KuteSearchProvider
 import de.markusressel.kutepreferences.library.R
 

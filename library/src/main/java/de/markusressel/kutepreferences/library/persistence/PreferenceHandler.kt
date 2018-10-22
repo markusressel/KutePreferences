@@ -1,7 +1,7 @@
 package de.markusressel.kutepreferences.library.persistence
 
 import android.content.Context
-import android.support.annotation.StringRes
+import androidx.annotation.StringRes
 import de.markusressel.typedpreferences.PreferenceItem
 import de.markusressel.typedpreferences.PreferencesHandlerBase
 

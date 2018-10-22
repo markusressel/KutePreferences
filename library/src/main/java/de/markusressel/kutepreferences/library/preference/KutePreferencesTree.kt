@@ -1,6 +1,6 @@
 package de.markusressel.kutepreferences.library.preference
 
-import android.support.annotation.StringRes
+import androidx.annotation.StringRes
 import de.markusressel.kutepreferences.library.KutePreferenceListItem
 import de.markusressel.kutepreferences.library.KuteSearchProvider
 import de.markusressel.kutepreferences.library.preference.category.KuteParent

@@ -19,13 +19,13 @@
 package de.markusressel.kutepreferences.dagger
 
 import android.os.Bundle
-import android.support.annotation.CallSuper
-import android.support.annotation.IntDef
-import android.support.annotation.LayoutRes
-import android.support.v4.app.Fragment
-import android.support.v7.app.AppCompatActivity
 import android.view.Window
 import android.view.WindowManager
+import androidx.annotation.CallSuper
+import androidx.annotation.IntDef
+import androidx.annotation.LayoutRes
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector

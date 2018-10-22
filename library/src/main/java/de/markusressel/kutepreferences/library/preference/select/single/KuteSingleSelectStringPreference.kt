@@ -2,7 +2,7 @@ package de.markusressel.kutepreferences.library.preference.select.single
 
 import android.content.Context
 import android.graphics.drawable.Drawable
-import android.support.annotation.StringRes
+import androidx.annotation.StringRes
 import de.markusressel.kutepreferences.library.R
 import de.markusressel.kutepreferences.library.persistence.KutePreferenceDataProvider
 import de.markusressel.kutepreferences.library.view.edit.KutePreferenceEditDialog

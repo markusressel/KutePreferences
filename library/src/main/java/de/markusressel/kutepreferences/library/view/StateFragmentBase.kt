@@ -1,7 +1,7 @@
 package de.markusressel.kutepreferences.library.view
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 
 /**
  * Created by Markus on 21.02.2018.
