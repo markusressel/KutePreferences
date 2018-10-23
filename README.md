@@ -27,9 +27,15 @@ To use this library just include it in your dependencies using
 in your project build.gradle file and
 
     dependencies {
-        compile('com.github.markusressel.KutePreferences:library:v1.3.0') {
-            transitive = true
-        }
+        ...
+    
+        def kutePreferencesVersion = "v1.3.0"
+        // choose the ones you need
+        implementation("com.github.markusressel.KutePreferences:boolean:${codeEditorVersion}")
+        implementation("com.github.markusressel.KutePreferences:date:${codeEditorVersion}")
+        implementation("com.github.markusressel.KutePreferences:number:${codeEditorVersion}")
+        implementation("com.github.markusressel.KutePreferences:selection:${codeEditorVersion}")
+        implementation("com.github.markusressel.KutePreferences:text:${codeEditorVersion}")
     }
 
 in your desired module ```build.gradle``` file.
@@ -71,11 +77,11 @@ class PreferencesFragment : KutePreferencesMainFragment() {
 }
 ```
 
-KutePreferenceItems are simple Objects that specify view behaviour.
+KutePreferenceItems are simple objects that specify view behaviour.
 They work in conjunction with a data provider that defines how the state of the preference item is persisted.
 
 Usually the preferences of your app are organized in some kind of tree.
-KutePreferences lets you specify the preference structre exactly as it is supposed to be: as a tree.
+KutePreferences lets you specify the preference structure exactly like that.
 
 ### Included Preference Types
 
