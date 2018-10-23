@@ -14,6 +14,8 @@
 
     <string name="title_demo_slider_pref">Volume</string>
 
+    <string name="title_demo_color_pref">Favorite Color</string>
+
     <string name="title_demo_date_pref">Day of Birth</string>
 
     <string name="title_demo_action">About</string>

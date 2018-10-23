@@ -4,18 +4,19 @@ import android.content.Context
 import android.widget.Toast
 import com.mikepenz.material_design_iconic_typeface_library.MaterialDesignIconic
 import de.markusressel.kutepreferences.R
+import de.markusressel.kutepreferences.core.persistence.DefaultKutePreferenceDataProvider
+import de.markusressel.kutepreferences.core.preference.action.KuteAction
 import de.markusressel.kutepreferences.helper.IconHelper
 import de.markusressel.kutepreferences.library.ktx.toast
-import de.markusressel.kutepreferences.library.persistence.DefaultKutePreferenceDataProvider
-import de.markusressel.kutepreferences.library.preference.action.KuteAction
-import de.markusressel.kutepreferences.library.preference.date.KuteDatePreference
-import de.markusressel.kutepreferences.library.preference.number.KuteNumberPreference
-import de.markusressel.kutepreferences.library.preference.number.KuteSliderPreference
-import de.markusressel.kutepreferences.library.preference.select.multi.KuteMultiSelectPreference
-import de.markusressel.kutepreferences.library.preference.select.single.KuteSingleSelectStringPreference
-import de.markusressel.kutepreferences.library.preference.text.KutePasswordPreference
-import de.markusressel.kutepreferences.library.preference.text.KuteTextPreference
-import de.markusressel.kutepreferences.library.preference.toggle.KuteTogglePreference
+import de.markusressel.kutepreferences.preference.boolean.KuteBooleanPreference
+import de.markusressel.kutepreferences.preference.color.KuteColorPreference
+import de.markusressel.kutepreferences.preference.date.KuteDatePreference
+import de.markusressel.kutepreferences.preference.number.KuteNumberPreference
+import de.markusressel.kutepreferences.preference.number.KuteSliderPreference
+import de.markusressel.kutepreferences.preference.selection.multi.KuteMultiSelectPreference
+import de.markusressel.kutepreferences.preference.selection.single.KuteSingleSelectStringPreference
+import de.markusressel.kutepreferences.preference.text.KutePasswordPreference
+import de.markusressel.kutepreferences.preference.text.KuteTextPreference
 import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -57,7 +58,7 @@ class KutePreferencesHolder @Inject constructor(
     }
 
     val togglePreference by lazy {
-        KuteTogglePreference(key = R.string.key_demo_toggle_pref,
+        KuteBooleanPreference(key = R.string.key_demo_toggle_pref,
                 icon = iconHelper.getIcon(MaterialDesignIconic.Icon.gmi_airplane),
                 title = context.getString(R.string.title_demo_toggle_pref),
                 descriptionFunction = {
@@ -69,7 +70,7 @@ class KutePreferencesHolder @Inject constructor(
                 },
                 defaultValue = false,
                 onPreferenceChangedListener = { old, new ->
-                    context.toast("Old: $old New: $new", Toast.LENGTH_SHORT)
+                    Toast.makeText(context, "Old: $old New: $new", Toast.LENGTH_SHORT).show()
                 },
                 dataProvider = dataProvider)
     }
@@ -89,6 +90,16 @@ class KutePreferencesHolder @Inject constructor(
                 title = context.getString(R.string.title_demo_slider_pref),
                 maximum = 7,
                 defaultValue = 5,
+                dataProvider = dataProvider)
+    }
+
+    val colorPreference by lazy {
+        KuteColorPreference(
+                context = context,
+                key = R.string.key_demo_color_pref,
+                icon = iconHelper.getIcon(MaterialDesignIconic.Icon.gmi_colorize),
+                title = context.getString(R.string.title_demo_color_pref),
+                defaultValue = R.color.colorAccent,
                 dataProvider = dataProvider)
     }
 
@@ -135,7 +146,7 @@ class KutePreferencesHolder @Inject constructor(
                 icon = iconHelper.getIcon(MaterialDesignIconic.Icon.gmi_info),
                 title = context.getString(R.string.title_demo_action),
                 onClickAction = { context, kuteAction ->
-                    context.toast("Action clicked!", Toast.LENGTH_SHORT)
+                    Toast.makeText(context, "Action clicked!", Toast.LENGTH_SHORT).show()
                 })
     }
 

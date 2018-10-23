@@ -2,10 +2,10 @@ package de.markusressel.kutepreferences.view
 
 import com.mikepenz.material_design_iconic_typeface_library.MaterialDesignIconic
 import de.markusressel.kutepreferences.R
+import de.markusressel.kutepreferences.core.preference.KutePreferencesTree
+import de.markusressel.kutepreferences.core.preference.category.KuteCategory
+import de.markusressel.kutepreferences.core.preference.category.KuteDivider
 import de.markusressel.kutepreferences.helper.IconHelper
-import de.markusressel.kutepreferences.library.preference.KutePreferencesTree
-import de.markusressel.kutepreferences.library.preference.category.KuteCategory
-import de.markusressel.kutepreferences.library.preference.category.KuteDivider
 import de.markusressel.kutepreferences.preferences.DaggerKutePreferenceFragmentBase
 import de.markusressel.kutepreferences.preferences.KutePreferencesHolder
 import javax.inject.Inject
@@ -51,6 +51,7 @@ class PreferencesFragment : DaggerKutePreferenceFragmentBase() {
                         children = listOf(
                                 kutePreferencesHolder.textPreference2,
                                 kutePreferencesHolder.singleSelectPreference,
+                                kutePreferencesHolder.colorPreference,
                                 kutePreferencesHolder.datePreference,
                                 kutePreferencesHolder.passwordPreference
                         )

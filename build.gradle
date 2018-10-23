@@ -57,6 +57,14 @@ allprojects {
         maven { url "https://jitpack.io" }
         maven { url "https://dl.bintray.com/drummer-aidan/maven/" }
     }
+
+    configurations.all() {
+        resolutionStrategy.force "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+        resolutionStrategy.force "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+
+        resolutionStrategy.force "com.android.support:support-v4:$supportLibVersion"
+        resolutionStrategy.force "com.android.support:appcompat-v7:$supportLibVersion"
+    }
 }
 
 compileKotlin {
@@ -68,12 +76,4 @@ compileTestKotlin {
     kotlinOptions {
         jvmTarget = "1.8"
     }
-}
-
-configurations.all() {
-    resolutionStrategy.force "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    resolutionStrategy.force "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-
-    resolutionStrategy.force "com.android.support:support-v4:$supportLibVersion"
-    resolutionStrategy.force "com.android.support:appcompat-v7:$supportLibVersion"
 }
