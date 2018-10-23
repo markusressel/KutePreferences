@@ -40,8 +40,6 @@ dependencies {
     implementation project(':selection')
     implementation project(':text')
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-
     implementation "androidx.appcompat:appcompat:$androidKtxVersion"
 
     // Android KTX
@@ -65,17 +63,6 @@ dependencies {
     //this adds all ui view widgets (IconicsButton, IconicsImageView, ...)
     implementation "com.mikepenz:iconics-views:${iconicsVersion}@aar"
     implementation 'com.mikepenz:material-design-iconic-typeface:+@aar'
-
-
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-}
-
-configurations.all {
-    resolutionStrategy.force "com.android.support:support-v4:$supportLibVersion"
-    resolutionStrategy.force "com.android.support:appcompat-v7:$supportLibVersion"
-    resolutionStrategy.force "com.android.support:design:$supportLibVersion"
 }
 
 // build a jar with source files

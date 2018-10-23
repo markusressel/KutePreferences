@@ -16,7 +16,7 @@ buildscript {
         buildToolsVersion = "28.0.3"
 
         // DEPENDENCIES
-        androidKtxVersion = "1.0.0"
+        androidKtxVersion = "1.0.0-rc01"
         supportLibVersion = "28.0.0"
 
         javaxAnnotationVersion = "10.0-b28"
@@ -61,9 +61,6 @@ allprojects {
     configurations.all() {
         resolutionStrategy.force "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
         resolutionStrategy.force "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-
-        resolutionStrategy.force "com.android.support:support-v4:$supportLibVersion"
-        resolutionStrategy.force "com.android.support:appcompat-v7:$supportLibVersion"
     }
 }
 

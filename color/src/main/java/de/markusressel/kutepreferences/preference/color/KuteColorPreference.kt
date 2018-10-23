@@ -3,8 +3,8 @@ package de.markusressel.kutepreferences.preference.color
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.Drawable
-import android.support.annotation.ColorRes
-import android.support.v4.content.ContextCompat
+import androidx.annotation.ColorRes
+import androidx.core.content.ContextCompat
 import de.markusressel.kutepreferences.core.persistence.KutePreferenceDataProvider
 import de.markusressel.kutepreferences.core.preference.KutePreferenceBase
 

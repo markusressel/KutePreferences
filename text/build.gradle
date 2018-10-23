@@ -27,7 +27,6 @@ android {
 
 dependencies {
     implementation project(':core')
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 }
 
 // build a jar with source files

@@ -1,9 +1,9 @@
 package de.markusressel.kutepreferences.preference.color
 
 import android.content.Context
-import android.support.annotation.ColorInt
 import android.view.LayoutInflater
 import android.view.View
+import androidx.annotation.ColorInt
 import de.markusressel.kutepreferences.core.view.edit.KutePreferenceEditDialogBase
 
 open class KuteColorPreferenceEditDialog(
