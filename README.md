@@ -31,12 +31,12 @@ in your project build.gradle file and
     
         def kutePreferencesVersion = "v1.3.1"
         // choose the ones you need
-        implementation("com.github.markusressel.KutePreferences:boolean:${codeEditorVersion}")
-        implementation("com.github.markusressel.KutePreferences:color:${codeEditorVersion}")
-        implementation("com.github.markusressel.KutePreferences:date:${codeEditorVersion}")
-        implementation("com.github.markusressel.KutePreferences:number:${codeEditorVersion}")
-        implementation("com.github.markusressel.KutePreferences:selection:${codeEditorVersion}")
-        implementation("com.github.markusressel.KutePreferences:text:${codeEditorVersion}")
+        implementation("com.github.markusressel.KutePreferences:boolean:${kutePreferencesVersion}")
+        implementation("com.github.markusressel.KutePreferences:color:${kutePreferencesVersion}")
+        implementation("com.github.markusressel.KutePreferences:date:${kutePreferencesVersion}")
+        implementation("com.github.markusressel.KutePreferences:number:${kutePreferencesVersion}")
+        implementation("com.github.markusressel.KutePreferences:selection:${kutePreferencesVersion}")
+        implementation("com.github.markusressel.KutePreferences:text:${kutePreferencesVersion}")
     }
 
 in your desired module ```build.gradle``` file.
