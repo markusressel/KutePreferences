@@ -6,6 +6,7 @@ import android.view.View
 import androidx.annotation.LayoutRes
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.customview.customView
+import com.afollestad.materialdialogs.customview.getCustomView
 import de.markusressel.kutepreferences.core.R
 
 /**
@@ -73,6 +74,12 @@ abstract class KutePreferenceEditDialogBase<DataType : Any> : KutePreferenceEdit
     }
 
     /**
+     * Get the content view of the dialog
+     */
+    val contentView: View?
+        get() = dialog?.getCustomView()
+
+    /**
      * Show this dialog
      */
     override fun show(context: Context) {
@@ -81,12 +88,10 @@ abstract class KutePreferenceEditDialogBase<DataType : Any> : KutePreferenceEdit
         val layoutInflater = LayoutInflater
                 .from(context)
 
-        val dialogContentView = layoutInflater
+        val contentView = layoutInflater
                 .inflate(contentLayoutRes, null)
 
-        onContentViewCreated(context, layoutInflater, dialogContentView)
-
-        dialog = MaterialDialog(context).customView(view = dialogContentView, scrollable = false)
+        dialog = MaterialDialog(context).customView(view = contentView, scrollable = false)
                 .noAutoDismiss()
                 .title(text = preferenceItem.title)
                 .neutralButton(res = android.R.string.cancel, click = {
@@ -99,6 +104,8 @@ abstract class KutePreferenceEditDialogBase<DataType : Any> : KutePreferenceEdit
                     save()
                     dismiss()
                 })
+
+        onContentViewCreated(context, layoutInflater, contentView)
 
         dialog?.show()
     }

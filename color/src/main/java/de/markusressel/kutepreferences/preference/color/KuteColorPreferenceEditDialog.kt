@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import androidx.annotation.ColorInt
 import de.markusressel.kutepreferences.core.view.edit.KutePreferenceEditDialogBase
+import top.defaults.colorpicker.ColorPickerView
 
 open class KuteColorPreferenceEditDialog(
         override val preferenceItem: KuteColorPreference) :
@@ -13,11 +14,19 @@ open class KuteColorPreferenceEditDialog(
     override val contentLayoutRes: Int
         get() = R.layout.kute_preference__color__edit_dialog
 
-    var colorPickerView: View? = null
+    val colorPickerView: ColorPickerView by lazy {
+        contentView!!.findViewById<ColorPickerView>(R.id.kute_preferences__preference__color__color_picker)
+    }
 
     override fun onContentViewCreated(context: Context, layoutInflater: LayoutInflater, contentView: View) {
-        colorPickerView = contentView
-                .findViewById(R.id.kute_preferences__preference__color__color_picker)
+        colorPickerView.setInitialColor(persistedValue)
+
+        colorPickerView.subscribe { color, fromUser ->
+            if (fromUser) {
+                userInput = color
+                currentValue = color
+            }
+        }
 
         userInput = persistedValue
     }
@@ -25,8 +34,7 @@ open class KuteColorPreferenceEditDialog(
     override fun onCurrentValueChanged(@ColorInt oldValue: Int?, @ColorInt newValue: Int?, byUser: Boolean) {
         if (!byUser) {
             newValue?.let {
-                //                colorPickerView
-//                        ?.setColor(it)
+                colorPickerView.setInitialColor(it)
             }
         }
     }

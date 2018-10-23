@@ -28,6 +28,7 @@ android {
 dependencies {
     implementation project(':core')
     implementation "androidx.core:core:$androidKtxVersion"
+    implementation 'com.github.duanhong169:colorpicker:1.1.5'
 }
 
 // build a jar with source files

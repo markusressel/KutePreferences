@@ -40,10 +40,10 @@ open class KuteColorPreference(
     }
 
     override fun createDescription(currentValue: Int): String {
-        val a = Color.alpha(currentValue).toString(16)
-        val r = Color.red(currentValue).toString(16)
-        val g = Color.green(currentValue).toString(16)
-        val b = Color.blue(currentValue).toString(16)
+        val a = Color.alpha(currentValue).toString(16).padStart(2, '0')
+        val r = Color.red(currentValue).toString(16).padStart(2, '0')
+        val g = Color.green(currentValue).toString(16).padStart(2, '0')
+        val b = Color.blue(currentValue).toString(16).padStart(2, '0')
 
         return "#$a$r$g$b"
     }
