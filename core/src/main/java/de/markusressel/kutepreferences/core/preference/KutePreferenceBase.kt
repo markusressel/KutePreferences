@@ -44,9 +44,17 @@ abstract class KutePreferenceBase<DataType : Any> : KutePreferenceItem<DataType>
         descriptionTextView = layout
                 .findViewById(R.id.kute_preferences__preference__description)
 
+        onLayoutInflated(layout)
+
         updateDescription()
 
         return layout
+    }
+
+    /**
+     * Do any additional layout work that you need to do here
+     */
+    protected open fun onLayoutInflated(layout: View) {
     }
 
     override fun onClick(context: Context) {

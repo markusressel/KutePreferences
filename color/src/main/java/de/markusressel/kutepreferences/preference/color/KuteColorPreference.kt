@@ -3,6 +3,7 @@ package de.markusressel.kutepreferences.preference.color
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.Drawable
+import android.view.View
 import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
 import de.markusressel.kutepreferences.core.persistence.KutePreferenceDataProvider
@@ -24,9 +25,16 @@ open class KuteColorPreference(
         KutePreferenceBase<Int>() {
 
     override val layoutRes: Int
-        get() = R.layout.kute_preference__default__list_item
+        get() = R.layout.kute_preference__color__list_item
+
+    var colorPreviewView: View? = null
 
     override fun getDefaultValue(): Int = ContextCompat.getColor(context, defaultValue)
+
+    override fun onLayoutInflated(layout: View) {
+        super.onLayoutInflated(layout)
+        colorPreviewView = layout.findViewById(R.id.kute_preferences__preference__color__preview)
+    }
 
     override fun onClick(context: Context) {
         val dialog = KuteColorPreferenceEditDialog(this)
@@ -36,7 +44,7 @@ open class KuteColorPreference(
 
     override fun updateDescription() {
         super.updateDescription()
-        descriptionTextView?.setTextColor(persistedValue)
+        colorPreviewView?.setBackgroundColor(persistedValue)
     }
 
     override fun createDescription(currentValue: Int): String {

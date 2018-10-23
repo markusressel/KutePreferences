@@ -29,9 +29,10 @@ in your project build.gradle file and
     dependencies {
         ...
     
-        def kutePreferencesVersion = "v1.3.0"
+        def kutePreferencesVersion = "v1.3.1"
         // choose the ones you need
         implementation("com.github.markusressel.KutePreferences:boolean:${codeEditorVersion}")
+        implementation("com.github.markusressel.KutePreferences:color:${codeEditorVersion}")
         implementation("com.github.markusressel.KutePreferences:date:${codeEditorVersion}")
         implementation("com.github.markusressel.KutePreferences:number:${codeEditorVersion}")
         implementation("com.github.markusressel.KutePreferences:selection:${codeEditorVersion}")
@@ -91,12 +92,13 @@ KutePreferences includes implementation for most of the commonly needed preferen
 |----------------------------|--------------|-------------|
 | KuteTogglePreference       | Boolean      | A simple on/off preference. |
 | KuteTextPreference         | String       | A simple text preference.   |
-| KutePasswordPreference     | String       | A simple password text preference. This type works exactly like `KuteTextPreference` but includes obscuring typed input. |
+| KutePasswordPreference     | String       | A password text preference. This type works exactly like `KuteTextPreference` but includes obscuring typed input. |
 | KuteNumberPreference       | Integer      | A preference for number values. |
 | KuteSliderPreference       | Integer      | Like `KuteNumberPreference` but with a slider GUI instead of a direct input field. |
 | KuteDatePreference         | Date         | Let's the user select and store a date. |
+| KuteColorPreference        | Color        | Let's the user select and store an ARGB color. |
 | KuteSingleSelectPreference | List\<T\>    | Allows a single selection from a specified list of items. |
-| KuteMultiSelectPreference  | List\<T\>    | Allow to select multiple items from a specified list of items. |
+| KuteMultiSelectPreference  | List\<T\>    | Allows to select multiple items from a specified list of items. |
 
 ### Other Types
 
