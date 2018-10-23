@@ -24,7 +24,7 @@ buildscript {
         // v2.17 and up seems to have some issues with jetifier (androidx conversion tool)
         dagger2Version = "2.16"
 
-        rxKotlinVersion = "2.2.0"
+        rxKotlinVersion = "2.3.0"
         rxBindingVersion = "2.1.1"
         rxLifecycleVersion = "2.2.1"
 
