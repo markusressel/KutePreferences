@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
-        style="@style/KutePreferences.ListItem"
+        style="@style/KutePreferences.Divider"
+        android:layout_height="36dp"
         android:orientation="vertical">
 
     <TextView

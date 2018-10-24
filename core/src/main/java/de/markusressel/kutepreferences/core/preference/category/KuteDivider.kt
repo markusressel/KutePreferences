@@ -13,8 +13,8 @@ open class KuteDivider(
         override val key: Int,
         override val title: String) : KutePreferenceDivider {
 
-    override fun inflateListLayout(layoutInflater: LayoutInflater): ViewGroup {
-        val layout = layoutInflater.inflate(R.layout.kute_preference__divider, null, false) as ViewGroup
+    override fun inflateListLayout(layoutInflater: LayoutInflater, parent: ViewGroup): ViewGroup {
+        val layout = layoutInflater.inflate(R.layout.kute_preference__divider, parent, false) as ViewGroup
 
         val nameView: TextView = layout
                 .findViewById(R.id.kute_preference_divider__title)

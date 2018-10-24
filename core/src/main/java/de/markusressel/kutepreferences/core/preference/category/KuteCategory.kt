@@ -19,8 +19,9 @@ open class KuteCategory(
         override val description: String,
         override val children: List<KutePreferenceListItem>) :
         KutePreferenceCategory {
-    override fun inflateListLayout(layoutInflater: LayoutInflater): ViewGroup {
-        val layout = layoutInflater.inflate(R.layout.kute_preference__category, null, false) as ViewGroup
+
+    override fun inflateListLayout(layoutInflater: LayoutInflater, parent: ViewGroup): ViewGroup {
+        val layout = layoutInflater.inflate(R.layout.kute_preference__category, parent, false) as ViewGroup
 
         val iconView: ImageView = layout
                 .findViewById(R.id.kute_preference__category__icon)

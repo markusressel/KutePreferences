@@ -4,7 +4,7 @@
     <dimen name="kute_preferences__list_padding__horizontal">8dp</dimen>
     <dimen name="kute_preferences__list_padding__vertical">4dp</dimen>
 
-    <dimen name="kute_preferences__category__item_height">56dp</dimen>
+    <dimen name="kute_preferences__category__item_height">64dp</dimen>
 
     <dimen name="kute_preferences__category__icon_size">20dp</dimen>
 
@@ -14,7 +14,7 @@
     <dimen name="kute_preferences__divider__text_size__name">14sp</dimen>
 
     <dimen name="kute_preferences__preference__icon_size">20dp</dimen>
-    <dimen name="kute_preferences__preference__item_height">56dp</dimen>
+    <dimen name="kute_preferences__preference__item_height">64dp</dimen>
     <dimen name="kute_preferences__preference__text_size__title">16sp</dimen>
     <dimen name="kute_preferences__preference__text_size__description">12sp</dimen>
 

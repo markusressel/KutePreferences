@@ -24,8 +24,8 @@ abstract class KutePreferenceBase<DataType : Any> : KutePreferenceItem<DataType>
     protected var descriptionTextView: TextView? = null
 
     @CallSuper
-    override fun inflateListLayout(layoutInflater: LayoutInflater): ViewGroup {
-        val layout = layoutInflater.inflate(layoutRes, null, false) as ViewGroup
+    override fun inflateListLayout(layoutInflater: LayoutInflater, parent: ViewGroup): ViewGroup {
+        val layout = layoutInflater.inflate(layoutRes, parent, false) as ViewGroup
 
         iconView = layout
                 .findViewById(R.id.kute_preference__preference__icon)

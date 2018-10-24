@@ -29,8 +29,8 @@ open class KuteBooleanPreference(
 
     private var switchView: Switch? = null
 
-    override fun inflateListLayout(layoutInflater: LayoutInflater): ViewGroup {
-        val layout = super.inflateListLayout(layoutInflater)
+    override fun inflateListLayout(layoutInflater: LayoutInflater, parent: ViewGroup): ViewGroup {
+        val layout = super.inflateListLayout(layoutInflater, parent)
 
         switchView = layout
                 .findViewById(R.id.kute_preferences__preference__toggle__switch)

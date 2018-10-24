@@ -165,7 +165,7 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
             }
         }
 
-        val layout: ViewGroup = kutePreferenceListItem.inflateListLayout(layoutInflater)
+        val layout: ViewGroup = kutePreferenceListItem.inflateListLayout(layoutInflater, layoutToAppendTo)
         layoutToAppendTo.addView(layout)
 
         if (kutePreferenceListItem is KutePreferenceClickListener) {
