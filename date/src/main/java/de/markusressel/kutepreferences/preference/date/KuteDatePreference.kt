@@ -4,7 +4,6 @@ import android.content.Context
 import android.graphics.drawable.Drawable
 import de.markusressel.kutepreferences.core.persistence.KutePreferenceDataProvider
 import de.markusressel.kutepreferences.core.preference.KutePreferenceBase
-import de.markusressel.kutepreferences.preference.R
 import java.text.DateFormat
 import java.util.*
 

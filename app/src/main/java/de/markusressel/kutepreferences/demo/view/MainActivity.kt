@@ -1,9 +1,9 @@
-package de.markusressel.kutepreferences.view
+package de.markusressel.kutepreferences.demo.view
 
 import android.os.Bundle
-import de.markusressel.kutepreferences.R
-import de.markusressel.kutepreferences.dagger.DaggerSupportActivityBase
-import de.markusressel.kutepreferences.preferences.KutePreferencesHolder
+import de.markusressel.kutepreferences.demo.R
+import de.markusressel.kutepreferences.demo.dagger.DaggerSupportActivityBase
+import de.markusressel.kutepreferences.demo.preferences.KutePreferencesHolder
 import javax.inject.Inject
 
 class MainActivity : DaggerSupportActivityBase() {

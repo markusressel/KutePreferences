@@ -6,7 +6,6 @@ import android.view.View
 import android.widget.NumberPicker
 import de.markusressel.kutepreferences.core.preference.KutePreferenceItem
 import de.markusressel.kutepreferences.core.view.edit.KutePreferenceEditDialogBase
-import de.markusressel.kutepreferences.preference.R
 
 open class KuteNumberPreferenceEditDialog(override val preferenceItem: KutePreferenceItem<Long>) :
         KutePreferenceEditDialogBase<Long>() {

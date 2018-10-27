@@ -16,20 +16,21 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.markusressel.kutepreferences.dagger
+package de.markusressel.kutepreferences.demo.application
 
-import dagger.Component
 import dagger.android.AndroidInjector
-import dagger.android.support.AndroidSupportInjectionModule
-import de.markusressel.kutepreferences.application.App
-import javax.inject.Singleton
+import dagger.android.DaggerApplication
+import de.markusressel.kutepreferences.demo.dagger.DaggerAppComponent
 
-@Singleton
-@Component(
-        modules = [(AppModule::class), (AndroidSupportInjectionModule::class)])
-interface AppComponent : AndroidInjector<App> {
+/**
+ * Created by Markus on 20.12.2017.
+ */
+class App : DaggerApplicationBase() {
 
-    @Component.Builder
-    abstract class Builder : AndroidInjector.Builder<App>()
+    override fun applicationInjector(): AndroidInjector<out DaggerApplication> {
+        return DaggerAppComponent
+                .builder()
+                .create(this)
+    }
 
 }

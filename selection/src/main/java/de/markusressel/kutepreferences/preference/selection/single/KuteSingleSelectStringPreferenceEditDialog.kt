@@ -8,7 +8,7 @@ import android.widget.RadioGroup
 import de.markusressel.kutepreferences.core.extensions.children
 import de.markusressel.kutepreferences.core.preference.KutePreferenceItem
 import de.markusressel.kutepreferences.library.ktx.forEachCompat
-import de.markusressel.kutepreferences.preference.R
+import de.markusressel.kutepreferences.preference.selection.R
 
 class KuteSingleSelectStringPreferenceEditDialog(preferenceItem: KutePreferenceItem<String>,
                                                  override val possibleValues: Map<Int, String>) :

@@ -3,7 +3,7 @@ package de.markusressel.kutepreferences.preference.selection.single
 import android.content.Context
 import de.markusressel.kutepreferences.core.preference.KutePreferenceBase
 import de.markusressel.kutepreferences.core.view.edit.KutePreferenceEditDialog
-import de.markusressel.kutepreferences.preference.R
+import de.markusressel.kutepreferences.preference.selection.R
 
 /**
  * Base class for implementing a single selection preference

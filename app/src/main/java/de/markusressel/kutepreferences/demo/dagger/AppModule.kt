@@ -16,7 +16,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.markusressel.kutepreferences.dagger
+package de.markusressel.kutepreferences.demo.dagger
 
 import android.app.Application
 import android.content.Context
@@ -24,10 +24,10 @@ import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.android.ContributesAndroidInjector
-import de.markusressel.kutepreferences.application.App
-import de.markusressel.kutepreferences.preferences.DaggerKutePreferenceFragmentBase
-import de.markusressel.kutepreferences.view.MainActivity
-import de.markusressel.kutepreferences.view.PreferencesFragment
+import de.markusressel.kutepreferences.demo.application.App
+import de.markusressel.kutepreferences.demo.preferences.DaggerKutePreferenceFragmentBase
+import de.markusressel.kutepreferences.demo.view.MainActivity
+import de.markusressel.kutepreferences.demo.view.PreferencesFragment
 import javax.inject.Singleton
 
 /**

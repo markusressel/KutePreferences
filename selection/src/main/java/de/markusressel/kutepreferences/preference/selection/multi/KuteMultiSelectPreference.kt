@@ -5,7 +5,7 @@ import android.graphics.drawable.Drawable
 import androidx.annotation.StringRes
 import de.markusressel.kutepreferences.core.persistence.KutePreferenceDataProvider
 import de.markusressel.kutepreferences.core.preference.KutePreferenceBase
-import de.markusressel.kutepreferences.preference.R
+import de.markusressel.kutepreferences.preference.selection.R
 
 /**
  * Implementation of a multi selection preference

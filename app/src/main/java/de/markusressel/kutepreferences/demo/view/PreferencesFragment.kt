@@ -1,13 +1,13 @@
-package de.markusressel.kutepreferences.view
+package de.markusressel.kutepreferences.demo.view
 
 import com.mikepenz.material_design_iconic_typeface_library.MaterialDesignIconic
-import de.markusressel.kutepreferences.R
 import de.markusressel.kutepreferences.core.preference.KutePreferencesTree
 import de.markusressel.kutepreferences.core.preference.category.KuteCategory
 import de.markusressel.kutepreferences.core.preference.category.KuteDivider
-import de.markusressel.kutepreferences.helper.IconHelper
-import de.markusressel.kutepreferences.preferences.DaggerKutePreferenceFragmentBase
-import de.markusressel.kutepreferences.preferences.KutePreferencesHolder
+import de.markusressel.kutepreferences.demo.R
+import de.markusressel.kutepreferences.demo.helper.IconHelper
+import de.markusressel.kutepreferences.demo.preferences.DaggerKutePreferenceFragmentBase
+import de.markusressel.kutepreferences.demo.preferences.KutePreferencesHolder
 import javax.inject.Inject
 
 /**

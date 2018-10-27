@@ -5,7 +5,7 @@ import android.graphics.drawable.Drawable
 import androidx.annotation.StringRes
 import de.markusressel.kutepreferences.core.persistence.KutePreferenceDataProvider
 import de.markusressel.kutepreferences.core.view.edit.KutePreferenceEditDialog
-import de.markusressel.kutepreferences.preference.R
+import de.markusressel.kutepreferences.preference.selection.R
 
 /**
  * Implementation of a single selection preference for selecting simple string objects

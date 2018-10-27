@@ -33,7 +33,7 @@ android {
 
 dependencies {
     implementation project(':core')
-    implementation project(':boolean')
+    implementation project(':bool')
     implementation project(':color')
     implementation project(':date')
     implementation project(':number')

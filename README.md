@@ -31,7 +31,7 @@ in your project build.gradle file and
     
         def kutePreferencesVersion = "v1.3.1"
         // choose the ones you need
-        implementation("com.github.markusressel.KutePreferences:boolean:${kutePreferencesVersion}")
+        implementation("com.github.markusressel.KutePreferences:bool:${kutePreferencesVersion}")
         implementation("com.github.markusressel.KutePreferences:color:${kutePreferencesVersion}")
         implementation("com.github.markusressel.KutePreferences:date:${kutePreferencesVersion}")
         implementation("com.github.markusressel.KutePreferences:number:${kutePreferencesVersion}")
@@ -90,7 +90,7 @@ KutePreferences includes implementation for most of the commonly needed preferen
 
 | Name                       | Item Type    | Description |
 |----------------------------|--------------|-------------|
-| KuteTogglePreference       | Boolean      | A simple on/off preference. |
+| KuteBooleanPreference       | Boolean      | A simple on/off preference. |
 | KuteTextPreference         | String       | A simple text preference.   |
 | KutePasswordPreference     | String       | A password text preference. This type works exactly like `KuteTextPreference` but includes obscuring typed input. |
 | KuteNumberPreference       | Integer      | A preference for number values. |

@@ -16,7 +16,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.markusressel.kutepreferences.preferences
+package de.markusressel.kutepreferences.demo.preferences
 
 import android.content.Context
 import androidx.fragment.app.Fragment

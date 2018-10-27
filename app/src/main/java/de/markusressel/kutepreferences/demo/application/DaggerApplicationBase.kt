@@ -16,21 +16,12 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.markusressel.kutepreferences.application
+package de.markusressel.kutepreferences.demo.application
 
-import dagger.android.AndroidInjector
 import dagger.android.DaggerApplication
-import de.markusressel.kutepreferences.dagger.DaggerAppComponent
+import dagger.android.HasActivityInjector
 
 /**
- * Created by Markus on 20.12.2017.
+ * Created by Markus on 22.02.2018.
  */
-class App : DaggerApplicationBase() {
-
-    override fun applicationInjector(): AndroidInjector<out DaggerApplication> {
-        return DaggerAppComponent
-                .builder()
-                .create(this)
-    }
-
-}
+abstract class DaggerApplicationBase : DaggerApplication(), HasActivityInjector

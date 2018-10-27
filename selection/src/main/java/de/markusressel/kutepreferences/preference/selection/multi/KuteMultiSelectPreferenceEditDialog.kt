@@ -6,10 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
 import de.markusressel.kutepreferences.core.extensions.children
-import de.markusressel.kutepreferences.library.ktx.forEachCompat
 import de.markusressel.kutepreferences.core.preference.KutePreferenceItem
 import de.markusressel.kutepreferences.core.view.edit.KutePreferenceEditDialogBase
-import de.markusressel.kutepreferences.preference.R
+import de.markusressel.kutepreferences.library.ktx.forEachCompat
+import de.markusressel.kutepreferences.preference.selection.R
 
 
 open class KuteMultiSelectPreferenceEditDialog(

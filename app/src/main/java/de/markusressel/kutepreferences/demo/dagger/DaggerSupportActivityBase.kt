@@ -16,7 +16,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.markusressel.kutepreferences.dagger
+package de.markusressel.kutepreferences.demo.dagger
 
 import android.os.Bundle
 import android.view.Window

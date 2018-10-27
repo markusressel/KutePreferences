@@ -1,4 +1,4 @@
-package de.markusressel.kutepreferences.preference.boolean
+package de.markusressel.kutepreferences.preference.bool
 
 import android.content.Context
 import android.graphics.drawable.Drawable
@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.Switch
 import de.markusressel.kutepreferences.core.persistence.KutePreferenceDataProvider
 import de.markusressel.kutepreferences.core.preference.KutePreferenceBase
-import de.markusressel.kutepreferences.preference.R
 
 /**
  * Implementation of a boolean preference

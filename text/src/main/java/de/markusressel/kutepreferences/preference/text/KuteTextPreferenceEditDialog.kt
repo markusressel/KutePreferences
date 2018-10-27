@@ -10,7 +10,6 @@ import com.jakewharton.rxbinding2.widget.RxTextView
 import com.trello.rxlifecycle2.kotlin.bindToLifecycle
 import de.markusressel.kutepreferences.core.preference.KutePreferenceItem
 import de.markusressel.kutepreferences.core.view.edit.KutePreferenceEditDialogBase
-import de.markusressel.kutepreferences.preference.R
 import io.reactivex.rxkotlin.subscribeBy
 
 open class KuteTextPreferenceEditDialog(
