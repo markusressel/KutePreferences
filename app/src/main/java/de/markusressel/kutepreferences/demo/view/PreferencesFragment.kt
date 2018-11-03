@@ -53,6 +53,7 @@ class PreferencesFragment : DaggerKutePreferenceFragmentBase() {
                                 kutePreferencesHolder.singleSelectPreference,
                                 kutePreferencesHolder.colorPreference,
                                 kutePreferencesHolder.datePreference,
+                                kutePreferencesHolder.timePreference,
                                 kutePreferencesHolder.passwordPreference
                         )
                 ),
