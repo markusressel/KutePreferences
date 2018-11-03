@@ -34,6 +34,7 @@ in your project build.gradle file and
         implementation("com.github.markusressel.KutePreferences:bool:${kutePreferencesVersion}")
         implementation("com.github.markusressel.KutePreferences:color:${kutePreferencesVersion}")
         implementation("com.github.markusressel.KutePreferences:date:${kutePreferencesVersion}")
+        implementation("com.github.markusressel.KutePreferences:time:${kutePreferencesVersion}")
         implementation("com.github.markusressel.KutePreferences:number:${kutePreferencesVersion}")
         implementation("com.github.markusressel.KutePreferences:selection:${kutePreferencesVersion}")
         implementation("com.github.markusressel.KutePreferences:text:${kutePreferencesVersion}")
@@ -96,6 +97,7 @@ KutePreferences includes implementation for most of the commonly needed preferen
 | KuteNumberPreference       | Integer      | A preference for number values. |
 | KuteSliderPreference       | Integer      | Like `KuteNumberPreference` but with a slider GUI instead of a direct input field. |
 | KuteDatePreference         | Date         | Let's the user select and store a date. |
+| KuteTimePreference         | TimePersistenceModel         | Let's the user select and store a time of the day. |
 | KuteColorPreference        | Color        | Let's the user select and store an ARGB color. |
 | KuteSingleSelectPreference | List\<T\>    | Allows a single selection from a specified list of items. |
 | KuteMultiSelectPreference  | List\<T\>    | Allows to select multiple items from a specified list of items. |
