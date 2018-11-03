@@ -2,6 +2,7 @@ package de.markusressel.kutepreferences.preference.date
 
 import android.content.Context
 import android.graphics.drawable.Drawable
+import android.view.View
 import de.markusressel.kutepreferences.core.persistence.KutePreferenceDataProvider
 import de.markusressel.kutepreferences.core.preference.KutePreferenceBase
 import java.text.DateFormat
@@ -21,9 +22,11 @@ open class KuteDatePreference(
     override val layoutRes: Int
         get() = R.layout.kute_preference__default__list_item
 
-    private val dateFormatter = DateFormat.getDateInstance(DateFormat.LONG)
-
     override fun getDefaultValue(): Long = defaultValue
+
+    override fun onLayoutInflated(layout: View) {
+        super.onLayoutInflated(layout)
+    }
 
     override fun onClick(context: Context) {
         val dialog = KuteDatePreferenceEditDialog(this, minimum, maximum)
@@ -33,6 +36,10 @@ open class KuteDatePreference(
 
     override fun createDescription(currentValue: Long): String {
         return dateFormatter.format(Date(currentValue))
+    }
+
+    companion object {
+        private val dateFormatter = DateFormat.getDateInstance(DateFormat.LONG)
     }
 
 }

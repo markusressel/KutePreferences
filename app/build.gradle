@@ -36,6 +36,7 @@ dependencies {
     implementation project(':bool')
     implementation project(':color')
     implementation project(':date')
+    implementation project(':time')
     implementation project(':number')
     implementation project(':selection')
     implementation project(':text')

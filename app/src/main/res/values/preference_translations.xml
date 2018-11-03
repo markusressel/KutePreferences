@@ -18,6 +18,8 @@
 
     <string name="title_demo_date_pref">Day of Birth</string>
 
+    <string name="title_demo_time_pref">Time of Birth</string>
+
     <string name="title_demo_action">About</string>
 
     <string name="title_category_battery">Battery</string>

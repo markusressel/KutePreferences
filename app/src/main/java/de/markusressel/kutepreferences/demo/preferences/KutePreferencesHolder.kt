@@ -16,6 +16,8 @@ import de.markusressel.kutepreferences.preference.selection.multi.KuteMultiSelec
 import de.markusressel.kutepreferences.preference.selection.single.KuteSingleSelectStringPreference
 import de.markusressel.kutepreferences.preference.text.KutePasswordPreference
 import de.markusressel.kutepreferences.preference.text.KuteTextPreference
+import de.markusressel.kutepreferences.preference.time.KuteTimePreference
+import de.markusressel.kutepreferences.preference.time.TimePersistenceModel
 import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -107,6 +109,14 @@ class KutePreferencesHolder @Inject constructor(
                 icon = iconHelper.getIcon(MaterialDesignIconic.Icon.gmi_calendar),
                 title = context.getString(R.string.title_demo_date_pref),
                 defaultValue = Date().time,
+                dataProvider = dataProvider)
+    }
+
+    val timePreference by lazy {
+        KuteTimePreference(key = R.string.key_demo_time_pref,
+                icon = iconHelper.getIcon(MaterialDesignIconic.Icon.gmi_time),
+                title = context.getString(R.string.title_demo_time_pref),
+                defaultValue = TimePersistenceModel(hourOfDay = 12, minute = 30),
                 dataProvider = dataProvider)
     }
 

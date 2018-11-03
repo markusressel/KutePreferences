@@ -1,1 +1,1 @@
-include ':app', ':color', ':core', ':date', ':number', ':bool', ':text', ':selection'
+include ':app', ':color', ':core', ':date', ':number', ':bool', ':text', ':selection', ':time'
