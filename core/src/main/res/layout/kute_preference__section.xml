@@ -2,14 +2,19 @@
 <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         style="@style/KutePreferences.Divider"
-        android:layout_height="36dp"
         android:orientation="vertical">
 
     <TextView
-            android:id="@+id/kute_preference_divider__title"
+            android:id="@+id/kute_preference_section__title"
             style="@style/KutePreferences.Divider.Title"
-            android:text="Divider"/>
+            android:text="Section"/>
 
     <View style="@style/KutePreferences.Divider.Line"/>
+
+    <LinearLayout
+            android:id="@+id/kute_preference_section__item_list"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
 </LinearLayout>

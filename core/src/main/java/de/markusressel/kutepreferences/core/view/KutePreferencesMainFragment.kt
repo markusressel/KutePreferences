@@ -7,14 +7,18 @@ import android.view.*
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
+import com.eightbitlab.rxbus.Bus
+import com.eightbitlab.rxbus.registerInBus
 import com.jakewharton.rxbinding2.support.v7.widget.RxSearchView
 import com.trello.rxlifecycle2.android.lifecycle.kotlin.bindUntilEvent
 import de.markusressel.kutepreferences.core.KutePreferenceListItem
 import de.markusressel.kutepreferences.core.R
+import de.markusressel.kutepreferences.core.event.CategoryClickedEvent
 import de.markusressel.kutepreferences.core.preference.KutePreferenceClickListener
 import de.markusressel.kutepreferences.core.preference.KutePreferenceItem
 import de.markusressel.kutepreferences.core.preference.KutePreferencesTree
 import de.markusressel.kutepreferences.core.preference.category.KutePreferenceCategory
+import de.markusressel.kutepreferences.core.preference.category.KutePreferenceSection
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.subscribeBy
 import kotlinx.android.synthetic.main.kute_preference__main_fragment.*
@@ -90,6 +94,16 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+        Bus
+                .observe<CategoryClickedEvent>()
+                .subscribe {
+                    showCategory(it.preferenceItem)
+                }
+                .registerInBus(this)
+    }
+
     fun showTopLevel() {
         showPreferenceItems(kutePreferencesTree.getTopLevelItems().map {
             it.key
@@ -163,22 +177,12 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
             is KutePreferenceCategory -> {
                 checkKeyDuplication(kutePreferenceListItem.key, keySet)
             }
+            is KutePreferenceSection -> {
+                checkKeyDuplication(kutePreferenceListItem.key, keySet)
+            }
         }
 
-        val layout: ViewGroup = kutePreferenceListItem.inflateListLayout(layoutInflater, layoutToAppendTo)
-        layoutToAppendTo.addView(layout)
-
-        if (kutePreferenceListItem is KutePreferenceClickListener) {
-            layout
-                    .setOnClickListener {
-                        kutePreferenceListItem
-                                .onClick(layoutInflater.context)
-
-                        if (kutePreferenceListItem is KutePreferenceCategory) {
-                            showCategory(kutePreferenceListItem)
-                        }
-                    }
-        }
+        inflateAndAttachClickListeners(layoutInflater, kutePreferenceListItem, layoutToAppendTo)
     }
 
     private fun checkKeyDuplication(key: Int, keySet: MutableSet<Int>) {
@@ -221,6 +225,23 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
     }
 
     companion object {
+        fun inflateAndAttachClickListeners(layoutInflater: LayoutInflater, preferenceItem: KutePreferenceListItem, parent: ViewGroup) {
+            val layout = preferenceItem.inflateListLayout(layoutInflater, parent)
+            parent.addView(layout)
+
+            if (preferenceItem is KutePreferenceClickListener) {
+                layout
+                        .setOnClickListener {
+                            preferenceItem
+                                    .onClick(layoutInflater.context)
+
+                            if (preferenceItem is KutePreferenceCategory) {
+                                Bus.send(CategoryClickedEvent(preferenceItem))
+                            }
+                        }
+            }
+        }
+
         const val TAG: String = "MainFragment"
     }
 

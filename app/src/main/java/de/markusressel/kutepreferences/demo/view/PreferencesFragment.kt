@@ -3,7 +3,7 @@ package de.markusressel.kutepreferences.demo.view
 import com.mikepenz.material_design_iconic_typeface_library.MaterialDesignIconic
 import de.markusressel.kutepreferences.core.preference.KutePreferencesTree
 import de.markusressel.kutepreferences.core.preference.category.KuteCategory
-import de.markusressel.kutepreferences.core.preference.category.KuteDivider
+import de.markusressel.kutepreferences.core.preference.category.KuteSection
 import de.markusressel.kutepreferences.demo.R
 import de.markusressel.kutepreferences.demo.helper.IconHelper
 import de.markusressel.kutepreferences.demo.preferences.DaggerKutePreferenceFragmentBase
@@ -29,10 +29,12 @@ class PreferencesFragment : DaggerKutePreferenceFragmentBase() {
                         title = getString(R.string.title_category_battery),
                         description = getString(R.string.description_category_battery),
                         children = listOf(
-                                KuteDivider(
+                                KuteSection(
                                         key = R.string.key_divider_test,
-                                        title = "Test Divider"),
-                                kutePreferencesHolder.textPreference
+                                        title = "Test Divider",
+                                        preferenceItems = listOf(
+                                                kutePreferencesHolder.textPreference
+                                        ))
                         )
                 ),
                 KuteCategory(key = R.string.key_category_network,
