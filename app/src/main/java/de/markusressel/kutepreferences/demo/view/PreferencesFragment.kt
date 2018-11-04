@@ -57,6 +57,7 @@ class PreferencesFragment : DaggerKutePreferenceFragmentBase() {
                                 kutePreferencesHolder.passwordPreference
                         )
                 ),
+                kutePreferencesHolder.urlPreference,
                 kutePreferencesHolder.sliderPreference,
                 kutePreferencesHolder.multiSelectPreference,
                 kutePreferencesHolder.kuteAction
