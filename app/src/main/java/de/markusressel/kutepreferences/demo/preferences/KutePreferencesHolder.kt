@@ -53,8 +53,9 @@ class KutePreferencesHolder @Inject constructor(
 
     val urlPreference by lazy {
         KuteUrlPreference(
-                key = R.string.key_demo_text_pref_2,
-                title = context.getString(R.string.title_demo_text_pref_2),
+                key = R.string.key_demo_url_pref,
+                title = context.getString(R.string.title_demo_url_pref),
+                icon = iconHelper.getIcon(MaterialDesignIconic.Icon.gmi_open_in_browser),
                 defaultValue = "https://www.markusressel.de",
                 dataProvider = dataProvider)
     }

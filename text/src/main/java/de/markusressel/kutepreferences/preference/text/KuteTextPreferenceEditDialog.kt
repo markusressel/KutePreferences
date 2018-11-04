@@ -56,18 +56,25 @@ open class KuteTextPreferenceEditDialog(
                     }
         }
 
-        if (pattern != null && newValue != null) {
-            validatePattern(newValue, pattern)
-        }
+        validate(newValue)
     }
 
-    protected open fun validatePattern(value: String, pattern: Regex) {
-        // validate pattern if necessary
-        val newValueMatchesPattern = value.matches(pattern)
+    protected open fun isValid(value: String?, pattern: Regex?): Boolean {
+        var isValid = true
+        if (value == null) {
+            isValid = false
+        } else {
+            pattern?.let {
+                isValid = value.matches(it)
+            }
+        }
 
+        return isValid
+    }
+
+    protected open fun validate(value: String?) {
         val positiveDialogButton = dialog?.getActionButton(WhichButton.POSITIVE)
-
-        positiveDialogButton?.isEnabled = newValueMatchesPattern
+        positiveDialogButton?.isEnabled = isValid(value, pattern)
     }
 
 }
