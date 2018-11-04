@@ -61,7 +61,7 @@ open class KuteTextPreferenceEditDialog(
         }
     }
 
-    private fun validatePattern(value: String, pattern: Regex) {
+    protected open fun validatePattern(value: String, pattern: Regex) {
         // validate pattern if necessary
         val newValueMatchesPattern = value.matches(pattern)
 
