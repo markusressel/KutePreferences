@@ -6,6 +6,10 @@
 
     <string name="title_demo_text_pref_2">Device Owner</string>
 
+    <string name="title_section_person">Person</string>
+    <string name="title_section_taste">Taste</string>
+    <string name="title_section_security">Security</string>
+
     <string name="title_demo_url_pref">Website</string>
 
     <string name="title_demo_text_pref_password">Password</string>
@@ -24,11 +28,15 @@
 
     <string name="title_demo_action">About</string>
 
+    <string name="title_section_system_hardware">System Hardware</string>
+
     <string name="title_category_battery">Battery</string>
     <string name="description_category_battery">Everything about your battery</string>
 
     <string name="title_category_network">Network</string>
     <string name="description_category_network">Wi-Fi, mobile, hotspot</string>
+
+    <string name="title_section_device_owner">Device Owner</string>
 
     <string name="title_category_user">User</string>
     <string name="description_category_user">Profile, Password, etc.</string>

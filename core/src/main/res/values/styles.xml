@@ -43,21 +43,26 @@
         <item name="android:maxLines">2</item>
     </style>
 
-    <style name="KutePreferences.Divider">
+    <style name="KutePreferences.Section">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
     </style>
 
-    <style name="KutePreferences.Divider.Title">
+    <style name="KutePreferences.Section.Title">
         <item name="android:gravity">center</item>
         <item name="android:layout_weight">1</item>
-        <item name="android:textSize">@dimen/kute_preferences__divider__text_size__name
-        </item>
+        <item name="android:textSize">@dimen/kute_preferences__section__text_size__name</item>
     </style>
 
-    <style name="KutePreferences.Divider.Line">
+    <style name="KutePreferences.Section.Line">
         <item name="android:layout_height">1dp</item>
         <item name="android:layout_width">match_parent</item>
+        <item name="android:background">?attr/colorAccent</item>
+    </style>
+
+    <style name="KutePreferences.Section.Line.Vertical">
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_width">1dp</item>
         <item name="android:background">?attr/colorAccent</item>
     </style>
 

@@ -86,4 +86,7 @@ abstract class KutePreferenceBase<DataType : Any> : KutePreferenceItem<DataType>
         return setOf(title, description)
     }
 
+    override fun highlightSearchMathes(regex: String) {
+    }
+
 }

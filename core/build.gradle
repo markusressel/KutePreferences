@@ -65,6 +65,9 @@ dependencies {
     api "com.trello.rxlifecycle2:rxlifecycle-android:$rxLifecycleVersion"
     api "com.trello.rxlifecycle2:rxlifecycle-android-lifecycle-kotlin:$rxLifecycleVersion"
 
+    // RxBus (event bus)
+    api 'com.eightbitlab:rxbus:1.0.2'
+
     testImplementation 'junit:junit:4.12'
     androidTestImplementation "androidx.test:runner:1.1.0-beta02"
     androidTestImplementation "androidx.test.espresso:espresso-core:3.1.0-beta02"

@@ -1,10 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <string name="key_section_system_hardware" translatable="false">key_section_system_hardware</string>
+
     <string name="key_category_battery" translatable="false">key_category_battery</string>
     <string name="key_category_network" translatable="false">key_category_wifi</string>
+
+    <string name="key_section_device_owner" translatable="false">key_section_device_owner</string>
+
     <string name="key_category_user" translatable="false">key_category_user</string>
-    <string name="key_divider_test" translatable="false">key_divider_test</string>
+    <string name="key_section_test" translatable="false">key_section_test</string>
+
+    <string name="key_section_person" translatable="false">key_section_person</string>
+    <string name="key_section_taste" translatable="false">key_section_taste</string>
+    <string name="key_section_security" translatable="false">key_section_security</string>
 
     <string name="key_demo_text_pref" translatable="false">key_demo_text_pref</string>
     <string name="key_demo_text_pref_2" translatable="false">key_demo_text_pref_2</string>
