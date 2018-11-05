@@ -140,20 +140,17 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
                     it.key
                 }
 
-        categoryItems?.let {
-            if (it.any { item -> item in backstack.peek().preferenceItemIds }) {
-                return
-            }
-            clearSearch()
-            showPreferenceItems(it)
+        // don't switch the category if the search bar is closed (iconified)
+        if (searchView.isIconified) {
+            return
         }
-    }
 
-    private fun clearSearch() {
-        searchView.apply {
-            setQuery("", false)
-            clearFocus()
-            searchMenuItem.collapseActionView()
+        clearSearch()
+        if (categoryItems != null) {
+            showPreferenceItems(categoryItems)
+        } else {
+            // if the section has no parent category it must be the a root section
+            showTopLevel()
         }
     }
 
@@ -171,6 +168,14 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
 
         clearSearch()
         showPreferenceItems(categoryItems)
+    }
+
+    private fun clearSearch() {
+        searchView.apply {
+            setQuery("", false)
+            clearFocus()
+            searchMenuItem.collapseActionView()
+        }
     }
 
     internal fun showPreferenceItems(backstackItem: BackstackItem) {
