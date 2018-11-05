@@ -20,15 +20,11 @@ class KutePreferencesTree(vararg items: KutePreferenceListItem) {
         fun traverse(items: List<KutePreferenceListItem>) {
             items.forEach {
                 when (it) {
-                    is KuteParent -> with(it) {
-                        result
-                                .add(it)
+                    is KuteParent -> {
+                        result.add(it)
                         traverse(it.children)
                     }
-                    else -> {
-                        result
-                                .add(it)
-                    }
+                    else -> result.add(it)
                 }
             }
         }
@@ -45,7 +41,7 @@ class KutePreferencesTree(vararg items: KutePreferenceListItem) {
      * @return list of items
      */
     fun findInSearchProviders(text: String): List<KutePreferenceListItem> {
-        return treeAsList.filter {
+        return treeAsList.asSequence().filter {
             it is KuteSearchProvider
         }.map {
             it as KuteSearchProvider
@@ -55,7 +51,7 @@ class KutePreferencesTree(vararg items: KutePreferenceListItem) {
             }
         }.map {
             it as KutePreferenceListItem
-        }
+        }.toList()
     }
 
     /**
@@ -73,7 +69,7 @@ class KutePreferencesTree(vararg items: KutePreferenceListItem) {
      * Find a category somewhere in the tree
      */
     private fun getCategory(@StringRes key: Int, items: List<KutePreferenceListItem>): KutePreferenceCategory? {
-        return items.filter {
+        return items.asSequence().filter {
             it is KutePreferenceCategory
         }.filter {
             it.key == key

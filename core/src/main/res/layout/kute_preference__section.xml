@@ -12,6 +12,7 @@
     <View style="@style/KutePreferences.Divider.Line"/>
 
     <LinearLayout
+            android:layout_marginStart="8dp"
             android:id="@+id/kute_preference_section__item_list"
             android:orientation="vertical"
             android:layout_width="match_parent"

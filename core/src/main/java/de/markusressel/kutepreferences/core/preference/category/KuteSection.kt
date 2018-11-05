@@ -15,7 +15,7 @@ import de.markusressel.kutepreferences.core.view.KutePreferencesMainFragment
 open class KuteSection(
         override val key: Int,
         override val title: String,
-        override val preferenceItems: List<KutePreferenceListItem>) : KutePreferenceSection {
+        override val children: List<KutePreferenceListItem>) : KutePreferenceSection {
 
     override fun inflateListLayout(layoutInflater: LayoutInflater, parent: ViewGroup): ViewGroup {
         val layout = layoutInflater.inflate(R.layout.kute_preference__section, parent, false) as ViewGroup
@@ -34,8 +34,8 @@ open class KuteSection(
     }
 
     private fun inflatePreferenceItems(layoutInflater: LayoutInflater, preferenceItemList: LinearLayout) {
-        for (preferenceItem in preferenceItems) {
-            KutePreferencesMainFragment.inflateAndAttachClickListeners(layoutInflater, preferenceItem, preferenceItemList)
+        for (child in children) {
+            KutePreferencesMainFragment.inflateAndAttachClickListeners(layoutInflater, child, preferenceItemList)
         }
     }
 

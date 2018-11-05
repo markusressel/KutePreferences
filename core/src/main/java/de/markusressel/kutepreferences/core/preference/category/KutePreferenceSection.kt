@@ -7,16 +7,11 @@ import de.markusressel.kutepreferences.core.preference.KutePreferenceClickListen
 /**
  * Interface for a KutePreference section that groups preferences within a page
  */
-interface KutePreferenceSection : KutePreferenceListItem, KutePreferenceClickListener, KuteSearchProvider {
+interface KutePreferenceSection : KutePreferenceListItem, KuteParent, KutePreferenceClickListener, KuteSearchProvider {
 
     /**
      * The title of this section
      */
     val title: String
-
-    /**
-     * A list of all the preferences in this section
-     */
-    val preferenceItems: List<KutePreferenceListItem>
 
 }
