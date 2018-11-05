@@ -1,10 +1,13 @@
 package de.markusressel.kutepreferences.demo.view
 
 import android.os.Bundle
+import android.view.MenuItem
+import androidx.core.app.NavUtils
 import de.markusressel.kutepreferences.demo.R
 import de.markusressel.kutepreferences.demo.dagger.DaggerSupportActivityBase
 import de.markusressel.kutepreferences.demo.preferences.KutePreferencesHolder
 import javax.inject.Inject
+
 
 class MainActivity : DaggerSupportActivityBase() {
 
@@ -53,6 +56,21 @@ class MainActivity : DaggerSupportActivityBase() {
 //        preferencesHolder.dataProvider.storeValueUnsafe(R.string.key_demo_text_pref_2,
 //                1000)
 
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        return when (item?.itemId) {
+            android.R.id.home -> {
+                // make sure to pass the event to the preferencesFragment
+                if (preferencesFragment.onBackPressed()) {
+                    return true
+                }
+
+                NavUtils.navigateUpFromSameTask(this)
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     override fun onBackPressed() {
