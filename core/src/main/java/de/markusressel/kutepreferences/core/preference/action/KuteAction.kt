@@ -46,4 +46,7 @@ open class KuteAction(override val key: Int,
         return setOf(title)
     }
 
+    override fun highlightSearchMathes(regex: String) {
+    }
+
 }

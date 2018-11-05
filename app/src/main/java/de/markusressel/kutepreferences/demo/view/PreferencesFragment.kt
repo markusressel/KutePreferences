@@ -1,9 +1,9 @@
 package de.markusressel.kutepreferences.demo.view
 
 import com.mikepenz.material_design_iconic_typeface_library.MaterialDesignIconic
-import de.markusressel.kutepreferences.core.preference.KutePreferencesTree
+import de.markusressel.kutepreferences.core.KutePreferenceListItem
 import de.markusressel.kutepreferences.core.preference.category.KuteCategory
-import de.markusressel.kutepreferences.core.preference.category.KuteSection
+import de.markusressel.kutepreferences.core.preference.section.KuteSection
 import de.markusressel.kutepreferences.demo.R
 import de.markusressel.kutepreferences.demo.helper.IconHelper
 import de.markusressel.kutepreferences.demo.preferences.DaggerKutePreferenceFragmentBase
@@ -21,8 +21,8 @@ class PreferencesFragment : DaggerKutePreferenceFragmentBase() {
     @Inject
     lateinit var iconHelper: IconHelper
 
-    override fun initPreferenceTree(): KutePreferencesTree {
-        return KutePreferencesTree(
+    override fun initPreferenceTree(): Array<KutePreferenceListItem> {
+        return arrayOf(
                 KuteSection(
                         key = R.string.key_section_system_hardware,
                         title = getString(R.string.title_section_system_hardware),

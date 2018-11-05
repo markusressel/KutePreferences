@@ -1,4 +1,4 @@
-package de.markusressel.kutepreferences.core.preference.category
+package de.markusressel.kutepreferences.core.preference.section
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -45,4 +45,8 @@ open class KuteSection(
     override fun getSearchableItems(): Set<String> {
         return setOf(title)
     }
+
+    override fun highlightSearchMathes(regex: String) {
+    }
+
 }

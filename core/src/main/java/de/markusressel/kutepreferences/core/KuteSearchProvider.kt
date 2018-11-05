@@ -7,4 +7,9 @@ interface KuteSearchProvider {
      */
     fun getSearchableItems(): Set<String>
 
+    /**
+     * Highlights all matches that were found
+     */
+    fun highlightSearchMathes(regex: String)
+
 }

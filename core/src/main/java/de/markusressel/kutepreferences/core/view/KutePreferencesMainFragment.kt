@@ -14,11 +14,12 @@ import com.trello.rxlifecycle2.android.lifecycle.kotlin.bindUntilEvent
 import de.markusressel.kutepreferences.core.KutePreferenceListItem
 import de.markusressel.kutepreferences.core.R
 import de.markusressel.kutepreferences.core.event.CategoryClickedEvent
+import de.markusressel.kutepreferences.core.event.SectionClickedEvent
 import de.markusressel.kutepreferences.core.preference.KutePreferenceClickListener
 import de.markusressel.kutepreferences.core.preference.KutePreferenceItem
-import de.markusressel.kutepreferences.core.preference.KutePreferencesTree
 import de.markusressel.kutepreferences.core.preference.category.KutePreferenceCategory
-import de.markusressel.kutepreferences.core.preference.category.KutePreferenceSection
+import de.markusressel.kutepreferences.core.preference.section.KutePreferenceSection
+import de.markusressel.kutepreferences.core.tree.TreeManager
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.subscribeBy
 import kotlinx.android.synthetic.main.kute_preference__main_fragment.*
@@ -31,7 +32,7 @@ import java.util.concurrent.TimeUnit
  */
 abstract class KutePreferencesMainFragment : StateFragmentBase() {
 
-    internal lateinit var kutePreferencesTree: KutePreferencesTree
+    internal lateinit var treeManager: TreeManager
 
     /**
      * Stack of previously visible preference items, including the current ones
@@ -69,7 +70,7 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
                         if (it.isBlank()) {
                             showPreferenceItems(backstack.peek())
                         } else {
-                            val preferenceIds = kutePreferencesTree
+                            val preferenceIds = treeManager
                                     .findInSearchProviders(it.toString())
                                     .map {
                                         it
@@ -86,7 +87,7 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        kutePreferencesTree = initPreferenceTree()
+        treeManager = TreeManager(*initPreferenceTree())
 
         when {
             backstack.isNotEmpty() -> showPreferenceItems(backstack.peek())
@@ -99,15 +100,45 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
         Bus
                 .observe<CategoryClickedEvent>()
                 .subscribe {
-                    showCategory(it.preferenceItem)
+                    showCategory(it.category)
+                }
+                .registerInBus(this)
+
+        Bus
+                .observe<SectionClickedEvent>()
+                .subscribe {
+                    showCategory(it.section)
                 }
                 .registerInBus(this)
     }
 
+    override fun onStop() {
+        super.onStop()
+
+        Bus.unregister(this)
+    }
+
     fun showTopLevel() {
-        showPreferenceItems(kutePreferencesTree.getTopLevelItems().map {
+        showPreferenceItems(treeManager.getTopLevelItems().map {
             it.key
         })
+    }
+
+    /**
+     * Show the containing category of a section
+     *
+     * @param section the section that has been clicked
+     */
+    fun showCategory(section: KutePreferenceSection) {
+        val categoryItems = treeManager.findParentCategory(section)
+                ?.children
+                ?.map {
+                    it.key
+                }
+
+        categoryItems?.let {
+            showPreferenceItems(it)
+        }
     }
 
     /**
@@ -115,8 +146,8 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
      *
      * @param category the category to show
      */
-    fun showCategory(category: KutePreferenceListItem) {
-        val categoryItems = kutePreferencesTree
+    fun showCategory(category: KutePreferenceCategory) {
+        val categoryItems = treeManager
                 .getCategoryItems(category.key)
                 .map {
                     it.key
@@ -142,10 +173,11 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
         }
 
         val preferenceItems: List<KutePreferenceListItem> =
-                kutePreferencesTree
+                treeManager
                         .findInTree {
-                            preferenceIds
-                                    .contains(it.key)
+                            it.key in preferenceIds
+                        }.mapNotNull {
+                            it.item
                         }
 
         generatePage(preferenceItems)
@@ -199,7 +231,7 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
     /**
      * Initialize your preferences tree here
      */
-    abstract fun initPreferenceTree(): KutePreferencesTree
+    abstract fun initPreferenceTree(): Array<KutePreferenceListItem>
 
     /**
      * Call this from your activity's {@link AppCompatActivity.onBackPressed()} to ensure
@@ -235,8 +267,13 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
                             preferenceItem
                                     .onClick(layoutInflater.context)
 
-                            if (preferenceItem is KutePreferenceCategory) {
-                                Bus.send(CategoryClickedEvent(preferenceItem))
+                            when (preferenceItem) {
+                                is KutePreferenceCategory -> {
+                                    Bus.send(CategoryClickedEvent(preferenceItem))
+                                }
+                                is KutePreferenceSection -> {
+                                    Bus.send(SectionClickedEvent(preferenceItem))
+                                }
                             }
                         }
             }

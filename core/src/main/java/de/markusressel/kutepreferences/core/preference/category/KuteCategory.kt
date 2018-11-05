@@ -48,4 +48,7 @@ open class KuteCategory(
         return setOf(title, description)
     }
 
+    override fun highlightSearchMathes(regex: String) {
+    }
+
 }
