@@ -1,8 +1,9 @@
-package de.markusressel.kutepreferences.preference.text
+package de.markusressel.kutepreferences.preference.text.password
 
 import android.content.Context
 import android.graphics.drawable.Drawable
 import de.markusressel.kutepreferences.core.persistence.KutePreferenceDataProvider
+import de.markusressel.kutepreferences.preference.text.KuteTextPreference
 
 /**
  * Specialized implementation of a text preference for usage with passwords

@@ -27,6 +27,8 @@ android {
 
 dependencies {
     implementation project(':core')
+
+    implementation "commons-validator:commons-validator:1.6"
 }
 
 // build a jar with source files
