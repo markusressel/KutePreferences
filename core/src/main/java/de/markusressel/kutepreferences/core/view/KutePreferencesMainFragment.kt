@@ -40,6 +40,7 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
     internal var backstack: Stack<BackstackItem> by savedInstanceState(Stack())
 
     private var searchView: SearchView? = null
+    private lateinit var searchMenuItem: MenuItem
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,10 +56,10 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
         inflater
                 ?.inflate(R.menu.kutepreferences__menu, menu)
 
-        val searchMenuItem = menu?.findItem(R.id.search)
-        searchMenuItem?.icon = ContextCompat.getDrawable(context as Context, R.drawable.ic_search_24px)
+        searchMenuItem = menu?.findItem(R.id.search)!!
+        searchMenuItem.icon = ContextCompat.getDrawable(context as Context, R.drawable.ic_search_24px)
 
-        searchView = searchMenuItem?.actionView as SearchView?
+        searchView = searchMenuItem.actionView as SearchView?
         searchView?.let {
             RxSearchView
                     .queryTextChanges(it)
@@ -130,14 +131,26 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
      * @param section the section that has been clicked
      */
     fun showCategory(section: KutePreferenceSection) {
-        val categoryItems = treeManager.findParentCategory(section)
+        val categoryItems: List<Int>? = treeManager.findParentCategory(section)
                 ?.children
                 ?.map {
                     it.key
                 }
 
         categoryItems?.let {
+            if (it.any { item -> item in backstack.peek().preferenceItemIds }) {
+                return
+            }
+            clearSearch()
             showPreferenceItems(it)
+        }
+    }
+
+    private fun clearSearch() {
+        searchView?.apply {
+            setQuery("", false)
+            clearFocus()
+            searchMenuItem.collapseActionView()
         }
     }
 
@@ -153,6 +166,7 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
                     it.key
                 }
 
+        clearSearch()
         showPreferenceItems(categoryItems)
     }
 
