@@ -39,7 +39,7 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
      */
     internal var backstack: Stack<BackstackItem> by savedInstanceState(Stack())
 
-    private var searchView: SearchView? = null
+    private lateinit var searchView: SearchView
     private lateinit var searchMenuItem: MenuItem
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,8 +59,8 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
         searchMenuItem = menu?.findItem(R.id.search)!!
         searchMenuItem.icon = ContextCompat.getDrawable(context as Context, R.drawable.ic_search_24px)
 
-        searchView = searchMenuItem.actionView as SearchView?
-        searchView?.let {
+        searchView = searchMenuItem.actionView as SearchView
+        searchView.let {
             RxSearchView
                     .queryTextChanges(it)
                     .skipInitialValue()
@@ -98,6 +98,7 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
 
     override fun onStart() {
         super.onStart()
+
         Bus
                 .observe<CategoryClickedEvent>()
                 .subscribe {
@@ -122,7 +123,9 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
     fun showTopLevel() {
         showPreferenceItems(treeManager.getTopLevelItems().map {
             it.key
-        })
+        },
+                // small workaround to allow searchView non-nullable type
+                ignoreSearch = true)
     }
 
     /**
@@ -147,7 +150,7 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
     }
 
     private fun clearSearch() {
-        searchView?.apply {
+        searchView.apply {
             setQuery("", false)
             clearFocus()
             searchMenuItem.collapseActionView()
@@ -171,18 +174,13 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
     }
 
     internal fun showPreferenceItems(backstackItem: BackstackItem) {
-        searchView?.setQuery(backstackItem.searchText, false)
+        searchView.setQuery(backstackItem.searchText, false)
         showPreferenceItems(backstackItem.preferenceItemIds, false)
     }
 
-    internal fun showPreferenceItems(preferenceIds: List<Int>, addToStack: Boolean = true) {
+    internal fun showPreferenceItems(preferenceIds: List<Int>, addToStack: Boolean = true, ignoreSearch: Boolean = false) {
         if (addToStack) {
-            val query = if (searchView != null) {
-                searchView?.query.toString()
-            } else {
-                ""
-            }
-
+            val query = if (ignoreSearch) "" else searchView.query.toString()
             backstack.push(BackstackItem(preferenceIds, query))
         }
 
@@ -253,7 +251,7 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
      * @return true if a navigation happened (aka the back button event was consumed), false otherwise
      */
     open fun onBackPressed(): Boolean {
-        searchView?.let {
+        searchView.let {
             if (it.query.isNotEmpty()) {
                 it.setQuery("", false)
                 return true
