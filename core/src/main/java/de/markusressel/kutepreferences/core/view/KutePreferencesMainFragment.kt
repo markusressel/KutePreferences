@@ -186,7 +186,8 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
     internal fun showPreferenceItems(preferenceIds: List<Int>, addToStack: Boolean = true, ignoreSearch: Boolean = false) {
         if (addToStack) {
             val query = if (ignoreSearch) "" else searchView.query.toString()
-            backstack.push(BackstackItem(preferenceIds, query))
+            val newBackstackItem = BackstackItem(preferenceIds, query)
+            addToBackstack(newBackstackItem)
         }
 
         val preferenceItems: List<KutePreferenceListItem> =
@@ -198,6 +199,17 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
                         }
 
         generatePage(preferenceItems)
+    }
+
+    private fun addToBackstack(newBackstackItem: BackstackItem) {
+        if (backstack.isEmpty()) {
+            backstack.push(newBackstackItem)
+        } else {
+            // only push new backstack item if something about is has changed
+            if (backstack.peek() != newBackstackItem) {
+                backstack.push(newBackstackItem)
+            }
+        }
     }
 
     /**
