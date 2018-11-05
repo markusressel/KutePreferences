@@ -97,7 +97,6 @@ abstract class DaggerSupportActivityBase : AppCompatActivity(), HasFragmentInjec
 
         supportActionBar
                 ?.setDisplayHomeAsUpEnabled(true)
-
     }
 
     /**
