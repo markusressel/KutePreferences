@@ -1,8 +1,9 @@
-package de.markusressel.kutepreferences.preference.text
+package de.markusressel.kutepreferences.preference.text.url
 
 import android.content.Context
 import android.graphics.drawable.Drawable
 import de.markusressel.kutepreferences.core.persistence.KutePreferenceDataProvider
+import de.markusressel.kutepreferences.preference.text.KuteTextPreference
 
 /**
  * Implementation for a url preference

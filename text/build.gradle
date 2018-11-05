@@ -27,6 +27,10 @@ android {
 
 dependencies {
     implementation project(':core')
+    
+    implementation ("commons-validator:commons-validator:1.6") {
+        exclude group: 'commons-logging', module: 'commons-logging'
+    }
 }
 
 // build a jar with source files

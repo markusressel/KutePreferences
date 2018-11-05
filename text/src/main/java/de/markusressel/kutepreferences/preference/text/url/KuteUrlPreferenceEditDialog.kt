@@ -1,4 +1,4 @@
-package de.markusressel.kutepreferences.preference.text
+package de.markusressel.kutepreferences.preference.text.url
 
 import android.content.Context
 import android.text.InputType
@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.webkit.URLUtil
 import de.markusressel.kutepreferences.core.preference.KutePreferenceItem
+import de.markusressel.kutepreferences.preference.text.KuteTextPreferenceEditDialog
+import org.apache.commons.validator.routines.UrlValidator
 
 open class KuteUrlPreferenceEditDialog(
         override val preferenceItem: KutePreferenceItem<String>,
@@ -20,7 +22,11 @@ open class KuteUrlPreferenceEditDialog(
 
     override fun isValid(value: String?, pattern: Regex?): Boolean {
         val result = super.isValid(value, pattern)
-        return result and URLUtil.isValidUrl(value)
+
+        val schemes = arrayOf("http", "https")
+        val urlValidator = UrlValidator(schemes)
+
+        return result and URLUtil.isValidUrl(value) and urlValidator.isValid(value)
     }
 
 }

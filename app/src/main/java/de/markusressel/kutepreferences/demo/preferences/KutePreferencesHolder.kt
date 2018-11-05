@@ -14,9 +14,9 @@ import de.markusressel.kutepreferences.preference.number.KuteNumberPreference
 import de.markusressel.kutepreferences.preference.number.KuteSliderPreference
 import de.markusressel.kutepreferences.preference.selection.multi.KuteMultiSelectPreference
 import de.markusressel.kutepreferences.preference.selection.single.KuteSingleSelectStringPreference
-import de.markusressel.kutepreferences.preference.text.KutePasswordPreference
 import de.markusressel.kutepreferences.preference.text.KuteTextPreference
-import de.markusressel.kutepreferences.preference.text.KuteUrlPreference
+import de.markusressel.kutepreferences.preference.text.password.KutePasswordPreference
+import de.markusressel.kutepreferences.preference.text.url.KuteUrlPreference
 import de.markusressel.kutepreferences.preference.time.KuteTimePreference
 import de.markusressel.kutepreferences.preference.time.TimePersistenceModel
 import java.util.*
