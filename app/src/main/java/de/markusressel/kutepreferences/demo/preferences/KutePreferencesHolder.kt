@@ -14,8 +14,9 @@ import de.markusressel.kutepreferences.preference.number.KuteNumberPreference
 import de.markusressel.kutepreferences.preference.number.KuteSliderPreference
 import de.markusressel.kutepreferences.preference.selection.multi.KuteMultiSelectPreference
 import de.markusressel.kutepreferences.preference.selection.single.KuteSingleSelectStringPreference
-import de.markusressel.kutepreferences.preference.text.KutePasswordPreference
 import de.markusressel.kutepreferences.preference.text.KuteTextPreference
+import de.markusressel.kutepreferences.preference.text.password.KutePasswordPreference
+import de.markusressel.kutepreferences.preference.text.url.KuteUrlPreference
 import de.markusressel.kutepreferences.preference.time.KuteTimePreference
 import de.markusressel.kutepreferences.preference.time.TimePersistenceModel
 import java.util.*
@@ -47,6 +48,15 @@ class KutePreferencesHolder @Inject constructor(
         KuteTextPreference(key = R.string.key_demo_text_pref_2,
                 title = context.getString(R.string.title_demo_text_pref_2),
                 defaultValue = TEXT_PREFERENCE_2_DEFAULT_VALUE,
+                dataProvider = dataProvider)
+    }
+
+    val urlPreference by lazy {
+        KuteUrlPreference(
+                key = R.string.key_demo_url_pref,
+                title = context.getString(R.string.title_demo_url_pref),
+                icon = iconHelper.getIcon(MaterialDesignIconic.Icon.gmi_open_in_browser),
+                defaultValue = "https://www.markusressel.de",
                 dataProvider = dataProvider)
     }
 

@@ -1,18 +1,16 @@
-package de.markusressel.kutepreferences.preference.text
+package de.markusressel.kutepreferences.preference.text.password
 
 import android.content.Context
 import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
 import de.markusressel.kutepreferences.core.preference.KutePreferenceItem
+import de.markusressel.kutepreferences.preference.text.KuteTextPreferenceEditDialog
 
 open class KutePasswordPreferenceEditDialog(
         override val preferenceItem: KutePreferenceItem<String>,
         regex: String?) :
         KuteTextPreferenceEditDialog(preferenceItem, regex) {
-
-    override val contentLayoutRes: Int
-        get() = R.layout.kute_preference__text__edit_dialog
 
     override fun onContentViewCreated(context: Context, layoutInflater: LayoutInflater, contentView: View) {
         super.onContentViewCreated(context, layoutInflater, contentView)

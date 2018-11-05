@@ -10,6 +10,8 @@
     <string name="title_section_taste">Taste</string>
     <string name="title_section_security">Security</string>
 
+    <string name="title_demo_url_pref">Website</string>
+
     <string name="title_demo_text_pref_password">Password</string>
 
     <string name="title_demo_toggle_pref">Airplane Mode</string>

@@ -17,6 +17,7 @@
 
     <string name="key_demo_text_pref" translatable="false">key_demo_text_pref</string>
     <string name="key_demo_text_pref_2" translatable="false">key_demo_text_pref_2</string>
+    <string name="key_demo_url_pref" translatable="false">key_demo_url_pref</string>
     <string name="key_demo_text_pref_password" translatable="false">key_demo_text_pref_password</string>
 
     <string name="key_demo_number_pref" translatable="false">key_demo_number_pref</string>
