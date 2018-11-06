@@ -9,6 +9,7 @@ A **GUI** library for easy to use, fast and beautiful **preferences** in your ap
 # Features
 * Easy to use
 * Many included preference types
+* Integrated search
 * Easily expandable with custom styles and logic
 * Written in Kotlin
 
@@ -40,13 +41,11 @@ in your project build.gradle file and
         implementation("com.github.markusressel.KutePreferences:text:${kutePreferencesVersion}")
     }
 
-in your desired module ```build.gradle``` file.
+in your desired module `build.gradle` file.
 
 ## Specify the preferences you need
 
-**KutePreferences** builds on ```android.support.v4.app.Fragment``` for increased flexibility.
-The first thing you have to do is create a class in your project that extends ```KutePreferencesMainFragment```
-and implements it's ```fun initPreferenceTree(): KutePreferencesTree``` method like this:
+Since **KutePreferences** provides navigation between categories, search and other things it is necessary to extend `KutePreferencesMainFragment` (that builds on `android.support.v4.app.Fragment`) with a custom class of yours in your project and implements it's `fun initPreferenceTree(): KutePreferencesTree` method similar to this:
 
 ```
 class PreferencesFragment : KutePreferencesMainFragment() {
@@ -75,24 +74,22 @@ class PreferencesFragment : KutePreferencesMainFragment() {
             )
         )
     }
-
 }
 ```
 
-KutePreferenceItems are simple objects that specify view behaviour.
-They work in conjunction with a data provider that defines how the state of the preference item is persisted.
+## Structure
 
-Usually the preferences of your app are organized in some kind of tree.
-KutePreferences lets you specify the preference structure exactly like that.
+The items that you return in the `initPreferenceTree()` method are a direct representation of the categories, sections preferences and custom items that will be visible in your app. Items that need persistence require a `KuteDataProvider` parameter that defines how the current state of the preference item is persisted.
 
-### Included Preference Types
+### Preference Types
 
 KutePreferences includes implementation for most of the commonly needed preference items that you might encounter when building an app.
 
 | Name                       | Item Type    | Description |
 |----------------------------|--------------|-------------|
-| KuteBooleanPreference       | Boolean      | A simple on/off preference. |
+| KuteBooleanPreference      | Boolean      | A simple on/off preference. |
 | KuteTextPreference         | String       | A simple text preference.   |
+| KuteUrlPreference          | String       | A url preference.   |
 | KutePasswordPreference     | String       | A password text preference. This type works exactly like `KuteTextPreference` but includes obscuring typed input. |
 | KuteNumberPreference       | Integer      | A preference for number values. |
 | KuteSliderPreference       | Integer      | Like `KuteNumberPreference` but with a slider GUI instead of a direct input field. |
@@ -117,14 +114,14 @@ To do this you can use one of these classes:
 
 | Name                       | Description |
 |----------------------------|-------------|
-| KuteCategory               | A Category groups multiple preference items or even other category items. |
-| KuteDivider                | A simple divider of preference items inside a single preference category. |
+| KuteCategory               | A category groups sections, preference items and/or other category items. |
+| KuteSection                | A group of preference items inside a single preference category. |
 
 ### Implement custom preferences
 
 If the integrated preference classes don't fit your needs you can easily create your own custom preference implementation.
 To do so you have to create an implementation of `KutePreferenceItem`.
-You can use `KutePreferenceBase` instead (which has some basic functionality implemented already) if it fit's your needs.
+You can use `KutePreferenceBase` as a base class instead of implementing everything from scrath (which has some basic functionality implemented already) if it fit's your needs.
 
 Important things to keep in mind if you implement your own preference item:
 
@@ -134,6 +131,14 @@ Important things to keep in mind if you implement your own preference item:
   * KutePreferences.Preference.Title
   * KutePreferences.Preference.Description
   * etc.
+
+# Troubleshooting
+
+## Navigation
+* The back button doesn't work
+  * ensure that you are calling the `onBackPressed()` methof of your `KutePreferencesMainFragment` implementation from the activity that is hosting it (like seen in the example app)
+* The back button in the toolbar doesn't work
+  * Similar to the issue above ensure that you are passing the `onOptionsItemSelected()` event for the `android.R.id.home` id to your `KutePreferencesMainFragment`
 
 # Contributing
 
