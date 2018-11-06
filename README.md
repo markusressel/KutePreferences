@@ -10,6 +10,7 @@ A **GUI** library for easy to use, fast and beautiful **preferences** in your ap
 * Easy to use
 * Many included preference types
 * Integrated search
+* Persistence
 * Easily expandable with custom styles and logic
 * Written in Kotlin
 
