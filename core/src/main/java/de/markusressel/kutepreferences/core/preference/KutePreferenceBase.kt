@@ -1,6 +1,7 @@
 package de.markusressel.kutepreferences.core.preference
 
 import android.content.Context
+import android.text.Spanned
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -86,7 +87,9 @@ abstract class KutePreferenceBase<DataType : Any> : KutePreferenceItem<DataType>
         return setOf(title, description)
     }
 
-    override fun highlightSearchMathes(regex: String) {
+    override fun highlightSearchMatches(highlighter: (String) -> Spanned) {
+        nameTextView?.text = highlighter(title)
+        descriptionTextView?.text = highlighter(description)
     }
 
 }
