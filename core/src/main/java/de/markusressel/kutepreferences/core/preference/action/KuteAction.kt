@@ -2,6 +2,7 @@ package de.markusressel.kutepreferences.core.preference.action
 
 import android.content.Context
 import android.graphics.drawable.Drawable
+import android.text.Spanned
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -16,14 +17,17 @@ open class KuteAction(override val key: Int,
                       val title: String,
                       val onClickAction: (Context, KuteAction) -> Unit) :
         KutePreferenceListItem, KutePreferenceClickListener, KuteSearchProvider {
+
     val layoutRes: Int
         get() = R.layout.kute_preference__action__list_item
+
+    lateinit var iconView: ImageView
+    lateinit var nameTextView: TextView
 
     override fun inflateListLayout(layoutInflater: LayoutInflater, parent: ViewGroup): ViewGroup {
         val layout = layoutInflater.inflate(layoutRes, parent, false) as ViewGroup
 
-        val iconView: ImageView = layout
-                .findViewById(R.id.kute_preference__preference__icon)
+        iconView = layout.findViewById(R.id.kute_preference__preference__icon)
         if (icon != null) {
             iconView.setImageDrawable(icon)
         } else {
@@ -31,8 +35,7 @@ open class KuteAction(override val key: Int,
             iconView.alpha = 0.5F
         }
 
-        val nameTextView: TextView = layout
-                .findViewById(R.id.kute_preferences__preference__title)
+        nameTextView = layout.findViewById(R.id.kute_preferences__preference__title)
         nameTextView.text = title
 
         return layout
@@ -46,7 +49,8 @@ open class KuteAction(override val key: Int,
         return setOf(title)
     }
 
-    override fun highlightSearchMathes(regex: String) {
+    override fun highlightSearchMatches(highlighter: (String) -> Spanned) {
+        nameTextView.text = highlighter(title)
     }
 
 }

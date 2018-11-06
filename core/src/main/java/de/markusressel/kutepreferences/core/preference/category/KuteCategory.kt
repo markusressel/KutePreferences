@@ -2,6 +2,7 @@ package de.markusressel.kutepreferences.core.preference.category
 
 import android.content.Context
 import android.graphics.drawable.Drawable
+import android.text.Spanned
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -20,23 +21,21 @@ open class KuteCategory(
         override val children: List<KutePreferenceListItem>) :
         KutePreferenceCategory {
 
+    lateinit var iconView: ImageView
+    lateinit var nameView: TextView
+    lateinit var descriptionView: TextView
+
     override fun inflateListLayout(layoutInflater: LayoutInflater, parent: ViewGroup): ViewGroup {
         val layout = layoutInflater.inflate(R.layout.kute_preference__category, parent, false) as ViewGroup
 
-        val iconView: ImageView = layout
-                .findViewById(R.id.kute_preference__category__icon)
-        iconView
-                .setImageDrawable(icon)
+        iconView = layout.findViewById(R.id.kute_preference__category__icon)
+        nameView = layout.findViewById(R.id.kute_preference__category__title)
 
-        val nameView: TextView = layout
-                .findViewById(R.id.kute_preference__category__title)
-        nameView
-                .text = title
+        iconView.setImageDrawable(icon)
+        nameView.text = title
 
-        val descriptionView: TextView = layout
-                .findViewById(R.id.kute_preference__category__description)
-        descriptionView
-                .text = description
+        descriptionView = layout.findViewById(R.id.kute_preference__category__description)
+        descriptionView.text = description
 
         return layout
     }
@@ -48,7 +47,9 @@ open class KuteCategory(
         return setOf(title, description)
     }
 
-    override fun highlightSearchMathes(regex: String) {
+    override fun highlightSearchMatches(highlighter: (String) -> Spanned) {
+        nameView.text = highlighter(title)
+        descriptionView.text = highlighter(description)
     }
 
 }

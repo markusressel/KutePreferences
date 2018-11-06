@@ -1,17 +1,21 @@
 package de.markusressel.kutepreferences.core.view
 
 import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
+import android.text.SpannableStringBuilder
 import android.util.Log
 import android.view.*
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
+import androidx.core.text.backgroundColor
 import androidx.lifecycle.Lifecycle
 import com.eightbitlab.rxbus.Bus
 import com.eightbitlab.rxbus.registerInBus
 import com.jakewharton.rxbinding2.support.v7.widget.RxSearchView
 import com.trello.rxlifecycle2.android.lifecycle.kotlin.bindUntilEvent
 import de.markusressel.kutepreferences.core.KutePreferenceListItem
+import de.markusressel.kutepreferences.core.KuteSearchProvider
 import de.markusressel.kutepreferences.core.R
 import de.markusressel.kutepreferences.core.event.CategoryClickedEvent
 import de.markusressel.kutepreferences.core.event.SectionClickedEvent
@@ -71,13 +75,13 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
                         if (it.isBlank()) {
                             showPreferenceItems(backstack.peek())
                         } else {
+                            val searchString = it.toString()
                             val preferenceIds = treeManager
-                                    .findInSearchProviders(it.toString())
+                                    .findInSearchProviders(searchString)
                                     .map {
-                                        it
-                                                .key
+                                        it.key
                                     }
-                            showPreferenceItems(preferenceIds, false)
+                            showPreferenceItems(preferenceIds, false, searchString = searchString)
                         }
                     }, onError = {
                         Log.e(TAG, "Error filtering list", it)
@@ -183,7 +187,7 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
         showPreferenceItems(backstackItem.preferenceItemIds, false)
     }
 
-    internal fun showPreferenceItems(preferenceIds: List<Int>, addToStack: Boolean = true, ignoreSearch: Boolean = false) {
+    internal fun showPreferenceItems(preferenceIds: List<Int>, addToStack: Boolean = true, ignoreSearch: Boolean = false, searchString: String? = null) {
         if (addToStack) {
             val query = if (ignoreSearch) "" else searchView.query.toString()
             val newBackstackItem = BackstackItem(preferenceIds, query)
@@ -198,7 +202,7 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
                             it.item
                         }
 
-        generatePage(preferenceItems)
+        generatePage(preferenceItems, searchString)
     }
 
     private fun addToBackstack(newBackstackItem: BackstackItem) {
@@ -215,7 +219,7 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
     /**
      * Generates a ViewGroup for the given preferences
      */
-    internal fun generatePage(kutePreference: List<KutePreferenceListItem>) {
+    internal fun generatePage(kutePreference: List<KutePreferenceListItem>, searchString: String?) {
         // find the layout where list items should be inserted
         val listItemLayout: ViewGroup = kute_preferences__list_item_root
         listItemLayout
@@ -225,12 +229,13 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
         kutePreference
                 .forEach {
                     // does NOT recurse through child items as we only want to inflate the current tree layer
-                    inflate(it, listItemLayout, keySet)
+                    inflate(it, listItemLayout, keySet, searchString)
                 }
     }
 
     internal fun inflate(kutePreferenceListItem: KutePreferenceListItem, layoutToAppendTo: ViewGroup,
-                         keySet: MutableSet<Int>) {
+                         keySet: MutableSet<Int>,
+                         searchString: String?) {
         when (kutePreferenceListItem) {
             is KutePreferenceItem<*> -> {
                 checkKeyDuplication(kutePreferenceListItem.key, keySet)
@@ -243,7 +248,7 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
             }
         }
 
-        inflateAndAttachClickListeners(layoutInflater, kutePreferenceListItem, layoutToAppendTo)
+        inflateAndAttachClickListeners(layoutInflater, kutePreferenceListItem, layoutToAppendTo, searchString)
     }
 
     private fun checkKeyDuplication(key: Int, keySet: MutableSet<Int>) {
@@ -286,9 +291,13 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
     }
 
     companion object {
-        fun inflateAndAttachClickListeners(layoutInflater: LayoutInflater, preferenceItem: KutePreferenceListItem, parent: ViewGroup) {
+        fun inflateAndAttachClickListeners(layoutInflater: LayoutInflater, preferenceItem: KutePreferenceListItem, parent: ViewGroup, searchString: String? = null) {
             val layout = preferenceItem.inflateListLayout(layoutInflater, parent)
             parent.addView(layout)
+
+            if (searchString != null && preferenceItem is KuteSearchProvider) {
+                highlightSearchMatches(preferenceItem, searchString)
+            }
 
             if (preferenceItem is KutePreferenceClickListener) {
                 layout
@@ -306,6 +315,36 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
                             }
                         }
             }
+        }
+
+        private fun highlightSearchMatches(preferenceItem: KuteSearchProvider, searchString: String) {
+            preferenceItem.highlightSearchMatches { text ->
+                val regex = searchString.toRegex(RegexOption.IGNORE_CASE)
+
+                val highlightedText = SpannableStringBuilder()
+
+                var currentStartIndex = 0
+                while (currentStartIndex < text.length) {
+                    val matchResult = regex.find(text, startIndex = currentStartIndex)
+
+                    if (matchResult != null) {
+                        // append normal text
+                        highlightedText.append(text.substring(currentStartIndex, matchResult.range.first))
+
+                        // append highlighted text
+                        highlightedText.backgroundColor(Color.YELLOW) { append(text.substring(matchResult.range.first, matchResult.range.last + 1)) }
+
+                        // set index for next iteration
+                        currentStartIndex = matchResult.range.last + 1
+                    } else {
+                        highlightedText.append(text.substring(currentStartIndex, text.length))
+                        break
+                    }
+                }
+
+                highlightedText
+            }
+
         }
 
         const val TAG: String = "MainFragment"

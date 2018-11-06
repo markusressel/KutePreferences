@@ -1,6 +1,7 @@
 package de.markusressel.kutepreferences.core.preference.section
 
 import android.content.Context
+import android.text.Spanned
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.LinearLayout
@@ -17,16 +18,16 @@ open class KuteSection(
         override val title: String,
         override val children: List<KutePreferenceListItem>) : KutePreferenceSection {
 
+    lateinit var nameView: TextView
+    lateinit var preferenceItemList: LinearLayout
+
     override fun inflateListLayout(layoutInflater: LayoutInflater, parent: ViewGroup): ViewGroup {
         val layout = layoutInflater.inflate(R.layout.kute_preference__section, parent, false) as ViewGroup
 
-        val nameView: TextView = layout
-                .findViewById(R.id.kute_preference_section__title)
-        val preferenceItemList: LinearLayout = layout
-                .findViewById(R.id.kute_preference_section__item_list)
+        nameView = layout.findViewById(R.id.kute_preference_section__title)
+        preferenceItemList = layout.findViewById(R.id.kute_preference_section__item_list)
 
-        nameView
-                .text = title
+        nameView.text = title
 
         inflatePreferenceItems(layoutInflater, preferenceItemList)
 
@@ -46,7 +47,8 @@ open class KuteSection(
         return setOf(title)
     }
 
-    override fun highlightSearchMathes(regex: String) {
+    override fun highlightSearchMatches(highlighter: (String) -> Spanned) {
+        nameView.text = highlighter(title)
     }
 
 }

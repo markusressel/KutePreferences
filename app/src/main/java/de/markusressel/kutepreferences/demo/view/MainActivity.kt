@@ -41,7 +41,7 @@ class MainActivity : DaggerSupportActivityBase() {
         val storedTextValueUnsafe: String = preferencesHolder.dataProvider.getValueUnsafe(R.string.key_demo_text_pref_2,
                 KutePreferencesHolder.TEXT_PREFERENCE_2_DEFAULT_VALUE)
 
-        // set a new valu
+        // set a new value
         preferencesHolder.textPreference2.persistedValue = "Tom Riddle"
 
         // store a value without using the preferenceItem directly

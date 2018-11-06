@@ -1,5 +1,7 @@
 package de.markusressel.kutepreferences.core
 
+import android.text.Spanned
+
 interface KuteSearchProvider {
 
     /**
@@ -9,7 +11,9 @@ interface KuteSearchProvider {
 
     /**
      * Highlights all matches that were found
+     *
+     * @param highlighter a function that takes any string and highlights it
      */
-    fun highlightSearchMathes(regex: String)
+    fun highlightSearchMatches(highlighter: (String) -> Spanned)
 
 }
