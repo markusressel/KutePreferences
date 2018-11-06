@@ -31,7 +31,7 @@ in your project build.gradle file and
     dependencies {
         ...
     
-        def kutePreferencesVersion = "v1.4.0"
+        def kutePreferencesVersion = "v1.5.0"
         // choose the ones you need
         implementation("com.github.markusressel.KutePreferences:bool:${kutePreferencesVersion}")
         implementation("com.github.markusressel.KutePreferences:color:${kutePreferencesVersion}")
