@@ -28,9 +28,9 @@ android {
 dependencies {
     api "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
-    def markusresselCommonsVersion = "master"
+    def markusresselCommonsVersion = "master-SNAPSHOT"
     // choose the ones you need
-    implementation("com.github.markusressel.commons:themes:${markusresselCommonsVersion}")
+    implementation("com.github.markusressel.commons:android_themes:${markusresselCommonsVersion}")
 
     api "androidx.annotation:annotation:$androidKtxVersion"
     implementation "androidx.appcompat:appcompat:$androidKtxVersion"
