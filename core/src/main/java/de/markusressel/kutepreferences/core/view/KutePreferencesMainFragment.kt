@@ -1,7 +1,6 @@
 package de.markusressel.kutepreferences.core.view
 
 import android.content.Context
-import android.graphics.Color
 import android.os.Bundle
 import android.text.SpannableStringBuilder
 import android.util.Log
@@ -14,6 +13,7 @@ import com.eightbitlab.rxbus.Bus
 import com.eightbitlab.rxbus.registerInBus
 import com.jakewharton.rxbinding2.support.v7.widget.RxSearchView
 import com.trello.rxlifecycle2.android.lifecycle.kotlin.bindUntilEvent
+import de.markusressel.commons.android.themes.getThemeAttrColor
 import de.markusressel.kutepreferences.core.KutePreferenceListItem
 import de.markusressel.kutepreferences.core.KuteSearchProvider
 import de.markusressel.kutepreferences.core.R
@@ -296,7 +296,7 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
             parent.addView(layout)
 
             if (searchString != null && preferenceItem is KuteSearchProvider) {
-                highlightSearchMatches(preferenceItem, searchString)
+                highlightSearchMatches(layoutInflater.context, preferenceItem, searchString)
             }
 
             if (preferenceItem is KutePreferenceClickListener) {
@@ -317,7 +317,7 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
             }
         }
 
-        private fun highlightSearchMatches(preferenceItem: KuteSearchProvider, searchString: String) {
+        private fun highlightSearchMatches(context: Context, preferenceItem: KuteSearchProvider, searchString: String) {
             preferenceItem.highlightSearchMatches { text ->
                 val regex = searchString.toRegex(RegexOption.IGNORE_CASE)
 
@@ -331,8 +331,10 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
                         // append normal text
                         highlightedText.append(text.substring(currentStartIndex, matchResult.range.first))
 
-                        // append highlighted text
-                        highlightedText.backgroundColor(Color.YELLOW) { append(text.substring(matchResult.range.first, matchResult.range.last + 1)) }
+                        val color = context.getThemeAttrColor(R.attr.kute_preferences__search__highlighted_text_color)
+                        highlightedText.backgroundColor(color) {
+                            append(text.substring(matchResult.range.first, matchResult.range.last + 1))
+                        }
 
                         // set index for next iteration
                         currentStartIndex = matchResult.range.last + 1
