@@ -5,9 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.RadioButton
 import android.widget.RadioGroup
+import de.markusressel.commons.core.forEachCompat
 import de.markusressel.kutepreferences.core.extensions.children
 import de.markusressel.kutepreferences.core.preference.KutePreferenceItem
-import de.markusressel.kutepreferences.library.ktx.forEachCompat
 import de.markusressel.kutepreferences.preference.selection.R
 
 class KuteSingleSelectStringPreferenceEditDialog(preferenceItem: KutePreferenceItem<String>,
