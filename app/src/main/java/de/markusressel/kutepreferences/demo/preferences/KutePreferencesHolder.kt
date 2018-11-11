@@ -11,7 +11,10 @@ import de.markusressel.kutepreferences.preference.bool.KuteBooleanPreference
 import de.markusressel.kutepreferences.preference.color.KuteColorPreference
 import de.markusressel.kutepreferences.preference.date.KuteDatePreference
 import de.markusressel.kutepreferences.preference.number.KuteNumberPreference
-import de.markusressel.kutepreferences.preference.number.KuteSliderPreference
+import de.markusressel.kutepreferences.preference.number.range.KuteFloatRangePreference
+import de.markusressel.kutepreferences.preference.number.range.KuteIntRangePreference
+import de.markusressel.kutepreferences.preference.number.range.RangePersistenceModel
+import de.markusressel.kutepreferences.preference.number.slider.KuteSliderPreference
 import de.markusressel.kutepreferences.preference.selection.multi.KuteMultiSelectPreference
 import de.markusressel.kutepreferences.preference.selection.single.KuteSingleSelectStringPreference
 import de.markusressel.kutepreferences.preference.text.KuteTextPreference
@@ -99,9 +102,34 @@ class KutePreferencesHolder @Inject constructor(
         KuteSliderPreference(key = R.string.key_demo_slider_pref,
                 icon = iconHelper.getIcon(MaterialDesignIconic.Icon.gmi_volume_up),
                 title = context.getString(R.string.title_demo_slider_pref),
+                minimum = 0,
                 maximum = 7,
                 defaultValue = 5,
                 dataProvider = dataProvider)
+    }
+
+    val intRangePreference by lazy {
+        KuteIntRangePreference(
+                key = R.string.key_demo_int_range_pref,
+                icon = iconHelper.getIcon(MaterialDesignIconic.Icon.gmi_arrows),
+                title = context.getString(R.string.title_demo_int_range_pref),
+                minimum = 0,
+                maximum = 100,
+                defaultValue = RangePersistenceModel(0, 100),
+                dataProvider = dataProvider
+        )
+    }
+
+    val floatRangePreference by lazy {
+        KuteFloatRangePreference(
+                key = R.string.key_demo_float_range_pref,
+                icon = iconHelper.getIcon(MaterialDesignIconic.Icon.gmi_arrows),
+                title = context.getString(R.string.title_demo_float_range_pref),
+                minimum = -5f,
+                maximum = 5f,
+                defaultValue = RangePersistenceModel(-2.3f, 1.83f),
+                dataProvider = dataProvider
+        )
     }
 
     val colorPreference by lazy {

@@ -8,7 +8,7 @@
     android:paddingEnd="8dp">
 
     <com.jaygoo.widget.RangeSeekBar
-        android:id="@+id/kute_preferences__preference__seekbar"
+        android:id="@+id/kute_preferences__preference__range_seekbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:rsb_indicator_height="23dp"
@@ -17,7 +17,7 @@
         app:rsb_indicator_padding_right="4dp"
         app:rsb_indicator_padding_top="6dp"
         app:rsb_indicator_show_mode="alwaysShow"
-        app:rsb_mode="single"
+        app:rsb_mode="range"
         app:rsb_progress_color="?android:attr/colorAccent"
         app:rsb_progress_height="2dp"
         app:rsb_tick_mark_mode="other"

@@ -1,16 +1,17 @@
-package de.markusressel.kutepreferences.preference.number
+package de.markusressel.kutepreferences.preference.number.slider
 
 import android.content.Context
 import android.graphics.drawable.Drawable
 import de.markusressel.kutepreferences.core.persistence.KutePreferenceDataProvider
 import de.markusressel.kutepreferences.core.preference.KutePreferenceBase
+import de.markusressel.kutepreferences.preference.number.R
 
 open class KuteSliderPreference(
         override val key: Int,
         override val icon: Drawable? = null,
         override val title: String,
-        private val minimum: Int? = null,
-        private val maximum: Int? = null,
+        private val minimum: Int,
+        private val maximum: Int,
         private val defaultValue: Int,
         override val dataProvider: KutePreferenceDataProvider,
         override val onPreferenceChangedListener: ((oldValue: Int, newValue: Int) -> Unit)? = null) :

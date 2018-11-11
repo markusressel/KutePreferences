@@ -20,6 +20,9 @@
 
     <string name="title_demo_slider_pref">Volume</string>
 
+    <string name="title_demo_int_range_pref">Int Range</string>
+    <string name="title_demo_float_range_pref">Float Range</string>
+
     <string name="title_demo_color_pref">Favorite Color</string>
 
     <string name="title_demo_date_pref">Day of Birth</string>
