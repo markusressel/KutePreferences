@@ -50,7 +50,9 @@ class PreferencesFragment : DaggerKutePreferenceFragmentBase() {
                                                 kutePreferencesHolder.numberPreference
                                         )
                                 ),
-                                kutePreferencesHolder.sliderPreference
+                                kutePreferencesHolder.sliderPreference,
+                                kutePreferencesHolder.intRangePreference,
+                                kutePreferencesHolder.floatRangePreference
                         )
                 ),
                 KuteSection(
