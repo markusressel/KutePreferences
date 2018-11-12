@@ -42,16 +42,22 @@ open class KuteSliderPreferenceEditDialog(
             it.setOnRangeChangedListener(object : OnRangeChangedListener {
                 override fun onRangeChanged(rangeSeekBar: RangeSeekBar?, leftValue: Float, rightValue: Float, isFromUser: Boolean) {
                     rangeSeekBar?.let {
-                        val newAsLong = leftValue.roundToInt()
-                        userInput = newAsLong
-                        currentValue = newAsLong
+                        val newValue = leftValue.roundToInt()
+
+                        if (isFromUser) {
+                            it.setValue(newValue.toFloat())
+                        }
+
+                        userInput = newValue
+                        currentValue = newValue
                     }
                 }
 
-                override fun onStartTrackingTouch(view: RangeSeekBar?, isLeft: Boolean) {
+                override fun onStartTrackingTouch(rangeSeekBar: RangeSeekBar?, isLeft: Boolean) {
                 }
 
-                override fun onStopTrackingTouch(view: RangeSeekBar?, isLeft: Boolean) {
+                override fun onStopTrackingTouch(rangeSeekBar: RangeSeekBar?, isLeft: Boolean) {
+
                 }
             })
         }

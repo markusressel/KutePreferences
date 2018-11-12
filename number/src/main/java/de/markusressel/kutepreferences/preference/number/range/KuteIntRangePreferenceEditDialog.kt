@@ -6,6 +6,7 @@ import android.view.View
 import com.jaygoo.widget.OnRangeChangedListener
 import com.jaygoo.widget.RangeSeekBar
 import de.markusressel.kutepreferences.preference.number.R
+import kotlin.math.roundToInt
 
 open class KuteIntRangePreferenceEditDialog(
         preferenceItem: KuteRangePreference<Int>,
@@ -46,7 +47,12 @@ open class KuteIntRangePreferenceEditDialog(
             it.setOnRangeChangedListener(object : OnRangeChangedListener {
                 override fun onRangeChanged(rangeSeekBar1: RangeSeekBar?, leftValue: Float, rightValue: Float, isFromUser: Boolean) {
                     rangeSeekBar1?.let {
-                        val newValue = RangePersistenceModel(leftValue.toInt(), rightValue.toInt())
+                        val newValue = RangePersistenceModel(leftValue.roundToInt(), rightValue.roundToInt())
+
+                        if (isFromUser) {
+                            it.setValue(newValue.min.toFloat(), newValue.max.toFloat())
+                        }
+
                         userInput = newValue
                         currentValue = newValue
                     }
