@@ -10,13 +10,14 @@ open class KuteFloatRangePreference(
         title: String,
         minimum: Float,
         maximum: Float,
+        decimalPlaces: Int = 1,
         defaultValue: RangePersistenceModel<Float>,
         dataProvider: KutePreferenceDataProvider,
         onPreferenceChangedListener: ((oldValue: RangePersistenceModel<Float>, newValue: RangePersistenceModel<Float>) -> Unit)? = null) :
-        KuteRangePreference<Float>(key, icon, title, minimum, maximum, defaultValue, dataProvider, onPreferenceChangedListener) {
+        KuteRangePreference<Float>(key, icon, title, minimum, maximum, decimalPlaces, defaultValue, dataProvider, onPreferenceChangedListener) {
 
     override fun onClick(context: Context) {
-        val dialog = KuteFloatRangePreferenceEditDialog(this, minimum, maximum)
+        val dialog = KuteFloatRangePreferenceEditDialog(this, minimum, maximum, decimalPlaces)
         dialog.show(context)
     }
 

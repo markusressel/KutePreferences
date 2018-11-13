@@ -13,7 +13,7 @@ open class KuteIntRangePreference(
         defaultValue: RangePersistenceModel<Int>,
         dataProvider: KutePreferenceDataProvider,
         onPreferenceChangedListener: ((oldValue: RangePersistenceModel<Int>, newValue: RangePersistenceModel<Int>) -> Unit)? = null) :
-        KuteRangePreference<Int>(key, icon, title, minimum, maximum, defaultValue, dataProvider, onPreferenceChangedListener) {
+        KuteRangePreference<Int>(key, icon, title, minimum, maximum, 0, defaultValue, dataProvider, onPreferenceChangedListener) {
 
     override fun onClick(context: Context) {
         val dialog = KuteIntRangePreferenceEditDialog(this, minimum, maximum)

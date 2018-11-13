@@ -125,9 +125,10 @@ class KutePreferencesHolder @Inject constructor(
                 key = R.string.key_demo_float_range_pref,
                 icon = iconHelper.getIcon(MaterialDesignIconic.Icon.gmi_arrows),
                 title = context.getString(R.string.title_demo_float_range_pref),
-                minimum = -5f,
-                maximum = 5f,
-                defaultValue = RangePersistenceModel(-2.3f, 1.83f),
+                decimalPlaces = 2,
+                minimum = -0.1f,
+                maximum = 0.1f,
+                defaultValue = RangePersistenceModel(-0.003f, 0.02f),
                 dataProvider = dataProvider
         )
     }

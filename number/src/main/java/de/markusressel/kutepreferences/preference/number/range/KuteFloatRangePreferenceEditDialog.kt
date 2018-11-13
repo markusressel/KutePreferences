@@ -10,7 +10,8 @@ import de.markusressel.kutepreferences.preference.number.R
 open class KuteFloatRangePreferenceEditDialog(
         preferenceItem: KuteRangePreference<Float>,
         minimum: Float,
-        maximum: Float) :
+        maximum: Float,
+        private val decimalPlaces: Int) :
         KuteRangePreferenceEditDialog<Float>(
                 preferenceItem,
                 minimum,
@@ -29,13 +30,17 @@ open class KuteFloatRangePreferenceEditDialog(
         userInput = persistedValue
 
         rangeSeekBar?.let {
-            it.setIndicatorTextDecimalFormat("0.0")
+            val decimalFormat = when {
+                decimalPlaces <= 0 -> "0"
+                else -> "0.${"0".repeat(decimalPlaces)}"
+            }
+            it.setIndicatorTextDecimalFormat(decimalFormat)
 
             val stepSize = (maximum - minimum) / 10
             it.tickMarkTextArray = (0..10).mapIndexed { index, item ->
                 minimum + stepSize * index
             }.map {
-                "%.1f".format(it)
+                "%.${decimalPlaces}f".format(it)
             }.toTypedArray()
 
             it.setRange(minimum, maximum)

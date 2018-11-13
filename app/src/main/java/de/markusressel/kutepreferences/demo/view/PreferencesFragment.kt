@@ -22,6 +22,8 @@ class PreferencesFragment : DaggerKutePreferenceFragmentBase() {
     lateinit var iconHelper: IconHelper
 
     override fun initPreferenceTree(): Array<KutePreferenceListItem> {
+        kutePreferencesHolder.floatRangePreference.reset()
+
         return arrayOf(
                 KuteSection(
                         key = R.string.key_section_system_hardware,
