@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="KutePreferences" />
+    <style name="KutePreferences"/>
 
     <style name="KutePreferences.ListItem">
         <item name="android:layout_height">@dimen/kute_preferences__preference__item_height</item>
         <item name="android:background">?attr/selectableItemBackground</item>
         <item name="android:layout_width">match_parent</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
         <item name="android:gravity">center_vertical</item>
     </style>
 
@@ -19,6 +21,8 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/kute_preferences__category__item_height</item>
         <item name="android:background">?attr/selectableItemBackground</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
         <item name="android:gravity">center_vertical</item>
     </style>
 

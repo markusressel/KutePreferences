@@ -16,7 +16,7 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode rootProject.ext.versionCode
         versionName rootProject.ext.versionName
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         setProperty("archivesBaseName", "KutePreferences_v${versionName}_(${versionCode})")
 
@@ -41,11 +41,11 @@ dependencies {
     implementation project(':selection')
     implementation project(':text')
 
-    implementation "androidx.appcompat:appcompat:$androidKtxVersion"
+    implementation "androidx.appcompat:appcompat:1.0.2"
 
     // Android KTX
 
-    implementation "androidx.core:core-ktx:1.0.0"
+    implementation "androidx.core:core-ktx:1.0.1"
 //    implementation "androidx.fragment:fragment-ktx:$androidKtxVersion"
 //    implementation "androidx.collection:collection-ktx:$androidKtxVersion"
 

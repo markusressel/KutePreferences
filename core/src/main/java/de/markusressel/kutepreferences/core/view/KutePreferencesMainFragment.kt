@@ -1,7 +1,9 @@
 package de.markusressel.kutepreferences.core.view
 
 import android.content.Context
+import android.graphics.drawable.RippleDrawable
 import android.os.Bundle
+import android.os.Handler
 import android.text.SpannableStringBuilder
 import android.util.Log
 import android.view.*
@@ -19,16 +21,19 @@ import de.markusressel.kutepreferences.core.KuteSearchProvider
 import de.markusressel.kutepreferences.core.R
 import de.markusressel.kutepreferences.core.event.CategoryClickedEvent
 import de.markusressel.kutepreferences.core.event.SectionClickedEvent
+import de.markusressel.kutepreferences.core.extensions.children
 import de.markusressel.kutepreferences.core.preference.KutePreferenceClickListener
-import de.markusressel.kutepreferences.core.preference.KutePreferenceItem
 import de.markusressel.kutepreferences.core.preference.category.KutePreferenceCategory
 import de.markusressel.kutepreferences.core.preference.section.KutePreferenceSection
+import de.markusressel.kutepreferences.core.preference.section.KuteSection
 import de.markusressel.kutepreferences.core.tree.TreeManager
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.subscribeBy
 import kotlinx.android.synthetic.main.kute_preference__main_fragment.*
 import java.util.*
+import java.util.concurrent.LinkedBlockingQueue
 import java.util.concurrent.TimeUnit
+
 
 /**
  * The main class for all preferences.
@@ -124,12 +129,12 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
         Bus.unregister(this)
     }
 
-    fun showTopLevel() {
+    fun showTopLevel(keysToHighlight: List<Int> = emptyList()) {
         showPreferenceItems(treeManager.getTopLevelItems().map {
             it.key
         },
                 // small workaround to allow searchView non-nullable type
-                ignoreSearch = true)
+                ignoreSearch = true, keysToHighlight = keysToHighlight)
     }
 
     /**
@@ -151,10 +156,10 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
 
         clearSearch()
         if (categoryItems != null) {
-            showPreferenceItems(categoryItems)
+            showPreferenceItems(categoryItems, keysToHighlight = listOf(section.key))
         } else {
-            // if the section has no parent category it must be the a root section
-            showTopLevel()
+            // if the section has no parent category it must be a root section
+            showTopLevel(keysToHighlight = listOf(section.key))
         }
     }
 
@@ -187,22 +192,22 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
         showPreferenceItems(backstackItem.preferenceItemIds, false)
     }
 
-    internal fun showPreferenceItems(preferenceIds: List<Int>, addToStack: Boolean = true, ignoreSearch: Boolean = false, searchString: String? = null) {
+    internal fun showPreferenceItems(preferenceKeys: List<Int>, addToStack: Boolean = true, ignoreSearch: Boolean = false, searchString: String? = null, keysToHighlight: List<Int> = emptyList()) {
         if (addToStack) {
             val query = if (ignoreSearch) "" else searchView.query.toString()
-            val newBackstackItem = BackstackItem(preferenceIds, query)
+            val newBackstackItem = BackstackItem(preferenceKeys, query)
             addToBackstack(newBackstackItem)
         }
 
         val preferenceItems: List<KutePreferenceListItem> =
                 treeManager
                         .findInTree {
-                            it.key in preferenceIds
+                            it.key in preferenceKeys
                         }.mapNotNull {
                             it.item
                         }
 
-        generatePage(preferenceItems, searchString)
+        generatePage(preferenceItems, searchString, keysToHighlight)
     }
 
     private fun addToBackstack(newBackstackItem: BackstackItem) {
@@ -219,7 +224,7 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
     /**
      * Generates a ViewGroup for the given preferences
      */
-    internal fun generatePage(kutePreference: List<KutePreferenceListItem>, searchString: String?) {
+    internal fun generatePage(kutePreference: List<KutePreferenceListItem>, searchString: String?, highlightPreferenceId: List<Int>) {
         // find the layout where list items should be inserted
         val listItemLayout: ViewGroup = kute_preferences__list_item_root
         listItemLayout
@@ -229,26 +234,64 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
         kutePreference
                 .forEach {
                     // does NOT recurse through child items as we only want to inflate the current tree layer
-                    inflate(it, listItemLayout, keySet, searchString)
+                    val highlight = it.key in highlightPreferenceId
+                    inflate(it, listItemLayout, keySet, searchString, highlight)
                 }
     }
 
     internal fun inflate(kutePreferenceListItem: KutePreferenceListItem, layoutToAppendTo: ViewGroup,
                          keySet: MutableSet<Int>,
-                         searchString: String?) {
-        when (kutePreferenceListItem) {
-            is KutePreferenceItem<*> -> {
-                checkKeyDuplication(kutePreferenceListItem.key, keySet)
+                         searchString: String?,
+                         highlight: Boolean) {
+        checkKeyDuplication(kutePreferenceListItem.key, keySet)
+        val view = inflateAndAttachClickListeners(layoutInflater, kutePreferenceListItem, layoutToAppendTo, searchString)
+
+        if (highlight) {
+            if (kutePreferenceListItem is KuteSection) {
+                forceRippleAnimation(view)
             }
-            is KutePreferenceCategory -> {
-                checkKeyDuplication(kutePreferenceListItem.key, keySet)
-            }
-            is KutePreferenceSection -> {
-                checkKeyDuplication(kutePreferenceListItem.key, keySet)
+        }
+    }
+
+    private fun forceRippleAnimation(view: View) {
+        val viewWithRippleDrawable = findViewWithRippleBackground(view)
+
+        viewWithRippleDrawable?.let {
+            it.postDelayed({
+                it.background.apply {
+                    setHotspot(it.width / 2F, it.height / 2F)
+                    state = intArrayOf(android.R.attr.state_pressed, android.R.attr.state_enabled)
+                }
+
+                val handler = Handler()
+                handler.postDelayed({ it.background.state = intArrayOf() }, 5000)
+            }, 1000)
+        }
+    }
+
+    /**
+     * Tries to find a view with a RippleBackground in the view hierarchy of the given view.
+     * @param view the view to start searching
+     */
+    private fun findViewWithRippleBackground(view: View): View? {
+        val visited = mutableListOf(view)
+        val queue = LinkedBlockingQueue<View>()
+        queue.put(view)
+
+        while (queue.isNotEmpty()) {
+            val current = queue.poll()
+            if (current.background is RippleDrawable) {
+                return current
+            } else {
+                if (current is ViewGroup) {
+                    val notYetVisited = current.children.filter { it !in visited }
+                    queue.addAll(notYetVisited)
+                    visited.addAll(notYetVisited)
+                }
             }
         }
 
-        inflateAndAttachClickListeners(layoutInflater, kutePreferenceListItem, layoutToAppendTo, searchString)
+        return null
     }
 
     private fun checkKeyDuplication(key: Int, keySet: MutableSet<Int>) {
@@ -291,7 +334,7 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
     }
 
     companion object {
-        fun inflateAndAttachClickListeners(layoutInflater: LayoutInflater, preferenceItem: KutePreferenceListItem, parent: ViewGroup, searchString: String? = null) {
+        fun inflateAndAttachClickListeners(layoutInflater: LayoutInflater, preferenceItem: KutePreferenceListItem, parent: ViewGroup, searchString: String? = null): ViewGroup {
             val layout = preferenceItem.inflateListLayout(layoutInflater, parent)
             parent.addView(layout)
 
@@ -315,6 +358,8 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
                             }
                         }
             }
+
+            return layout
         }
 
         private fun highlightSearchMatches(context: Context, preferenceItem: KuteSearchProvider, searchString: String) {
