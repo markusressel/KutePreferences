@@ -3,11 +3,11 @@ package de.markusressel.kutepreferences.preference.color
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.Drawable
-import android.view.View
 import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
+import com.airbnb.epoxy.EpoxyModel
 import de.markusressel.kutepreferences.core.persistence.KutePreferenceDataProvider
-import de.markusressel.kutepreferences.core.preference.KutePreferenceBase
+import de.markusressel.kutepreferences.core.preference.KutePreferenceItem
 
 /**
  * Preference item for a 4 channel color (rgba).
@@ -22,30 +22,9 @@ open class KuteColorPreference(
         private val defaultValue: Int,
         override val dataProvider: KutePreferenceDataProvider,
         override val onPreferenceChangedListener: ((oldValue: Int, newValue: Int) -> Unit)? = null) :
-        KutePreferenceBase<Int>() {
-
-    override val layoutRes: Int
-        get() = R.layout.kute_preference__color__list_item
-
-    var colorPreviewView: View? = null
+        KutePreferenceItem<Int> {
 
     override fun getDefaultValue(): Int = ContextCompat.getColor(context, defaultValue)
-
-    override fun onLayoutInflated(layout: View) {
-        super.onLayoutInflated(layout)
-        colorPreviewView = layout.findViewById(R.id.kute_preferences__preference__color__preview)
-    }
-
-    override fun onClick(context: Context) {
-        val dialog = KuteColorPreferenceEditDialog(this)
-        dialog
-                .show(context)
-    }
-
-    override fun updateDescription() {
-        super.updateDescription()
-        colorPreviewView?.setBackgroundColor(persistedValue)
-    }
 
     override fun createDescription(currentValue: Int): String {
         val a = Color.alpha(currentValue).toString(16).padStart(2, '0')
@@ -54,6 +33,15 @@ open class KuteColorPreference(
         val b = Color.blue(currentValue).toString(16).padStart(2, '0')
 
         return "#$a$r$g$b"
+    }
+
+    override fun getEpoxyModel(): EpoxyModel<*> {
+        val viewModel = ColorPreferenceViewModel()
+        viewModel.name.value = title
+        viewModel.description.value = description
+        viewModel.color.value = persistedValue
+
+        return KutePreferenceColorListItemBindingModel_().viewModel(viewModel)
     }
 
 }

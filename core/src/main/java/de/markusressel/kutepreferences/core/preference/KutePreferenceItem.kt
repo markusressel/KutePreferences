@@ -3,14 +3,20 @@ package de.markusressel.kutepreferences.core.preference
 import android.graphics.drawable.Drawable
 import androidx.annotation.CallSuper
 import androidx.annotation.CheckResult
-import de.markusressel.kutepreferences.core.KutePreferenceListItem
+import com.airbnb.epoxy.EpoxyModel
+import de.markusressel.kutepreferences.core.KutePreferenceDefaultListItemBindingModel_
 import de.markusressel.kutepreferences.core.persistence.KutePreferenceDataProvider
+import de.markusressel.kutepreferences.core.viewmodel.DefaultItemViewModel
 
 /**
  * Interface for Preferences
  */
-interface KutePreferenceItem<DataType : Any> : KutePreferenceListItem, KutePreferenceClickListener,
-        KutePreferenceLongClickListener {
+interface KutePreferenceItem<DataType : Any> {
+
+    /**
+     * A unique identifier for this preference item
+     */
+    val key: Int
 
     /**
      * Optional icon of this KutePreference
@@ -86,6 +92,17 @@ interface KutePreferenceItem<DataType : Any> : KutePreferenceListItem, KutePrefe
     fun onPreferenceChanged(oldValue: DataType, newValue: DataType) {
         onPreferenceChangedListener
                 ?.invoke(oldValue, newValue)
+    }
+
+    /**
+     * Returns an instance of an epoxy viewmodel for this KutePreferenceItem
+     */
+    fun getEpoxyModel(): EpoxyModel<*> {
+        val viewModel = DefaultItemViewModel()
+        viewModel.name.value = title
+        viewModel.description.value = description
+
+        return KutePreferenceDefaultListItemBindingModel_().viewModel(viewModel)
     }
 
 }

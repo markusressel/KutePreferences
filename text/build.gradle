@@ -1,6 +1,8 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'com.jakewharton.butterknife'
 
 apply plugin: 'com.github.dcendents.android-maven'
 group = rootProject.ext.group
@@ -23,10 +25,13 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    dataBinding.enabled true
 }
 
 dependencies {
     implementation project(':core')
+    kapt "com.airbnb.android:epoxy-processor:$epoxyVersion"
     
     implementation ("commons-validator:commons-validator:1.6") {
         exclude group: 'commons-logging', module: 'commons-logging'

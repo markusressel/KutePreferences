@@ -2,9 +2,11 @@ package de.markusressel.kutepreferences.preference.number.range
 
 import android.graphics.drawable.Drawable
 import de.markusressel.kutepreferences.core.persistence.KutePreferenceDataProvider
-import de.markusressel.kutepreferences.core.preference.KutePreferenceBase
-import de.markusressel.kutepreferences.preference.number.R
+import de.markusressel.kutepreferences.core.preference.KutePreferenceItem
 
+/**
+ * Base class for preferences defining some kind of range
+ */
 abstract class KuteRangePreference<T : Number>(
         override val key: Int,
         override val icon: Drawable? = null,
@@ -15,10 +17,7 @@ abstract class KuteRangePreference<T : Number>(
         private val defaultValue: RangePersistenceModel<T>,
         override val dataProvider: KutePreferenceDataProvider,
         override val onPreferenceChangedListener: ((oldValue: RangePersistenceModel<T>, newValue: RangePersistenceModel<T>) -> Unit)? = null) :
-        KutePreferenceBase<RangePersistenceModel<T>>() {
-
-    override val layoutRes: Int
-        get() = R.layout.kute_preference__default__list_item
+        KutePreferenceItem<RangePersistenceModel<T>> {
 
     override fun getDefaultValue(): RangePersistenceModel<T> = defaultValue
 

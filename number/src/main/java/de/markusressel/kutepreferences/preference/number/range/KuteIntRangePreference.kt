@@ -1,6 +1,5 @@
 package de.markusressel.kutepreferences.preference.number.range
 
-import android.content.Context
 import android.graphics.drawable.Drawable
 import de.markusressel.kutepreferences.core.persistence.KutePreferenceDataProvider
 
@@ -15,10 +14,4 @@ open class KuteIntRangePreference(
         onPreferenceChangedListener: ((oldValue: RangePersistenceModel<Int>, newValue: RangePersistenceModel<Int>) -> Unit)? = null) :
         KuteRangePreference<Int>(key, icon, title, minimum, maximum, 0, defaultValue, dataProvider, onPreferenceChangedListener) {
 
-    override fun onClick(context: Context) {
-        val dialog = KuteIntRangePreferenceEditDialog(this, minimum, maximum)
-        dialog
-                .show(context)
-    }
-    
 }

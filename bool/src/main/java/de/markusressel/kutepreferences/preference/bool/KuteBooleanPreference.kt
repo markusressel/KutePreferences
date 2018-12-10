@@ -1,12 +1,9 @@
 package de.markusressel.kutepreferences.preference.bool
 
-import android.content.Context
 import android.graphics.drawable.Drawable
-import android.view.LayoutInflater
-import android.view.ViewGroup
-import android.widget.Switch
+import com.airbnb.epoxy.EpoxyModel
 import de.markusressel.kutepreferences.core.persistence.KutePreferenceDataProvider
-import de.markusressel.kutepreferences.core.preference.KutePreferenceBase
+import de.markusressel.kutepreferences.core.preference.KutePreferenceItem
 
 /**
  * Implementation of a boolean preference
@@ -19,42 +16,8 @@ open class KuteBooleanPreference(
         private val defaultValue: Boolean,
         override val dataProvider: KutePreferenceDataProvider,
         override val onPreferenceChangedListener: ((oldValue: Boolean, newValue: Boolean) -> Unit)? = null) :
-        KutePreferenceBase<Boolean>() {
-
-    override val layoutRes: Int
-        get() = R.layout.kute_preference__boolean__list_item
-
+        KutePreferenceItem<Boolean> {
     override fun getDefaultValue(): Boolean = defaultValue
-
-    private var switchView: Switch? = null
-
-    override fun inflateListLayout(layoutInflater: LayoutInflater, parent: ViewGroup): ViewGroup {
-        val layout = super.inflateListLayout(layoutInflater, parent)
-
-        switchView = layout
-                .findViewById(R.id.kute_preferences__preference__toggle__switch)
-        switchView
-                ?.isChecked = persistedValue
-        switchView
-                ?.setOnCheckedChangeListener { _, newValue ->
-                    persistedValue = newValue
-                }
-
-        return layout
-    }
-
-    override fun onClick(context: Context) {
-        persistedValue = !persistedValue
-    }
-
-    override fun onPreferenceChanged(oldValue: Boolean, newValue: Boolean) {
-        super
-                .onPreferenceChanged(oldValue, newValue)
-
-        // update switch state
-        switchView
-                ?.isChecked = newValue
-    }
 
     override fun createDescription(currentValue: Boolean): String {
         descriptionFunction?.let {
@@ -65,6 +28,20 @@ open class KuteBooleanPreference(
         // there is no additional value in a "true" or "false" description
         // since it is already visible on the toggle
         return ""
+    }
+
+//    fun createListView(context: Context): KutePreferenceListItem {
+//         TODO: extract everything view related to the BooleanPreferenceListView class
+//        return BooleanPreferenceListView(1, context, this)
+//    }
+
+    override fun getEpoxyModel(): EpoxyModel<*> {
+        val viewModel = BooleanPreferenceViewModel()
+        viewModel.name.value = title
+        viewModel.description.value = description
+        viewModel.checked.value = persistedValue
+
+        return KutePreferenceBooleanListItemBindingModel_().viewModel(viewModel)
     }
 
 }

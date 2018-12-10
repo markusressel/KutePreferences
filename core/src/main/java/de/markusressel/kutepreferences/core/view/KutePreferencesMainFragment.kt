@@ -7,10 +7,15 @@ import android.os.Handler
 import android.text.SpannableStringBuilder
 import android.util.Log
 import android.view.*
+import androidx.annotation.CallSuper
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.core.text.backgroundColor
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.airbnb.epoxy.EpoxyController
+import com.airbnb.epoxy.TypedEpoxyController
 import com.eightbitlab.rxbus.Bus
 import com.eightbitlab.rxbus.registerInBus
 import com.jakewharton.rxbinding2.support.v7.widget.RxSearchView
@@ -23,6 +28,7 @@ import de.markusressel.kutepreferences.core.event.CategoryClickedEvent
 import de.markusressel.kutepreferences.core.event.SectionClickedEvent
 import de.markusressel.kutepreferences.core.extensions.children
 import de.markusressel.kutepreferences.core.preference.KutePreferenceClickListener
+import de.markusressel.kutepreferences.core.preference.KutePreferenceItem
 import de.markusressel.kutepreferences.core.preference.category.KutePreferenceCategory
 import de.markusressel.kutepreferences.core.preference.section.KutePreferenceSection
 import de.markusressel.kutepreferences.core.preference.section.KuteSection
@@ -48,6 +54,8 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
      */
     internal var backstack: Stack<BackstackItem> by savedInstanceState(Stack())
 
+    internal val epoxyController by lazy { createEpoxyController() }
+
     private lateinit var searchView: SearchView
     private lateinit var searchMenuItem: MenuItem
 
@@ -57,8 +65,27 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater
-                .inflate(R.layout.kute_preference__main_fragment, container, false)
+        return inflater.inflate(R.layout.kute_preference__main_fragment, container, false)
+    }
+
+    @CallSuper
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        recyclerView.setController(epoxyController)
+
+        val layoutManager = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
+        recyclerView.layoutManager = layoutManager
+    }
+
+    private fun createEpoxyController(): EpoxyController {
+        return object : TypedEpoxyController<List<KutePreferenceItem<*>>>() {
+            override fun buildModels(data: List<KutePreferenceItem<*>>?) {
+                data?.forEach {
+                    it.getEpoxyModel().addTo(this)
+                }
+            }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
@@ -207,7 +234,7 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
                             it.item
                         }
 
-        generatePage(preferenceItems, searchString, keysToHighlight)
+//        generatePage(preferenceItems, searchString, keysToHighlight)
     }
 
     private fun addToBackstack(newBackstackItem: BackstackItem) {
@@ -221,30 +248,30 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
         }
     }
 
-    /**
-     * Generates a ViewGroup for the given preferences
-     */
-    internal fun generatePage(kutePreference: List<KutePreferenceListItem>, searchString: String?, highlightPreferenceId: List<Int>) {
-        // find the layout where list items should be inserted
-        val listItemLayout: ViewGroup = kute_preferences__list_item_root
-        listItemLayout
-                .removeAllViews()
-
-        val keySet: MutableSet<Int> = mutableSetOf()
-        kutePreference
-                .forEach {
-                    // does NOT recurse through child items as we only want to inflate the current tree layer
-                    val highlight = it.key in highlightPreferenceId
-                    inflate(it, listItemLayout, keySet, searchString, highlight)
-                }
-    }
+//    /**
+//     * Generates a ViewGroup for the given preferences
+//     */
+//    internal fun generatePage(kutePreference: List<KutePreferenceListItem>, searchString: String?, highlightPreferenceId: List<Int>) {
+//        // find the layout where list items should be inserted
+//        val listItemLayout: ViewGroup = kute_preferences__list_item_root
+//        listItemLayout
+//                .removeAllViews()
+//
+//        val keySet: MutableSet<Int> = mutableSetOf()
+//        kutePreference
+//                .forEach {
+//                    // does NOT recurse through child items as we only want to inflate the current tree layer
+//                    val highlight = it.key in highlightPreferenceId
+//                    inflate(it, listItemLayout, keySet, searchString, highlight)
+//                }
+//    }
 
     internal fun inflate(kutePreferenceListItem: KutePreferenceListItem, layoutToAppendTo: ViewGroup,
                          keySet: MutableSet<Int>,
                          searchString: String?,
                          highlight: Boolean) {
         checkKeyDuplication(kutePreferenceListItem.key, keySet)
-        val view = inflateAndAttachClickListeners(layoutInflater, kutePreferenceListItem, layoutToAppendTo, searchString)
+        val view = inflateAndAttachClickListeners(this, layoutInflater, kutePreferenceListItem, layoutToAppendTo, searchString)
 
         if (highlight) {
             if (kutePreferenceListItem is KuteSection) {
@@ -308,7 +335,7 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
     /**
      * Initialize your preferences tree here
      */
-    abstract fun initPreferenceTree(): Array<KutePreferenceListItem>
+    abstract fun initPreferenceTree(): Array<Any>
 
     /**
      * Call this from your activity's {@link AppCompatActivity.onBackPressed()} to ensure
@@ -334,8 +361,8 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
     }
 
     companion object {
-        fun inflateAndAttachClickListeners(layoutInflater: LayoutInflater, preferenceItem: KutePreferenceListItem, parent: ViewGroup, searchString: String? = null): ViewGroup {
-            val layout = preferenceItem.inflateListLayout(layoutInflater, parent)
+        fun inflateAndAttachClickListeners(parentFragment: Fragment, layoutInflater: LayoutInflater, preferenceItem: KutePreferenceListItem, parent: ViewGroup, searchString: String? = null): View {
+            val layout = preferenceItem.inflateListLayout(parentFragment, layoutInflater, parent)
             parent.addView(layout)
 
             if (searchString != null && preferenceItem is KuteSearchProvider) {

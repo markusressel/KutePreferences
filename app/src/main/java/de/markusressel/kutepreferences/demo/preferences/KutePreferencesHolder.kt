@@ -72,7 +72,8 @@ class KutePreferencesHolder @Inject constructor(
     }
 
     val togglePreference by lazy {
-        KuteBooleanPreference(key = R.string.key_demo_toggle_pref,
+        KuteBooleanPreference(
+                key = R.string.key_demo_toggle_pref,
                 icon = iconHelper.getIcon(MaterialDesignIconic.Icon.gmi_airplane),
                 title = context.getString(R.string.title_demo_toggle_pref),
                 descriptionFunction = {

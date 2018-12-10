@@ -3,9 +3,11 @@ package de.markusressel.kutepreferences.preference.selection.multi
 import android.content.Context
 import android.graphics.drawable.Drawable
 import androidx.annotation.StringRes
+import com.airbnb.epoxy.EpoxyModel
+import de.markusressel.kutepreferences.core.KutePreferenceDefaultListItemBindingModel_
 import de.markusressel.kutepreferences.core.persistence.KutePreferenceDataProvider
-import de.markusressel.kutepreferences.core.preference.KutePreferenceBase
-import de.markusressel.kutepreferences.preference.selection.R
+import de.markusressel.kutepreferences.core.preference.KutePreferenceItem
+import de.markusressel.kutepreferences.core.viewmodel.DefaultItemViewModel
 
 /**
  * Implementation of a multi selection preference
@@ -20,20 +22,9 @@ open class KuteMultiSelectPreference(
         private val possibleValues: Map<Int, Int>,
         override val dataProvider: KutePreferenceDataProvider,
         override val onPreferenceChangedListener: ((oldValue: Set<String>, newValue: Set<String>) -> Unit)? = null) :
-        KutePreferenceBase<Set<String>>() {
-
-    override val layoutRes: Int
-        get() = R.layout.kute_preference__default__list_item
+        KutePreferenceItem<Set<String>> {
 
     override fun getDefaultValue(): Set<String> = defaultValue.asSequence().map { context.getString(it) }.toSet()
-
-    override fun onClick(context: Context) {
-        val dialog = KuteMultiSelectPreferenceEditDialog(
-                this,
-                possibleValues)
-        dialog
-                .show(context)
-    }
 
     override fun createDescription(currentValue: Set<String>): String {
         return possibleValues.filter {

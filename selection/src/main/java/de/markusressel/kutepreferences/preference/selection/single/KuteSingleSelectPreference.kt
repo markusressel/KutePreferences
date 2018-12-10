@@ -1,7 +1,7 @@
 package de.markusressel.kutepreferences.preference.selection.single
 
 import android.content.Context
-import de.markusressel.kutepreferences.core.preference.KutePreferenceBase
+import de.markusressel.kutepreferences.core.preference.KutePreferenceItem
 import de.markusressel.kutepreferences.core.view.edit.KutePreferenceEditDialog
 import de.markusressel.kutepreferences.preference.selection.R
 
@@ -10,15 +10,11 @@ import de.markusressel.kutepreferences.preference.selection.R
  *
  * @param T The preference item data type
  */
-abstract class KuteSingleSelectPreference<T : Any> :
-        KutePreferenceBase<T>() {
+abstract class KuteSingleSelectPreference<T : Any> : KutePreferenceItem<T> {
     abstract val context: Context
     abstract val possibleValues: Map<Int, T>
 
-    override val layoutRes: Int
-        get() = R.layout.kute_preference__default__list_item
-
-    override fun onClick(context: Context) {
+    fun onClick(context: Context) {
         val dialog = createSingleSelectDialog(this, possibleValues)
         dialog
                 .show(context)

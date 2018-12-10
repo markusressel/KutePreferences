@@ -24,9 +24,6 @@ open class KuteSingleSelectStringPreference(
 
     override val possibleValues = possibleValues.entries.associate { it.key to context.getString(it.value) }
 
-    override val layoutRes: Int
-        get() = R.layout.kute_preference__default__list_item
-
     override fun getDefaultValue(): String = context.getString(defaultValue)
 
     override fun createSingleSelectDialog(kuteSingleSelectPreference: KuteSingleSelectPreference<String>,

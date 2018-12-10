@@ -2,6 +2,8 @@ package de.markusressel.kutepreferences.core
 
 import android.text.Spanned
 
+typealias HighlighterFunction = (String) -> Spanned
+
 interface KuteSearchProvider {
 
     /**
@@ -14,6 +16,6 @@ interface KuteSearchProvider {
      *
      * @param highlighter a function that takes any string and highlights it
      */
-    fun highlightSearchMatches(highlighter: (String) -> Spanned)
+    fun highlightSearchMatches(highlighter: HighlighterFunction)
 
 }

@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.fragment.app.Fragment
+import de.markusressel.kutepreferences.core.HighlighterFunction
 import de.markusressel.kutepreferences.core.KutePreferenceListItem
 import de.markusressel.kutepreferences.core.R
 import de.markusressel.kutepreferences.core.view.KutePreferencesMainFragment
@@ -21,7 +23,7 @@ open class KuteSection(
     lateinit var nameView: TextView
     lateinit var preferenceItemList: LinearLayout
 
-    override fun inflateListLayout(layoutInflater: LayoutInflater, parent: ViewGroup): ViewGroup {
+    override fun inflateListLayout(parentFragment: Fragment, layoutInflater: LayoutInflater, parent: ViewGroup): ViewGroup {
         val layout = layoutInflater.inflate(R.layout.kute_preference__section, parent, false) as ViewGroup
 
         nameView = layout.findViewById(R.id.kute_preference_section__title)
@@ -29,14 +31,14 @@ open class KuteSection(
 
         nameView.text = title
 
-        inflatePreferenceItems(layoutInflater, preferenceItemList)
+        inflatePreferenceItems(parentFragment, layoutInflater, preferenceItemList)
 
         return layout
     }
 
-    private fun inflatePreferenceItems(layoutInflater: LayoutInflater, preferenceItemList: LinearLayout) {
+    private fun inflatePreferenceItems(parentFragment: Fragment, layoutInflater: LayoutInflater, preferenceItemList: LinearLayout) {
         for (child in children) {
-            KutePreferencesMainFragment.inflateAndAttachClickListeners(layoutInflater, child, preferenceItemList)
+            KutePreferencesMainFragment.inflateAndAttachClickListeners(parentFragment, layoutInflater, child, preferenceItemList)
         }
     }
 
@@ -47,7 +49,7 @@ open class KuteSection(
         return setOf(title)
     }
 
-    override fun highlightSearchMatches(highlighter: (String) -> Spanned) {
+    override fun highlightSearchMatches(highlighter: HighlighterFunction) {
         nameView.text = highlighter(title)
     }
 

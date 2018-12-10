@@ -7,6 +7,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.fragment.app.Fragment
+import de.markusressel.kutepreferences.core.HighlighterFunction
 import de.markusressel.kutepreferences.core.KutePreferenceListItem
 import de.markusressel.kutepreferences.core.KuteSearchProvider
 import de.markusressel.kutepreferences.core.R
@@ -24,7 +26,7 @@ open class KuteAction(override val key: Int,
     lateinit var iconView: ImageView
     lateinit var nameTextView: TextView
 
-    override fun inflateListLayout(layoutInflater: LayoutInflater, parent: ViewGroup): ViewGroup {
+    override fun inflateListLayout(parentFragment: Fragment, layoutInflater: LayoutInflater, parent: ViewGroup): ViewGroup {
         val layout = layoutInflater.inflate(layoutRes, parent, false) as ViewGroup
 
         iconView = layout.findViewById(R.id.kute_preference__preference__icon)
@@ -49,7 +51,7 @@ open class KuteAction(override val key: Int,
         return setOf(title)
     }
 
-    override fun highlightSearchMatches(highlighter: (String) -> Spanned) {
+    override fun highlightSearchMatches(highlighter: HighlighterFunction) {
         nameTextView.text = highlighter(title)
     }
 

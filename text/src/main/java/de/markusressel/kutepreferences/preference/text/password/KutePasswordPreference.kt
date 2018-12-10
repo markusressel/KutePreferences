@@ -1,6 +1,5 @@
 package de.markusressel.kutepreferences.preference.text.password
 
-import android.content.Context
 import android.graphics.drawable.Drawable
 import de.markusressel.kutepreferences.core.persistence.KutePreferenceDataProvider
 import de.markusressel.kutepreferences.preference.text.KuteTextPreference
@@ -23,10 +22,6 @@ open class KutePasswordPreference(key: Int,
                 defaultValue = defaultValue,
                 dataProvider = dataProvider,
                 onPreferenceChangedListener = onPreferenceChangedListener) {
-
-    override fun onClick(context: Context) {
-        KutePasswordPreferenceEditDialog(this, regex).show(context)
-    }
 
     override fun createDescription(currentValue: String): String {
         return if (currentValue.isNotEmpty()) {

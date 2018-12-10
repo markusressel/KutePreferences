@@ -1,9 +1,11 @@
 package de.markusressel.kutepreferences.preference.number
 
-import android.content.Context
 import android.graphics.drawable.Drawable
+import com.airbnb.epoxy.EpoxyModel
+import de.markusressel.kutepreferences.core.KutePreferenceDefaultListItemBindingModel_
 import de.markusressel.kutepreferences.core.persistence.KutePreferenceDataProvider
-import de.markusressel.kutepreferences.core.preference.KutePreferenceBase
+import de.markusressel.kutepreferences.core.preference.KutePreferenceItem
+import de.markusressel.kutepreferences.core.viewmodel.DefaultItemViewModel
 
 /**
  * Implementation of a Long preference for selecting a number
@@ -18,10 +20,7 @@ open class KuteNumberPreference(
         val unit: String? = null,
         override val dataProvider: KutePreferenceDataProvider,
         override val onPreferenceChangedListener: ((oldValue: Long, newValue: Long) -> Unit)? = null) :
-        KutePreferenceBase<Long>() {
-
-    override val layoutRes: Int
-        get() = R.layout.kute_preference__default__list_item
+        KutePreferenceItem<Long> {
 
     override fun getDefaultValue(): Long = defaultValue
 
@@ -31,12 +30,6 @@ open class KuteNumberPreference(
         }
 
         return "$currentValue"
-    }
-
-    override fun onClick(context: Context) {
-        val dialog = KuteNumberPreferenceEditDialog(this)
-        dialog
-                .show(context)
     }
 
 }

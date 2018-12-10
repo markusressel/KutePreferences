@@ -28,19 +28,26 @@ buildscript {
         rxBindingVersion = "2.1.1"
         rxLifecycleVersion = "2.2.1"
 
+        epoxyVersion = "3.0.0"
+
         iconicsVersion = "3.1.0"
     }
 
     repositories {
         google()
         jcenter()
+        mavenCentral()
         maven { url "https://jitpack.io" }
         maven { url "https://dl.bintray.com/drummer-aidan/maven/" }
+        // TODO: remove this when butterknife 9.0.0 is stable
+        maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
     }
     dependencies {
         classpath "com.android.tools.build:gradle:3.2.1"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
+        // TODO: upgrade this to 9.0.0 stable when it is released
+        classpath 'com.jakewharton:butterknife-gradle-plugin:9.0.0-SNAPSHOT'
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -61,6 +68,11 @@ allprojects {
     configurations.all() {
         resolutionStrategy.force "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
         resolutionStrategy.force "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+
+        // TODO: find out which version to use here
+        resolutionStrategy.force "androidx.transition:transition:1.0.0-rc01"
+        resolutionStrategy.force "androidx.cardview:cardview:1.0.0-rc01"
+        resolutionStrategy.force "com.google.android.material:material:1.0.0-rc01"
     }
 }
 

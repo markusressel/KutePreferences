@@ -1,6 +1,8 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'com.jakewharton.butterknife'
 
 apply plugin: 'com.github.dcendents.android-maven'
 group = rootProject.ext.group
@@ -23,6 +25,8 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    dataBinding.enabled true
 }
 
 dependencies {
@@ -35,7 +39,7 @@ dependencies {
 
     api "androidx.annotation:annotation:$androidKtxVersion"
     implementation "androidx.appcompat:appcompat:1.0.2"
-    implementation "com.google.android.material:material:1.1.0-alpha01"
+    implementation "com.google.android.material:material:1.0.0-rc01"
     implementation "androidx.core:core-ktx:1.0.1"
 
     implementation "com.google.code.gson:gson:2.8.5"
@@ -43,6 +47,9 @@ dependencies {
         exclude module: 'app'
         transitive = true
     }
+
+    // Android Architecture Components
+    api "android.arch.lifecycle:extensions:2.0.0"
 
     // Material Dialogs
     api 'com.afollestad.material-dialogs:core:2.0.0-beta4'
@@ -68,6 +75,12 @@ dependencies {
     // RxBus (event bus)
     api 'com.eightbitlab:rxbus:1.0.2'
 
+    // Epoxy - Recyclerview for dummies
+    api "com.airbnb.android:epoxy:$epoxyVersion"
+    api "com.airbnb.android:epoxy-databinding:$epoxyVersion"
+//    implementation "com.airbnb.android:epoxy-paging:$epoxyVersion"
+    kapt "com.airbnb.android:epoxy-processor:$epoxyVersion"
+
     testImplementation 'junit:junit:4.12'
     androidTestImplementation "androidx.test:runner:1.1.0"
     androidTestImplementation "androidx.test.espresso:espresso-core:3.1.0"
@@ -84,7 +97,7 @@ task sourcesJar(type: Jar) {
 }
 
 task javadoc(type: Javadoc) {
-    failOnError  false
+    failOnError false
     source = android.sourceSets.main.java.sourceFiles
     classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
     classpath += configurations.compile
