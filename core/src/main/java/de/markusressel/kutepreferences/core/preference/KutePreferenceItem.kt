@@ -97,7 +97,7 @@ interface KutePreferenceItem<DataType : Any> {
     /**
      * Returns an instance of an epoxy viewmodel for this KutePreferenceItem
      */
-    fun getEpoxyModel(): EpoxyModel<*> {
+    fun createEpoxyModel(): EpoxyModel<*> {
         val viewModel = DefaultItemViewModel()
         viewModel.name.value = title
         viewModel.description.value = description

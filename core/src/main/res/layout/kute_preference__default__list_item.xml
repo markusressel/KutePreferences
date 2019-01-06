@@ -6,10 +6,12 @@
         <variable
                 name="viewModel"
                 type="de.markusressel.kutepreferences.core.viewmodel.PreferenceItemViewModel"/>
+
     </data>
 
     <LinearLayout
             style="@style/KutePreferences.ListItem"
+            android:onClick="@{viewModel.onClick}"
             android:orientation="horizontal">
 
         <ImageView

@@ -2,15 +2,14 @@ package de.markusressel.kutepreferences.core.preference.category
 
 import android.content.Context
 import android.graphics.drawable.Drawable
-import android.text.Spanned
-import android.view.LayoutInflater
-import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
-import androidx.fragment.app.Fragment
+import android.view.View
+import com.airbnb.epoxy.EpoxyModel
+import com.eightbitlab.rxbus.Bus
 import de.markusressel.kutepreferences.core.HighlighterFunction
+import de.markusressel.kutepreferences.core.KutePreferenceDefaultListItemBindingModel_
 import de.markusressel.kutepreferences.core.KutePreferenceListItem
-import de.markusressel.kutepreferences.core.R
+import de.markusressel.kutepreferences.core.event.CategoryClickedEvent
+import de.markusressel.kutepreferences.core.viewmodel.DefaultItemViewModel
 
 /**
  * The default implementation of a KutePreference Category
@@ -23,26 +22,34 @@ open class KuteCategory(
         override val children: List<KutePreferenceListItem>) :
         KutePreferenceCategory {
 
-    lateinit var iconView: ImageView
-    lateinit var nameView: TextView
-    lateinit var descriptionView: TextView
+    override fun createEpoxyModel(): EpoxyModel<*> {
+        val viewModel = DefaultItemViewModel()
+        viewModel.name.value = title
+        viewModel.description.value = description
+        viewModel.icon.value = icon
+        viewModel.onClick = View.OnClickListener { v -> onListItemClicked(v!!.context!!) }
+        viewModel.onLongClick = View.OnLongClickListener { v -> onListItemLongClicked(v!!.context!!) }
 
-    override fun inflateListLayout(parentFragment: Fragment, layoutInflater: LayoutInflater, parent: ViewGroup): ViewGroup {
-        val layout = layoutInflater.inflate(R.layout.kute_preference__category, parent, false) as ViewGroup
-
-        iconView = layout.findViewById(R.id.kute_preference__category__icon)
-        nameView = layout.findViewById(R.id.kute_preference__category__title)
-
-        iconView.setImageDrawable(icon)
-        nameView.text = title
-
-        descriptionView = layout.findViewById(R.id.kute_preference__category__description)
-        descriptionView.text = description
-
-        return layout
+        return KutePreferenceDefaultListItemBindingModel_().viewModel(viewModel)
     }
 
-    override fun onClick(context: Context) {
+//    override fun inflateListLayout(parentFragment: Fragment, layoutInflater: LayoutInflater, parent: ViewGroup): ViewGroup {
+//        val layout = layoutInflater.inflate(R.layout.kute_preference__category, parent, false) as ViewGroup
+//
+//        iconView = layout.findViewById(R.id.kute_preference__category__icon)
+//        nameView = layout.findViewById(R.id.kute_preference__category__title)
+//
+//        iconView.setImageDrawable(icon)
+//        nameView.text = title
+//
+//        descriptionView = layout.findViewById(R.id.kute_preference__category__description)
+//        descriptionView.text = description
+//
+//        return layout
+//    }
+
+    override fun onListItemClicked(context: Context) {
+        Bus.send(CategoryClickedEvent(this))
     }
 
     override fun getSearchableItems(): Set<String> {
@@ -50,8 +57,6 @@ open class KuteCategory(
     }
 
     override fun highlightSearchMatches(highlighter: HighlighterFunction) {
-        nameView.text = highlighter(title)
-        descriptionView.text = highlighter(description)
     }
 
 }

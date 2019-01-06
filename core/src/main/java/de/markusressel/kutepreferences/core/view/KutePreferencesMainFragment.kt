@@ -11,10 +11,8 @@ import androidx.annotation.CallSuper
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.core.text.backgroundColor
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.airbnb.epoxy.EpoxyController
 import com.airbnb.epoxy.TypedEpoxyController
 import com.eightbitlab.rxbus.Bus
 import com.eightbitlab.rxbus.registerInBus
@@ -27,11 +25,8 @@ import de.markusressel.kutepreferences.core.R
 import de.markusressel.kutepreferences.core.event.CategoryClickedEvent
 import de.markusressel.kutepreferences.core.event.SectionClickedEvent
 import de.markusressel.kutepreferences.core.extensions.children
-import de.markusressel.kutepreferences.core.preference.KutePreferenceClickListener
-import de.markusressel.kutepreferences.core.preference.KutePreferenceItem
 import de.markusressel.kutepreferences.core.preference.category.KutePreferenceCategory
 import de.markusressel.kutepreferences.core.preference.section.KutePreferenceSection
-import de.markusressel.kutepreferences.core.preference.section.KuteSection
 import de.markusressel.kutepreferences.core.tree.TreeManager
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.subscribeBy
@@ -78,11 +73,13 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
         recyclerView.layoutManager = layoutManager
     }
 
-    private fun createEpoxyController(): EpoxyController {
-        return object : TypedEpoxyController<List<KutePreferenceItem<*>>>() {
-            override fun buildModels(data: List<KutePreferenceItem<*>>?) {
+    private fun createEpoxyController(): TypedEpoxyController<List<KutePreferenceListItem>> {
+        return object : TypedEpoxyController<List<KutePreferenceListItem>>() {
+            override fun buildModels(data: List<KutePreferenceListItem>?) {
                 data?.forEach {
-                    it.getEpoxyModel().addTo(this)
+                    val model = it.createEpoxyModel()
+                    model.id(it.key)
+                    model.addTo(this)
                 }
             }
         }
@@ -103,20 +100,20 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
                     .bindUntilEvent(this, Lifecycle.Event.ON_DESTROY)
                     .debounce(100, TimeUnit.MILLISECONDS)
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeBy(onNext = {
-                        if (it.isBlank()) {
+                    .subscribeBy(onNext = { text ->
+                        if (text.isBlank()) {
                             showPreferenceItems(backstack.peek())
                         } else {
-                            val searchString = it.toString()
+                            val searchString = text.toString()
                             val preferenceIds = treeManager
                                     .findInSearchProviders(searchString)
-                                    .map {
-                                        it.key
+                                    .map { listItem ->
+                                        listItem.key
                                     }
                             showPreferenceItems(preferenceIds, false, searchString = searchString)
                         }
-                    }, onError = {
-                        Log.e(TAG, "Error filtering list", it)
+                    }, onError = { error ->
+                        Log.e(TAG, "Error filtering list", error)
                     })
         }
     }
@@ -135,19 +132,15 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
     override fun onStart() {
         super.onStart()
 
-        Bus
-                .observe<CategoryClickedEvent>()
+        Bus.observe<CategoryClickedEvent>()
                 .subscribe {
                     showCategory(it.category)
-                }
-                .registerInBus(this)
+                }.registerInBus(this)
 
-        Bus
-                .observe<SectionClickedEvent>()
+        Bus.observe<SectionClickedEvent>()
                 .subscribe {
                     showCategory(it.section)
-                }
-                .registerInBus(this)
+                }.registerInBus(this)
     }
 
     override fun onStop() {
@@ -234,6 +227,8 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
                             it.item
                         }
 
+        epoxyController.setData(preferenceItems)
+
 //        generatePage(preferenceItems, searchString, keysToHighlight)
     }
 
@@ -266,19 +261,19 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
 //                }
 //    }
 
-    internal fun inflate(kutePreferenceListItem: KutePreferenceListItem, layoutToAppendTo: ViewGroup,
-                         keySet: MutableSet<Int>,
-                         searchString: String?,
-                         highlight: Boolean) {
-        checkKeyDuplication(kutePreferenceListItem.key, keySet)
-        val view = inflateAndAttachClickListeners(this, layoutInflater, kutePreferenceListItem, layoutToAppendTo, searchString)
-
-        if (highlight) {
-            if (kutePreferenceListItem is KuteSection) {
-                forceRippleAnimation(view)
-            }
-        }
-    }
+//    internal fun inflate(kutePreferenceListItem: KutePreferenceListItem, layoutToAppendTo: ViewGroup,
+//                         keySet: MutableSet<Int>,
+//                         searchString: String?,
+//                         highlight: Boolean) {
+//        checkKeyDuplication(kutePreferenceListItem.key, keySet)
+//        val view = inflateAndAttachClickListeners(this, layoutInflater, kutePreferenceListItem, layoutToAppendTo, searchString)
+//
+//        if (highlight) {
+//            if (kutePreferenceListItem is KuteSection) {
+//                forceRippleAnimation(view)
+//            }
+//        }
+//    }
 
     private fun forceRippleAnimation(view: View) {
         val viewWithRippleDrawable = findViewWithRippleBackground(view)
@@ -335,7 +330,7 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
     /**
      * Initialize your preferences tree here
      */
-    abstract fun initPreferenceTree(): Array<Any>
+    abstract fun initPreferenceTree(): Array<KutePreferenceListItem>
 
     /**
      * Call this from your activity's {@link AppCompatActivity.onBackPressed()} to ensure
@@ -361,33 +356,33 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
     }
 
     companion object {
-        fun inflateAndAttachClickListeners(parentFragment: Fragment, layoutInflater: LayoutInflater, preferenceItem: KutePreferenceListItem, parent: ViewGroup, searchString: String? = null): View {
-            val layout = preferenceItem.inflateListLayout(parentFragment, layoutInflater, parent)
-            parent.addView(layout)
-
-            if (searchString != null && preferenceItem is KuteSearchProvider) {
-                highlightSearchMatches(layoutInflater.context, preferenceItem, searchString)
-            }
-
-            if (preferenceItem is KutePreferenceClickListener) {
-                layout
-                        .setOnClickListener {
-                            preferenceItem
-                                    .onClick(layoutInflater.context)
-
-                            when (preferenceItem) {
-                                is KutePreferenceCategory -> {
-                                    Bus.send(CategoryClickedEvent(preferenceItem))
-                                }
-                                is KutePreferenceSection -> {
-                                    Bus.send(SectionClickedEvent(preferenceItem))
-                                }
-                            }
-                        }
-            }
-
-            return layout
-        }
+//        fun inflateAndAttachClickListeners(parentFragment: Fragment, layoutInflater: LayoutInflater, preferenceItem: KutePreferenceListItem, parent: ViewGroup, searchString: String? = null): View {
+//            val layout = preferenceItem.inflateListLayout(parentFragment, layoutInflater, parent)
+//            parent.addView(layout)
+//
+//            if (searchString != null && preferenceItem is KuteSearchProvider) {
+//                highlightSearchMatches(layoutInflater.context, preferenceItem, searchString)
+//            }
+//
+//            if (preferenceItem is KutePreferenceClickListener) {
+//                layout
+//                        .setOnClickListener {
+//                            preferenceItem
+//                                    .onListItemClicked(layoutInflater.context)
+//
+//                            when (preferenceItem) {
+//                                is KutePreferenceCategory -> {
+//                                    Bus.send(CategoryClickedEvent(preferenceItem))
+//                                }
+//                                is KutePreferenceSection -> {
+//                                    Bus.send(SectionClickedEvent(preferenceItem))
+//                                }
+//                            }
+//                        }
+//            }
+//
+//            return layout
+//        }
 
         private fun highlightSearchMatches(context: Context, preferenceItem: KuteSearchProvider, searchString: String) {
             preferenceItem.highlightSearchMatches { text ->

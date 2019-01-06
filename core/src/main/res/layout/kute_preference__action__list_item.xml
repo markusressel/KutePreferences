@@ -1,23 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        style="@style/KutePreferences.ListItem"
-        android:orientation="horizontal">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <ImageView
-            android:id="@+id/kute_preference__preference__icon"
-            style="@style/KutePreferences.Preference.Icon"/>
+    <data>
+
+        <variable
+                name="viewModel"
+                type="de.markusressel.kutepreferences.core.preference.action.ActionViewModel"/>
+
+    </data>
 
     <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            style="@style/KutePreferences.ListItem"
+            android:onClick="@{viewModel.onClick}"
+            android:orientation="horizontal">
 
-        <TextView
-                android:id="@+id/kute_preferences__preference__title"
-                style="@style/KutePreferences.Preference.Title"
-                android:text="Action Title"/>
+        <ImageView
+                android:id="@+id/kute_preference__preference__icon"
+                style="@style/KutePreferences.Preference.Icon"/>
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+            <TextView
+                    android:id="@+id/kute_preferences__preference__title"
+                    style="@style/KutePreferences.Preference.Title"
+                    android:text="@{viewModel.name}"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 
-</LinearLayout>
+</layout>

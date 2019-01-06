@@ -194,6 +194,7 @@ class KutePreferencesHolder @Inject constructor(
         KuteAction(key = R.string.key_demo_action,
                 icon = iconHelper.getIcon(MaterialDesignIconic.Icon.gmi_info),
                 title = context.getString(R.string.title_demo_action),
+                description = "Additional info about this app.",
                 onClickAction = { context, kuteAction ->
                     Toast.makeText(context, "About clicked!", Toast.LENGTH_SHORT).show()
                 })

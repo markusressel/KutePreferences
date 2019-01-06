@@ -29,11 +29,19 @@ abstract class PreferenceItemViewModel : ViewModel() {
     val descriptionVisibility = MutableLiveData<Int>()
 
     /**
-     * The description of the preference item
-     * This should always represent the current value of the preference item
-     * if it is not visualized in some other form
+     * The icon of the preference item
      */
     val icon = MutableLiveData<Drawable>()
+
+    /**
+     * Action for clicks
+     */
+    var onClick: View.OnClickListener? = null
+
+    /**
+     * Action for long clicks
+     */
+    var onLongClick: View.OnLongClickListener? = null
 
     init {
         description.observeForever {

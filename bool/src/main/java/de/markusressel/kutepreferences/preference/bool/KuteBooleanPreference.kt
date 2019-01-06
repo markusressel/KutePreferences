@@ -1,7 +1,10 @@
 package de.markusressel.kutepreferences.preference.bool
 
+import android.content.Context
 import android.graphics.drawable.Drawable
+import android.view.View
 import com.airbnb.epoxy.EpoxyModel
+import de.markusressel.kutepreferences.core.KutePreferenceListItem
 import de.markusressel.kutepreferences.core.persistence.KutePreferenceDataProvider
 import de.markusressel.kutepreferences.core.preference.KutePreferenceItem
 
@@ -16,7 +19,7 @@ open class KuteBooleanPreference(
         private val defaultValue: Boolean,
         override val dataProvider: KutePreferenceDataProvider,
         override val onPreferenceChangedListener: ((oldValue: Boolean, newValue: Boolean) -> Unit)? = null) :
-        KutePreferenceItem<Boolean> {
+        KutePreferenceItem<Boolean>, KutePreferenceListItem {
     override fun getDefaultValue(): Boolean = defaultValue
 
     override fun createDescription(currentValue: Boolean): String {
@@ -35,11 +38,17 @@ open class KuteBooleanPreference(
 //        return BooleanPreferenceListView(1, context, this)
 //    }
 
-    override fun getEpoxyModel(): EpoxyModel<*> {
+    override fun onListItemClicked(context: Context) {
+        // TODO: switch checkbox state
+    }
+
+    override fun createEpoxyModel(): EpoxyModel<*> {
         val viewModel = BooleanPreferenceViewModel()
         viewModel.name.value = title
         viewModel.description.value = description
         viewModel.checked.value = persistedValue
+        viewModel.onClick = View.OnClickListener { v -> onListItemClicked(v!!.context!!) }
+        viewModel.onLongClick = View.OnLongClickListener { v -> onListItemLongClicked(v!!.context!!) }
 
         return KutePreferenceBooleanListItemBindingModel_().viewModel(viewModel)
     }

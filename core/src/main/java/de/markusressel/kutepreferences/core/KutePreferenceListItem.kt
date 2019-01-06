@@ -1,10 +1,12 @@
 package de.markusressel.kutepreferences.core
 
-import android.view.LayoutInflater
-import android.view.ViewGroup
+import android.content.Context
 import androidx.annotation.StringRes
+import com.airbnb.epoxy.EpoxyModel
+import de.markusressel.kutepreferences.core.preference.KutePreferenceClickListener
+import de.markusressel.kutepreferences.core.preference.KutePreferenceLongClickListener
 
-interface KutePreferenceListItem {
+interface KutePreferenceListItem : KutePreferenceClickListener, KutePreferenceLongClickListener {
 
     /**
      * A unique identifier for this KutePreference
@@ -13,14 +15,15 @@ interface KutePreferenceListItem {
     val key: Int
 
     /**
-     * Inflate the layout for this KutePreferenceListItem that will be visible in the overview list.
-     *
-     * NOTE: Remember to NOT attach your layout to the parent manually as this will be done for you in
-     * [de.markusressel.kutepreferences.core.view.KutePreferencesMainFragment]
-     *
-     * @param layoutInflater a layout inflater that can be used to inflate your custom layout
-     * @param parent the parent view to derive styles from
+     * Returns an instance of an epoxy viewmodel for this KutePreferenceListItem
      */
-    fun inflateListLayout(layoutInflater: LayoutInflater, parent: ViewGroup): ViewGroup
+    fun createEpoxyModel(): EpoxyModel<*>
+
+    override fun onListItemClicked(context: Context) {
+    }
+
+    override fun onListItemLongClicked(context: Context): Boolean {
+        return false
+    }
 
 }

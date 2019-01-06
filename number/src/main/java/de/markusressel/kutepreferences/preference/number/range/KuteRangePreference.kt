@@ -1,8 +1,13 @@
 package de.markusressel.kutepreferences.preference.number.range
 
 import android.graphics.drawable.Drawable
+import android.view.View
+import com.airbnb.epoxy.EpoxyModel
+import de.markusressel.kutepreferences.core.KutePreferenceDefaultListItemBindingModel_
+import de.markusressel.kutepreferences.core.KutePreferenceListItem
 import de.markusressel.kutepreferences.core.persistence.KutePreferenceDataProvider
 import de.markusressel.kutepreferences.core.preference.KutePreferenceItem
+import de.markusressel.kutepreferences.core.viewmodel.DefaultItemViewModel
 
 /**
  * Base class for preferences defining some kind of range
@@ -17,7 +22,7 @@ abstract class KuteRangePreference<T : Number>(
         private val defaultValue: RangePersistenceModel<T>,
         override val dataProvider: KutePreferenceDataProvider,
         override val onPreferenceChangedListener: ((oldValue: RangePersistenceModel<T>, newValue: RangePersistenceModel<T>) -> Unit)? = null) :
-        KutePreferenceItem<RangePersistenceModel<T>> {
+        KutePreferenceItem<RangePersistenceModel<T>>, KutePreferenceListItem {
 
     override fun getDefaultValue(): RangePersistenceModel<T> = defaultValue
 
@@ -37,6 +42,16 @@ abstract class KuteRangePreference<T : Number>(
         }
 
         return "%.${decimalPlaces}f".format(number.toFloat())
+    }
+
+    override fun createEpoxyModel(): EpoxyModel<*> {
+        val viewModel = DefaultItemViewModel()
+        viewModel.name.value = title
+        viewModel.description.value = description
+        viewModel.onClick = View.OnClickListener { v -> onListItemClicked(v!!.context!!) }
+        viewModel.onLongClick = View.OnLongClickListener { v -> onListItemLongClicked(v!!.context!!) }
+
+        return KutePreferenceDefaultListItemBindingModel_().viewModel(viewModel)
     }
 
 }
