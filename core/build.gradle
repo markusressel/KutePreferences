@@ -35,7 +35,7 @@ dependencies {
 
     api "androidx.annotation:annotation:$androidKtxVersion"
     implementation "androidx.appcompat:appcompat:1.0.2"
-    implementation "com.google.android.material:material:1.1.0-alpha01"
+    implementation "com.google.android.material:material:1.1.0-alpha02"
     implementation "androidx.core:core-ktx:1.0.1"
 
     implementation "com.google.code.gson:gson:2.8.5"
@@ -45,7 +45,7 @@ dependencies {
     }
 
     // Material Dialogs
-    api 'com.afollestad.material-dialogs:core:2.0.0-beta4'
+    api 'com.afollestad.material-dialogs:core:2.0.0-rc7'
 
     // RxJava (RxKotlin actually)
     api "io.reactivex.rxjava2:rxjava:2.2.0"
@@ -69,8 +69,8 @@ dependencies {
     api 'com.eightbitlab:rxbus:1.0.2'
 
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation "androidx.test:runner:1.1.0"
-    androidTestImplementation "androidx.test.espresso:espresso-core:3.1.0"
+    androidTestImplementation "androidx.test:runner:1.1.1"
+    androidTestImplementation "androidx.test.espresso:espresso-core:3.1.1"
 }
 
 configurations.all {
