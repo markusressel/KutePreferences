@@ -22,7 +22,7 @@ open class KuteSection(
 
     override fun createEpoxyModel(): EpoxyModel<*> {
         val viewModel = DefaultItemViewModel()
-        viewModel.name.value = title
+        viewModel.title.value = title
 
         return KutePreferenceDefaultListItemBindingModel_().viewModel(viewModel)
     }

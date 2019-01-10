@@ -20,7 +20,7 @@ package de.markusressel.kutepreferences.core.preference
 //    override fun createEpoxyModel(): EpoxyModel<*> {
 //        val viewModel = getViewModel()
 //
-//        viewModel.name.value = prefenceItem.title
+//        viewModel.title.value = prefenceItem.title
 //        viewModel.description.value = prefenceItem.description
 ////        viewModel.icon.value = prefenceItem.icon
 ////                ?: ContextCompat.getDrawable(, R.drawable.ic_settings_black_24dp)

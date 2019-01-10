@@ -12,9 +12,9 @@ import de.markusressel.kutepreferences.core.HighlighterFunction
 abstract class PreferenceItemViewModel : ViewModel() {
 
     /**
-     * The name of the preference item
+     * The title of the preference item
      */
-    val name = MutableLiveData<String>()
+    val title = MutableLiveData<String>()
 
     /**
      * The description of the preference item

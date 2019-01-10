@@ -30,8 +30,9 @@ open class KuteTextPreference(override val key: Int,
 
     override fun createEpoxyModel(): EpoxyModel<*> {
         val viewModel = DefaultItemViewModel()
-        viewModel.name.value = title
+        viewModel.title.value = title
         viewModel.description.value = description
+        viewModel.icon.value = icon
         viewModel.onClick = View.OnClickListener { v -> onListItemClicked(v!!.context!!) }
         viewModel.onLongClick = View.OnLongClickListener { v -> onListItemLongClicked(v!!.context!!) }
 

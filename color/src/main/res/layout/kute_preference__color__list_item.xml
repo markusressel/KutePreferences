@@ -14,7 +14,8 @@
 
         <ImageView
                 android:id="@+id/kute_preference__preference__icon"
-                style="@style/KutePreferences.Preference.Icon"/>
+                style="@style/KutePreferences.Preference.Icon"
+                android:src="@{viewModel.icon}"/>
 
         <LinearLayout
                 android:layout_weight="1"
@@ -23,10 +24,13 @@
                 android:orientation="vertical">
 
             <TextView
-                    style="@style/KutePreferences.Preference.Title"/>
+                    style="@style/KutePreferences.Preference.Title"
+                    android:text="@{viewModel.name}"/>
 
             <TextView
-                    style="@style/KutePreferences.Preference.Description"/>
+                    style="@style/KutePreferences.Preference.Description"
+                    android:text="@{viewModel.description}"
+                    android:visibility="@{viewModel.descriptionVisibility}"/>
 
         </LinearLayout>
 

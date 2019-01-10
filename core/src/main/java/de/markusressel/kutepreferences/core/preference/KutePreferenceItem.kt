@@ -99,7 +99,7 @@ interface KutePreferenceItem<DataType : Any> {
      */
     fun createEpoxyModel(): EpoxyModel<*> {
         val viewModel = DefaultItemViewModel()
-        viewModel.name.value = title
+        viewModel.title.value = title
         viewModel.description.value = description
 
         return KutePreferenceDefaultListItemBindingModel_().viewModel(viewModel)

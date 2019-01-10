@@ -44,7 +44,7 @@ open class KuteBooleanPreference(
 
     override fun createEpoxyModel(): EpoxyModel<*> {
         val viewModel = BooleanPreferenceViewModel()
-        viewModel.name.value = title
+        viewModel.title.value = title
         viewModel.description.value = description
         viewModel.checked.value = persistedValue
         viewModel.onClick = View.OnClickListener { v -> onListItemClicked(v!!.context!!) }

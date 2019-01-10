@@ -16,7 +16,8 @@
 
         <ImageView
                 android:id="@+id/kute_preference__preference__icon"
-                style="@style/KutePreferences.Preference.Icon"/>
+                style="@style/KutePreferences.Preference.Icon"
+                android:src="@{viewModel.icon}"/>
 
         <LinearLayout
                 android:layout_width="match_parent"

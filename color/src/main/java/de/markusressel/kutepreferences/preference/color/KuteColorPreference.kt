@@ -43,7 +43,7 @@ open class KuteColorPreference(
 
     override fun createEpoxyModel(): EpoxyModel<*> {
         val viewModel = ColorPreferenceViewModel()
-        viewModel.name.value = title
+        viewModel.title.value = title
         viewModel.description.value = description
         viewModel.color.value = persistedValue
         viewModel.onClick = View.OnClickListener { v -> onListItemClicked(v!!.context!!) }

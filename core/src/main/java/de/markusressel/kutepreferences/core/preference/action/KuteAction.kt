@@ -20,7 +20,7 @@ open class KuteAction(override val key: Int,
 
     override fun createEpoxyModel(): EpoxyModel<*> {
         val viewModel = ActionViewModel()
-        viewModel.name.value = title
+        viewModel.title.value = title
         viewModel.description.value = description
         // TODO: default icon?
         viewModel.icon.value = icon
