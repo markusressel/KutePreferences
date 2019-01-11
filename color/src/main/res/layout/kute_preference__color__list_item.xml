@@ -25,7 +25,7 @@
 
             <TextView
                     style="@style/KutePreferences.Preference.Title"
-                    android:text="@{viewModel.name}"/>
+                    android:text="@{viewModel.title}"/>
 
             <TextView
                     style="@style/KutePreferences.Preference.Description"

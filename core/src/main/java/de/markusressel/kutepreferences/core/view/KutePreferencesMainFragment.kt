@@ -243,38 +243,6 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
         }
     }
 
-//    /**
-//     * Generates a ViewGroup for the given preferences
-//     */
-//    internal fun generatePage(kutePreference: List<KutePreferenceListItem>, searchString: String?, highlightPreferenceId: List<Int>) {
-//        // find the layout where list items should be inserted
-//        val listItemLayout: ViewGroup = kute_preferences__list_item_root
-//        listItemLayout
-//                .removeAllViews()
-//
-//        val keySet: MutableSet<Int> = mutableSetOf()
-//        kutePreference
-//                .forEach {
-//                    // does NOT recurse through child items as we only want to inflate the current tree layer
-//                    val highlight = it.key in highlightPreferenceId
-//                    inflate(it, listItemLayout, keySet, searchString, highlight)
-//                }
-//    }
-
-//    internal fun inflate(kutePreferenceListItem: KutePreferenceListItem, layoutToAppendTo: ViewGroup,
-//                         keySet: MutableSet<Int>,
-//                         searchString: String?,
-//                         highlight: Boolean) {
-//        checkKeyDuplication(kutePreferenceListItem.key, keySet)
-//        val view = inflateAndAttachClickListeners(this, layoutInflater, kutePreferenceListItem, layoutToAppendTo, searchString)
-//
-//        if (highlight) {
-//            if (kutePreferenceListItem is KuteSection) {
-//                forceRippleAnimation(view)
-//            }
-//        }
-//    }
-
     private fun forceRippleAnimation(view: View) {
         val viewWithRippleDrawable = findViewWithRippleBackground(view)
 
@@ -355,66 +323,39 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
         }
     }
 
-    companion object {
-//        fun inflateAndAttachClickListeners(parentFragment: Fragment, layoutInflater: LayoutInflater, preferenceItem: KutePreferenceListItem, parent: ViewGroup, searchString: String? = null): View {
-//            val layout = preferenceItem.inflateListLayout(parentFragment, layoutInflater, parent)
-//            parent.addView(layout)
-//
-//            if (searchString != null && preferenceItem is KuteSearchProvider) {
-//                highlightSearchMatches(layoutInflater.context, preferenceItem, searchString)
-//            }
-//
-//            if (preferenceItem is KutePreferenceClickListener) {
-//                layout
-//                        .setOnClickListener {
-//                            preferenceItem
-//                                    .onListItemClicked(layoutInflater.context)
-//
-//                            when (preferenceItem) {
-//                                is KutePreferenceCategory -> {
-//                                    Bus.send(CategoryClickedEvent(preferenceItem))
-//                                }
-//                                is KutePreferenceSection -> {
-//                                    Bus.send(SectionClickedEvent(preferenceItem))
-//                                }
-//                            }
-//                        }
-//            }
-//
-//            return layout
-//        }
+    private fun highlightSearchMatches(context: Context, preferenceItem: KuteSearchProvider, searchString: String) {
+        preferenceItem.highlightSearchMatches { text ->
+            val regex = searchString.toRegex(RegexOption.IGNORE_CASE)
 
-        private fun highlightSearchMatches(context: Context, preferenceItem: KuteSearchProvider, searchString: String) {
-            preferenceItem.highlightSearchMatches { text ->
-                val regex = searchString.toRegex(RegexOption.IGNORE_CASE)
+            val highlightedText = SpannableStringBuilder()
 
-                val highlightedText = SpannableStringBuilder()
+            var currentStartIndex = 0
+            while (currentStartIndex < text.length) {
+                val matchResult = regex.find(text, startIndex = currentStartIndex)
 
-                var currentStartIndex = 0
-                while (currentStartIndex < text.length) {
-                    val matchResult = regex.find(text, startIndex = currentStartIndex)
+                if (matchResult != null) {
+                    // append normal text
+                    highlightedText.append(text.substring(currentStartIndex, matchResult.range.first))
 
-                    if (matchResult != null) {
-                        // append normal text
-                        highlightedText.append(text.substring(currentStartIndex, matchResult.range.first))
-
-                        val color = context.getThemeAttrColor(R.attr.kute_preferences__search__highlighted_text_color)
-                        highlightedText.backgroundColor(color) {
-                            append(text.substring(matchResult.range.first, matchResult.range.last + 1))
-                        }
-
-                        // set index for next iteration
-                        currentStartIndex = matchResult.range.last + 1
-                    } else {
-                        highlightedText.append(text.substring(currentStartIndex, text.length))
-                        break
+                    val color = context.getThemeAttrColor(R.attr.kute_preferences__search__highlighted_text_color)
+                    highlightedText.backgroundColor(color) {
+                        append(text.substring(matchResult.range.first, matchResult.range.last + 1))
                     }
-                }
 
-                highlightedText
+                    // set index for next iteration
+                    currentStartIndex = matchResult.range.last + 1
+                } else {
+                    highlightedText.append(text.substring(currentStartIndex, text.length))
+                    break
+                }
             }
 
+            highlightedText
         }
+
+    }
+
+    companion object {
 
         const val TAG: String = "MainFragment"
     }

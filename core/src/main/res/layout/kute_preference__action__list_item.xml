@@ -27,7 +27,7 @@
             <TextView
                     android:id="@+id/kute_preferences__preference__title"
                     style="@style/KutePreferences.Preference.Title"
-                    android:text="@{viewModel.name}"/>
+                    android:text="@{viewModel.title}"/>
 
         </LinearLayout>
 
