@@ -15,7 +15,6 @@
             android:orientation="horizontal">
 
         <ImageView
-                android:id="@+id/kute_preference__preference__icon"
                 style="@style/KutePreferences.Preference.Icon"
                 android:src="@{viewModel.icon}"/>
 
@@ -36,13 +35,13 @@
 
         </LinearLayout>
 
-        <!-- TODO: change background color based on ViewModel -->
         <View
-
-                android:id="@+id/kute_preferences__preference__color__preview"
                 android:layout_margin="16dp"
                 android:layout_width="36dp"
-                android:layout_height="36dp"/>
+                android:layout_height="36dp"
+                android:background="@drawable/color_preview_inner_color"
+                android:backgroundTint="@{viewModel.color}"
+                android:foreground="@drawable/color_preview_frame"/>
 
     </LinearLayout>
 

@@ -32,23 +32,6 @@
                         android:background="?attr/colorAccent"
                         android:text="@{viewModel.title}"/>
 
-                <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                    <!--<View-->
-                    <!--style="@style/KutePreferences.Section.Line.Vertical"-->
-                    <!--android:layout_width="8dp"/>-->
-
-                    <LinearLayout
-                            android:id="@+id/kute_preference_section__item_list"
-                            android:orientation="vertical"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"/>
-
-                </LinearLayout>
-
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>
