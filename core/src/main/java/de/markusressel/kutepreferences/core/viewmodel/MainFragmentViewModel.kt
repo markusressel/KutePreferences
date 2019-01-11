@@ -11,17 +11,35 @@ import java.util.*
 
 class MainFragmentViewModel : ViewModel() {
 
-    lateinit var treeManager: TreeManager
+    private lateinit var treeManager: TreeManager
+
+    private var preferenceTree: Array<KutePreferenceListItem>? = null
+
+    val currentPreferenceItems = MutableLiveData<List<KutePreferenceListItem>>()
+
+    val isSearchExpanded = MutableLiveData<Boolean>()
+    val currentSearchFilter = MutableLiveData<String>()
 
     /**
      * Stack of previously visible preference items, including the current ones
      */
     private val backstack: Stack<BackstackItem> = Stack()
 
-    val currentPreferenceItems = MutableLiveData<List<KutePreferenceListItem>>()
+    /**
+     * Set the complete preference tree to use
+     */
+    fun setPreferenceTree(preferenceItems: Array<KutePreferenceListItem>) {
+        treeManager = TreeManager(*preferenceItems)
+        preferenceTree = preferenceItems
+        showTopLevel()
+    }
 
-    val isSearchExpanded = MutableLiveData<Boolean>()
-    val currentSearchFilter = MutableLiveData<String>()
+    /**
+     * @return true when [setPreferenceTree] has been called at least once
+     */
+    fun hasPreferenceTree(): Boolean {
+        return preferenceTree != null
+    }
 
     /**
      * Show a specific category

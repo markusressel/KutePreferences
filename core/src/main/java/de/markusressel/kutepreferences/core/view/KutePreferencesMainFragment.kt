@@ -31,7 +31,6 @@ import de.markusressel.kutepreferences.core.event.CategoryClickedEvent
 import de.markusressel.kutepreferences.core.event.SectionClickedEvent
 import de.markusressel.kutepreferences.core.extensions.children
 import de.markusressel.kutepreferences.core.preference.section.KuteSection
-import de.markusressel.kutepreferences.core.tree.TreeManager
 import de.markusressel.kutepreferences.core.viewmodel.MainFragmentViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.subscribeBy
@@ -46,12 +45,12 @@ import java.util.concurrent.TimeUnit
  */
 abstract class KutePreferencesMainFragment : LifecycleFragmentBase() {
 
-    private val viewModel: MainFragmentViewModel by lazy { ViewModelProviders.of(this).get(MainFragmentViewModel::class.java) }
+    private val viewModel: MainFragmentViewModel by lazy { ViewModelProviders.of(activity!!).get(MainFragmentViewModel::class.java) }
 
     internal val epoxyController by lazy { createEpoxyController() }
 
-    private lateinit var searchView: SearchView
-    private lateinit var searchMenuItem: MenuItem
+    private var searchView: SearchView? = null
+    private var searchMenuItem: MenuItem? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,17 +62,18 @@ abstract class KutePreferencesMainFragment : LifecycleFragmentBase() {
         viewModel.currentPreferenceItems.observe(this, Observer {
             epoxyController.setData(it)
         })
-        viewModel.treeManager = TreeManager(*initPreferenceTree())
-        viewModel.showTopLevel()
+        if (!viewModel.hasPreferenceTree()) {
+            viewModel.setPreferenceTree(initPreferenceTree())
+        }
 
         viewModel.currentSearchFilter.observe(this, Observer {
             // TODO: this has to be submitted at least somehow
-            searchView.setQuery(it, false)
+            searchView?.setQuery(it, false)
         })
         viewModel.isSearchExpanded.observe(this, Observer { isExpanded ->
             if (!isExpanded) {
-                searchView.clearFocus()
-                searchMenuItem.collapseActionView()
+                searchView?.clearFocus()
+                searchMenuItem?.collapseActionView()
             }
         })
 
@@ -119,28 +119,30 @@ abstract class KutePreferencesMainFragment : LifecycleFragmentBase() {
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         inflater?.inflate(R.menu.kutepreferences__menu, menu)
 
-        searchMenuItem = menu?.findItem(R.id.search)!!
-        searchMenuItem.icon = ContextCompat.getDrawable(context as Context, R.drawable.ic_search_24px)
-        searchMenuItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
-            override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
-                val oldValue = viewModel.isSearchExpanded.value
-                if (oldValue == null || !oldValue) {
-                    viewModel.isSearchExpanded.value = true
+        searchMenuItem = menu?.findItem(R.id.search)
+        searchMenuItem?.apply {
+            icon = ContextCompat.getDrawable(context as Context, R.drawable.ic_search_24px)
+            setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
+                override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
+                    val oldValue = viewModel.isSearchExpanded.value
+                    if (oldValue == null || !oldValue) {
+                        viewModel.isSearchExpanded.value = true
+                    }
+                    return true
                 }
-                return true
-            }
 
-            override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
-                val oldValue = viewModel.isSearchExpanded.value
-                if (oldValue == null || oldValue) {
-                    viewModel.isSearchExpanded.value = false
+                override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
+                    val oldValue = viewModel.isSearchExpanded.value
+                    if (oldValue == null || oldValue) {
+                        viewModel.isSearchExpanded.value = false
+                    }
+                    return true
                 }
-                return true
-            }
-        })
+            })
+        }
 
-        searchView = searchMenuItem.actionView as SearchView
-        searchView.let {
+        searchView = searchMenuItem?.actionView as SearchView
+        searchView?.let {
             RxSearchView
                     .queryTextChanges(it)
                     .skipInitialValue()
