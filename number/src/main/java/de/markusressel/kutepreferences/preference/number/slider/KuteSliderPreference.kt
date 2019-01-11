@@ -1,5 +1,6 @@
 package de.markusressel.kutepreferences.preference.number.slider
 
+import android.content.Context
 import android.graphics.drawable.Drawable
 import android.view.View
 import com.airbnb.epoxy.EpoxyModel
@@ -19,6 +20,10 @@ open class KuteSliderPreference(
         override val dataProvider: KutePreferenceDataProvider,
         override val onPreferenceChangedListener: ((oldValue: Int, newValue: Int) -> Unit)? = null) :
         KutePreferenceItem<Int>, KutePreferenceListItem {
+
+    override fun onListItemClicked(context: Context) {
+        KuteSliderPreferenceEditDialog(this, minimum, maximum).show(context)
+    }
 
     override fun createEpoxyModel(): EpoxyModel<*> {
         val viewModel = DefaultItemViewModel()

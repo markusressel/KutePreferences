@@ -13,6 +13,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.text.backgroundColor
 import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.airbnb.epoxy.EpoxyModel
 import com.airbnb.epoxy.TypedEpoxyController
 import com.eightbitlab.rxbus.Bus
 import com.eightbitlab.rxbus.registerInBus
@@ -27,6 +28,7 @@ import de.markusressel.kutepreferences.core.event.SectionClickedEvent
 import de.markusressel.kutepreferences.core.extensions.children
 import de.markusressel.kutepreferences.core.preference.category.KutePreferenceCategory
 import de.markusressel.kutepreferences.core.preference.section.KutePreferenceSection
+import de.markusressel.kutepreferences.core.preference.section.KuteSection
 import de.markusressel.kutepreferences.core.tree.TreeManager
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.subscribeBy
@@ -77,9 +79,18 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
         return object : TypedEpoxyController<List<KutePreferenceListItem>>() {
             override fun buildModels(data: List<KutePreferenceListItem>?) {
                 data?.forEach {
-                    val model = it.createEpoxyModel()
-                    model.id(it.key)
-                    model.addTo(this)
+                    createModel(it).addTo(this)
+                    if (it is KuteSection) {
+                        it.children.forEach { child ->
+                            createModel(child).addTo(this)
+                        }
+                    }
+                }
+            }
+
+            private fun createModel(kutePreferenceListItem: KutePreferenceListItem): EpoxyModel<*> {
+                return kutePreferenceListItem.createEpoxyModel().apply {
+                    id(kutePreferenceListItem.key)
                 }
             }
         }

@@ -11,6 +11,8 @@
 
     <LinearLayout
             style="@style/KutePreferences.ListItem"
+            android:onClick="@{viewModel.onClick}"
+            android:onLongClick="@{viewModel.onLongClick}"
             android:orientation="horizontal">
 
         <ImageView
