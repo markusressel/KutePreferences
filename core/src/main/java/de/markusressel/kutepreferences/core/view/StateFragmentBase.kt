@@ -12,20 +12,15 @@ abstract class StateFragmentBase : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         if (savedInstanceState != null) {
-            stateBundle
-                    .putAll(savedInstanceState.getBundle(KEY_BUNDLE))
+            stateBundle.putAll(savedInstanceState.getBundle(KEY_BUNDLE))
         }
 
-        super
-                .onActivityCreated(savedInstanceState)
+        super.onActivityCreated(savedInstanceState)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        outState
-                .putBundle(KEY_BUNDLE, stateBundle)
-
-        super
-                .onSaveInstanceState(outState)
+        outState.putBundle(KEY_BUNDLE, stateBundle)
+        super.onSaveInstanceState(outState)
     }
 
     /**
