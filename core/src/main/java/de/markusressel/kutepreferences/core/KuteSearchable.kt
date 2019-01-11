@@ -4,7 +4,7 @@ import android.text.Spanned
 
 typealias HighlighterFunction = (String) -> Spanned
 
-interface KuteSearchProvider {
+interface KuteSearchable {
 
     /**
      * Retrieves a list of all searchable strings

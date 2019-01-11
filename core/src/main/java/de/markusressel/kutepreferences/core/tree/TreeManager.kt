@@ -2,7 +2,7 @@ package de.markusressel.kutepreferences.core.tree
 
 import androidx.annotation.StringRes
 import de.markusressel.kutepreferences.core.KutePreferenceListItem
-import de.markusressel.kutepreferences.core.KuteSearchProvider
+import de.markusressel.kutepreferences.core.KuteSearchable
 import de.markusressel.kutepreferences.core.preference.category.KuteParent
 import de.markusressel.kutepreferences.core.preference.category.KutePreferenceCategory
 import de.markusressel.kutepreferences.core.preference.section.KutePreferenceSection
@@ -15,9 +15,9 @@ class TreeManager(vararg items: KutePreferenceListItem) {
 
     private val itemsWithSearchProviders by lazy {
         treeAsList.asSequence().mapNotNull { it.item }.filter {
-            it is KuteSearchProvider
+            it is KuteSearchable
         }.map {
-            it as KuteSearchProvider
+            it as KuteSearchable
         }
     }
 

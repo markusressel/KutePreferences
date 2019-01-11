@@ -1,12 +1,12 @@
 package de.markusressel.kutepreferences.core.preference.category
 
 import de.markusressel.kutepreferences.core.KutePreferenceListItem
-import de.markusressel.kutepreferences.core.KuteSearchProvider
+import de.markusressel.kutepreferences.core.KuteSearchable
 
 /**
  * Interface for a KutePreference category that holds a set preferences
  */
-interface KutePreferenceCategory : KutePreferenceListItem, KuteSearchProvider, KuteParent {
+interface KutePreferenceCategory : KutePreferenceListItem, KuteSearchable, KuteParent {
 
     /**
      * The title of this category

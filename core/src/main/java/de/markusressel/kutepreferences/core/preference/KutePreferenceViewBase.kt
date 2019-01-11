@@ -10,7 +10,7 @@ package de.markusressel.kutepreferences.core.preference
 //        KutePreferenceListItem,
 //        KutePreferenceClickListener,
 //        KutePreferenceLongClickListener,
-//        KuteSearchProvider {
+//        KuteSearchable {
 //
 //    @get:LayoutRes
 //    protected abstract val layoutRes: Int

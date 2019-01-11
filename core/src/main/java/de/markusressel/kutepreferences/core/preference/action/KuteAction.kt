@@ -8,7 +8,7 @@ import com.airbnb.epoxy.EpoxyModel
 import de.markusressel.kutepreferences.core.HighlighterFunction
 import de.markusressel.kutepreferences.core.KutePreferenceActionListItemBindingModel_
 import de.markusressel.kutepreferences.core.KutePreferenceListItem
-import de.markusressel.kutepreferences.core.KuteSearchProvider
+import de.markusressel.kutepreferences.core.KuteSearchable
 import de.markusressel.kutepreferences.core.preference.KutePreferenceClickListener
 
 open class KuteAction(override val key: Int,
@@ -16,7 +16,7 @@ open class KuteAction(override val key: Int,
                       val title: String,
                       val description: String,
                       val onClickAction: (Context, KuteAction) -> Unit) :
-        KutePreferenceListItem, KutePreferenceClickListener, KuteSearchProvider {
+        KutePreferenceListItem, KutePreferenceClickListener, KuteSearchable {
 
     override fun createEpoxyModel(): EpoxyModel<*> {
         val viewModel = ActionViewModel()

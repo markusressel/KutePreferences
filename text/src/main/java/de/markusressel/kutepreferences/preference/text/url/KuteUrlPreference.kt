@@ -24,4 +24,8 @@ open class KuteUrlPreference(key: Int,
                 dataProvider = dataProvider,
                 onPreferenceChangedListener = onPreferenceChangedListener) {
 
+    override fun onListItemClicked(context: Context) {
+        KuteUrlPreferenceEditDialog(this, regex).show(context)
+    }
+
 }

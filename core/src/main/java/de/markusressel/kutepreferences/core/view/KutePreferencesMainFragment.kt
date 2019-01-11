@@ -20,7 +20,7 @@ import com.jakewharton.rxbinding2.support.v7.widget.RxSearchView
 import com.trello.rxlifecycle2.android.lifecycle.kotlin.bindUntilEvent
 import de.markusressel.commons.android.themes.getThemeAttrColor
 import de.markusressel.kutepreferences.core.KutePreferenceListItem
-import de.markusressel.kutepreferences.core.KuteSearchProvider
+import de.markusressel.kutepreferences.core.KuteSearchable
 import de.markusressel.kutepreferences.core.R
 import de.markusressel.kutepreferences.core.event.CategoryClickedEvent
 import de.markusressel.kutepreferences.core.event.SectionClickedEvent
@@ -323,7 +323,7 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
         }
     }
 
-    private fun highlightSearchMatches(context: Context, preferenceItem: KuteSearchProvider, searchString: String) {
+    private fun highlightSearchMatches(context: Context, preferenceItem: KuteSearchable, searchString: String) {
         preferenceItem.highlightSearchMatches { text ->
             val regex = searchString.toRegex(RegexOption.IGNORE_CASE)
 
