@@ -2,7 +2,7 @@ package de.markusressel.kutepreferences.preference.date
 
 import androidx.lifecycle.MutableLiveData
 import de.markusressel.kutepreferences.core.HighlighterFunction
-import de.markusressel.kutepreferences.core.viewmodel.PreferenceItemViewModel
+import de.markusressel.kutepreferences.core.viewmodel.base.PreferenceItemViewModel
 
 /**
  * ViewModel for a date preference

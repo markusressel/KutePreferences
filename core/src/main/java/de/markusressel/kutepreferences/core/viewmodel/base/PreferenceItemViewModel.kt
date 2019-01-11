@@ -1,4 +1,4 @@
-package de.markusressel.kutepreferences.core.viewmodel
+package de.markusressel.kutepreferences.core.viewmodel.base
 
 import android.graphics.drawable.Drawable
 import android.view.View

@@ -5,7 +5,7 @@
 
         <variable
                 name="viewModel"
-                type="de.markusressel.kutepreferences.core.viewmodel.PreferenceItemViewModel"/>
+                type="de.markusressel.kutepreferences.core.viewmodel.base.PreferenceItemViewModel"/>
 
     </data>
 

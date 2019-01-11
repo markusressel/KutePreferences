@@ -11,7 +11,10 @@ import androidx.annotation.CallSuper
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.core.text.backgroundColor
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.airbnb.epoxy.EpoxyModel
 import com.airbnb.epoxy.TypedEpoxyController
@@ -23,17 +26,16 @@ import de.markusressel.commons.android.themes.getThemeAttrColor
 import de.markusressel.kutepreferences.core.KutePreferenceListItem
 import de.markusressel.kutepreferences.core.KuteSearchable
 import de.markusressel.kutepreferences.core.R
+import de.markusressel.kutepreferences.core.databinding.KutePreferenceMainFragmentBinding
 import de.markusressel.kutepreferences.core.event.CategoryClickedEvent
 import de.markusressel.kutepreferences.core.event.SectionClickedEvent
 import de.markusressel.kutepreferences.core.extensions.children
-import de.markusressel.kutepreferences.core.preference.category.KutePreferenceCategory
-import de.markusressel.kutepreferences.core.preference.section.KutePreferenceSection
 import de.markusressel.kutepreferences.core.preference.section.KuteSection
 import de.markusressel.kutepreferences.core.tree.TreeManager
+import de.markusressel.kutepreferences.core.viewmodel.MainFragmentViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.subscribeBy
 import kotlinx.android.synthetic.main.kute_preference__main_fragment.*
-import java.util.*
 import java.util.concurrent.LinkedBlockingQueue
 import java.util.concurrent.TimeUnit
 
@@ -42,14 +44,9 @@ import java.util.concurrent.TimeUnit
  * The main class for all preferences.
  * All navigation between categories, subcategories and dividers is managed in here.
  */
-abstract class KutePreferencesMainFragment : StateFragmentBase() {
+abstract class KutePreferencesMainFragment : LifecycleFragmentBase() {
 
-    internal lateinit var treeManager: TreeManager
-
-    /**
-     * Stack of previously visible preference items, including the current ones
-     */
-    internal var backstack: Stack<BackstackItem> by savedInstanceState(Stack())
+    private val viewModel: MainFragmentViewModel by lazy { ViewModelProviders.of(this).get(MainFragmentViewModel::class.java) }
 
     internal val epoxyController by lazy { createEpoxyController() }
 
@@ -62,7 +59,30 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.kute_preference__main_fragment, container, false)
+        val binding: KutePreferenceMainFragmentBinding = DataBindingUtil.inflate(layoutInflater, R.layout.kute_preference__main_fragment, container, false)
+        viewModel.currentPreferenceItems.observe(this, Observer {
+            epoxyController.setData(it)
+        })
+        viewModel.treeManager = TreeManager(*initPreferenceTree())
+        viewModel.showTopLevel()
+
+        viewModel.currentSearchFilter.observe(this, Observer {
+            // TODO: this has to be submitted at least somehow
+            searchView.setQuery(it, false)
+        })
+        viewModel.isSearchExpanded.observe(this, Observer { isExpanded ->
+            if (!isExpanded) {
+                searchView.clearFocus()
+                searchMenuItem.collapseActionView()
+            }
+        })
+
+        binding.let {
+            it.setLifecycleOwner(this)
+            it.viewModel = viewModel
+        }
+
+        return binding.root
     }
 
     @CallSuper
@@ -97,11 +117,27 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
-        inflater
-                ?.inflate(R.menu.kutepreferences__menu, menu)
+        inflater?.inflate(R.menu.kutepreferences__menu, menu)
 
         searchMenuItem = menu?.findItem(R.id.search)!!
         searchMenuItem.icon = ContextCompat.getDrawable(context as Context, R.drawable.ic_search_24px)
+        searchMenuItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
+            override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
+                val oldValue = viewModel.isSearchExpanded.value
+                if (oldValue == null || !oldValue) {
+                    viewModel.isSearchExpanded.value = true
+                }
+                return true
+            }
+
+            override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
+                val oldValue = viewModel.isSearchExpanded.value
+                if (oldValue == null || oldValue) {
+                    viewModel.isSearchExpanded.value = false
+                }
+                return true
+            }
+        })
 
         searchView = searchMenuItem.actionView as SearchView
         searchView.let {
@@ -112,31 +148,10 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
                     .debounce(100, TimeUnit.MILLISECONDS)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeBy(onNext = { text ->
-                        if (text.isBlank()) {
-                            showPreferenceItems(backstack.peek())
-                        } else {
-                            val searchString = text.toString()
-                            val preferenceIds = treeManager
-                                    .findInSearchProviders(searchString)
-                                    .map { listItem ->
-                                        listItem.key
-                                    }
-                            showPreferenceItems(preferenceIds, false, searchString = searchString)
-                        }
+                        viewModel.setSearch(text.toString())
                     }, onError = { error ->
                         Log.e(TAG, "Error filtering list", error)
                     })
-        }
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
-        treeManager = TreeManager(*initPreferenceTree())
-
-        when {
-            backstack.isNotEmpty() -> showPreferenceItems(backstack.peek())
-            else -> showTopLevel()
         }
     }
 
@@ -145,12 +160,12 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
 
         Bus.observe<CategoryClickedEvent>()
                 .subscribe {
-                    showCategory(it.category)
+                    viewModel.showCategory(it.category)
                 }.registerInBus(this)
 
         Bus.observe<SectionClickedEvent>()
                 .subscribe {
-                    showCategory(it.section)
+                    viewModel.showCategory(it.section)
                 }.registerInBus(this)
     }
 
@@ -158,100 +173,6 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
         super.onStop()
 
         Bus.unregister(this)
-    }
-
-    fun showTopLevel(keysToHighlight: List<Int> = emptyList()) {
-        showPreferenceItems(treeManager.getTopLevelItems().map {
-            it.key
-        },
-                // small workaround to allow searchView non-nullable type
-                ignoreSearch = true, keysToHighlight = keysToHighlight)
-    }
-
-    /**
-     * Show the containing category of a section
-     *
-     * @param section the section that has been clicked
-     */
-    fun showCategory(section: KutePreferenceSection) {
-        val categoryItems: List<Int>? = treeManager.findParentCategory(section)
-                ?.children
-                ?.map {
-                    it.key
-                }
-
-        // don't switch the category if the search bar is closed (iconified)
-        if (searchView.isIconified) {
-            return
-        }
-
-        clearSearch()
-        if (categoryItems != null) {
-            showPreferenceItems(categoryItems, keysToHighlight = listOf(section.key))
-        } else {
-            // if the section has no parent category it must be a root section
-            showTopLevel(keysToHighlight = listOf(section.key))
-        }
-    }
-
-    /**
-     * Show a specific category
-     *
-     * @param category the category to show
-     */
-    fun showCategory(category: KutePreferenceCategory) {
-        val categoryItems = treeManager
-                .getCategoryItems(category.key)
-                .map {
-                    it.key
-                }
-
-        clearSearch()
-        showPreferenceItems(categoryItems)
-    }
-
-    private fun clearSearch() {
-        searchView.apply {
-            setQuery("", false)
-            clearFocus()
-            searchMenuItem.collapseActionView()
-        }
-    }
-
-    internal fun showPreferenceItems(backstackItem: BackstackItem) {
-        searchView.setQuery(backstackItem.searchText, false)
-        showPreferenceItems(backstackItem.preferenceItemIds, false)
-    }
-
-    internal fun showPreferenceItems(preferenceKeys: List<Int>, addToStack: Boolean = true, ignoreSearch: Boolean = false, searchString: String? = null, keysToHighlight: List<Int> = emptyList()) {
-        if (addToStack) {
-            val query = if (ignoreSearch) "" else searchView.query.toString()
-            val newBackstackItem = BackstackItem(preferenceKeys, query)
-            addToBackstack(newBackstackItem)
-        }
-
-        val preferenceItems: List<KutePreferenceListItem> =
-                treeManager
-                        .findInTree {
-                            it.key in preferenceKeys
-                        }.mapNotNull {
-                            it.item
-                        }
-
-        epoxyController.setData(preferenceItems)
-
-//        generatePage(preferenceItems, searchString, keysToHighlight)
-    }
-
-    private fun addToBackstack(newBackstackItem: BackstackItem) {
-        if (backstack.isEmpty()) {
-            backstack.push(newBackstackItem)
-        } else {
-            // only push new backstack item if something about is has changed
-            if (backstack.peek() != newBackstackItem) {
-                backstack.push(newBackstackItem)
-            }
-        }
     }
 
     private fun forceRippleAnimation(view: View) {
@@ -317,21 +238,7 @@ abstract class KutePreferencesMainFragment : StateFragmentBase() {
      * @return true if a navigation happened (aka the back button event was consumed), false otherwise
      */
     open fun onBackPressed(): Boolean {
-        searchView.let {
-            if (it.query.isNotEmpty()) {
-                it.setQuery("", false)
-                return true
-            }
-        }
-
-        return when {
-            backstack.size > 1 -> {
-                backstack.pop()
-                showPreferenceItems(backstack.peek())
-                true
-            }
-            else -> false
-        }
+        return viewModel.navigateUp()
     }
 
     private fun highlightSearchMatches(context: Context, preferenceItem: KuteSearchable, searchString: String) {
