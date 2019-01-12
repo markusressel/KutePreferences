@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.drawable.Drawable
 import android.view.View
 import com.airbnb.epoxy.EpoxyModel
+import de.markusressel.kutepreferences.core.HighlighterFunction
 import de.markusressel.kutepreferences.core.KutePreferenceDefaultListItemBindingModel_
 import de.markusressel.kutepreferences.core.KutePreferenceListItem
 import de.markusressel.kutepreferences.core.persistence.KutePreferenceDataProvider
@@ -25,6 +26,14 @@ abstract class KuteRangePreference<T : Number>(
         override val dataProvider: KutePreferenceDataProvider,
         override val onPreferenceChangedListener: ((oldValue: RangePersistenceModel<T>, newValue: RangePersistenceModel<T>) -> Unit)? = null) :
         KutePreferenceItem<RangePersistenceModel<T>>, KutePreferenceListItem {
+
+    override fun getSearchableItems(): Set<String> {
+        return setOf(title, description)
+    }
+
+    override fun highlightSearchMatches(highlighter: HighlighterFunction) {
+        // TODO
+    }
 
     override fun getDefaultValue(): RangePersistenceModel<T> = defaultValue
 

@@ -3,6 +3,7 @@ package de.markusressel.kutepreferences.preference.selection.single
 import android.content.Context
 import android.view.View
 import com.airbnb.epoxy.EpoxyModel
+import de.markusressel.kutepreferences.core.HighlighterFunction
 import de.markusressel.kutepreferences.core.KutePreferenceDefaultListItemBindingModel_
 import de.markusressel.kutepreferences.core.KutePreferenceListItem
 import de.markusressel.kutepreferences.core.preference.KutePreferenceItem
@@ -17,6 +18,14 @@ import de.markusressel.kutepreferences.core.viewmodel.base.PreferenceItemDataMod
 abstract class KuteSingleSelectPreference<T : Any> : KutePreferenceItem<T>, KutePreferenceListItem {
     abstract val context: Context
     abstract val possibleValues: Map<Int, T>
+
+    override fun getSearchableItems(): Set<String> {
+        return setOf(title, description)
+    }
+
+    override fun highlightSearchMatches(highlighter: HighlighterFunction) {
+        // TODO
+    }
 
     override fun onListItemClicked(context: Context) {
         createSingleSelectDialog(this, possibleValues).show(context)

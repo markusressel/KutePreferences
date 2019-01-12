@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable
 import android.view.View
 import androidx.annotation.StringRes
 import com.airbnb.epoxy.EpoxyModel
+import de.markusressel.kutepreferences.core.HighlighterFunction
 import de.markusressel.kutepreferences.core.KutePreferenceDefaultListItemBindingModel_
 import de.markusressel.kutepreferences.core.KutePreferenceListItem
 import de.markusressel.kutepreferences.core.persistence.KutePreferenceDataProvider
@@ -25,6 +26,14 @@ open class KuteMultiSelectPreference(
         override val dataProvider: KutePreferenceDataProvider,
         override val onPreferenceChangedListener: ((oldValue: Set<String>, newValue: Set<String>) -> Unit)? = null) :
         KutePreferenceItem<Set<String>>, KutePreferenceListItem {
+
+    override fun getSearchableItems(): Set<String> {
+        return setOf(title, description)
+    }
+
+    override fun highlightSearchMatches(highlighter: HighlighterFunction) {
+        // TODO
+    }
 
     override fun getDefaultValue(): Set<String> = defaultValue.asSequence().map { context.getString(it) }.toSet()
 

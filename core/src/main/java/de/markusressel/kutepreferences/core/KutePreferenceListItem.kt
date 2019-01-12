@@ -6,7 +6,7 @@ import com.airbnb.epoxy.EpoxyModel
 import de.markusressel.kutepreferences.core.preference.KutePreferenceClickListener
 import de.markusressel.kutepreferences.core.preference.KutePreferenceLongClickListener
 
-interface KutePreferenceListItem : KutePreferenceClickListener, KutePreferenceLongClickListener {
+interface KutePreferenceListItem : KutePreferenceClickListener, KutePreferenceLongClickListener, KuteSearchable {
 
     /**
      * A unique identifier for this KutePreference

@@ -68,7 +68,6 @@ abstract class KutePreferencesMainFragment : LifecycleFragmentBase() {
         }
 
         viewModel.currentSearchFilter.observe(this, Observer {
-            // TODO: this has to be submitted at least somehow
             searchView?.setQuery(it, false)
         })
         viewModel.isSearchExpanded.observe(this, Observer { isExpanded ->
@@ -101,7 +100,7 @@ abstract class KutePreferencesMainFragment : LifecycleFragmentBase() {
             override fun buildModels(data: List<KutePreferenceListItem>?) {
                 data?.forEach {
                     createModel(it).addTo(this)
-                    if (it is KuteSection) {
+                    if (it is KuteSection && !viewModel.isSearching()) {
                         it.children.forEach { child ->
                             createModel(child).addTo(this)
                         }

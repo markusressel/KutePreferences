@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable
 import android.view.View
 import android.widget.CompoundButton
 import com.airbnb.epoxy.EpoxyModel
+import de.markusressel.kutepreferences.core.HighlighterFunction
 import de.markusressel.kutepreferences.core.KutePreferenceListItem
 import de.markusressel.kutepreferences.core.persistence.KutePreferenceDataProvider
 import de.markusressel.kutepreferences.core.preference.KutePreferenceItem
@@ -21,6 +22,15 @@ open class KuteBooleanPreference(
         override val dataProvider: KutePreferenceDataProvider,
         override val onPreferenceChangedListener: ((oldValue: Boolean, newValue: Boolean) -> Unit)? = null) :
         KutePreferenceItem<Boolean>, KutePreferenceListItem {
+
+    override fun getSearchableItems(): Set<String> {
+        return setOf(title, description)
+    }
+
+    override fun highlightSearchMatches(highlighter: HighlighterFunction) {
+        // TODO
+    }
+
     override fun getDefaultValue(): Boolean = defaultValue
 
     override fun createDescription(currentValue: Boolean): String {

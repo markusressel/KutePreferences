@@ -7,6 +7,7 @@ import android.view.View
 import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
 import com.airbnb.epoxy.EpoxyModel
+import de.markusressel.kutepreferences.core.HighlighterFunction
 import de.markusressel.kutepreferences.core.KutePreferenceListItem
 import de.markusressel.kutepreferences.core.persistence.KutePreferenceDataProvider
 import de.markusressel.kutepreferences.core.preference.KutePreferenceItem
@@ -25,6 +26,14 @@ open class KuteColorPreference(
         override val dataProvider: KutePreferenceDataProvider,
         override val onPreferenceChangedListener: ((oldValue: Int, newValue: Int) -> Unit)? = null) :
         KutePreferenceItem<Int>, KutePreferenceListItem {
+
+    override fun getSearchableItems(): Set<String> {
+        return setOf(title, description)
+    }
+
+    override fun highlightSearchMatches(highlighter: HighlighterFunction) {
+        // TODO
+    }
 
     override fun getDefaultValue(): Int = ContextCompat.getColor(context, defaultValue)
 

@@ -70,8 +70,8 @@ class TreeManager(vararg items: KutePreferenceListItem) {
      */
     fun findInSearchProviders(text: String): List<KutePreferenceListItem> {
         return itemsWithSearchProviders.filter {
-            it.getSearchableItems().any { it ->
-                it.contains(text, true)
+            it.getSearchableItems().any { searchableText ->
+                searchableText.contains(text, true)
             }
         }.map {
             it as KutePreferenceListItem

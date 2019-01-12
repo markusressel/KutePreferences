@@ -8,7 +8,6 @@ import de.markusressel.kutepreferences.core.HighlighterFunction
 import de.markusressel.kutepreferences.core.KutePreferenceActionListItemBindingModel_
 import de.markusressel.kutepreferences.core.KutePreferenceListItem
 import de.markusressel.kutepreferences.core.KuteSearchable
-import de.markusressel.kutepreferences.core.preference.KutePreferenceClickListener
 import de.markusressel.kutepreferences.core.viewmodel.base.PreferenceItemDataModel
 
 open class KuteAction(
@@ -18,7 +17,7 @@ open class KuteAction(
         val title: String,
         val description: String,
         val onClickAction: (Context, KuteAction) -> Unit) :
-        KutePreferenceListItem, KutePreferenceClickListener, KuteSearchable {
+        KutePreferenceListItem, KuteSearchable {
 
     override fun createEpoxyModel(): EpoxyModel<*> {
         val dataModel = PreferenceItemDataModel(

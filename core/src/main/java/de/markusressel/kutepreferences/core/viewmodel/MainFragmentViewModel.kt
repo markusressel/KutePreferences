@@ -18,12 +18,24 @@ class MainFragmentViewModel : ViewModel() {
     val currentPreferenceItems = MutableLiveData<List<KutePreferenceListItem>>()
 
     val isSearchExpanded = MutableLiveData<Boolean>()
+
     val currentSearchFilter = MutableLiveData<String>()
 
     /**
      * Stack of previously visible preference items, including the current ones
      */
     private val backstack: Stack<BackstackItem> = Stack()
+
+    init {
+        currentSearchFilter.observeForever { searchString ->
+            if (isSearching()) {
+                showPreferenceItems(treeManager.findInSearchProviders(searchString).map { it.key },
+                        addToStack = false)
+            } else {
+                showTopLevel()
+            }
+        }
+    }
 
     /**
      * Set the complete preference tree to use
@@ -39,6 +51,13 @@ class MainFragmentViewModel : ViewModel() {
      */
     fun hasPreferenceTree(): Boolean {
         return preferenceTree != null
+    }
+
+    /**
+     * @return true if a search is currently open, false otherwise
+     */
+    fun isSearching(): Boolean {
+        return currentSearchFilter.value?.isNotBlank() ?: false
     }
 
     /**
@@ -87,13 +106,13 @@ class MainFragmentViewModel : ViewModel() {
         }
     }
 
-    fun showPreferenceItems(backstackItem: BackstackItem) {
+    private fun showPreferenceItems(backstackItem: BackstackItem) {
         currentSearchFilter.value = backstackItem.searchText
 //        searchView.setQuery(backstackItem.searchText, false)
         showPreferenceItems(backstackItem.preferenceItemIds, false)
     }
 
-    fun showPreferenceItems(preferenceKeys: List<Int>, addToStack: Boolean = true, ignoreSearch: Boolean = false, searchString: String? = null, keysToHighlight: List<Int> = emptyList()) {
+    private fun showPreferenceItems(preferenceKeys: List<Int>, addToStack: Boolean = true, ignoreSearch: Boolean = false, keysToHighlight: List<Int> = emptyList()) {
         if (addToStack) {
             val query = if (ignoreSearch) "" else currentSearchFilter.value ?: ""
             val newBackstackItem = BackstackItem(preferenceKeys, query)
@@ -102,7 +121,7 @@ class MainFragmentViewModel : ViewModel() {
 
         val preferenceItems: List<KutePreferenceListItem> =
                 treeManager.findInTree { it.key in preferenceKeys }
-                        .mapNotNull { it.item }
+                        .mapNotNull { it.item }.distinctBy { it.key }
         currentPreferenceItems.value = preferenceItems
     }
 
@@ -132,19 +151,6 @@ class MainFragmentViewModel : ViewModel() {
      */
     fun setSearch(text: String) {
         currentSearchFilter.value = text
-
-        // TODO: add this logic to currentPreferenceItemIds
-//        if (text.isBlank()) {
-//            showPreferenceItems(backstack.peek())
-//        } else {
-//            val searchString = text.toString()
-//            val preferenceIds = treeManager
-//                    .findInSearchProviders(searchString)
-//                    .map { listItem ->
-//                        listItem.key
-//                    }
-//            showPreferenceItems(preferenceIds, false, searchString = searchString)
-//        }
     }
 
     private fun clearSearch() {
