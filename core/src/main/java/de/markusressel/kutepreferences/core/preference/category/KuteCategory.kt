@@ -9,12 +9,14 @@ import de.markusressel.kutepreferences.core.HighlighterFunction
 import de.markusressel.kutepreferences.core.KutePreferenceDefaultListItemBindingModel_
 import de.markusressel.kutepreferences.core.KutePreferenceListItem
 import de.markusressel.kutepreferences.core.event.CategoryClickedEvent
+import de.markusressel.kutepreferences.core.view.IconHelper
 import de.markusressel.kutepreferences.core.viewmodel.DefaultItemViewModel
 
 /**
  * The default implementation of a KutePreference Category
  */
 open class KuteCategory(
+        private val context: Context,
         override val key: Int,
         private val icon: Drawable,
         override val title: String,
@@ -26,7 +28,7 @@ open class KuteCategory(
         val viewModel = DefaultItemViewModel()
         viewModel.title.value = title
         viewModel.description.value = description
-        viewModel.icon.value = icon
+        viewModel.icon.value = IconHelper.getListItemIcon(context, icon)
         viewModel.onClick = View.OnClickListener { v -> onListItemClicked(v!!.context!!) }
         viewModel.onLongClick = View.OnLongClickListener { v -> onListItemLongClicked(v!!.context!!) }
 

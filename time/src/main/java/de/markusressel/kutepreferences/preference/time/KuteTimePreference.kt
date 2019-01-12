@@ -8,14 +8,17 @@ import de.markusressel.kutepreferences.core.KutePreferenceDefaultListItemBinding
 import de.markusressel.kutepreferences.core.KutePreferenceListItem
 import de.markusressel.kutepreferences.core.persistence.KutePreferenceDataProvider
 import de.markusressel.kutepreferences.core.preference.KutePreferenceItem
+import de.markusressel.kutepreferences.core.view.IconHelper
 import de.markusressel.kutepreferences.core.viewmodel.DefaultItemViewModel
 
-open class KuteTimePreference(override val key: Int,
-                              override val icon: Drawable? = null,
-                              override val title: String,
-                              private val defaultValue: TimePersistenceModel,
-                              override val dataProvider: KutePreferenceDataProvider,
-                              override val onPreferenceChangedListener: ((oldValue: TimePersistenceModel, newValue: TimePersistenceModel) -> Unit)? = null) :
+open class KuteTimePreference(
+        private val context: Context,
+        override val key: Int,
+        override val icon: Drawable? = null,
+        override val title: String,
+        private val defaultValue: TimePersistenceModel,
+        override val dataProvider: KutePreferenceDataProvider,
+        override val onPreferenceChangedListener: ((oldValue: TimePersistenceModel, newValue: TimePersistenceModel) -> Unit)? = null) :
         KutePreferenceItem<TimePersistenceModel>, KutePreferenceListItem {
 
 
@@ -29,7 +32,7 @@ open class KuteTimePreference(override val key: Int,
         val viewModel = DefaultItemViewModel()
         viewModel.title.value = title
         viewModel.description.value = description
-        viewModel.icon.value = icon
+        viewModel.icon.value = IconHelper.getListItemIcon(context, icon)
         viewModel.onClick = View.OnClickListener { v -> onListItemClicked(v!!.context!!) }
         viewModel.onLongClick = View.OnLongClickListener { v -> onListItemLongClicked(v!!.context!!) }
 

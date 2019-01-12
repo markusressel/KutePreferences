@@ -4,7 +4,9 @@ import android.graphics.drawable.Drawable
 import androidx.annotation.CallSuper
 import androidx.annotation.CheckResult
 import com.airbnb.epoxy.EpoxyModel
+import com.eightbitlab.rxbus.Bus
 import de.markusressel.kutepreferences.core.KutePreferenceDefaultListItemBindingModel_
+import de.markusressel.kutepreferences.core.event.PreferenceChangedEvent
 import de.markusressel.kutepreferences.core.persistence.KutePreferenceDataProvider
 import de.markusressel.kutepreferences.core.viewmodel.DefaultItemViewModel
 
@@ -61,8 +63,7 @@ interface KutePreferenceItem<DataType : Any> {
         set(newValue) {
             val oldValue = persistedValue
             if (oldValue != newValue) {
-                dataProvider
-                        .storeValue(this, newValue)
+                dataProvider.storeValue(this, newValue)
                 onPreferenceChanged(oldValue, newValue)
             }
         }
@@ -90,8 +91,8 @@ interface KutePreferenceItem<DataType : Any> {
      */
     @CallSuper
     fun onPreferenceChanged(oldValue: DataType, newValue: DataType) {
-        onPreferenceChangedListener
-                ?.invoke(oldValue, newValue)
+        Bus.send(PreferenceChangedEvent(this, oldValue, newValue))
+        onPreferenceChangedListener?.invoke(oldValue, newValue)
     }
 
     /**

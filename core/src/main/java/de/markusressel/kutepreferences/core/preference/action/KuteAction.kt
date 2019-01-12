@@ -10,20 +10,22 @@ import de.markusressel.kutepreferences.core.KutePreferenceActionListItemBindingM
 import de.markusressel.kutepreferences.core.KutePreferenceListItem
 import de.markusressel.kutepreferences.core.KuteSearchable
 import de.markusressel.kutepreferences.core.preference.KutePreferenceClickListener
+import de.markusressel.kutepreferences.core.view.IconHelper
 
-open class KuteAction(override val key: Int,
-                      val icon: Drawable? = null,
-                      val title: String,
-                      val description: String,
-                      val onClickAction: (Context, KuteAction) -> Unit) :
+open class KuteAction(
+        private val context: Context,
+        override val key: Int,
+        val icon: Drawable? = null,
+        val title: String,
+        val description: String,
+        val onClickAction: (Context, KuteAction) -> Unit) :
         KutePreferenceListItem, KutePreferenceClickListener, KuteSearchable {
 
     override fun createEpoxyModel(): EpoxyModel<*> {
         val viewModel = ActionViewModel()
         viewModel.title.value = title
         viewModel.description.value = description
-        // TODO: default icon?
-        viewModel.icon.value = icon
+        viewModel.icon.value = IconHelper.getListItemIcon(context, icon)
         viewModel.onClick = View.OnClickListener { v -> onListItemClicked(v!!.context!!) }
         viewModel.onLongClick = View.OnLongClickListener { v -> onListItemLongClicked(v!!.context!!) }
 

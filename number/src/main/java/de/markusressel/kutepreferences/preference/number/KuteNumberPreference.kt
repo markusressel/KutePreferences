@@ -8,12 +8,14 @@ import de.markusressel.kutepreferences.core.KutePreferenceDefaultListItemBinding
 import de.markusressel.kutepreferences.core.KutePreferenceListItem
 import de.markusressel.kutepreferences.core.persistence.KutePreferenceDataProvider
 import de.markusressel.kutepreferences.core.preference.KutePreferenceItem
+import de.markusressel.kutepreferences.core.view.IconHelper
 import de.markusressel.kutepreferences.core.viewmodel.DefaultItemViewModel
 
 /**
  * Implementation of a Long preference for selecting a number
  */
 open class KuteNumberPreference(
+        private val context: Context,
         override val key: Int,
         override val icon: Drawable? = null,
         override val title: String,
@@ -35,7 +37,7 @@ open class KuteNumberPreference(
         val viewModel = DefaultItemViewModel()
         viewModel.title.value = title
         viewModel.description.value = description
-        viewModel.icon.value = icon
+        viewModel.icon.value = IconHelper.getListItemIcon(context, icon)
         viewModel.onClick = View.OnClickListener { v -> onListItemClicked(v!!.context!!) }
         viewModel.onLongClick = View.OnLongClickListener { v -> onListItemLongClicked(v!!.context!!) }
 

@@ -6,6 +6,7 @@ import com.airbnb.epoxy.EpoxyModel
 import de.markusressel.kutepreferences.core.KutePreferenceDefaultListItemBindingModel_
 import de.markusressel.kutepreferences.core.KutePreferenceListItem
 import de.markusressel.kutepreferences.core.preference.KutePreferenceItem
+import de.markusressel.kutepreferences.core.view.IconHelper
 import de.markusressel.kutepreferences.core.view.edit.KutePreferenceEditDialog
 import de.markusressel.kutepreferences.core.viewmodel.DefaultItemViewModel
 
@@ -26,7 +27,7 @@ abstract class KuteSingleSelectPreference<T : Any> : KutePreferenceItem<T>, Kute
         val viewModel = DefaultItemViewModel()
         viewModel.title.value = title
         viewModel.description.value = description
-        viewModel.icon.value = icon
+        viewModel.icon.value = IconHelper.getListItemIcon(context, icon)
         viewModel.onClick = View.OnClickListener { v -> onListItemClicked(v!!.context!!) }
         viewModel.onLongClick = View.OnLongClickListener { v -> onListItemLongClicked(v!!.context!!) }
 

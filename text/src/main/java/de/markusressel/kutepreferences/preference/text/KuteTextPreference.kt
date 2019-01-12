@@ -8,18 +8,21 @@ import de.markusressel.kutepreferences.core.KutePreferenceDefaultListItemBinding
 import de.markusressel.kutepreferences.core.KutePreferenceListItem
 import de.markusressel.kutepreferences.core.persistence.KutePreferenceDataProvider
 import de.markusressel.kutepreferences.core.preference.KutePreferenceItem
+import de.markusressel.kutepreferences.core.view.IconHelper
 import de.markusressel.kutepreferences.core.viewmodel.DefaultItemViewModel
 
 /**
  * Implementation for a text preference
  */
-open class KuteTextPreference(override val key: Int,
-                              override val icon: Drawable? = null,
-                              override val title: String,
-                              protected val regex: String? = null,
-                              private val defaultValue: String,
-                              override val dataProvider: KutePreferenceDataProvider,
-                              override val onPreferenceChangedListener: ((oldValue: String, newValue: String) -> Unit)? = null) :
+open class KuteTextPreference(
+        protected val context: Context,
+        override val key: Int,
+        override val icon: Drawable? = null,
+        override val title: String,
+        protected val regex: String? = null,
+        private val defaultValue: String,
+        override val dataProvider: KutePreferenceDataProvider,
+        override val onPreferenceChangedListener: ((oldValue: String, newValue: String) -> Unit)? = null) :
         KutePreferenceItem<String>, KutePreferenceListItem {
 
     override fun getDefaultValue(): String = defaultValue
@@ -32,7 +35,7 @@ open class KuteTextPreference(override val key: Int,
         val viewModel = DefaultItemViewModel()
         viewModel.title.value = title
         viewModel.description.value = description
-        viewModel.icon.value = icon
+        viewModel.icon.value = IconHelper.getListItemIcon(context, icon)
         viewModel.onClick = View.OnClickListener { v -> onListItemClicked(v!!.context!!) }
         viewModel.onLongClick = View.OnLongClickListener { v -> onListItemLongClicked(v!!.context!!) }
 

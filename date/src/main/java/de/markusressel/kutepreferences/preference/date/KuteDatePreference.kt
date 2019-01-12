@@ -8,11 +8,13 @@ import de.markusressel.kutepreferences.core.KutePreferenceDefaultListItemBinding
 import de.markusressel.kutepreferences.core.KutePreferenceListItem
 import de.markusressel.kutepreferences.core.persistence.KutePreferenceDataProvider
 import de.markusressel.kutepreferences.core.preference.KutePreferenceItem
+import de.markusressel.kutepreferences.core.view.IconHelper
 import de.markusressel.kutepreferences.core.viewmodel.DefaultItemViewModel
 import java.text.DateFormat
 import java.util.*
 
 open class KuteDatePreference(
+        private val context: Context,
         override val key: Int,
         override val icon: Drawable? = null,
         override val title: String,
@@ -37,7 +39,7 @@ open class KuteDatePreference(
         val viewModel = DefaultItemViewModel()
         viewModel.title.value = title
         viewModel.description.value = description
-        viewModel.icon.value = icon
+        viewModel.icon.value = IconHelper.getListItemIcon(context, icon)
         viewModel.onClick = View.OnClickListener { v -> onListItemClicked(v!!.context!!) }
 
         return KutePreferenceDefaultListItemBindingModel_().viewModel(viewModel)

@@ -6,7 +6,7 @@
 
         <variable
                 name="viewModel"
-                type="de.markusressel.kutepreferences.preference.bool.BooleanPreferenceViewModel"/>
+                type="de.markusressel.kutepreferences.preference.bool.BooleanPreferenceDataModel"/>
     </data>
 
     <LinearLayout
@@ -45,7 +45,8 @@
 
             <Switch
                     android:layout_width="wrap_content"
-                    android:checked="@={viewModel.checked}"
+                    android:checked="@{viewModel.checked}"
+                    android:onCheckedChanged="@{viewModel.onCheckedChange}"
                     android:layout_height="wrap_content"/>
 
         </LinearLayout>

@@ -1,5 +1,6 @@
 package de.markusressel.kutepreferences.demo.view
 
+import android.content.Context
 import com.mikepenz.material_design_iconic_typeface_library.MaterialDesignIconic
 import de.markusressel.kutepreferences.core.KutePreferenceListItem
 import de.markusressel.kutepreferences.core.preference.category.KuteCategory
@@ -16,6 +17,9 @@ import javax.inject.Inject
 class PreferencesFragment : DaggerKutePreferenceFragmentBase() {
 
     @Inject
+    lateinit var applicationContext: Context
+
+    @Inject
     lateinit var kutePreferencesHolder: KutePreferencesHolder
 
     @Inject
@@ -30,6 +34,7 @@ class PreferencesFragment : DaggerKutePreferenceFragmentBase() {
                         title = getString(R.string.title_section_system_hardware),
                         children = listOf(
                                 KuteCategory(
+                                        context = applicationContext,
                                         key = R.string.key_category_battery,
                                         icon = iconHelper.getIcon(MaterialDesignIconic.Icon.gmi_battery),
                                         title = getString(R.string.title_category_battery),
@@ -43,7 +48,9 @@ class PreferencesFragment : DaggerKutePreferenceFragmentBase() {
                                                         ))
                                         )
                                 ),
-                                KuteCategory(key = R.string.key_category_network,
+                                KuteCategory(
+                                        context = applicationContext,
+                                        key = R.string.key_category_network,
                                         icon = iconHelper.getIcon(MaterialDesignIconic.Icon.gmi_wifi),
                                         title = getString(R.string.title_category_network),
                                         description = getString(R.string.description_category_network),
@@ -61,7 +68,9 @@ class PreferencesFragment : DaggerKutePreferenceFragmentBase() {
                         key = R.string.key_section_device_owner,
                         title = getString(R.string.title_section_device_owner),
                         children = listOf(
-                                KuteCategory(key = R.string.key_category_user,
+                                KuteCategory(
+                                        context = applicationContext,
+                                        key = R.string.key_category_user,
                                         icon = iconHelper.getIcon(MaterialDesignIconic.Icon.gmi_nature_people),
                                         title = getString(R.string.title_category_user),
                                         description = getString(R.string.description_category_user),

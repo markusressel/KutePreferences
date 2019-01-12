@@ -3,6 +3,7 @@ package de.markusressel.kutepreferences.preference.bool
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.view.View
+import android.widget.CompoundButton
 import com.airbnb.epoxy.EpoxyModel
 import de.markusressel.kutepreferences.core.KutePreferenceListItem
 import de.markusressel.kutepreferences.core.persistence.KutePreferenceDataProvider
@@ -33,24 +34,24 @@ open class KuteBooleanPreference(
         return ""
     }
 
-//    fun createListView(context: Context): KutePreferenceListItem {
-//         TODO: extract everything view related to the BooleanPreferenceListView class
-//        return BooleanPreferenceListView(1, context, this)
-//    }
-
     override fun onListItemClicked(context: Context) {
-        // TODO: switch checkbox state
+        persistedValue = !persistedValue
     }
 
     override fun createEpoxyModel(): EpoxyModel<*> {
-        val viewModel = BooleanPreferenceViewModel()
-        viewModel.title.value = title
-        viewModel.description.value = description
-        viewModel.checked.value = persistedValue
-        viewModel.onClick = View.OnClickListener { v -> onListItemClicked(v!!.context!!) }
-        viewModel.onLongClick = View.OnLongClickListener { v -> onListItemLongClicked(v!!.context!!) }
+        val dataModel = BooleanPreferenceDataModel(
+                title = title,
+                description = description,
+                icon = icon,
+                checked = persistedValue,
+                onCheckedChange = CompoundButton.OnCheckedChangeListener { _, isChecked ->
+                    persistedValue = isChecked
+                },
+                onClick = View.OnClickListener { v -> onListItemClicked(v!!.context!!) },
+                onLongClick = View.OnLongClickListener { v -> onListItemLongClicked(v!!.context!!) }
+        )
 
-        return KutePreferenceBooleanListItemBindingModel_().viewModel(viewModel)
+        return KutePreferenceBooleanListItemBindingModel_().viewModel(dataModel)
     }
 
 }
