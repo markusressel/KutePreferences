@@ -3,14 +3,13 @@ package de.markusressel.kutepreferences.core.preference.action
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.view.View
-import android.widget.TextView
 import com.airbnb.epoxy.EpoxyModel
 import de.markusressel.kutepreferences.core.HighlighterFunction
 import de.markusressel.kutepreferences.core.KutePreferenceActionListItemBindingModel_
 import de.markusressel.kutepreferences.core.KutePreferenceListItem
 import de.markusressel.kutepreferences.core.KuteSearchable
 import de.markusressel.kutepreferences.core.preference.KutePreferenceClickListener
-import de.markusressel.kutepreferences.core.view.IconHelper
+import de.markusressel.kutepreferences.core.viewmodel.base.PreferenceItemDataModel
 
 open class KuteAction(
         private val context: Context,
@@ -22,38 +21,22 @@ open class KuteAction(
         KutePreferenceListItem, KutePreferenceClickListener, KuteSearchable {
 
     override fun createEpoxyModel(): EpoxyModel<*> {
-        val viewModel = ActionViewModel()
-        viewModel.title.value = title
-        viewModel.description.value = description
-        viewModel.icon.value = IconHelper.getListItemIcon(context, icon)
-        viewModel.onClick = View.OnClickListener { v -> onListItemClicked(v!!.context!!) }
-        viewModel.onLongClick = View.OnLongClickListener { v -> onListItemLongClicked(v!!.context!!) }
+        val dataModel = PreferenceItemDataModel(
+                title = title,
+                description = description,
+                icon = icon,
+                onClick = View.OnClickListener { v -> onListItemClicked(v!!.context!!) },
+                onLongClick = View.OnLongClickListener { v -> onListItemLongClicked(v!!.context!!) }
+        )
 
-        return KutePreferenceActionListItemBindingModel_().viewModel(viewModel)
+        return KutePreferenceActionListItemBindingModel_().viewModel(dataModel)
     }
-
-    lateinit var nameTextView: TextView
-
-//    override fun inflateListLayout(parentFragment: Fragment, layoutInflater: LayoutInflater, parent: ViewGroup): ViewGroup {
-//        val layout = layoutInflater.inflate(layoutRes, parent, false) as ViewGroup
-//
-//        iconView = layout.findViewById(R.id.kute_preference__preference__icon)
-//        if (icon != null) {
-//            iconView.setImageDrawable(icon)
-//        } else {
-//            iconView.setImageResource(R.drawable.ic_settings_black_24dp)
-//            iconView.alpha = 0.5F
-//        }
-//
-//        return layout
-//    }
 
     override fun onListItemClicked(context: Context) = onClickAction(context, this)
 
     override fun getSearchableItems(): Set<String> = setOf(title)
 
     override fun highlightSearchMatches(highlighter: HighlighterFunction) {
-        nameTextView.text = highlighter(title)
     }
 
 }

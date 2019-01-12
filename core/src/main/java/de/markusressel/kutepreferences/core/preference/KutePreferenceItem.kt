@@ -8,7 +8,7 @@ import com.eightbitlab.rxbus.Bus
 import de.markusressel.kutepreferences.core.KutePreferenceDefaultListItemBindingModel_
 import de.markusressel.kutepreferences.core.event.PreferenceChangedEvent
 import de.markusressel.kutepreferences.core.persistence.KutePreferenceDataProvider
-import de.markusressel.kutepreferences.core.viewmodel.DefaultItemViewModel
+import de.markusressel.kutepreferences.core.viewmodel.base.PreferenceItemDataModel
 
 /**
  * Interface for Preferences
@@ -99,11 +99,13 @@ interface KutePreferenceItem<DataType : Any> {
      * Returns an instance of an epoxy viewmodel for this KutePreferenceItem
      */
     fun createEpoxyModel(): EpoxyModel<*> {
-        val viewModel = DefaultItemViewModel()
-        viewModel.title.value = title
-        viewModel.description.value = description
+        val dataModel = PreferenceItemDataModel(
+                title = title,
+                description = description,
+                icon = icon
+        )
 
-        return KutePreferenceDefaultListItemBindingModel_().viewModel(viewModel)
+        return KutePreferenceDefaultListItemBindingModel_().viewModel(dataModel)
     }
 
 }

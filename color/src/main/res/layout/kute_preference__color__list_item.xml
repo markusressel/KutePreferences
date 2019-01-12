@@ -5,7 +5,7 @@
 
         <variable
                 name="viewModel"
-                type="de.markusressel.kutepreferences.preference.color.ColorPreferenceViewModel"/>
+                type="de.markusressel.kutepreferences.preference.color.ColorPreferenceDataModel"/>
     </data>
 
     <LinearLayout

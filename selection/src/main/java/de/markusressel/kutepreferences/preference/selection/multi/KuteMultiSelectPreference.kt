@@ -9,8 +9,7 @@ import de.markusressel.kutepreferences.core.KutePreferenceDefaultListItemBinding
 import de.markusressel.kutepreferences.core.KutePreferenceListItem
 import de.markusressel.kutepreferences.core.persistence.KutePreferenceDataProvider
 import de.markusressel.kutepreferences.core.preference.KutePreferenceItem
-import de.markusressel.kutepreferences.core.view.IconHelper
-import de.markusressel.kutepreferences.core.viewmodel.DefaultItemViewModel
+import de.markusressel.kutepreferences.core.viewmodel.base.PreferenceItemDataModel
 
 /**
  * Implementation of a multi selection preference
@@ -34,14 +33,15 @@ open class KuteMultiSelectPreference(
     }
 
     override fun createEpoxyModel(): EpoxyModel<*> {
-        val viewModel = DefaultItemViewModel()
-        viewModel.title.value = title
-        viewModel.description.value = description
-        viewModel.icon.value = IconHelper.getListItemIcon(context, icon)
-        viewModel.onClick = View.OnClickListener { v -> onListItemClicked(v!!.context!!) }
-        viewModel.onLongClick = View.OnLongClickListener { v -> onListItemLongClicked(v!!.context!!) }
+        val dataModel = PreferenceItemDataModel(
+                title = title,
+                description = description,
+                icon = icon,
+                onClick = View.OnClickListener { v -> onListItemClicked(v!!.context!!) },
+                onLongClick = View.OnLongClickListener { v -> onListItemLongClicked(v!!.context!!) }
+        )
 
-        return KutePreferenceDefaultListItemBindingModel_().viewModel(viewModel)
+        return KutePreferenceDefaultListItemBindingModel_().viewModel(dataModel)
     }
 
     override fun createDescription(currentValue: Set<String>): String {
