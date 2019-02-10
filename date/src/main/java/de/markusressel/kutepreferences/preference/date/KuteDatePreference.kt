@@ -14,7 +14,6 @@ import java.text.DateFormat
 import java.util.*
 
 open class KuteDatePreference(
-        private val context: Context,
         override val key: Int,
         override val icon: Drawable? = null,
         override val title: String,

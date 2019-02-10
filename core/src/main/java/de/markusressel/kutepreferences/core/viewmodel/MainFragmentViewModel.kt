@@ -17,7 +17,7 @@ class MainFragmentViewModel : ViewModel() {
 
     val currentPreferenceItems = MutableLiveData<List<KutePreferenceListItem>>()
 
-    val isSearchExpanded = MutableLiveData<Boolean>()
+    val isSearchExpanded = MutableLiveData<Boolean>(false)
 
     val currentSearchFilter = MutableLiveData<String>()
 
@@ -61,6 +61,15 @@ class MainFragmentViewModel : ViewModel() {
     }
 
     /**
+     * Show the top level preferences page
+     */
+    fun showTopLevel(keysToHighlight: List<Int> = emptyList()) {
+        showPreferenceItems(treeManager.getTopLevelItems().map { it.key },
+                // small workaround to allow searchView non-nullable type
+                ignoreSearch = true, keysToHighlight = keysToHighlight)
+    }
+
+    /**
      * Show a specific category
      *
      * @param category the category to show
@@ -72,12 +81,6 @@ class MainFragmentViewModel : ViewModel() {
 
         clearSearch()
         showPreferenceItems(categoryItems)
-    }
-
-    fun showTopLevel(keysToHighlight: List<Int> = emptyList()) {
-        showPreferenceItems(treeManager.getTopLevelItems().map { it.key },
-                // small workaround to allow searchView non-nullable type
-                ignoreSearch = true, keysToHighlight = keysToHighlight)
     }
 
     /**
@@ -131,10 +134,7 @@ class MainFragmentViewModel : ViewModel() {
      * @return true, when there was an item on the backstack and a navigation was done, false otherwise
      */
     fun navigateUp(): Boolean {
-        if ((currentSearchFilter.value ?: "").isNotEmpty()) {
-            currentSearchFilter.value = ""
-            return true
-        }
+        if (setSearch("")) return true
 
         return when {
             backstack.size > 1 -> {
@@ -148,14 +148,21 @@ class MainFragmentViewModel : ViewModel() {
 
     /**
      * Set the search string
+     *
+     * @return true if the value has changed, false otherwise
      */
-    fun setSearch(text: String) {
-        currentSearchFilter.value = text
+    fun setSearch(text: String): Boolean {
+        return if (currentSearchFilter.value != text) {
+            currentSearchFilter.value = text
+            true
+        } else false
     }
 
     private fun clearSearch() {
-        currentSearchFilter.value = ""
-        isSearchExpanded.value = false
+        setSearch("")
+        if (isSearchExpanded.value != false) {
+            isSearchExpanded.value = false
+        }
     }
 
     private fun addToBackstack(newBackstackItem: BackstackItem) {

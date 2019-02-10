@@ -22,6 +22,8 @@
 
             <LinearLayout
                     style="@style/KutePreferences.Section"
+                    android:onClick="@{viewModel.onClick}"
+                    android:onLongClick="@{viewModel.onLongClick}"
                     android:background="?attr/selectableItemBackground"
                     android:orientation="vertical">
 

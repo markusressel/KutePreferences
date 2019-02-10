@@ -8,8 +8,7 @@ import de.markusressel.kutepreferences.preference.text.KuteTextPreference
 /**
  * Specialized implementation of a text preference for usage with passwords
  */
-open class KutePasswordPreference(context: Context,
-                                  key: Int,
+open class KutePasswordPreference(key: Int,
                                   icon: Drawable? = null,
                                   title: String,
                                   regex: String? = null,
@@ -17,7 +16,6 @@ open class KutePasswordPreference(context: Context,
                                   dataProvider: KutePreferenceDataProvider,
                                   onPreferenceChangedListener: ((oldValue: String, newValue: String) -> Unit)? = null) :
         KuteTextPreference(
-                context = context,
                 key = key,
                 icon = icon,
                 title = title,

@@ -12,7 +12,6 @@ import de.markusressel.kutepreferences.core.preference.KutePreferenceItem
 import de.markusressel.kutepreferences.core.viewmodel.base.PreferenceItemDataModel
 
 open class KuteTimePreference(
-        private val context: Context,
         override val key: Int,
         override val icon: Drawable? = null,
         override val title: String,

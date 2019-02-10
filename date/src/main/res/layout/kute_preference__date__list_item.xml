@@ -6,7 +6,7 @@
 
         <variable
                 name="viewModel"
-                type="de.markusressel.kutepreferences.preference.date.DatePreferenceDataModel"/>
+                type="de.markusressel.kutepreferences.core.viewmodel.base.PreferenceItemDataModel"/>
     </data>
 
     <LinearLayout

@@ -15,8 +15,7 @@ open class KuteFloatRangePreferenceEditDialog(
         KuteRangePreferenceEditDialog<Float>(
                 preferenceItem,
                 minimum,
-                maximum
-        ) {
+                maximum) {
 
     override val contentLayoutRes: Int
         get() = R.layout.kute_preference__int_range__edit_dialog

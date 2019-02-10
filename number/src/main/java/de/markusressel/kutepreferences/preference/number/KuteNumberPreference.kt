@@ -15,7 +15,6 @@ import de.markusressel.kutepreferences.core.viewmodel.base.PreferenceItemDataMod
  * Implementation of a Long preference for selecting a number
  */
 open class KuteNumberPreference(
-        private val context: Context,
         override val key: Int,
         override val icon: Drawable? = null,
         override val title: String,

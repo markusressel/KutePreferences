@@ -41,7 +41,6 @@ class KutePreferencesHolder @Inject constructor(
 
     val textPreference by lazy {
         KuteTextPreference(
-                context = context,
                 key = R.string.key_demo_text_pref,
                 icon = iconHelper.getIcon(MaterialDesignIconic.Icon.gmi_battery),
                 title = context.getString(R.string.title_demo_text_pref),
@@ -51,7 +50,6 @@ class KutePreferencesHolder @Inject constructor(
 
     val textPreference2 by lazy {
         KuteTextPreference(
-                context = context,
                 key = R.string.key_demo_text_pref_2,
                 title = context.getString(R.string.title_demo_text_pref_2),
                 defaultValue = TEXT_PREFERENCE_2_DEFAULT_VALUE,
@@ -60,7 +58,6 @@ class KutePreferencesHolder @Inject constructor(
 
     val urlPreference by lazy {
         KuteUrlPreference(
-                context = context,
                 key = R.string.key_demo_url_pref,
                 title = context.getString(R.string.title_demo_url_pref),
                 icon = iconHelper.getIcon(MaterialDesignIconic.Icon.gmi_open_in_browser),
@@ -70,7 +67,6 @@ class KutePreferencesHolder @Inject constructor(
 
     val passwordPreference by lazy {
         KutePasswordPreference(
-                context = context,
                 key = R.string.key_demo_text_pref_password,
                 icon = iconHelper.getIcon(MaterialDesignIconic.Icon.gmi_lock),
                 title = context.getString(R.string.title_demo_text_pref_password),
@@ -99,7 +95,6 @@ class KutePreferencesHolder @Inject constructor(
 
     val numberPreference by lazy {
         KuteNumberPreference(
-                context = context,
                 key = R.string.key_demo_number_pref,
                 icon = iconHelper.getIcon(MaterialDesignIconic.Icon.gmi_time_countdown),
                 title = context.getString(R.string.title_demo_number_pref),
@@ -110,7 +105,6 @@ class KutePreferencesHolder @Inject constructor(
 
     val sliderPreference by lazy {
         KuteSliderPreference(
-                context = context,
                 key = R.string.key_demo_slider_pref,
                 icon = iconHelper.getIcon(MaterialDesignIconic.Icon.gmi_volume_up),
                 title = context.getString(R.string.title_demo_slider_pref),
@@ -122,7 +116,6 @@ class KutePreferencesHolder @Inject constructor(
 
     val intRangePreference by lazy {
         KuteIntRangePreference(
-                context = context,
                 key = R.string.key_demo_int_range_pref,
                 icon = iconHelper.getIcon(MaterialDesignIconic.Icon.gmi_arrows),
                 title = context.getString(R.string.title_demo_int_range_pref),
@@ -134,7 +127,6 @@ class KutePreferencesHolder @Inject constructor(
 
     val floatRangePreference by lazy {
         KuteFloatRangePreference(
-                context = context,
                 key = R.string.key_demo_float_range_pref,
                 icon = iconHelper.getIcon(MaterialDesignIconic.Icon.gmi_arrows),
                 title = context.getString(R.string.title_demo_float_range_pref),
@@ -158,7 +150,6 @@ class KutePreferencesHolder @Inject constructor(
 
     val datePreference by lazy {
         KuteDatePreference(
-                context = context,
                 key = R.string.key_demo_date_pref,
                 icon = iconHelper.getIcon(MaterialDesignIconic.Icon.gmi_calendar),
                 title = context.getString(R.string.title_demo_date_pref),
@@ -168,7 +159,6 @@ class KutePreferencesHolder @Inject constructor(
 
     val timePreference by lazy {
         KuteTimePreference(
-                context = context,
                 key = R.string.key_demo_time_pref,
                 icon = iconHelper.getIcon(MaterialDesignIconic.Icon.gmi_time),
                 title = context.getString(R.string.title_demo_time_pref),

@@ -8,8 +8,7 @@ import de.markusressel.kutepreferences.preference.text.KuteTextPreference
 /**
  * Implementation for a url preference
  */
-open class KuteUrlPreference(context: Context,
-                             key: Int,
+open class KuteUrlPreference(key: Int,
                              icon: Drawable? = null,
                              title: String,
                              regex: String? = null,
@@ -17,7 +16,6 @@ open class KuteUrlPreference(context: Context,
                              dataProvider: KutePreferenceDataProvider,
                              onPreferenceChangedListener: ((oldValue: String, newValue: String) -> Unit)? = null) :
         KuteTextPreference(
-                context = context,
                 key = key,
                 icon = icon,
                 title = title,

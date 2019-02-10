@@ -15,7 +15,6 @@ import de.markusressel.kutepreferences.core.viewmodel.base.PreferenceItemDataMod
  * Implementation for a text preference
  */
 open class KuteTextPreference(
-        protected val context: Context,
         override val key: Int,
         override val icon: Drawable? = null,
         override val title: String,

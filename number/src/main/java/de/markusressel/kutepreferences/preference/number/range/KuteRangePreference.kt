@@ -1,6 +1,5 @@
 package de.markusressel.kutepreferences.preference.number.range
 
-import android.content.Context
 import android.graphics.drawable.Drawable
 import android.view.View
 import com.airbnb.epoxy.EpoxyModel
@@ -15,7 +14,6 @@ import de.markusressel.kutepreferences.core.viewmodel.base.PreferenceItemDataMod
  * Base class for preferences defining some kind of range
  */
 abstract class KuteRangePreference<T : Number>(
-        protected val context: Context,
         override val key: Int,
         override val icon: Drawable? = null,
         override val title: String,
