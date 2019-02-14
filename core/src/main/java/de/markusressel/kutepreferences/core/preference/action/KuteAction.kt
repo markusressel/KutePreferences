@@ -7,22 +7,22 @@ import com.airbnb.epoxy.EpoxyModel
 import de.markusressel.kutepreferences.core.HighlighterFunction
 import de.markusressel.kutepreferences.core.KutePreferenceActionListItemBindingModel_
 import de.markusressel.kutepreferences.core.KutePreferenceListItem
-import de.markusressel.kutepreferences.core.KuteSearchable
 import de.markusressel.kutepreferences.core.viewmodel.base.PreferenceItemDataModel
 
 open class KuteAction(
-        private val context: Context,
         override val key: Int,
         val icon: Drawable? = null,
         val title: String,
         val description: String,
         val onClickAction: (Context, KuteAction) -> Unit) :
-        KutePreferenceListItem, KuteSearchable {
+        KutePreferenceListItem {
 
-    override fun createEpoxyModel(): EpoxyModel<*> {
+    override fun getSearchableItems(): Set<String> = setOf(title, description)
+
+    override fun createEpoxyModel(highlighterFunction: HighlighterFunction): EpoxyModel<*> {
         val dataModel = PreferenceItemDataModel(
-                title = title,
-                description = description,
+                title = highlighterFunction.invoke(title),
+                description = highlighterFunction.invoke(description),
                 icon = icon,
                 onClick = View.OnClickListener { v -> onListItemClicked(v!!.context!!) },
                 onLongClick = View.OnLongClickListener { v -> onListItemLongClicked(v!!.context!!) }
@@ -32,10 +32,5 @@ open class KuteAction(
     }
 
     override fun onListItemClicked(context: Context) = onClickAction(context, this)
-
-    override fun getSearchableItems(): Set<String> = setOf(title)
-
-    override fun highlightSearchMatches(highlighter: HighlighterFunction) {
-    }
 
 }

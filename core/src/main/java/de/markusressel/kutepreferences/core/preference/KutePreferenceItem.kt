@@ -3,12 +3,9 @@ package de.markusressel.kutepreferences.core.preference
 import android.graphics.drawable.Drawable
 import androidx.annotation.CallSuper
 import androidx.annotation.CheckResult
-import com.airbnb.epoxy.EpoxyModel
 import com.eightbitlab.rxbus.Bus
-import de.markusressel.kutepreferences.core.KutePreferenceDefaultListItemBindingModel_
 import de.markusressel.kutepreferences.core.event.PreferenceChangedEvent
 import de.markusressel.kutepreferences.core.persistence.KutePreferenceDataProvider
-import de.markusressel.kutepreferences.core.viewmodel.base.PreferenceItemDataModel
 
 /**
  * Interface for Preferences
@@ -95,17 +92,17 @@ interface KutePreferenceItem<DataType : Any> {
         onPreferenceChangedListener?.invoke(oldValue, newValue)
     }
 
-    /**
-     * Returns an instance of an epoxy viewmodel for this KutePreferenceItem
-     */
-    fun createEpoxyModel(): EpoxyModel<*> {
-        val dataModel = PreferenceItemDataModel(
-                title = title,
-                description = description,
-                icon = icon
-        )
-
-        return KutePreferenceDefaultListItemBindingModel_().viewModel(dataModel)
-    }
+//    /**
+//     * Returns an instance of an epoxy viewmodel for this KutePreferenceItem
+//     */
+//    fun createEpoxyModel(): EpoxyModel<*> {
+//        val dataModel = PreferenceItemDataModel(
+//                title = title,
+//                description = description,
+//                icon = icon
+//        )
+//
+//        return KutePreferenceDefaultListItemBindingModel_().viewModel(dataModel)
+//    }
 
 }

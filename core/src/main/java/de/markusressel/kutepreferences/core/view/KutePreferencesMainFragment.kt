@@ -5,6 +5,8 @@ import android.graphics.drawable.RippleDrawable
 import android.os.Bundle
 import android.os.Handler
 import android.text.SpannableStringBuilder
+import android.text.Spanned
+import android.text.SpannedString
 import android.util.Log
 import android.view.*
 import androidx.annotation.CallSuper
@@ -23,8 +25,8 @@ import com.eightbitlab.rxbus.registerInBus
 import com.jakewharton.rxbinding2.support.v7.widget.RxSearchView
 import com.trello.rxlifecycle2.android.lifecycle.kotlin.bindUntilEvent
 import de.markusressel.commons.android.themes.getThemeAttrColor
+import de.markusressel.kutepreferences.core.HighlighterFunction
 import de.markusressel.kutepreferences.core.KutePreferenceListItem
-import de.markusressel.kutepreferences.core.KuteSearchable
 import de.markusressel.kutepreferences.core.R
 import de.markusressel.kutepreferences.core.databinding.KutePreferenceMainFragmentBinding
 import de.markusressel.kutepreferences.core.event.CategoryClickedEvent
@@ -78,7 +80,7 @@ abstract class KutePreferencesMainFragment : LifecycleFragmentBase() {
         })
 
         binding.let {
-            it.setLifecycleOwner(this)
+            it.lifecycleOwner = this
             it.viewModel = viewModel
         }
 
@@ -98,18 +100,20 @@ abstract class KutePreferencesMainFragment : LifecycleFragmentBase() {
     private fun createEpoxyController(): TypedEpoxyController<List<KutePreferenceListItem>> {
         return object : TypedEpoxyController<List<KutePreferenceListItem>>() {
             override fun buildModels(data: List<KutePreferenceListItem>?) {
+                val highlighter = createHighlighterFunction(viewModel.currentSearchFilter.value ?: "")
+
                 data?.forEach {
-                    createModel(it).addTo(this)
+                    createModel(it, highlighter).addTo(this)
                     if (it is KuteSection && !viewModel.isSearching()) {
                         it.children.forEach { child ->
-                            createModel(child).addTo(this)
+                            createModel(child, highlighter).addTo(this)
                         }
                     }
                 }
             }
 
-            private fun createModel(kutePreferenceListItem: KutePreferenceListItem): EpoxyModel<*> {
-                return kutePreferenceListItem.createEpoxyModel().apply {
+            private fun createModel(kutePreferenceListItem: KutePreferenceListItem, highlighter: HighlighterFunction): EpoxyModel<*> {
+                return kutePreferenceListItem.createEpoxyModel(highlighter).apply {
                     id(kutePreferenceListItem.key)
                 }
             }
@@ -175,6 +179,9 @@ abstract class KutePreferencesMainFragment : LifecycleFragmentBase() {
                     // force rebuilding of models
                     epoxyController.setData(epoxyController.currentData)
                 }.registerInBus(this)
+
+        // force rebuilding of models
+        epoxyController.setData(epoxyController.currentData)
     }
 
     override fun onStop() {
@@ -249,36 +256,38 @@ abstract class KutePreferencesMainFragment : LifecycleFragmentBase() {
         return viewModel.navigateUp()
     }
 
-    private fun highlightSearchMatches(context: Context, preferenceItem: KuteSearchable, searchString: String) {
-        preferenceItem.highlightSearchMatches { text ->
-            val regex = searchString.toRegex(RegexOption.IGNORE_CASE)
+    private fun createHighlighterFunction(searchString: String): HighlighterFunction {
+        return { text: String ->
+            if (searchString.isBlank()) {
+                SpannedString.valueOf(text) as Spanned
+            } else {
+                val regex = searchString.toRegex(RegexOption.IGNORE_CASE)
 
-            val highlightedText = SpannableStringBuilder()
+                val highlightedText = SpannableStringBuilder()
 
-            var currentStartIndex = 0
-            while (currentStartIndex < text.length) {
-                val matchResult = regex.find(text, startIndex = currentStartIndex)
+                var currentStartIndex = 0
+                while (currentStartIndex < text.length) {
+                    val matchResult = regex.find(text, startIndex = currentStartIndex)
 
-                if (matchResult != null) {
-                    // append normal text
-                    highlightedText.append(text.substring(currentStartIndex, matchResult.range.first))
+                    if (matchResult != null) {
+                        // append normal text
+                        highlightedText.append(text.substring(currentStartIndex, matchResult.range.first))
 
-                    val color = context.getThemeAttrColor(R.attr.kute_preferences__search__highlighted_text_color)
-                    highlightedText.backgroundColor(color) {
-                        append(text.substring(matchResult.range.first, matchResult.range.last + 1))
+                        val color = context!!.getThemeAttrColor(R.attr.kute_preferences__search__highlighted_text_color)
+                        highlightedText.backgroundColor(color) {
+                            append(text.substring(matchResult.range.first, matchResult.range.last + 1))
+                        }
+
+                        // set index for next iteration
+                        currentStartIndex = matchResult.range.last + 1
+                    } else {
+                        highlightedText.append(text.substring(currentStartIndex, text.length))
+                        break
                     }
-
-                    // set index for next iteration
-                    currentStartIndex = matchResult.range.last + 1
-                } else {
-                    highlightedText.append(text.substring(currentStartIndex, text.length))
-                    break
                 }
+                highlightedText
             }
-
-            highlightedText
         }
-
     }
 
     companion object {

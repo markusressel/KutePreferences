@@ -1,6 +1,7 @@
 package de.markusressel.kutepreferences.core.viewmodel.base
 
 import android.graphics.drawable.Drawable
+import android.text.Spanned
 import android.view.View
 
 /**
@@ -10,13 +11,13 @@ open class PreferenceItemDataModel(
         /**
          * The title of the preference item
          */
-        val title: String,
+        val title: Spanned,
         /**
          * The description of the preference item
          * This should always represent the current value of the preference item
          * if it is not visualized in some other form
          */
-        val description: String,
+        val description: Spanned,
 
         /**
          * Indicates the visibility of the description TextView

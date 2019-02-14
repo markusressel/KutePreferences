@@ -23,13 +23,7 @@ open class KuteBooleanPreference(
         override val onPreferenceChangedListener: ((oldValue: Boolean, newValue: Boolean) -> Unit)? = null) :
         KutePreferenceItem<Boolean>, KutePreferenceListItem {
 
-    override fun getSearchableItems(): Set<String> {
-        return setOf(title, description)
-    }
-
-    override fun highlightSearchMatches(highlighter: HighlighterFunction) {
-        // TODO
-    }
+    override fun getSearchableItems(): Set<String> = setOf(title, description)
 
     override fun getDefaultValue(): Boolean = defaultValue
 
@@ -48,10 +42,10 @@ open class KuteBooleanPreference(
         persistedValue = !persistedValue
     }
 
-    override fun createEpoxyModel(): EpoxyModel<*> {
+    override fun createEpoxyModel(highlighterFunction: HighlighterFunction): EpoxyModel<*> {
         val dataModel = BooleanPreferenceDataModel(
-                title = title,
-                description = description,
+                title = highlighterFunction.invoke(title),
+                description = highlighterFunction.invoke(description),
                 icon = icon,
                 checked = persistedValue,
                 onCheckedChange = CompoundButton.OnCheckedChangeListener { _, isChecked ->

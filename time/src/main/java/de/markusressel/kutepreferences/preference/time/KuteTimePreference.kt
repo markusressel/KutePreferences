@@ -20,14 +20,7 @@ open class KuteTimePreference(
         override val onPreferenceChangedListener: ((oldValue: TimePersistenceModel, newValue: TimePersistenceModel) -> Unit)? = null) :
         KutePreferenceItem<TimePersistenceModel>, KutePreferenceListItem {
 
-    override fun getSearchableItems(): Set<String> {
-        return setOf(title, description)
-    }
-
-    override fun highlightSearchMatches(highlighter: HighlighterFunction) {
-        // TODO
-    }
-
+    override fun getSearchableItems(): Set<String> = setOf(title, description)
 
     override fun getDefaultValue(): TimePersistenceModel = defaultValue
 
@@ -35,10 +28,10 @@ open class KuteTimePreference(
         KuteTimePreferenceEditDialog(this).show(context)
     }
 
-    override fun createEpoxyModel(): EpoxyModel<*> {
+    override fun createEpoxyModel(highlighterFunction: HighlighterFunction): EpoxyModel<*> {
         val dataModel = PreferenceItemDataModel(
-                title = title,
-                description = description,
+                title = highlighterFunction.invoke(title),
+                description = highlighterFunction.invoke(description),
                 icon = icon,
                 onClick = View.OnClickListener { v -> onListItemClicked(v!!.context!!) },
                 onLongClick = View.OnLongClickListener { v -> onListItemLongClicked(v!!.context!!) }

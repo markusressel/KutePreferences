@@ -1,6 +1,7 @@
 package de.markusressel.kutepreferences.preference.bool
 
 import android.graphics.drawable.Drawable
+import android.text.Spanned
 import android.view.View
 import android.widget.CompoundButton
 import de.markusressel.kutepreferences.core.viewmodel.base.PreferenceItemDataModel
@@ -9,14 +10,18 @@ import de.markusressel.kutepreferences.core.viewmodel.base.PreferenceItemDataMod
  * Data model for the boolean toggle preference
  */
 class BooleanPreferenceDataModel(
-        title: String,
-        description: String,
+        title: Spanned,
+        description: Spanned,
         icon: Drawable?,
         val checked: Boolean,
         val onCheckedChange: CompoundButton.OnCheckedChangeListener,
         onClick: View.OnClickListener,
         onLongClick: View.OnLongClickListener)
-    : PreferenceItemDataModel(title, description, icon = icon, onClick = onClick, onLongClick = onLongClick) {
+    : PreferenceItemDataModel(title,
+        description,
+        icon = icon,
+        onClick = onClick,
+        onLongClick = onLongClick) {
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

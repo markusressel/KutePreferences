@@ -27,13 +27,7 @@ open class KuteColorPreference(
         override val onPreferenceChangedListener: ((oldValue: Int, newValue: Int) -> Unit)? = null) :
         KutePreferenceItem<Int>, KutePreferenceListItem {
 
-    override fun getSearchableItems(): Set<String> {
-        return setOf(title, description)
-    }
-
-    override fun highlightSearchMatches(highlighter: HighlighterFunction) {
-        // TODO
-    }
+    override fun getSearchableItems(): Set<String> = setOf(title, description)
 
     override fun getDefaultValue(): Int = ContextCompat.getColor(context, defaultValue)
 
@@ -50,10 +44,10 @@ open class KuteColorPreference(
         return "#$a$r$g$b"
     }
 
-    override fun createEpoxyModel(): EpoxyModel<*> {
+    override fun createEpoxyModel(highlighterFunction: HighlighterFunction): EpoxyModel<*> {
         val dataModel = ColorPreferenceDataModel(
-                title = title,
-                description = description,
+                title = highlighterFunction.invoke(title),
+                description = highlighterFunction.invoke(description),
                 icon = icon,
                 color = persistedValue,
                 onClick = View.OnClickListener { v -> onListItemClicked(v!!.context!!) },

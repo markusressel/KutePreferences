@@ -1,12 +1,13 @@
 package de.markusressel.kutepreferences.core.viewmodel
 
+import android.text.Spanned
 import android.view.View
 
 class SectionViewModel(
         /**
          * The title of the section
          */
-        val title: String,
+        val title: Spanned,
 
         /**
          * Action for clicks

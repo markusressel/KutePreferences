@@ -23,6 +23,11 @@ android {
         multiDexEnabled true
     }
 
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -65,7 +70,7 @@ dependencies {
     implementation "com.mikepenz:iconics-core:${iconicsVersion}@aar"
     //this adds all ui view widgets (IconicsButton, IconicsImageView, ...)
     implementation "com.mikepenz:iconics-views:${iconicsVersion}@aar"
-    implementation 'com.mikepenz:material-design-iconic-typeface:+@aar'
+    implementation 'com.mikepenz:material-design-iconic-typeface:2.2.0.5@aar'
 }
 
 // build a jar with source files

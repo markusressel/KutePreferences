@@ -6,18 +6,21 @@ import com.airbnb.epoxy.EpoxyModel
 import de.markusressel.kutepreferences.core.preference.KutePreferenceClickListener
 import de.markusressel.kutepreferences.core.preference.KutePreferenceLongClickListener
 
-interface KutePreferenceListItem : KutePreferenceClickListener, KutePreferenceLongClickListener, KuteSearchable {
+interface KutePreferenceListItem : KuteSearchable, KutePreferenceClickListener, KutePreferenceLongClickListener {
 
     /**
-     * A unique identifier for this KutePreference
+     * A unique identifier for this [KutePreferenceListItem]
      */
     @get:StringRes
     val key: Int
 
     /**
-     * Returns an instance of an epoxy viewmodel for this KutePreferenceListItem
+     * Creates the epoxy viewmodel for this [KutePreferenceListItem]
+     *
+     * @param highlighterFunction the function used to highlight items based on the current search text
+     * @return the viewmodel representing the current state of this [KutePreferenceListItem]
      */
-    fun createEpoxyModel(): EpoxyModel<*>
+    fun createEpoxyModel(highlighterFunction: HighlighterFunction): EpoxyModel<*>
 
     override fun onListItemClicked(context: Context) {
     }

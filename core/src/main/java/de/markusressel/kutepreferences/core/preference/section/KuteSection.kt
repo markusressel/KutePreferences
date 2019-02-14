@@ -2,7 +2,6 @@ package de.markusressel.kutepreferences.core.preference.section
 
 import android.content.Context
 import android.view.View
-import android.widget.TextView
 import com.airbnb.epoxy.EpoxyModel
 import com.eightbitlab.rxbus.Bus
 import de.markusressel.kutepreferences.core.HighlighterFunction
@@ -19,11 +18,11 @@ open class KuteSection(
         override val title: String,
         override val children: List<KutePreferenceListItem>) : KutePreferenceSection {
 
-    lateinit var nameView: TextView
+    override fun getSearchableItems(): Set<String> = setOf(title)
 
-    override fun createEpoxyModel(): EpoxyModel<*> {
+    override fun createEpoxyModel(highlighterFunction: HighlighterFunction): EpoxyModel<*> {
         val viewModel = SectionViewModel(
-                title = title,
+                title = highlighterFunction.invoke(title),
                 onClick = View.OnClickListener { v -> onListItemClicked(v!!.context!!) },
                 onLongClick = View.OnLongClickListener { v -> onListItemLongClicked(v!!.context!!) })
 
@@ -32,14 +31,6 @@ open class KuteSection(
 
     override fun onListItemClicked(context: Context) {
         Bus.send(SectionClickedEvent(this))
-    }
-
-    override fun getSearchableItems(): Set<String> {
-        return setOf(title)
-    }
-
-    override fun highlightSearchMatches(highlighter: HighlighterFunction) {
-        nameView.text = highlighter(title)
     }
 
 }

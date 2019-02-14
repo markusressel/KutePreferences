@@ -198,7 +198,6 @@ class KutePreferencesHolder @Inject constructor(
 
     val kuteAction by lazy {
         KuteAction(
-                context = context,
                 key = R.string.key_demo_action,
                 icon = iconHelper.getIcon(MaterialDesignIconic.Icon.gmi_info),
                 title = context.getString(R.string.title_demo_action),

@@ -24,13 +24,7 @@ open class KuteDatePreference(
         override val onPreferenceChangedListener: ((oldValue: Long, newValue: Long) -> Unit)? = null) :
         KutePreferenceItem<Long>, KutePreferenceListItem {
 
-    override fun getSearchableItems(): Set<String> {
-        return setOf(title, description)
-    }
-
-    override fun highlightSearchMatches(highlighter: HighlighterFunction) {
-        // TODO
-    }
+    override fun getSearchableItems(): Set<String> = setOf(title, description)
 
     override fun getDefaultValue(): Long = defaultValue
 
@@ -42,10 +36,10 @@ open class KuteDatePreference(
         KuteDatePreferenceEditDialog(this, minimum = minimum, maximum = maximum).show(context)
     }
 
-    override fun createEpoxyModel(): EpoxyModel<*> {
+    override fun createEpoxyModel(highlighterFunction: HighlighterFunction): EpoxyModel<*> {
         val dataModel = PreferenceItemDataModel(
-                title = title,
-                description = description,
+                title = highlighterFunction.invoke(title),
+                description = highlighterFunction.invoke(description),
                 icon = icon,
                 onClick = View.OnClickListener { v -> onListItemClicked(v!!.context!!) },
                 onLongClick = View.OnLongClickListener { v -> onListItemLongClicked(v!!.context!!) }

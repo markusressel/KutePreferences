@@ -14,9 +14,7 @@ class TreeManager(vararg items: KutePreferenceListItem) {
     private val treeAsList = creatListOfAllItems(tree)
 
     private val itemsWithSearchProviders by lazy {
-        treeAsList.asSequence().mapNotNull { it.item }.filter {
-            it is KuteSearchable
-        }.map {
+        treeAsList.asSequence().mapNotNull { it.item }.map {
             it as KuteSearchable
         }
     }

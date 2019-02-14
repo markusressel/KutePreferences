@@ -1,6 +1,7 @@
 package de.markusressel.kutepreferences.preference.color
 
 import android.graphics.drawable.Drawable
+import android.text.Spanned
 import android.view.View
 import androidx.annotation.ColorInt
 import de.markusressel.kutepreferences.core.viewmodel.base.PreferenceItemDataModel
@@ -9,8 +10,8 @@ import de.markusressel.kutepreferences.core.viewmodel.base.PreferenceItemDataMod
  * Data model for the boolean toggle preference
  */
 class ColorPreferenceDataModel(
-        title: String,
-        description: String,
+        title: Spanned,
+        description: Spanned,
         icon: Drawable?,
         @ColorInt
         val color: Int,
