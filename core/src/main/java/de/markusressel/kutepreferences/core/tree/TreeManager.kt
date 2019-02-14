@@ -63,13 +63,14 @@ class TreeManager(vararg items: KutePreferenceListItem) {
     /**
      * Finds KuteSearchProviders and analyzes them for the given text
      *
-     * @param text text to search for
+     * @param searchText text to search for
      * @return list of items
      */
-    fun findInSearchProviders(text: String): List<KutePreferenceListItem> {
+    fun findInSearchProviders(searchText: String): List<KutePreferenceListItem> {
+        val searchRegex = searchText.toRegex(setOf(RegexOption.IGNORE_CASE, RegexOption.LITERAL))
         return itemsWithSearchProviders.filter {
             it.getSearchableItems().any { searchableText ->
-                searchableText.contains(text, true)
+                searchableText.contains(searchRegex)
             }
         }.map {
             it as KutePreferenceListItem

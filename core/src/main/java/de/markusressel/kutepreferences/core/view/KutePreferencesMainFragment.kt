@@ -54,6 +54,9 @@ abstract class KutePreferencesMainFragment : LifecycleFragmentBase() {
 
     private var searchView: SearchView? = null
     private var searchMenuItem: MenuItem? = null
+    private val searchHighlightingColor by lazy {
+        context!!.getThemeAttrColor(R.attr.kute_preferences__search__highlighted_text_color)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -261,10 +264,9 @@ abstract class KutePreferencesMainFragment : LifecycleFragmentBase() {
             if (searchString.isBlank()) {
                 SpannedString.valueOf(text) as Spanned
             } else {
-                val regex = searchString.toRegex(RegexOption.IGNORE_CASE)
+                val regex = searchString.toRegex(setOf(RegexOption.IGNORE_CASE, RegexOption.LITERAL))
 
                 val highlightedText = SpannableStringBuilder()
-
                 var currentStartIndex = 0
                 while (currentStartIndex < text.length) {
                     val matchResult = regex.find(text, startIndex = currentStartIndex)
@@ -273,8 +275,7 @@ abstract class KutePreferencesMainFragment : LifecycleFragmentBase() {
                         // append normal text
                         highlightedText.append(text.substring(currentStartIndex, matchResult.range.first))
 
-                        val color = context!!.getThemeAttrColor(R.attr.kute_preferences__search__highlighted_text_color)
-                        highlightedText.backgroundColor(color) {
+                        highlightedText.backgroundColor(searchHighlightingColor) {
                             append(text.substring(matchResult.range.first, matchResult.range.last + 1))
                         }
 
