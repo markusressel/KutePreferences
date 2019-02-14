@@ -39,18 +39,13 @@ buildscript {
         mavenCentral()
         maven { url "https://jitpack.io" }
         maven { url "https://dl.bintray.com/drummer-aidan/maven/" }
-        // TODO: remove this when butterknife 9.0.0 is stable
-        maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
     }
     dependencies {
         classpath "com.android.tools.build:gradle:$gradle_plugin_version"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
-        // TODO: upgrade this to 9.0.0 stable when it is released
-        classpath 'com.jakewharton:butterknife-gradle-plugin:9.0.0-SNAPSHOT'
-
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
+        classpath "org.jetbrains.dokka:dokka-android-gradle-plugin:0.9.17"
+        classpath 'com.jakewharton:butterknife-gradle-plugin:10.0.0'
     }
 }
 
