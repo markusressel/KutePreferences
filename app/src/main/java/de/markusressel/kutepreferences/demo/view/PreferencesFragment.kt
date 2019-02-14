@@ -8,6 +8,7 @@ import de.markusressel.kutepreferences.demo.R
 import de.markusressel.kutepreferences.demo.helper.IconHelper
 import de.markusressel.kutepreferences.demo.preferences.DaggerKutePreferenceFragmentBase
 import de.markusressel.kutepreferences.demo.preferences.KutePreferencesHolder
+import de.markusressel.kutepreferences.demo.preferences.custom.CustomPreferenceItem
 import javax.inject.Inject
 
 /**
@@ -93,7 +94,10 @@ class PreferencesFragment : DaggerKutePreferenceFragmentBase() {
                         )
                 ),
                 kutePreferencesHolder.urlPreference,
-                kutePreferencesHolder.kuteAction
+                kutePreferencesHolder.kuteAction,
+                CustomPreferenceItem(
+                        key = R.string.key_demo_custom
+                )
         )
     }
 

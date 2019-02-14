@@ -48,6 +48,9 @@ dependencies {
     implementation project(':selection')
     implementation project(':text')
 
+    // add this if you want to add custom preference item layouts
+    kapt "com.airbnb.android:epoxy-processor:$epoxyVersion"
+
     implementation "androidx.appcompat:appcompat:1.0.2"
 
     // Android KTX
