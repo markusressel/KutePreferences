@@ -63,11 +63,6 @@ allprojects {
     configurations.all() {
         resolutionStrategy.force "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
         resolutionStrategy.force "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-
-        // TODO: find out which version to use here
-        resolutionStrategy.force "androidx.transition:transition:1.0.0-rc01"
-        resolutionStrategy.force "androidx.cardview:cardview:1.0.0-rc01"
-        resolutionStrategy.force "com.google.android.material:material:1.0.0-rc01"
     }
 }
 
