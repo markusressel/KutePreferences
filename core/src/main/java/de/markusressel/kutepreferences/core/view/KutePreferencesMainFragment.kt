@@ -124,10 +124,10 @@ abstract class KutePreferencesMainFragment : LifecycleFragmentBase() {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
-        inflater?.inflate(R.menu.kutepreferences__menu, menu)
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.kutepreferences__menu, menu)
 
-        searchMenuItem = menu?.findItem(R.id.search)
+        searchMenuItem = menu.findItem(R.id.search)
         searchMenuItem?.apply {
             icon = ContextCompat.getDrawable(context as Context, R.drawable.ic_search_24px)
             setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
