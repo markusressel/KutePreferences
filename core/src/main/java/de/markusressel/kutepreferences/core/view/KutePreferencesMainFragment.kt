@@ -31,6 +31,7 @@ import de.markusressel.kutepreferences.core.R
 import de.markusressel.kutepreferences.core.databinding.KutePreferenceMainFragmentBinding
 import de.markusressel.kutepreferences.core.event.CategoryClickedEvent
 import de.markusressel.kutepreferences.core.event.PreferenceChangedEvent
+import de.markusressel.kutepreferences.core.event.RefreshPreferenceItemsEvent
 import de.markusressel.kutepreferences.core.event.SectionClickedEvent
 import de.markusressel.kutepreferences.core.extensions.children
 import de.markusressel.kutepreferences.core.preference.section.KuteSection
@@ -178,6 +179,12 @@ abstract class KutePreferencesMainFragment : LifecycleFragmentBase() {
                 }.registerInBus(this)
 
         Bus.observe<PreferenceChangedEvent<*>>()
+                .subscribe {
+                    // force rebuilding of models
+                    epoxyController.setData(epoxyController.currentData)
+                }.registerInBus(this)
+
+        Bus.observe<RefreshPreferenceItemsEvent>()
                 .subscribe {
                     // force rebuilding of models
                     epoxyController.setData(epoxyController.currentData)
