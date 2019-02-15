@@ -2,7 +2,6 @@ package de.markusressel.kutepreferences.demo.view
 
 import android.os.Bundle
 import android.view.MenuItem
-import androidx.core.app.NavUtils
 import de.markusressel.kutepreferences.demo.R
 import de.markusressel.kutepreferences.demo.dagger.DaggerSupportActivityBase
 import de.markusressel.kutepreferences.demo.preferences.KutePreferencesHolder
@@ -66,7 +65,7 @@ class MainActivity : DaggerSupportActivityBase() {
                     return true
                 }
 
-                NavUtils.navigateUpFromSameTask(this)
+                finish()
                 true
             }
             else -> super.onOptionsItemSelected(item)

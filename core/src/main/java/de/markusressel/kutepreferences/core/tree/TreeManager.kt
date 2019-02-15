@@ -2,7 +2,7 @@ package de.markusressel.kutepreferences.core.tree
 
 import androidx.annotation.StringRes
 import de.markusressel.kutepreferences.core.KutePreferenceListItem
-import de.markusressel.kutepreferences.core.KuteSearchProvider
+import de.markusressel.kutepreferences.core.KuteSearchable
 import de.markusressel.kutepreferences.core.preference.category.KuteParent
 import de.markusressel.kutepreferences.core.preference.category.KutePreferenceCategory
 import de.markusressel.kutepreferences.core.preference.section.KutePreferenceSection
@@ -14,10 +14,8 @@ class TreeManager(vararg items: KutePreferenceListItem) {
     private val treeAsList = creatListOfAllItems(tree)
 
     private val itemsWithSearchProviders by lazy {
-        treeAsList.asSequence().mapNotNull { it.item }.filter {
-            it is KuteSearchProvider
-        }.map {
-            it as KuteSearchProvider
+        treeAsList.asSequence().mapNotNull { it.item }.map {
+            it as KuteSearchable
         }
     }
 
@@ -65,13 +63,14 @@ class TreeManager(vararg items: KutePreferenceListItem) {
     /**
      * Finds KuteSearchProviders and analyzes them for the given text
      *
-     * @param text text to search for
+     * @param searchText text to search for
      * @return list of items
      */
-    fun findInSearchProviders(text: String): List<KutePreferenceListItem> {
+    fun findInSearchProviders(searchText: String): List<KutePreferenceListItem> {
+        val searchRegex = searchText.toRegex(setOf(RegexOption.IGNORE_CASE, RegexOption.LITERAL))
         return itemsWithSearchProviders.filter {
-            it.getSearchableItems().any { it ->
-                it.contains(text, true)
+            it.getSearchableItems().any { searchableText ->
+                searchableText.contains(searchRegex)
             }
         }.map {
             it as KutePreferenceListItem

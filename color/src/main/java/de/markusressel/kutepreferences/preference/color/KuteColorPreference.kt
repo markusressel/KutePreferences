@@ -6,8 +6,11 @@ import android.graphics.drawable.Drawable
 import android.view.View
 import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
+import com.airbnb.epoxy.EpoxyModel
+import de.markusressel.kutepreferences.core.HighlighterFunction
+import de.markusressel.kutepreferences.core.KutePreferenceListItem
 import de.markusressel.kutepreferences.core.persistence.KutePreferenceDataProvider
-import de.markusressel.kutepreferences.core.preference.KutePreferenceBase
+import de.markusressel.kutepreferences.core.preference.KutePreferenceItem
 
 /**
  * Preference item for a 4 channel color (rgba).
@@ -22,29 +25,14 @@ open class KuteColorPreference(
         private val defaultValue: Int,
         override val dataProvider: KutePreferenceDataProvider,
         override val onPreferenceChangedListener: ((oldValue: Int, newValue: Int) -> Unit)? = null) :
-        KutePreferenceBase<Int>() {
+        KutePreferenceItem<Int>, KutePreferenceListItem {
 
-    override val layoutRes: Int
-        get() = R.layout.kute_preference__color__list_item
-
-    var colorPreviewView: View? = null
+    override fun getSearchableItems(): Set<String> = setOf(title, description)
 
     override fun getDefaultValue(): Int = ContextCompat.getColor(context, defaultValue)
 
-    override fun onLayoutInflated(layout: View) {
-        super.onLayoutInflated(layout)
-        colorPreviewView = layout.findViewById(R.id.kute_preferences__preference__color__preview)
-    }
-
-    override fun onClick(context: Context) {
-        val dialog = KuteColorPreferenceEditDialog(this)
-        dialog
-                .show(context)
-    }
-
-    override fun updateDescription() {
-        super.updateDescription()
-        colorPreviewView?.setBackgroundColor(persistedValue)
+    override fun onListItemClicked(context: Context) {
+        KuteColorPreferenceEditDialog(this).show(context)
     }
 
     override fun createDescription(currentValue: Int): String {
@@ -54,6 +42,19 @@ open class KuteColorPreference(
         val b = Color.blue(currentValue).toString(16).padStart(2, '0')
 
         return "#$a$r$g$b"
+    }
+
+    override fun createEpoxyModel(highlighterFunction: HighlighterFunction): EpoxyModel<*> {
+        val dataModel = ColorPreferenceDataModel(
+                title = highlighterFunction.invoke(title),
+                description = highlighterFunction.invoke(description),
+                icon = icon,
+                color = persistedValue,
+                onClick = View.OnClickListener { v -> onListItemClicked(v!!.context!!) },
+                onLongClick = View.OnLongClickListener { v -> onListItemLongClicked(v!!.context!!) }
+        )
+
+        return KutePreferenceColorListItemBindingModel_().viewModel(dataModel)
     }
 
 }

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+                name="viewModel"
+                type="de.markusressel.kutepreferences.core.viewmodel.SectionViewModel"/>
+
+    </data>
+
+    <LinearLayout
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            style="@style/KutePreferences.Section"
+            android:paddingBottom="8dp">
+
+        <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardUseCompatPadding="true"
+                app:cardCornerRadius="8dp">
+
+            <LinearLayout
+                    style="@style/KutePreferences.Section"
+                    android:onClick="@{viewModel.onClick}"
+                    android:onLongClick="@{viewModel.onLongClick}"
+                    android:background="?attr/selectableItemBackground"
+                    android:orientation="vertical">
+
+                <TextView
+                        android:id="@+id/kute_preference_section__title"
+                        style="@style/KutePreferences.Section.Title"
+                        android:layout_height="36dp"
+                        android:background="?attr/colorAccent"
+                        android:text="@{viewModel.title}"/>
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
+
+</layout>

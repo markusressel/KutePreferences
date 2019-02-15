@@ -2,13 +2,14 @@ package de.markusressel.kutepreferences.core.preference.category
 
 import android.content.Context
 import android.graphics.drawable.Drawable
-import android.text.Spanned
-import android.view.LayoutInflater
-import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
+import android.view.View
+import com.airbnb.epoxy.EpoxyModel
+import com.eightbitlab.rxbus.Bus
+import de.markusressel.kutepreferences.core.HighlighterFunction
+import de.markusressel.kutepreferences.core.KutePreferenceDefaultListItemBindingModel_
 import de.markusressel.kutepreferences.core.KutePreferenceListItem
-import de.markusressel.kutepreferences.core.R
+import de.markusressel.kutepreferences.core.event.CategoryClickedEvent
+import de.markusressel.kutepreferences.core.viewmodel.base.PreferenceItemDataModel
 
 /**
  * The default implementation of a KutePreference Category
@@ -21,35 +22,22 @@ open class KuteCategory(
         override val children: List<KutePreferenceListItem>) :
         KutePreferenceCategory {
 
-    lateinit var iconView: ImageView
-    lateinit var nameView: TextView
-    lateinit var descriptionView: TextView
+    override fun getSearchableItems(): Set<String> = setOf(title, description)
 
-    override fun inflateListLayout(layoutInflater: LayoutInflater, parent: ViewGroup): ViewGroup {
-        val layout = layoutInflater.inflate(R.layout.kute_preference__category, parent, false) as ViewGroup
+    override fun createEpoxyModel(highlighterFunction: HighlighterFunction): EpoxyModel<*> {
+        val dataModel = PreferenceItemDataModel(
+                title = highlighterFunction.invoke(title),
+                description = highlighterFunction.invoke(description),
+                icon = icon,
+                onClick = View.OnClickListener { v -> onListItemClicked(v!!.context!!) },
+                onLongClick = View.OnLongClickListener { v -> onListItemLongClicked(v!!.context!!) }
+        )
 
-        iconView = layout.findViewById(R.id.kute_preference__category__icon)
-        nameView = layout.findViewById(R.id.kute_preference__category__title)
-
-        iconView.setImageDrawable(icon)
-        nameView.text = title
-
-        descriptionView = layout.findViewById(R.id.kute_preference__category__description)
-        descriptionView.text = description
-
-        return layout
+        return KutePreferenceDefaultListItemBindingModel_().viewModel(dataModel)
     }
 
-    override fun onClick(context: Context) {
-    }
-
-    override fun getSearchableItems(): Set<String> {
-        return setOf(title, description)
-    }
-
-    override fun highlightSearchMatches(highlighter: (String) -> Spanned) {
-        nameView.text = highlighter(title)
-        descriptionView.text = highlighter(description)
+    override fun onListItemClicked(context: Context) {
+        Bus.send(CategoryClickedEvent(this))
     }
 
 }

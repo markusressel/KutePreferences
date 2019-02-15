@@ -24,7 +24,7 @@ open class KutePasswordPreference(key: Int,
                 dataProvider = dataProvider,
                 onPreferenceChangedListener = onPreferenceChangedListener) {
 
-    override fun onClick(context: Context) {
+    override fun onListItemClicked(context: Context) {
         KutePasswordPreferenceEditDialog(this, regex).show(context)
     }
 

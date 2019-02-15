@@ -40,7 +40,8 @@ class KutePreferencesHolder @Inject constructor(
     }
 
     val textPreference by lazy {
-        KuteTextPreference(key = R.string.key_demo_text_pref,
+        KuteTextPreference(
+                key = R.string.key_demo_text_pref,
                 icon = iconHelper.getIcon(MaterialDesignIconic.Icon.gmi_battery),
                 title = context.getString(R.string.title_demo_text_pref),
                 defaultValue = context.getString(R.string.default_value_demo_text_pref),
@@ -48,7 +49,8 @@ class KutePreferencesHolder @Inject constructor(
     }
 
     val textPreference2 by lazy {
-        KuteTextPreference(key = R.string.key_demo_text_pref_2,
+        KuteTextPreference(
+                key = R.string.key_demo_text_pref_2,
                 title = context.getString(R.string.title_demo_text_pref_2),
                 defaultValue = TEXT_PREFERENCE_2_DEFAULT_VALUE,
                 dataProvider = dataProvider)
@@ -64,7 +66,8 @@ class KutePreferencesHolder @Inject constructor(
     }
 
     val passwordPreference by lazy {
-        KutePasswordPreference(key = R.string.key_demo_text_pref_password,
+        KutePasswordPreference(
+                key = R.string.key_demo_text_pref_password,
                 icon = iconHelper.getIcon(MaterialDesignIconic.Icon.gmi_lock),
                 title = context.getString(R.string.title_demo_text_pref_password),
                 defaultValue = "",
@@ -72,7 +75,8 @@ class KutePreferencesHolder @Inject constructor(
     }
 
     val togglePreference by lazy {
-        KuteBooleanPreference(key = R.string.key_demo_toggle_pref,
+        KuteBooleanPreference(
+                key = R.string.key_demo_toggle_pref,
                 icon = iconHelper.getIcon(MaterialDesignIconic.Icon.gmi_airplane),
                 title = context.getString(R.string.title_demo_toggle_pref),
                 descriptionFunction = {
@@ -90,7 +94,8 @@ class KutePreferencesHolder @Inject constructor(
     }
 
     val numberPreference by lazy {
-        KuteNumberPreference(key = R.string.key_demo_number_pref,
+        KuteNumberPreference(
+                key = R.string.key_demo_number_pref,
                 icon = iconHelper.getIcon(MaterialDesignIconic.Icon.gmi_time_countdown),
                 title = context.getString(R.string.title_demo_number_pref),
                 unit = "ms",
@@ -99,7 +104,8 @@ class KutePreferencesHolder @Inject constructor(
     }
 
     val sliderPreference by lazy {
-        KuteSliderPreference(key = R.string.key_demo_slider_pref,
+        KuteSliderPreference(
+                key = R.string.key_demo_slider_pref,
                 icon = iconHelper.getIcon(MaterialDesignIconic.Icon.gmi_volume_up),
                 title = context.getString(R.string.title_demo_slider_pref),
                 minimum = 0,
@@ -116,8 +122,7 @@ class KutePreferencesHolder @Inject constructor(
                 minimum = 0,
                 maximum = 100,
                 defaultValue = RangePersistenceModel(0, 100),
-                dataProvider = dataProvider
-        )
+                dataProvider = dataProvider)
     }
 
     val floatRangePreference by lazy {
@@ -144,7 +149,8 @@ class KutePreferencesHolder @Inject constructor(
     }
 
     val datePreference by lazy {
-        KuteDatePreference(key = R.string.key_demo_date_pref,
+        KuteDatePreference(
+                key = R.string.key_demo_date_pref,
                 icon = iconHelper.getIcon(MaterialDesignIconic.Icon.gmi_calendar),
                 title = context.getString(R.string.title_demo_date_pref),
                 defaultValue = Date().time,
@@ -152,7 +158,8 @@ class KutePreferencesHolder @Inject constructor(
     }
 
     val timePreference by lazy {
-        KuteTimePreference(key = R.string.key_demo_time_pref,
+        KuteTimePreference(
+                key = R.string.key_demo_time_pref,
                 icon = iconHelper.getIcon(MaterialDesignIconic.Icon.gmi_time),
                 title = context.getString(R.string.title_demo_time_pref),
                 defaultValue = TimePersistenceModel(hourOfDay = 12, minute = 30),
@@ -190,9 +197,11 @@ class KutePreferencesHolder @Inject constructor(
     }
 
     val kuteAction by lazy {
-        KuteAction(key = R.string.key_demo_action,
+        KuteAction(
+                key = R.string.key_demo_action,
                 icon = iconHelper.getIcon(MaterialDesignIconic.Icon.gmi_info),
                 title = context.getString(R.string.title_demo_action),
+                description = "Additional info about this app.",
                 onClickAction = { context, kuteAction ->
                     Toast.makeText(context, "About clicked!", Toast.LENGTH_SHORT).show()
                 })

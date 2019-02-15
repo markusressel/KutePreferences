@@ -2,9 +2,14 @@ package de.markusressel.kutepreferences.preference.number.slider
 
 import android.content.Context
 import android.graphics.drawable.Drawable
+import android.view.View
+import com.airbnb.epoxy.EpoxyModel
+import de.markusressel.kutepreferences.core.HighlighterFunction
+import de.markusressel.kutepreferences.core.KutePreferenceDefaultListItemBindingModel_
+import de.markusressel.kutepreferences.core.KutePreferenceListItem
 import de.markusressel.kutepreferences.core.persistence.KutePreferenceDataProvider
-import de.markusressel.kutepreferences.core.preference.KutePreferenceBase
-import de.markusressel.kutepreferences.preference.number.R
+import de.markusressel.kutepreferences.core.preference.KutePreferenceItem
+import de.markusressel.kutepreferences.core.viewmodel.base.PreferenceItemDataModel
 
 open class KuteSliderPreference(
         override val key: Int,
@@ -15,17 +20,26 @@ open class KuteSliderPreference(
         private val defaultValue: Int,
         override val dataProvider: KutePreferenceDataProvider,
         override val onPreferenceChangedListener: ((oldValue: Int, newValue: Int) -> Unit)? = null) :
-        KutePreferenceBase<Int>() {
+        KutePreferenceItem<Int>, KutePreferenceListItem {
 
-    override val layoutRes: Int
-        get() = R.layout.kute_preference__default__list_item
+    override fun getSearchableItems(): Set<String> = setOf(title, description)
+
+    override fun onListItemClicked(context: Context) {
+        KuteSliderPreferenceEditDialog(this, minimum, maximum).show(context)
+    }
+
+    override fun createEpoxyModel(highlighterFunction: HighlighterFunction): EpoxyModel<*> {
+        val dataModel = PreferenceItemDataModel(
+                title = highlighterFunction.invoke(title),
+                description = highlighterFunction.invoke(description),
+                icon = icon,
+                onClick = View.OnClickListener { v -> onListItemClicked(v!!.context!!) },
+                onLongClick = View.OnLongClickListener { v -> onListItemLongClicked(v!!.context!!) }
+        )
+
+        return KutePreferenceDefaultListItemBindingModel_().viewModel(dataModel)
+    }
 
     override fun getDefaultValue(): Int = defaultValue
-
-    override fun onClick(context: Context) {
-        val dialog = KuteSliderPreferenceEditDialog(this, minimum, maximum)
-        dialog
-                .show(context)
-    }
 
 }

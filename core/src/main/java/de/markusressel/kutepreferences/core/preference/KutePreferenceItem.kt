@@ -3,14 +3,19 @@ package de.markusressel.kutepreferences.core.preference
 import android.graphics.drawable.Drawable
 import androidx.annotation.CallSuper
 import androidx.annotation.CheckResult
-import de.markusressel.kutepreferences.core.KutePreferenceListItem
+import com.eightbitlab.rxbus.Bus
+import de.markusressel.kutepreferences.core.event.PreferenceChangedEvent
 import de.markusressel.kutepreferences.core.persistence.KutePreferenceDataProvider
 
 /**
  * Interface for Preferences
  */
-interface KutePreferenceItem<DataType : Any> : KutePreferenceListItem, KutePreferenceClickListener,
-        KutePreferenceLongClickListener {
+interface KutePreferenceItem<DataType : Any> {
+
+    /**
+     * A unique identifier for this preference item
+     */
+    val key: Int
 
     /**
      * Optional icon of this KutePreference
@@ -55,8 +60,7 @@ interface KutePreferenceItem<DataType : Any> : KutePreferenceListItem, KutePrefe
         set(newValue) {
             val oldValue = persistedValue
             if (oldValue != newValue) {
-                dataProvider
-                        .storeValue(this, newValue)
+                dataProvider.storeValue(this, newValue)
                 onPreferenceChanged(oldValue, newValue)
             }
         }
@@ -84,8 +88,21 @@ interface KutePreferenceItem<DataType : Any> : KutePreferenceListItem, KutePrefe
      */
     @CallSuper
     fun onPreferenceChanged(oldValue: DataType, newValue: DataType) {
-        onPreferenceChangedListener
-                ?.invoke(oldValue, newValue)
+        Bus.send(PreferenceChangedEvent(this, oldValue, newValue))
+        onPreferenceChangedListener?.invoke(oldValue, newValue)
     }
+
+//    /**
+//     * Returns an instance of an epoxy viewmodel for this KutePreferenceItem
+//     */
+//    fun createEpoxyModel(): EpoxyModel<*> {
+//        val dataModel = PreferenceItemDataModel(
+//                title = title,
+//                description = description,
+//                icon = icon
+//        )
+//
+//        return KutePreferenceDefaultListItemBindingModel_().viewModel(dataModel)
+//    }
 
 }

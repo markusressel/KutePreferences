@@ -1,35 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        style="@style/KutePreferences.ListItem"
-        android:orientation="horizontal">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <ImageView
-            android:id="@+id/kute_preference__preference__icon"
-            style="@style/KutePreferences.Preference.Icon"/>
+    <data>
+
+        <variable
+                name="viewModel"
+                type="de.markusressel.kutepreferences.preference.color.ColorPreferenceDataModel"/>
+    </data>
 
     <LinearLayout
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:layout_width="0dp"
-            android:orientation="vertical">
+            style="@style/KutePreferences.ListItem"
+            android:onClick="@{viewModel.onClick}"
+            android:onLongClick="@{viewModel.onLongClick}"
+            android:orientation="horizontal">
 
-        <TextView
-                android:id="@+id/kute_preferences__preference__title"
-                style="@style/KutePreferences.Preference.Title"
-                android:text="Preference Title"/>
+        <ImageView
+                style="@style/KutePreferences.Preference.Icon"
+                android:src="@{viewModel.icon}"/>
 
-        <TextView
-                android:id="@+id/kute_preferences__preference__description"
-                style="@style/KutePreferences.Preference.Description"
-                android:text="Preference Description"/>
+        <LinearLayout
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:orientation="vertical">
+
+            <TextView
+                    style="@style/KutePreferences.Preference.Title"
+                    android:text="@{viewModel.title}"/>
+
+            <TextView
+                    style="@style/KutePreferences.Preference.Description"
+                    android:text="@{viewModel.description}"
+                    android:visibility="@{viewModel.descriptionVisibility}"/>
+
+        </LinearLayout>
+
+        <View
+                android:layout_margin="16dp"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:background="@drawable/color_preview_inner_color"
+                android:backgroundTint="@{viewModel.color}"
+                android:foreground="@drawable/color_preview_frame"/>
 
     </LinearLayout>
 
-    <View
-            android:id="@+id/kute_preferences__preference__color__preview"
-            android:layout_margin="16dp"
-            android:layout_width="36dp"
-            android:layout_height="36dp"/>
-
-</LinearLayout>
+</layout>

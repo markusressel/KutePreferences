@@ -8,6 +8,7 @@ import de.markusressel.kutepreferences.demo.R
 import de.markusressel.kutepreferences.demo.helper.IconHelper
 import de.markusressel.kutepreferences.demo.preferences.DaggerKutePreferenceFragmentBase
 import de.markusressel.kutepreferences.demo.preferences.KutePreferencesHolder
+import de.markusressel.kutepreferences.demo.preferences.custom.CustomPreferenceItem
 import javax.inject.Inject
 
 /**
@@ -43,7 +44,8 @@ class PreferencesFragment : DaggerKutePreferenceFragmentBase() {
                                                         ))
                                         )
                                 ),
-                                KuteCategory(key = R.string.key_category_network,
+                                KuteCategory(
+                                        key = R.string.key_category_network,
                                         icon = iconHelper.getIcon(MaterialDesignIconic.Icon.gmi_wifi),
                                         title = getString(R.string.title_category_network),
                                         description = getString(R.string.description_category_network),
@@ -61,7 +63,8 @@ class PreferencesFragment : DaggerKutePreferenceFragmentBase() {
                         key = R.string.key_section_device_owner,
                         title = getString(R.string.title_section_device_owner),
                         children = listOf(
-                                KuteCategory(key = R.string.key_category_user,
+                                KuteCategory(
+                                        key = R.string.key_category_user,
                                         icon = iconHelper.getIcon(MaterialDesignIconic.Icon.gmi_nature_people),
                                         title = getString(R.string.title_category_user),
                                         description = getString(R.string.description_category_user),
@@ -91,7 +94,10 @@ class PreferencesFragment : DaggerKutePreferenceFragmentBase() {
                         )
                 ),
                 kutePreferencesHolder.urlPreference,
-                kutePreferencesHolder.kuteAction
+                kutePreferencesHolder.kuteAction,
+                CustomPreferenceItem(
+                        key = R.string.key_demo_custom
+                )
         )
     }
 

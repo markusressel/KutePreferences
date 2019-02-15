@@ -46,4 +46,6 @@
     <string name="key_multi_select_2" translatable="false">key_multi_select_2</string>
     <string name="key_multi_select_3" translatable="false">key_multi_select_3</string>
 
+    <string name="key_demo_custom" translatable="false">key_demo_custom</string>
+
 </resources>

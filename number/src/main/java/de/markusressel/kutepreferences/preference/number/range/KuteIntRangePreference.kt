@@ -15,10 +15,8 @@ open class KuteIntRangePreference(
         onPreferenceChangedListener: ((oldValue: RangePersistenceModel<Int>, newValue: RangePersistenceModel<Int>) -> Unit)? = null) :
         KuteRangePreference<Int>(key, icon, title, minimum, maximum, 0, defaultValue, dataProvider, onPreferenceChangedListener) {
 
-    override fun onClick(context: Context) {
-        val dialog = KuteIntRangePreferenceEditDialog(this, minimum, maximum)
-        dialog
-                .show(context)
+    override fun onListItemClicked(context: Context) {
+        KuteIntRangePreferenceEditDialog(this, minimum, maximum).show(context)
     }
-    
+
 }

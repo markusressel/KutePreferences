@@ -1,6 +1,9 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'com.jakewharton.butterknife'
+apply plugin: 'org.jetbrains.dokka-android'
 
 apply plugin: 'com.github.dcendents.android-maven'
 group = rootProject.ext.group
@@ -23,6 +26,8 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    dataBinding.enabled true
 }
 
 dependencies {
@@ -35,7 +40,7 @@ dependencies {
 
     api "androidx.annotation:annotation:$androidKtxVersion"
     implementation "androidx.appcompat:appcompat:1.0.2"
-    implementation "com.google.android.material:material:1.1.0-alpha02"
+    implementation "com.google.android.material:material:1.1.0-alpha03"
     implementation "androidx.core:core-ktx:1.0.1"
 
     implementation "com.google.code.gson:gson:2.8.5"
@@ -44,11 +49,14 @@ dependencies {
         transitive = true
     }
 
+    // Android Architecture Components
+    api "androidx.lifecycle:lifecycle-extensions:2.1.0-alpha02"
+
     // Material Dialogs
     api 'com.afollestad.material-dialogs:core:2.0.0-rc7'
 
     // RxJava (RxKotlin actually)
-    api "io.reactivex.rxjava2:rxjava:2.2.0"
+    api "io.reactivex.rxjava2:rxjava:2.2.3"
     api 'io.reactivex.rxjava2:rxandroid:2.0.2'
     api "io.reactivex.rxjava2:rxkotlin:${rootProject.ext.rxKotlinVersion}"
 
@@ -68,6 +76,12 @@ dependencies {
     // RxBus (event bus)
     api 'com.eightbitlab:rxbus:1.0.2'
 
+    // Epoxy - Recyclerview for dummies
+    api "com.airbnb.android:epoxy:$epoxyVersion"
+    api "com.airbnb.android:epoxy-databinding:$epoxyVersion"
+//    implementation "com.airbnb.android:epoxy-paging:$epoxyVersion"
+    kapt "com.airbnb.android:epoxy-processor:$epoxyVersion"
+
     testImplementation 'junit:junit:4.12'
     androidTestImplementation "androidx.test:runner:1.1.1"
     androidTestImplementation "androidx.test.espresso:espresso-core:3.1.1"
@@ -83,20 +97,12 @@ task sourcesJar(type: Jar) {
     classifier = 'sources'
 }
 
-task javadoc(type: Javadoc) {
-    failOnError  false
-    source = android.sourceSets.main.java.sourceFiles
-    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-    classpath += configurations.compile
-}
-
-// build a jar with javadoc
-task javadocJar(type: Jar, dependsOn: javadoc) {
+task dokkaJar(type: Jar, dependsOn: dokka) {
     classifier = 'javadoc'
-    from javadoc.destinationDir
+    from dokka.outputDirectory
 }
 
 artifacts {
     archives sourcesJar
-    archives javadocJar
+    archives dokkaJar
 }

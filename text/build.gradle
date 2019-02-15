@@ -1,6 +1,9 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'com.jakewharton.butterknife'
+apply plugin: 'org.jetbrains.dokka-android'
 
 apply plugin: 'com.github.dcendents.android-maven'
 group = rootProject.ext.group
@@ -23,10 +26,13 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    dataBinding.enabled true
 }
 
 dependencies {
     implementation project(':core')
+    kapt "com.airbnb.android:epoxy-processor:$epoxyVersion"
     
     implementation ("commons-validator:commons-validator:1.6") {
         exclude group: 'commons-logging', module: 'commons-logging'
@@ -39,20 +45,12 @@ task sourcesJar(type: Jar) {
     classifier = 'sources'
 }
 
-task javadoc(type: Javadoc) {
-    failOnError  false
-    source = android.sourceSets.main.java.sourceFiles
-    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-    classpath += configurations.compile
-}
-
-// build a jar with javadoc
-task javadocJar(type: Jar, dependsOn: javadoc) {
+task dokkaJar(type: Jar, dependsOn: dokka) {
     classifier = 'javadoc'
-    from javadoc.destinationDir
+    from dokka.outputDirectory
 }
 
 artifacts {
     archives sourcesJar
-    archives javadocJar
+    archives dokkaJar
 }

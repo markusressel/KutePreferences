@@ -1,10 +1,18 @@
 package de.markusressel.kutepreferences.preference.number.range
 
 import android.graphics.drawable.Drawable
+import android.view.View
+import com.airbnb.epoxy.EpoxyModel
+import de.markusressel.kutepreferences.core.HighlighterFunction
+import de.markusressel.kutepreferences.core.KutePreferenceDefaultListItemBindingModel_
+import de.markusressel.kutepreferences.core.KutePreferenceListItem
 import de.markusressel.kutepreferences.core.persistence.KutePreferenceDataProvider
-import de.markusressel.kutepreferences.core.preference.KutePreferenceBase
-import de.markusressel.kutepreferences.preference.number.R
+import de.markusressel.kutepreferences.core.preference.KutePreferenceItem
+import de.markusressel.kutepreferences.core.viewmodel.base.PreferenceItemDataModel
 
+/**
+ * Base class for preferences defining some kind of range
+ */
 abstract class KuteRangePreference<T : Number>(
         override val key: Int,
         override val icon: Drawable? = null,
@@ -15,10 +23,9 @@ abstract class KuteRangePreference<T : Number>(
         private val defaultValue: RangePersistenceModel<T>,
         override val dataProvider: KutePreferenceDataProvider,
         override val onPreferenceChangedListener: ((oldValue: RangePersistenceModel<T>, newValue: RangePersistenceModel<T>) -> Unit)? = null) :
-        KutePreferenceBase<RangePersistenceModel<T>>() {
+        KutePreferenceItem<RangePersistenceModel<T>>, KutePreferenceListItem {
 
-    override val layoutRes: Int
-        get() = R.layout.kute_preference__default__list_item
+    override fun getSearchableItems(): Set<String> = setOf(title, description)
 
     override fun getDefaultValue(): RangePersistenceModel<T> = defaultValue
 
@@ -38,6 +45,18 @@ abstract class KuteRangePreference<T : Number>(
         }
 
         return "%.${decimalPlaces}f".format(number.toFloat())
+    }
+
+    override fun createEpoxyModel(highlighterFunction: HighlighterFunction): EpoxyModel<*> {
+        val dataModel = PreferenceItemDataModel(
+                title = highlighterFunction.invoke(title),
+                description = highlighterFunction.invoke(description),
+                icon = icon,
+                onClick = View.OnClickListener { v -> onListItemClicked(v!!.context!!) },
+                onLongClick = View.OnLongClickListener { v -> onListItemLongClicked(v!!.context!!) }
+        )
+
+        return KutePreferenceDefaultListItemBindingModel_().viewModel(dataModel)
     }
 
 }

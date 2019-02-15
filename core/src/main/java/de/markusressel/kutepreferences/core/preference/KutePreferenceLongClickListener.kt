@@ -9,7 +9,9 @@ interface KutePreferenceLongClickListener {
 
     /**
      * Called when a KutePreferenceListItem is long clicked
+     *
+     * @return true if the callback consumed the long click, false otherwise.
      */
-    fun onLongClick(context: Context)
+    fun onListItemLongClicked(context: Context): Boolean
 
 }

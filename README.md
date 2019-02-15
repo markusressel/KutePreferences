@@ -122,7 +122,7 @@ To do this you can use one of these classes:
 
 If the integrated preference classes don't fit your needs you can easily create your own custom preference implementation.
 To do so you have to create an implementation of `KutePreferenceItem`.
-You can use `KutePreferenceBase` as a base class instead of implementing everything from scrath (which has some basic functionality implemented already) if it fit's your needs.
+You can use `KutePreferenceBase` as a base class instead of implementing everything from scratch (which has some basic functionality implemented already) if it fit's your needs.
 
 Important things to keep in mind if you implement your own preference item:
 
