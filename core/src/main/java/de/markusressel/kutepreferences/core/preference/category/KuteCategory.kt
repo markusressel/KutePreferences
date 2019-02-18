@@ -6,7 +6,7 @@ import android.view.View
 import com.airbnb.epoxy.EpoxyModel
 import com.eightbitlab.rxbus.Bus
 import de.markusressel.kutepreferences.core.HighlighterFunction
-import de.markusressel.kutepreferences.core.KutePreferenceDefaultListItemBindingModel_
+import de.markusressel.kutepreferences.core.KutePreferenceCategoryListItemBindingModel_
 import de.markusressel.kutepreferences.core.KutePreferenceListItem
 import de.markusressel.kutepreferences.core.event.CategoryClickedEvent
 import de.markusressel.kutepreferences.core.viewmodel.base.PreferenceItemDataModel
@@ -33,7 +33,7 @@ open class KuteCategory(
                 onLongClick = View.OnLongClickListener { v -> onListItemLongClicked(v!!.context!!) }
         )
 
-        return KutePreferenceDefaultListItemBindingModel_().viewModel(dataModel)
+        return KutePreferenceCategoryListItemBindingModel_().viewModel(dataModel)
     }
 
     override fun onListItemClicked(context: Context) {

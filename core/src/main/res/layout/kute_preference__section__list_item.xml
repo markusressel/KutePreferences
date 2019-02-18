@@ -11,7 +11,8 @@
 
     <LinearLayout
             xmlns:app="http://schemas.android.com/apk/res-auto"
-            style="@style/KutePreferences.Section"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:paddingBottom="8dp">
 
         <androidx.cardview.widget.CardView
@@ -24,7 +25,6 @@
                     style="@style/KutePreferences.Section"
                     android:onClick="@{viewModel.onClick}"
                     android:onLongClick="@{viewModel.onLongClick}"
-                    android:background="?attr/selectableItemBackground"
                     android:orientation="vertical">
 
                 <TextView

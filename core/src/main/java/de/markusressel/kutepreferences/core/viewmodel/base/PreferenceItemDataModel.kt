@@ -3,6 +3,7 @@ package de.markusressel.kutepreferences.core.viewmodel.base
 import android.graphics.drawable.Drawable
 import android.text.Spanned
 import android.view.View
+import de.markusressel.kutepreferences.core.view.IconHelper
 
 /**
  * Base class for the data model of a preference item's list entry
@@ -27,7 +28,7 @@ open class PreferenceItemDataModel(
         /**
          * The icon of the preference item
          */
-        val icon: Drawable?,
+        icon: Drawable?,
 
         /**
          * Action for clicks
@@ -40,6 +41,8 @@ open class PreferenceItemDataModel(
         var onLongClick: View.OnLongClickListener? = null
 
 ) {
+
+    val icon: Drawable? = IconHelper.getListItemIcon(icon)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

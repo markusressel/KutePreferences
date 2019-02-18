@@ -39,6 +39,7 @@ import de.markusressel.kutepreferences.core.viewmodel.MainFragmentViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.subscribeBy
 import kotlinx.android.synthetic.main.kute_preference__main_fragment.*
+import java.lang.ref.WeakReference
 import java.util.concurrent.LinkedBlockingQueue
 import java.util.concurrent.TimeUnit
 
@@ -62,6 +63,7 @@ abstract class KutePreferencesMainFragment : LifecycleFragmentBase() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+        IconHelper.contextRef = WeakReference(context)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -299,7 +301,6 @@ abstract class KutePreferencesMainFragment : LifecycleFragmentBase() {
     }
 
     companion object {
-
         const val TAG: String = "MainFragment"
     }
 

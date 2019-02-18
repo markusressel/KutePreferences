@@ -5,7 +5,7 @@
 
     <style name="KutePreferences.ListItem">
         <item name="android:layout_height">@dimen/kute_preferences__preference__item_height</item>
-        <item name="android:background">?attr/selectableItemBackground</item>
+        <item name="android:background">?android:attr/selectableItemBackground</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:clickable">true</item>
         <item name="android:focusable">true</item>
@@ -20,7 +20,7 @@
     <style name="KutePreferences.Category.Base">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/kute_preferences__category__item_height</item>
-        <item name="android:background">?attr/selectableItemBackground</item>
+        <item name="android:background">?android:attr/selectableItemBackground</item>
         <item name="android:clickable">true</item>
         <item name="android:focusable">true</item>
         <item name="android:gravity">center_vertical</item>
@@ -35,7 +35,7 @@
     <style name="KutePreferences.Category.Title">
         <item name="android:textSize">@dimen/kute_preferences__category__text_size__title</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textColor">?attr/colorAccent</item>
+        <item name="android:textColor">?attr/kute_preferences__category__title_text_color</item>
         <item name="android:layout_height">wrap_content</item>
     </style>
 
@@ -50,24 +50,14 @@
     <style name="KutePreferences.Section">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">?attr/kute_preferences__section__background</item>
     </style>
 
     <style name="KutePreferences.Section.Title">
         <item name="android:gravity">center</item>
         <item name="android:layout_weight">1</item>
         <item name="android:textSize">@dimen/kute_preferences__section__text_size__name</item>
-    </style>
-
-    <style name="KutePreferences.Section.Line">
-        <item name="android:layout_height">1dp</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:background">?attr/colorAccent</item>
-    </style>
-
-    <style name="KutePreferences.Section.Line.Vertical">
-        <item name="android:layout_height">match_parent</item>
-        <item name="android:layout_width">1dp</item>
-        <item name="android:background">?attr/colorAccent</item>
+        <item name="android:textColor">?attr/kute_preferences__section__text_color</item>
     </style>
 
     <style name="KutePreferences.Preference">

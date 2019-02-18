@@ -10,6 +10,11 @@
         <item name="kute_preferences__menu__icon_color">#fff</item>
         <item name="kute_preferences__search__highlighted_text_color">#fe0</item>
         <item name="kute_preferences__setting__default_icon_color">#BF000000</item>
+
+        <item name="kute_preferences__category__title_text_color">?attr/colorAccent</item>
+
+        <item name="kute_preferences__section__text_color">?android:attr/textColorPrimaryInverse</item>
+        <item name="kute_preferences__section__background">?attr/colorAccent</item>
     </style>
 
 </resources>
