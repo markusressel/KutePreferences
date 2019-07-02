@@ -1,6 +1,5 @@
 package de.markusressel.kutepreferences.preference.time
 
-import android.content.Context
 import android.graphics.drawable.Drawable
 import android.view.View
 import com.airbnb.epoxy.EpoxyModel
@@ -24,17 +23,15 @@ open class KuteTimePreference(
 
     override fun getDefaultValue(): TimePersistenceModel = defaultValue
 
-    override fun onListItemClicked(context: Context) {
-        KuteTimePreferenceEditDialog(this).show(context)
-    }
-
     override fun createEpoxyModel(highlighterFunction: HighlighterFunction): EpoxyModel<*> {
         val dataModel = PreferenceItemDataModel(
                 title = highlighterFunction.invoke(title),
                 description = highlighterFunction.invoke(description),
                 icon = icon,
-                onClick = View.OnClickListener { v -> onListItemClicked(v!!.context!!) },
-                onLongClick = View.OnLongClickListener { v -> onListItemLongClicked(v!!.context!!) }
+                onClick = View.OnClickListener { v ->
+                    KuteTimePreferenceEditDialog(this).show(v!!.context!!)
+                },
+                onLongClick = View.OnLongClickListener { false }
         )
 
         return KutePreferenceDefaultListItemBindingModel_().viewModel(dataModel)

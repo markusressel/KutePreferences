@@ -1,12 +1,9 @@
 package de.markusressel.kutepreferences.core
 
-import android.content.Context
 import androidx.annotation.StringRes
 import com.airbnb.epoxy.EpoxyModel
-import de.markusressel.kutepreferences.core.preference.KutePreferenceClickListener
-import de.markusressel.kutepreferences.core.preference.KutePreferenceLongClickListener
 
-interface KutePreferenceListItem : KuteSearchable, KutePreferenceClickListener, KutePreferenceLongClickListener {
+interface KutePreferenceListItem : KuteSearchable {
 
     /**
      * A unique identifier for this [KutePreferenceListItem]
@@ -21,12 +18,5 @@ interface KutePreferenceListItem : KuteSearchable, KutePreferenceClickListener, 
      * @return the viewmodel representing the current state of this [KutePreferenceListItem]
      */
     fun createEpoxyModel(highlighterFunction: HighlighterFunction): EpoxyModel<*>
-
-    override fun onListItemClicked(context: Context) {
-    }
-
-    override fun onListItemLongClicked(context: Context): Boolean {
-        return false
-    }
 
 }

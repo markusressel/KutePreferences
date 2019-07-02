@@ -24,13 +24,13 @@ open class KuteAction(
                 title = highlighterFunction.invoke(title),
                 description = highlighterFunction.invoke(description),
                 icon = icon,
-                onClick = View.OnClickListener { v -> onListItemClicked(v!!.context!!) },
-                onLongClick = View.OnLongClickListener { v -> onListItemLongClicked(v!!.context!!) }
+                onClick = View.OnClickListener { v ->
+                    onClickAction(v!!.context!!, this)
+                },
+                onLongClick = View.OnLongClickListener { false }
         )
 
         return KutePreferenceDefaultListItemBindingModel_().viewModel(dataModel)
     }
-
-    override fun onListItemClicked(context: Context) = onClickAction(context, this)
 
 }

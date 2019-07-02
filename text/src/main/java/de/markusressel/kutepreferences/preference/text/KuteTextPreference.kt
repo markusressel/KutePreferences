@@ -28,20 +28,22 @@ open class KuteTextPreference(
 
     override fun getDefaultValue(): String = defaultValue
 
-    override fun onListItemClicked(context: Context) {
-        KuteTextPreferenceEditDialog(this, regex).show(context)
-    }
-
     override fun createEpoxyModel(highlighterFunction: HighlighterFunction): EpoxyModel<*> {
         val dataModel = PreferenceItemDataModel(
                 title = highlighterFunction.invoke(title),
                 description = highlighterFunction.invoke(description),
                 icon = icon,
-                onClick = View.OnClickListener { v -> onListItemClicked(v!!.context!!) },
-                onLongClick = View.OnLongClickListener { v -> onListItemLongClicked(v!!.context!!) }
+                onClick = View.OnClickListener { v ->
+                    onClick(v!!.context!!)
+                },
+                onLongClick = View.OnLongClickListener { false }
         )
 
         return KutePreferenceDefaultListItemBindingModel_().viewModel(dataModel)
+    }
+
+    open fun onClick(context: Context) {
+        KuteTextPreferenceEditDialog(this, regex).show(context)
     }
 
 }

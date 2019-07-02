@@ -21,17 +21,15 @@ abstract class KuteSingleSelectPreference<T : Any> : KutePreferenceItem<T>, Kute
 
     override fun getSearchableItems(): Set<String> = setOf(title, description)
 
-    override fun onListItemClicked(context: Context) {
-        createSingleSelectDialog(this, possibleValues).show(context)
-    }
-
     override fun createEpoxyModel(highlighterFunction: HighlighterFunction): EpoxyModel<*> {
         val dataModel = PreferenceItemDataModel(
                 title = highlighterFunction.invoke(title),
                 description = highlighterFunction.invoke(description),
                 icon = icon,
-                onClick = View.OnClickListener { v -> onListItemClicked(v!!.context!!) },
-                onLongClick = View.OnLongClickListener { v -> onListItemLongClicked(v!!.context!!) }
+                onClick = View.OnClickListener { v ->
+                    createSingleSelectDialog(this, possibleValues).show(v!!.context!!)
+                },
+                onLongClick = View.OnLongClickListener { false }
         )
 
         return KutePreferenceDefaultListItemBindingModel_().viewModel(dataModel)

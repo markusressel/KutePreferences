@@ -11,6 +11,7 @@
 
     <LinearLayout
             style="@style/KutePreferences.ListItem"
-            android:background="@{viewModel.backgroundColor}"/>
+            android:background="@{viewModel.backgroundColor}"
+            android:onClick="@{viewModel.onClick}"/>
 
 </layout>

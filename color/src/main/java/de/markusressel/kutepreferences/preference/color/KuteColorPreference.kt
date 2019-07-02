@@ -31,10 +31,6 @@ open class KuteColorPreference(
 
     override fun getDefaultValue(): Int = ContextCompat.getColor(context, defaultValue)
 
-    override fun onListItemClicked(context: Context) {
-        KuteColorPreferenceEditDialog(this).show(context)
-    }
-
     override fun createDescription(currentValue: Int): String {
         val a = Color.alpha(currentValue).toString(16).padStart(2, '0')
         val r = Color.red(currentValue).toString(16).padStart(2, '0')
@@ -50,8 +46,10 @@ open class KuteColorPreference(
                 description = highlighterFunction.invoke(description),
                 icon = icon,
                 color = persistedValue,
-                onClick = View.OnClickListener { v -> onListItemClicked(v!!.context!!) },
-                onLongClick = View.OnLongClickListener { v -> onListItemLongClicked(v!!.context!!) }
+                onClick = View.OnClickListener {
+                    KuteColorPreferenceEditDialog(this).show(context)
+                },
+                onLongClick = View.OnLongClickListener { false }
         )
 
         return KutePreferenceColorListItemBindingModel_().viewModel(dataModel)

@@ -1,6 +1,5 @@
 package de.markusressel.kutepreferences.preference.bool
 
-import android.content.Context
 import android.graphics.drawable.Drawable
 import android.view.View
 import android.widget.CompoundButton
@@ -38,10 +37,6 @@ open class KuteBooleanPreference(
         return ""
     }
 
-    override fun onListItemClicked(context: Context) {
-        persistedValue = !persistedValue
-    }
-
     override fun createEpoxyModel(highlighterFunction: HighlighterFunction): EpoxyModel<*> {
         val dataModel = BooleanPreferenceDataModel(
                 title = highlighterFunction.invoke(title),
@@ -51,8 +46,10 @@ open class KuteBooleanPreference(
                 onCheckedChange = CompoundButton.OnCheckedChangeListener { _, isChecked ->
                     persistedValue = isChecked
                 },
-                onClick = View.OnClickListener { v -> onListItemClicked(v!!.context!!) },
-                onLongClick = View.OnLongClickListener { v -> onListItemLongClicked(v!!.context!!) }
+                onClick = View.OnClickListener {
+                    persistedValue = !persistedValue
+                },
+                onLongClick = View.OnLongClickListener { false }
         )
 
         return KutePreferenceBooleanListItemBindingModel_().viewModel(dataModel)
