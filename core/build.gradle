@@ -40,8 +40,8 @@ dependencies {
 
     api "androidx.annotation:annotation:$androidKtxVersion"
     implementation "androidx.appcompat:appcompat:1.0.2"
-    implementation "com.google.android.material:material:1.1.0-alpha03"
-    implementation "androidx.core:core-ktx:1.0.1"
+    implementation "com.google.android.material:material:1.1.0-alpha07"
+    implementation "androidx.core:core-ktx:1.0.2"
 
     implementation "com.google.code.gson:gson:2.8.5"
     implementation('com.github.markusressel:TypedPreferences:v2.1.1') {
@@ -50,14 +50,14 @@ dependencies {
     }
 
     // Android Architecture Components
-    api "androidx.lifecycle:lifecycle-extensions:2.1.0-alpha02"
+    api "androidx.lifecycle:lifecycle-extensions:2.2.0-alpha01"
 
     // Material Dialogs
-    api 'com.afollestad.material-dialogs:core:2.0.0-rc7'
+    api 'com.afollestad.material-dialogs:core:2.6.0'
 
     // RxJava (RxKotlin actually)
-    api "io.reactivex.rxjava2:rxjava:2.2.3"
-    api 'io.reactivex.rxjava2:rxandroid:2.0.2'
+    api "io.reactivex.rxjava2:rxjava:2.2.8"
+    api 'io.reactivex.rxjava2:rxandroid:2.1.0'
     api "io.reactivex.rxjava2:rxkotlin:${rootProject.ext.rxKotlinVersion}"
 
     // RxBinding
@@ -83,8 +83,8 @@ dependencies {
     kapt "com.airbnb.android:epoxy-processor:$epoxyVersion"
 
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation "androidx.test:runner:1.1.1"
-    androidTestImplementation "androidx.test.espresso:espresso-core:3.1.1"
+    androidTestImplementation "androidx.test:runner:1.2.0"
+    androidTestImplementation "androidx.test.espresso:espresso-core:3.2.0"
 }
 
 configurations.all {

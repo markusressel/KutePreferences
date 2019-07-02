@@ -39,10 +39,8 @@ abstract class DaggerKutePreferenceFragmentBase : KutePreferencesMainFragment(),
     lateinit var childFragmentInjector: DispatchingAndroidInjector<Fragment>
 
     override fun onAttach(context: Context) {
-        AndroidSupportInjection
-                .inject(this)
-        super
-                .onAttach(context)
+        AndroidSupportInjection.inject(this)
+        super.onAttach(context)
     }
 
     override fun supportFragmentInjector(): AndroidInjector<Fragment> {

@@ -4,8 +4,8 @@ buildscript {
     ext {
         group = 'com.github.markusressel'
 
-        kotlin_version = '1.3.21'
-        gradle_plugin_version = '3.3.1'
+        kotlin_version = '1.3.40'
+        gradle_plugin_version = '3.4.1'
 
         minSdkVersion = 22
         versionName = "1.5.2"
@@ -25,10 +25,10 @@ buildscript {
         dagger2Version = "2.16"
 
         rxKotlinVersion = "2.3.0"
-        rxBindingVersion = "2.1.1"
-        rxLifecycleVersion = "2.2.1"
+        rxBindingVersion = "2.2.0"
+        rxLifecycleVersion = "2.2.2"
 
-        epoxyVersion = "3.3.0"
+        epoxyVersion = "3.7.0"
 
         iconicsVersion = "3.2.1"
     }
