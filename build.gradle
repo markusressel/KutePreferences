@@ -8,7 +8,7 @@ buildscript {
         gradle_plugin_version = '3.4.2'
 
         minSdkVersion = 22
-        versionName = "1.5.2"
+        versionName = "2.0.0"
         versionCode = 1
 
         compileSdkVersion = 28
