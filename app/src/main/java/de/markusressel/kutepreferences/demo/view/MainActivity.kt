@@ -2,12 +2,14 @@ package de.markusressel.kutepreferences.demo.view
 
 import android.os.Bundle
 import android.view.MenuItem
+import dagger.hilt.android.AndroidEntryPoint
 import de.markusressel.kutepreferences.demo.R
 import de.markusressel.kutepreferences.demo.dagger.DaggerSupportActivityBase
 import de.markusressel.kutepreferences.demo.preferences.KutePreferencesHolder
 import javax.inject.Inject
 
 
+@AndroidEntryPoint
 class MainActivity : DaggerSupportActivityBase() {
 
     override val style: Int

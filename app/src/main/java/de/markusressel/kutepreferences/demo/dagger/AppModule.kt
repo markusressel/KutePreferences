@@ -18,49 +18,25 @@
 
 package de.markusressel.kutepreferences.demo.dagger
 
-import android.app.Application
 import android.content.Context
-import dagger.Binds
 import dagger.Module
 import dagger.Provides
-import dagger.android.ContributesAndroidInjector
-import de.markusressel.kutepreferences.demo.application.App
-import de.markusressel.kutepreferences.demo.preferences.DaggerKutePreferenceFragmentBase
-import de.markusressel.kutepreferences.demo.view.MainActivity
-import de.markusressel.kutepreferences.demo.view.PreferencesFragment
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ApplicationComponent
+import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Singleton
 
 /**
  * Created by Markus on 20.12.2017.
  */
 @Module
-abstract class AppModule {
+@InstallIn(ApplicationComponent::class)
+class AppModule {
 
-    @Binds
-    internal abstract fun application(application: App): Application
-
-    @ContributesAndroidInjector
-    internal abstract fun DaggerSupportActivityBase(): DaggerSupportActivityBase
-
-    @ContributesAndroidInjector
-    internal abstract fun MainActivity(): MainActivity
-
-    @ContributesAndroidInjector
-    internal abstract fun DaggerKutePreferenceFragmentBase(): DaggerKutePreferenceFragmentBase
-
-    @ContributesAndroidInjector
-    internal abstract fun PreferencesFragment(): PreferencesFragment
-
-    @Module
-    companion object {
-
-        @Provides
-        @Singleton
-        @JvmStatic
-        internal fun provideContext(application: Application): Context {
-            return application
-        }
-
+    @Provides
+    @Singleton
+    internal fun provideContext(@ApplicationContext context: Context): Context {
+        return context
     }
 
 }

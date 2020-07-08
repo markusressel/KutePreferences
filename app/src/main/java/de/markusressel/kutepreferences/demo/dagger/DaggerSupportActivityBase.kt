@@ -25,25 +25,12 @@ import androidx.annotation.CallSuper
 import androidx.annotation.IntDef
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
-import dagger.android.AndroidInjection
-import dagger.android.AndroidInjector
-import dagger.android.DispatchingAndroidInjector
-import dagger.android.HasFragmentInjector
-import dagger.android.support.HasSupportFragmentInjector
 import java.util.*
-import javax.inject.Inject
 
 /**
  * Created by Markus on 20.12.2017.
  */
-abstract class DaggerSupportActivityBase : AppCompatActivity(), HasFragmentInjector,
-        HasSupportFragmentInjector {
-
-    @Inject
-    internal lateinit var supportFragmentInjector: DispatchingAndroidInjector<Fragment>
-    @Inject
-    internal lateinit var frameworkFragmentInjector: DispatchingAndroidInjector<android.app.Fragment>
+abstract class DaggerSupportActivityBase : AppCompatActivity() {
 
     /**
      * @return true if this activity should use a dialog theme instead of a normal activity theme
@@ -57,19 +44,8 @@ abstract class DaggerSupportActivityBase : AppCompatActivity(), HasFragmentInjec
     @get:LayoutRes
     protected abstract val layoutRes: Int
 
-    override fun supportFragmentInjector(): AndroidInjector<Fragment>? {
-        return supportFragmentInjector
-    }
-
-    override fun fragmentInjector(): AndroidInjector<android.app.Fragment>? {
-        return frameworkFragmentInjector
-    }
-
     @CallSuper
     override fun onCreate(savedInstanceState: Bundle?) {
-        AndroidInjection
-                .inject(this)
-
         // apply forced locale (if set in developer options)
 //        initLocale()
 
@@ -85,51 +61,41 @@ abstract class DaggerSupportActivityBase : AppCompatActivity(), HasFragmentInjec
             supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
         }
 
-        super
-                .onCreate(savedInstanceState)
+        super.onCreate(savedInstanceState)
 
         // inflate view manually so it can be altered in plugins
-        val contentView = layoutInflater
-                .inflate(layoutRes, null)
+        val contentView = layoutInflater.inflate(layoutRes, null)
         setContentView(contentView)
 
 //        setSupportActionBar(toolbar)
 
-        supportActionBar
-                ?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
     /**
      * Show the status bar
      */
     protected fun showStatusBar() {
-        window
-                .clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
+        window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
     }
 
     /**
      * Hide the status bar
      */
     protected fun hideStatusBar() {
-        window
-                .setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                        WindowManager.LayoutParams.FLAG_FULLSCREEN)
+        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN)
     }
 
     private fun setLocale(locale: Locale) {
         val res = resources
         // Change locale settings in the app.
-        val dm = res
-                .displayMetrics
-        val conf = res
-                .configuration
+        val dm = res.displayMetrics
+        val conf = res.configuration
 
-        conf
-                .locale = locale
-        conf
-                .setLocale(locale)
-        res
-                .updateConfiguration(conf, dm)
+        conf.locale = locale
+        conf.setLocale(locale)
+        res.updateConfiguration(conf, dm)
 
         onConfigurationChanged(conf)
     }

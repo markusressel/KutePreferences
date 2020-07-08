@@ -1,12 +1,13 @@
 package de.markusressel.kutepreferences.demo.view
 
-import com.mikepenz.material_design_iconic_typeface_library.MaterialDesignIconic
+import com.mikepenz.iconics.typeface.library.materialdesigniconic.MaterialDesignIconic
+import dagger.hilt.android.AndroidEntryPoint
 import de.markusressel.kutepreferences.core.KutePreferenceListItem
 import de.markusressel.kutepreferences.core.preference.category.KuteCategory
 import de.markusressel.kutepreferences.core.preference.section.KuteSection
+import de.markusressel.kutepreferences.core.view.KutePreferencesMainFragment
 import de.markusressel.kutepreferences.demo.R
 import de.markusressel.kutepreferences.demo.helper.IconHelper
-import de.markusressel.kutepreferences.demo.preferences.DaggerKutePreferenceFragmentBase
 import de.markusressel.kutepreferences.demo.preferences.KutePreferencesHolder
 import de.markusressel.kutepreferences.demo.preferences.custom.CustomPreferenceItem
 import javax.inject.Inject
@@ -14,7 +15,8 @@ import javax.inject.Inject
 /**
  * Main Preference Page
  */
-class PreferencesFragment : DaggerKutePreferenceFragmentBase() {
+@AndroidEntryPoint
+class PreferencesFragment : KutePreferencesMainFragment() {
 
     @Inject
     lateinit var kutePreferencesHolder: KutePreferencesHolder
