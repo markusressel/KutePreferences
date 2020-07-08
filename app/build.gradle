@@ -49,6 +49,10 @@ android {
     }
 }
 
+kapt {
+    correctErrorTypes true
+}
+
 dependencies {
     implementation project(':core')
     implementation project(':bool')

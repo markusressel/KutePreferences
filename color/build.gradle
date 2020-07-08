@@ -45,6 +45,10 @@ android {
     }
 }
 
+kapt {
+    correctErrorTypes true
+}
+
 dependencies {
     implementation project(':core')
     kapt "com.airbnb.android:epoxy-processor:$epoxyVersion"
