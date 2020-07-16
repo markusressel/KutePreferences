@@ -1,10 +1,10 @@
 # KutePreferences
 A **GUI** library for easy to use, fast and beautiful **preferences** in your app.
 
-| Master | Dev |
-|--------|-----|
-| [![Master](https://travis-ci.org/markusressel/KutePreferences.svg?branch=master)](https://travis-ci.org/markusressel/KutePreferences/branches) | [![Master](https://travis-ci.org/markusressel/KutePreferences.svg?branch=dev)](https://travis-ci.org/markusressel/KutePreferences/branches) |
-| [![codebeat badge](https://codebeat.co/badges/418ec567-fa53-4f97-ad98-eb8c4bb816ec)](https://codebeat.co/projects/github-com-markusressel-kutepreferences-master) | [![codebeat badge](https://codebeat.co/badges/431a535a-cc23-4713-a061-307d97727b97)](https://codebeat.co/projects/github-com-markusressel-kutepreferences-dev) |
+| Master |
+|--------|
+| [![Master](https://travis-ci.org/markusressel/KutePreferences.svg?branch=master)](https://travis-ci.org/markusressel/KutePreferences/branches) |
+| [![codebeat badge](https://codebeat.co/badges/418ec567-fa53-4f97-ad98-eb8c4bb816ec)](https://codebeat.co/projects/github-com-markusressel-kutepreferences-master) |
 
 # Features
 * Easy to use
