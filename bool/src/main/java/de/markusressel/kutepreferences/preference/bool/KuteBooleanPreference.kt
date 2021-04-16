@@ -1,8 +1,6 @@
 package de.markusressel.kutepreferences.preference.bool
 
 import android.graphics.drawable.Drawable
-import android.view.View
-import android.widget.CompoundButton
 import com.airbnb.epoxy.EpoxyModel
 import de.markusressel.kutepreferences.core.HighlighterFunction
 import de.markusressel.kutepreferences.core.KutePreferenceListItem
@@ -43,13 +41,13 @@ open class KuteBooleanPreference(
                 description = highlighterFunction.invoke(description),
                 icon = icon,
                 checked = persistedValue,
-                onCheckedChange = CompoundButton.OnCheckedChangeListener { _, isChecked ->
+                onCheckedChange = { _, isChecked ->
                     persistedValue = isChecked
                 },
-                onClick = View.OnClickListener {
+                onClick = {
                     persistedValue = !persistedValue
                 },
-                onLongClick = View.OnLongClickListener { false }
+                onLongClick = { false }
         )
 
         return KutePreferenceBooleanListItemBindingModel_().viewModel(dataModel)

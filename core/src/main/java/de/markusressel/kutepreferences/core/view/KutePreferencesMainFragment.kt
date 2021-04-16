@@ -38,7 +38,6 @@ import de.markusressel.kutepreferences.core.preference.section.KuteSection
 import de.markusressel.kutepreferences.core.viewmodel.MainFragmentViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.subscribeBy
-import kotlinx.android.synthetic.main.kute_preference__main_fragment.*
 import java.lang.ref.WeakReference
 import java.util.concurrent.LinkedBlockingQueue
 import java.util.concurrent.TimeUnit
@@ -49,6 +48,9 @@ import java.util.concurrent.TimeUnit
  * All navigation between categories, subcategories and dividers is managed in here.
  */
 abstract class KutePreferencesMainFragment : LifecycleFragmentBase() {
+
+    private var _binding: KutePreferenceMainFragmentBinding? = null
+    private val binding get() = _binding!!
 
     private val viewModel: MainFragmentViewModel by lazy { ViewModelProviders.of(activity!!).get(MainFragmentViewModel::class.java) }
 
@@ -67,10 +69,11 @@ abstract class KutePreferencesMainFragment : LifecycleFragmentBase() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val binding: KutePreferenceMainFragmentBinding = DataBindingUtil.inflate(layoutInflater, R.layout.kute_preference__main_fragment, container, false)
-        viewModel.currentPreferenceItems.observe(this, Observer {
+        _binding = DataBindingUtil.inflate(layoutInflater, R.layout.kute_preference__main_fragment, container, false)
+
+        viewModel.currentPreferenceItems.observe(this) {
             epoxyController.setData(it)
-        })
+        }
         if (!viewModel.hasPreferenceTree()) {
             viewModel.setPreferenceTree(initPreferenceTree())
         }
@@ -93,14 +96,19 @@ abstract class KutePreferencesMainFragment : LifecycleFragmentBase() {
         return binding.root
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     @CallSuper
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        recyclerView.setController(epoxyController)
+        binding.recyclerView.setController(epoxyController)
 
         val layoutManager = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
-        recyclerView.layoutManager = layoutManager
+        binding.recyclerView.layoutManager = layoutManager
     }
 
     private fun createEpoxyController(): TypedEpoxyController<List<KutePreferenceListItem>> {

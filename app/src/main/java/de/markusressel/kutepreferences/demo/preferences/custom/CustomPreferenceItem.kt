@@ -1,7 +1,6 @@
 package de.markusressel.kutepreferences.demo.preferences.custom
 
 import android.graphics.Color
-import android.view.View
 import androidx.annotation.ColorInt
 import androidx.annotation.StringRes
 import com.airbnb.epoxy.EpoxyModel
@@ -27,7 +26,7 @@ class CustomPreferenceItem(
         // and other values
         val viewModel = CustomDataModel(
                 backgroundColor = backgroundColor,
-                onClick = View.OnClickListener {
+                onClick = {
                     val red = (0..255).random()
                     val green = (0..255).random()
                     val blue = (0..255).random()

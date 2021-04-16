@@ -27,8 +27,7 @@ open class KuteTextPreferenceEditDialog(
     protected var editTextView: EditText? = null
 
     override fun onContentViewCreated(context: Context, layoutInflater: LayoutInflater, contentView: View) {
-        editTextView = contentView
-                .findViewById(R.id.kute_preferences__preference__text__edit_name)
+        editTextView = contentView.findViewById(R.id.kute_preferences__preference__text__edit_name)
         userInput = persistedValue
 
         editTextView?.let {
@@ -36,24 +35,21 @@ open class KuteTextPreferenceEditDialog(
             it.setSelection(it.text.length)
             RxTextView.textChanges(it)
                     .bindToLifecycle(it)
-                    .subscribeBy(
-                            onNext = {
-                                val newValue = it.toString()
+                    .subscribeBy(onNext = {
+                        val newValue = it.toString()
 
-                                userInput = newValue
-                                currentValue = newValue
-                            }
-                    )
+                        userInput = newValue
+                        currentValue = newValue
+                    })
         }
     }
 
     override fun onCurrentValueChanged(oldValue: String?, newValue: String?, byUser: Boolean) {
         if (!byUser) {
-            editTextView
-                    ?.let {
-                        it.setText(newValue)
-                        it.setSelection(it.text.length)
-                    }
+            editTextView?.let {
+                it.setText(newValue)
+                it.setSelection(it.text.length)
+            }
         }
 
         validate(newValue)

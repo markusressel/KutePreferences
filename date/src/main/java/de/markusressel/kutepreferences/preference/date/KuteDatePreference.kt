@@ -1,7 +1,6 @@
 package de.markusressel.kutepreferences.preference.date
 
 import android.graphics.drawable.Drawable
-import android.view.View
 import com.airbnb.epoxy.EpoxyModel
 import de.markusressel.kutepreferences.core.HighlighterFunction
 import de.markusressel.kutepreferences.core.KutePreferenceDefaultListItemBindingModel_
@@ -36,10 +35,10 @@ open class KuteDatePreference(
                 title = highlighterFunction.invoke(title),
                 description = highlighterFunction.invoke(description),
                 icon = icon,
-                onClick = View.OnClickListener { v ->
-                    KuteDatePreferenceEditDialog(this, minimum = minimum, maximum = maximum).show(v!!.context!!)
+                onClick = { v ->
+                    KuteDatePreferenceEditDialog(this, minimum = minimum, maximum = maximum).show(v.context)
                 },
-                onLongClick = View.OnLongClickListener { false }
+                onLongClick = { false }
         )
 
         return KutePreferenceDefaultListItemBindingModel_().viewModel(dataModel)

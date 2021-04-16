@@ -31,7 +31,6 @@
                         android:id="@+id/kute_preference_section__title"
                         style="@style/KutePreferences.Section.Title"
                         android:layout_height="36dp"
-                        android:background="?attr/colorAccent"
                         android:text="@{viewModel.title}"/>
 
             </LinearLayout>

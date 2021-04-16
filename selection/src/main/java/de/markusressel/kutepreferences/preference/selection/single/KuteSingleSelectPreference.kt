@@ -1,7 +1,6 @@
 package de.markusressel.kutepreferences.preference.selection.single
 
 import android.content.Context
-import android.view.View
 import com.airbnb.epoxy.EpoxyModel
 import de.markusressel.kutepreferences.core.HighlighterFunction
 import de.markusressel.kutepreferences.core.KutePreferenceDefaultListItemBindingModel_
@@ -26,10 +25,10 @@ abstract class KuteSingleSelectPreference<T : Any> : KutePreferenceItem<T>, Kute
                 title = highlighterFunction.invoke(title),
                 description = highlighterFunction.invoke(description),
                 icon = icon,
-                onClick = View.OnClickListener { v ->
-                    createSingleSelectDialog(this, possibleValues).show(v!!.context!!)
+                onClick = { v ->
+                    createSingleSelectDialog(this, possibleValues).show(v.context)
                 },
-                onLongClick = View.OnLongClickListener { false }
+                onLongClick = { false }
         )
 
         return KutePreferenceDefaultListItemBindingModel_().viewModel(dataModel)

@@ -3,7 +3,6 @@ package de.markusressel.kutepreferences.preference.color
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.Drawable
-import android.view.View
 import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
 import com.airbnb.epoxy.EpoxyModel
@@ -46,10 +45,10 @@ open class KuteColorPreference(
                 description = highlighterFunction.invoke(description),
                 icon = icon,
                 color = persistedValue,
-                onClick = View.OnClickListener {
-                    KuteColorPreferenceEditDialog(this).show(context)
+                onClick = { v ->
+                    KuteColorPreferenceEditDialog(this).show(v.context)
                 },
-                onLongClick = View.OnLongClickListener { false }
+                onLongClick = { false }
         )
 
         return KutePreferenceColorListItemBindingModel_().viewModel(dataModel)

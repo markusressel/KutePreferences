@@ -23,8 +23,7 @@ class MainActivity : DaggerSupportActivityBase() {
     lateinit var preferencesHolder: KutePreferencesHolder
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super
-                .onCreate(savedInstanceState)
+        super.onCreate(savedInstanceState)
 
         supportFragmentManager
                 .beginTransaction()
@@ -59,8 +58,8 @@ class MainActivity : DaggerSupportActivityBase() {
 
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        return when (item?.itemId) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
             android.R.id.home -> {
                 // make sure to pass the event to the preferencesFragment
                 if (preferencesFragment.onBackPressed()) {
@@ -79,8 +78,7 @@ class MainActivity : DaggerSupportActivityBase() {
             return
         }
 
-        super
-                .onBackPressed()
+        super.onBackPressed()
     }
 
 }

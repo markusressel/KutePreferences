@@ -17,7 +17,7 @@ class MainFragmentViewModel : ViewModel() {
 
     val currentPreferenceItems = MutableLiveData<List<KutePreferenceListItem>>()
 
-    val isSearchExpanded = MutableLiveData<Boolean>(false)
+    val isSearchExpanded = MutableLiveData(false)
 
     val currentSearchFilter = MutableLiveData<String>()
 
