@@ -34,7 +34,7 @@ open class KuteNumberPreference(
                 description = highlighterFunction.invoke(description),
                 icon = icon,
                 onClick = { v ->
-                    KuteNumberPreferenceEditDialog(this).show(v!!.context!!)
+                    KuteNumberPreferenceEditDialog(this).show(v.context)
                 },
                 onLongClick = { false }
         )

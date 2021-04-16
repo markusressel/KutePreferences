@@ -24,7 +24,7 @@ open class KuteAction(
                 description = highlighterFunction.invoke(description),
                 icon = icon,
                 onClick = { v ->
-                    onClickAction(v!!.context!!, this)
+                    onClickAction(v.context, this)
                 },
                 onLongClick = { false }
         )

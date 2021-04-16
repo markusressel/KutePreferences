@@ -45,8 +45,8 @@ open class KuteColorPreference(
                 description = highlighterFunction.invoke(description),
                 icon = icon,
                 color = persistedValue,
-                onClick = {
-                    KuteColorPreferenceEditDialog(this).show(context)
+                onClick = { v ->
+                    KuteColorPreferenceEditDialog(this).show(v.context)
                 },
                 onLongClick = { false }
         )

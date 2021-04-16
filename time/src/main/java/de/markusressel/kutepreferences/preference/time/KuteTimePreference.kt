@@ -28,7 +28,7 @@ open class KuteTimePreference(
                 description = highlighterFunction.invoke(description),
                 icon = icon,
                 onClick = { v ->
-                    KuteTimePreferenceEditDialog(this).show(v!!.context!!)
+                    KuteTimePreferenceEditDialog(this).show(v.context)
                 },
                 onLongClick = { false }
         )

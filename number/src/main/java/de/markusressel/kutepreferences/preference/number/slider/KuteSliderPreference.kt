@@ -28,7 +28,7 @@ open class KuteSliderPreference(
                 description = highlighterFunction.invoke(description),
                 icon = icon,
                 onClick = { v ->
-                    KuteSliderPreferenceEditDialog(this, minimum, maximum).show(v!!.context!!)
+                    KuteSliderPreferenceEditDialog(this, minimum, maximum).show(v.context)
                 },
                 onLongClick = { false }
         )

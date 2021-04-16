@@ -33,7 +33,7 @@ open class KuteTextPreference(
                 description = highlighterFunction.invoke(description),
                 icon = icon,
                 onClick = { v ->
-                    onClick(v!!.context!!)
+                    onClick(v.context)
                 },
                 onLongClick = { false }
         )

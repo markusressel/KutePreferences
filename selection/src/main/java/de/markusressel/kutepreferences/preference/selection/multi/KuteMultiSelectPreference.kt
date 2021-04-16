@@ -36,7 +36,7 @@ open class KuteMultiSelectPreference(
                 description = highlighterFunction.invoke(description),
                 icon = icon,
                 onClick = { v ->
-                    KuteMultiSelectPreferenceEditDialog(this, possibleValues).show(v!!.context!!)
+                    KuteMultiSelectPreferenceEditDialog(this, possibleValues).show(v.context)
                 },
                 onLongClick = { false }
         )

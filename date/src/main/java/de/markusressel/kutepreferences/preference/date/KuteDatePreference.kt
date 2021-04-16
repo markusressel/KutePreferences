@@ -36,7 +36,7 @@ open class KuteDatePreference(
                 description = highlighterFunction.invoke(description),
                 icon = icon,
                 onClick = { v ->
-                    KuteDatePreferenceEditDialog(this, minimum = minimum, maximum = maximum).show(v!!.context!!)
+                    KuteDatePreferenceEditDialog(this, minimum = minimum, maximum = maximum).show(v.context)
                 },
                 onLongClick = { false }
         )

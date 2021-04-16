@@ -26,7 +26,7 @@ abstract class KuteSingleSelectPreference<T : Any> : KutePreferenceItem<T>, Kute
                 description = highlighterFunction.invoke(description),
                 icon = icon,
                 onClick = { v ->
-                    createSingleSelectDialog(this, possibleValues).show(v!!.context!!)
+                    createSingleSelectDialog(this, possibleValues).show(v.context)
                 },
                 onLongClick = { false }
         )

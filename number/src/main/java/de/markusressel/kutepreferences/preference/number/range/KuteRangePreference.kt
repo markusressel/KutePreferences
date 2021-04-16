@@ -53,7 +53,7 @@ abstract class KuteRangePreference<T : Number>(
                 title = highlighterFunction.invoke(title),
                 description = highlighterFunction.invoke(description),
                 icon = icon,
-                onClick = { v -> onListItemClicked(v!!.context!!) },
+                onClick = { v -> onListItemClicked(v.context) },
                 onLongClick = { false }
         )
 

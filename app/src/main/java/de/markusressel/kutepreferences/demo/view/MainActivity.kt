@@ -58,8 +58,8 @@ class MainActivity : DaggerSupportActivityBase() {
 
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        return when (item?.itemId) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
             android.R.id.home -> {
                 // make sure to pass the event to the preferencesFragment
                 if (preferencesFragment.onBackPressed()) {

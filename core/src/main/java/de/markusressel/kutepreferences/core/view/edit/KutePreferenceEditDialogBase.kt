@@ -51,8 +51,7 @@ abstract class KutePreferenceEditDialogBase<DataType : Any> : KutePreferenceEdit
     lateinit var userInput: DataType
 
     override fun dismiss() {
-        dialog
-                ?.dismiss()
+        dialog?.dismiss()
     }
 
     override fun restore() {
@@ -60,10 +59,9 @@ abstract class KutePreferenceEditDialogBase<DataType : Any> : KutePreferenceEdit
     }
 
     override fun save() {
-        currentValue
-                ?.let {
-                    persistedValue = it
-                }
+        currentValue?.let {
+            persistedValue = it
+        }
     }
 
     /**
@@ -85,11 +83,8 @@ abstract class KutePreferenceEditDialogBase<DataType : Any> : KutePreferenceEdit
     override fun show(context: Context) {
         userInput = persistedValue
 
-        val layoutInflater = LayoutInflater
-                .from(context)
-
-        val contentView = layoutInflater
-                .inflate(contentLayoutRes, null)
+        val layoutInflater = LayoutInflater.from(context)
+        val contentView = layoutInflater.inflate(contentLayoutRes, null)
 
         dialog = MaterialDialog(context).customView(view = contentView, scrollable = false)
                 .noAutoDismiss()
@@ -106,7 +101,6 @@ abstract class KutePreferenceEditDialogBase<DataType : Any> : KutePreferenceEdit
                 })
 
         onContentViewCreated(context, layoutInflater, contentView)
-
         dialog?.show()
     }
 
