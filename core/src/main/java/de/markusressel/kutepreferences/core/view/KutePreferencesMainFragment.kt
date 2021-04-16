@@ -15,8 +15,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.text.backgroundColor
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.airbnb.epoxy.EpoxyModel
 import com.airbnb.epoxy.TypedEpoxyController
@@ -52,7 +51,7 @@ abstract class KutePreferencesMainFragment : LifecycleFragmentBase() {
     private var _binding: KutePreferenceMainFragmentBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: MainFragmentViewModel by lazy { ViewModelProviders.of(activity!!).get(MainFragmentViewModel::class.java) }
+    private val viewModel: MainFragmentViewModel by lazy { ViewModelProvider(this).get(MainFragmentViewModel::class.java) }
 
     internal val epoxyController by lazy { createEpoxyController() }
 
@@ -71,17 +70,17 @@ abstract class KutePreferencesMainFragment : LifecycleFragmentBase() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = DataBindingUtil.inflate(layoutInflater, R.layout.kute_preference__main_fragment, container, false)
 
-        viewModel.currentPreferenceItems.observe(this) {
+        viewModel.currentPreferenceItems.observe(viewLifecycleOwner) {
             epoxyController.setData(it)
         }
         if (!viewModel.hasPreferenceTree()) {
             viewModel.setPreferenceTree(initPreferenceTree())
         }
 
-        viewModel.currentSearchFilter.observe(this, Observer {
+        viewModel.currentSearchFilter.observe(viewLifecycleOwner, {
             searchView?.setQuery(it, false)
         })
-        viewModel.isSearchExpanded.observe(this, Observer { isExpanded ->
+        viewModel.isSearchExpanded.observe(viewLifecycleOwner, { isExpanded ->
             if (!isExpanded) {
                 searchView?.clearFocus()
                 searchMenuItem?.collapseActionView()
@@ -253,12 +252,9 @@ abstract class KutePreferencesMainFragment : LifecycleFragmentBase() {
 
     private fun checkKeyDuplication(key: Int, keySet: MutableSet<Int>) {
         if (keySet.contains(key)) {
-            Log
-                    .w("KutePreferences",
-                            "Duplicate key '$key' found! Did you accidentally add a KutePreference twice or reused an existing key?")
+            Log.w("KutePreferences", "Duplicate key '$key' found! Did you accidentally add a KutePreference twice or reused an existing key?")
         } else {
-            keySet
-                    .add(key)
+            keySet.add(key)
         }
     }
 
