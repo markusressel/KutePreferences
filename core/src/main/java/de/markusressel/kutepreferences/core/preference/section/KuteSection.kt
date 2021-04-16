@@ -1,6 +1,5 @@
 package de.markusressel.kutepreferences.core.preference.section
 
-import android.view.View
 import com.airbnb.epoxy.EpoxyModel
 import com.eightbitlab.rxbus.Bus
 import de.markusressel.kutepreferences.core.HighlighterFunction
@@ -22,10 +21,10 @@ open class KuteSection(
     override fun createEpoxyModel(highlighterFunction: HighlighterFunction): EpoxyModel<*> {
         val viewModel = SectionViewModel(
                 title = highlighterFunction.invoke(title),
-                onClick = View.OnClickListener {
+                onClick = {
                     Bus.send(SectionClickedEvent(this))
                 },
-                onLongClick = View.OnLongClickListener { false })
+                onLongClick = { false })
 
         return KutePreferenceSectionListItemBindingModel_().viewModel(viewModel)
     }

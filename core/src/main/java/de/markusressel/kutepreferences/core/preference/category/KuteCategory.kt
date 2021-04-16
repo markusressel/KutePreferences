@@ -1,7 +1,6 @@
 package de.markusressel.kutepreferences.core.preference.category
 
 import android.graphics.drawable.Drawable
-import android.view.View
 import com.airbnb.epoxy.EpoxyModel
 import com.eightbitlab.rxbus.Bus
 import de.markusressel.kutepreferences.core.HighlighterFunction
@@ -28,10 +27,10 @@ open class KuteCategory(
                 title = highlighterFunction.invoke(title),
                 description = highlighterFunction.invoke(description),
                 icon = icon,
-                onClick = View.OnClickListener { v ->
+                onClick = { v ->
                     Bus.send(CategoryClickedEvent(this))
                 },
-                onLongClick = View.OnLongClickListener { false }
+                onLongClick = { false }
         )
 
         return KutePreferenceCategoryListItemBindingModel_().viewModel(dataModel)

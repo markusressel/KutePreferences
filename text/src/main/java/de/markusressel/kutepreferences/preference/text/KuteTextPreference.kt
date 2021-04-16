@@ -2,7 +2,6 @@ package de.markusressel.kutepreferences.preference.text
 
 import android.content.Context
 import android.graphics.drawable.Drawable
-import android.view.View
 import com.airbnb.epoxy.EpoxyModel
 import de.markusressel.kutepreferences.core.HighlighterFunction
 import de.markusressel.kutepreferences.core.KutePreferenceDefaultListItemBindingModel_
@@ -33,10 +32,10 @@ open class KuteTextPreference(
                 title = highlighterFunction.invoke(title),
                 description = highlighterFunction.invoke(description),
                 icon = icon,
-                onClick = View.OnClickListener { v ->
+                onClick = { v ->
                     onClick(v!!.context!!)
                 },
-                onLongClick = View.OnLongClickListener { false }
+                onLongClick = { false }
         )
 
         return KutePreferenceDefaultListItemBindingModel_().viewModel(dataModel)

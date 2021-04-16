@@ -2,7 +2,6 @@ package de.markusressel.kutepreferences.preference.selection.multi
 
 import android.content.Context
 import android.graphics.drawable.Drawable
-import android.view.View
 import androidx.annotation.StringRes
 import com.airbnb.epoxy.EpoxyModel
 import de.markusressel.kutepreferences.core.HighlighterFunction
@@ -36,10 +35,10 @@ open class KuteMultiSelectPreference(
                 title = highlighterFunction.invoke(title),
                 description = highlighterFunction.invoke(description),
                 icon = icon,
-                onClick = View.OnClickListener { v ->
+                onClick = { v ->
                     KuteMultiSelectPreferenceEditDialog(this, possibleValues).show(v!!.context!!)
                 },
-                onLongClick = View.OnLongClickListener { false }
+                onLongClick = { false }
         )
 
         return KutePreferenceDefaultListItemBindingModel_().viewModel(dataModel)

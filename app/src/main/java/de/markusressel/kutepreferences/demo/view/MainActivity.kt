@@ -23,8 +23,7 @@ class MainActivity : DaggerSupportActivityBase() {
     lateinit var preferencesHolder: KutePreferencesHolder
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super
-                .onCreate(savedInstanceState)
+        super.onCreate(savedInstanceState)
 
         supportFragmentManager
                 .beginTransaction()
@@ -79,8 +78,7 @@ class MainActivity : DaggerSupportActivityBase() {
             return
         }
 
-        super
-                .onBackPressed()
+        super.onBackPressed()
     }
 
 }
