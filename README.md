@@ -6,6 +6,8 @@ A **GUI** library for easy to use, fast and beautiful **preferences** in your ap
 | [![Master](https://travis-ci.org/markusressel/KutePreferences.svg?branch=master)](https://travis-ci.org/markusressel/KutePreferences/branches) |
 | [![codebeat badge](https://codebeat.co/badges/418ec567-fa53-4f97-ad98-eb8c4bb816ec)](https://codebeat.co/projects/github-com-markusressel-kutepreferences-master) |
 
+![Main](.images/main.png)
+
 # Features
 * Easy to use
 * Many included preference types
