@@ -9,12 +9,12 @@ A **GUI** library for easy to use, fast and beautiful **preferences** in your ap
 ![Main](.images/main.png)
 
 # Features
-* Easy to use
-* Many included preference types
-* Integrated search
-* Persistence
-* Easily expandable with custom styles and logic
-* Written in Kotlin
+* [x] Easy to use
+* [x] Many included preference types
+* [x] Expandable with custom styles and logic
+* [x] Integrated search
+* [x] Persistence
+* [x] Written in Kotlin
 
 # How to use
 Have a look at the demo app (```app```  module) for a complete sample.
