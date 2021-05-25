@@ -18,7 +18,7 @@ A **GUI** library for easy to use, fast and beautiful **preferences** in your ap
 
 # How to use
 Have a look at the demo app (```app```  module) for a complete sample.
-The sample app uses **Dagger 2** for Dependency Injection but this is not a requirement.
+The sample app uses **Dagger 2** (Hilt) for Dependency Injection but this is not a requirement.
 
 ## Gradle
 To use this library just include it in your dependencies using
@@ -48,7 +48,7 @@ in your desired module `build.gradle` file.
 
 ## Specify the preferences you need
 
-Since **KutePreferences** provides navigation between categories, search and other things it is necessary to extend `KutePreferencesMainFragment` (that builds on `android.support.v4.app.Fragment`) with a custom class of yours in your project and implements it's `fun initPreferenceTree(): KutePreferencesTree` method similar to this:
+Since **KutePreferences** provides navigation between categories, search and other things it is necessary to extend `KutePreferencesMainFragment` (that builds on `androidx.fragment.app.Fragment`) with a custom class of yours in your project and implements it's `fun initPreferenceTree(): KutePreferencesTree` method similar to this:
 
 ```
 class PreferencesFragment : KutePreferencesMainFragment() {
