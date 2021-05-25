@@ -58,11 +58,12 @@ dependencies {
     api("com.github.markusressel.commons:commons_core:${markusresselCommonsVersion}")
 
     api "androidx.annotation:annotation:$androidKtxVersion"
-    implementation "androidx.appcompat:appcompat:1.2.0"
-    implementation "com.google.android.material:material:1.4.0-alpha02"
-    implementation "androidx.core:core-ktx:1.3.2"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1"
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.3.1"
+    implementation "androidx.appcompat:appcompat:$appcompatVersion"
+    implementation "com.google.android.material:material:1.4.0-beta01"
+    implementation "androidx.core:core-ktx:$coreKtxVersion"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleKtxVersion"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleKtxVersion"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleKtxVersion"
 
     implementation "com.google.code.gson:gson:2.8.6"
     implementation('com.github.markusressel:TypedPreferences:v2.1.1') {

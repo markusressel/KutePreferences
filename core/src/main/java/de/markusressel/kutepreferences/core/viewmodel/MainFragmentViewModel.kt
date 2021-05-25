@@ -1,12 +1,14 @@
 package de.markusressel.kutepreferences.core.viewmodel
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import de.markusressel.kutepreferences.core.KutePreferenceListItem
 import de.markusressel.kutepreferences.core.preference.category.KutePreferenceCategory
 import de.markusressel.kutepreferences.core.preference.section.KutePreferenceSection
 import de.markusressel.kutepreferences.core.tree.TreeManager
 import de.markusressel.kutepreferences.core.view.BackstackItem
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import java.util.*
 
 class MainFragmentViewModel : ViewModel() {
@@ -15,11 +17,30 @@ class MainFragmentViewModel : ViewModel() {
 
     private var preferenceTree: Array<KutePreferenceListItem>? = null
 
-    val currentPreferenceItems = MutableLiveData<List<KutePreferenceListItem>>()
+    val currentCategory = MutableLiveData<Int>(null)
 
     val isSearchExpanded = MutableLiveData(false)
-
     val currentSearchFilter = MutableLiveData<String>()
+
+    private var searchFilterJob = Job()
+    val searchFilterResultItems: LiveData<List<Int>> = Transformations.switchMap(currentSearchFilter) {
+        searchFilterJob.cancel()
+        searchFilterJob = Job()
+        liveData(CoroutineScope(searchFilterJob + Dispatchers.IO).coroutineContext) {
+            if (isSearching()) {
+                val preferenceItemKeys = treeManager.findInSearchProviders(it).map { it.key }
+                //showPreferenceItems(treeManager.findInSearchProviders(it).map { it.key },
+                //     addToStack = false)
+                emit(preferenceItemKeys)
+            } else {
+                //showTopLevel()
+                emit(emptyList<Int>())
+            }
+        }
+    }
+
+    val currentPreferenceItems = MutableLiveData<List<KutePreferenceListItem>>()
+
 
     /**
      * Stack of previously visible preference items, including the current ones
@@ -27,14 +48,6 @@ class MainFragmentViewModel : ViewModel() {
     private val backstack: Stack<BackstackItem> = Stack()
 
     init {
-        currentSearchFilter.observeForever { searchString ->
-            if (isSearching()) {
-                showPreferenceItems(treeManager.findInSearchProviders(searchString).map { it.key },
-                        addToStack = false)
-            } else {
-                showTopLevel()
-            }
-        }
     }
 
     /**
@@ -75,6 +88,7 @@ class MainFragmentViewModel : ViewModel() {
      * @param category the category to show
      */
     fun showCategory(category: KutePreferenceCategory) {
+        currentCategory.value = category.key
         val categoryItems = treeManager
                 .getCategoryItems(category.key)
                 .map { it.key }

@@ -144,7 +144,7 @@ class KutePreferencesHolder @Inject constructor(
                 key = R.string.key_demo_color_pref,
                 icon = iconHelper.getIcon(MaterialDesignIconic.Icon.gmi_colorize),
                 title = context.getString(R.string.title_demo_color_pref),
-                defaultValue = R.color.colorAccent,
+                defaultValue = R.color.accent,
                 dataProvider = dataProvider)
     }
 
