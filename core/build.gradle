@@ -53,7 +53,6 @@ dependencies {
     api "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
     def markusresselCommonsVersion = "master-SNAPSHOT"
-    // choose the ones you need
     api("com.github.markusressel.commons:commons_android_themes:${markusresselCommonsVersion}")
     api("com.github.markusressel.commons:commons_core:${markusresselCommonsVersion}")
 
@@ -77,23 +76,9 @@ dependencies {
     // Material Dialogs
     api 'com.afollestad.material-dialogs:core:3.3.0'
 
-    // RxJava (RxKotlin actually)
-    api "io.reactivex.rxjava2:rxjava:2.2.19"
-    api 'io.reactivex.rxjava2:rxandroid:2.1.0'
-    api "io.reactivex.rxjava2:rxkotlin:${rootProject.ext.rxKotlinVersion}"
-
-    // RxBinding
-    // RxJava binding APIs for Android UI widgets from the platform and support libraries.
-    api "com.jakewharton.rxbinding2:rxbinding:${rootProject.ext.rxBindingVersion}"
-    api "com.jakewharton.rxbinding2:rxbinding-appcompat-v7:${rootProject.ext.rxBindingVersion}"
-    api "com.jakewharton.rxbinding2:rxbinding-design:${rootProject.ext.rxBindingVersion}"
-
-    // RxLifecycle to prevent memory leaks
-    def rxLifecycleVersion = rootProject.ext.rxLifecycleVersion
-    api "com.trello.rxlifecycle2:rxlifecycle:$rxLifecycleVersion"
-    api "com.trello.rxlifecycle2:rxlifecycle-kotlin:$rxLifecycleVersion"
-    api "com.trello.rxlifecycle2:rxlifecycle-android:$rxLifecycleVersion"
-    api "com.trello.rxlifecycle2:rxlifecycle-android-lifecycle-kotlin:$rxLifecycleVersion"
+    // FlowBinding
+    api "io.github.reactivecircus.flowbinding:flowbinding-android:$flowbindingVersion"
+    api "io.github.reactivecircus.flowbinding:flowbinding-appcompat:$flowbindingVersion"
 
     // RxBus (event bus)
     api 'com.eightbitlab:rxbus:1.0.2'

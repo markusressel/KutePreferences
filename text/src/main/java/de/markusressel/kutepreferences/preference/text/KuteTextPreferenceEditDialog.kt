@@ -6,16 +6,17 @@ import android.view.View
 import android.widget.EditText
 import com.afollestad.materialdialogs.WhichButton
 import com.afollestad.materialdialogs.actions.getActionButton
-import com.jakewharton.rxbinding2.widget.RxTextView
-import com.trello.rxlifecycle2.kotlin.bindToLifecycle
 import de.markusressel.kutepreferences.core.preference.KutePreferenceItem
 import de.markusressel.kutepreferences.core.view.edit.KutePreferenceEditDialogBase
-import io.reactivex.rxkotlin.subscribeBy
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import reactivecircus.flowbinding.android.widget.textChanges
 
 open class KuteTextPreferenceEditDialog(
-        override val preferenceItem: KutePreferenceItem<String>,
-        regex: String?) :
-        KutePreferenceEditDialogBase<String>() {
+    override val preferenceItem: KutePreferenceItem<String>,
+    regex: String?
+) : KutePreferenceEditDialogBase<String>() {
 
     protected val pattern = regex?.let {
         Regex(it)
@@ -26,21 +27,27 @@ open class KuteTextPreferenceEditDialog(
 
     protected var editTextView: EditText? = null
 
-    override fun onContentViewCreated(context: Context, layoutInflater: LayoutInflater, contentView: View) {
+    override fun onContentViewCreated(
+        context: Context,
+        layoutInflater: LayoutInflater,
+        contentView: View
+    ) {
         editTextView = contentView.findViewById(R.id.kute_preferences__preference__text__edit_name)
         userInput = persistedValue
 
         editTextView?.let {
             it.setText(currentValue)
             it.setSelection(it.text.length)
-            RxTextView.textChanges(it)
-                    .bindToLifecycle(it)
-                    .subscribeBy(onNext = {
-                        val newValue = it.toString()
+            it.textChanges()
+                .onEach { text ->
+                    val newValue = text.toString()
 
-                        userInput = newValue
-                        currentValue = newValue
-                    })
+                    userInput = newValue
+                    currentValue = newValue
+                }.launchIn(
+                    // TODO: get a coroutine scope that is tied to the view
+                    GlobalScope
+                )
         }
     }
 

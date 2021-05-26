@@ -13,16 +13,12 @@ import androidx.annotation.CallSuper
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.core.text.backgroundColor
-import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.airbnb.epoxy.EpoxyModel
 import com.airbnb.epoxy.TypedEpoxyController
 import com.eightbitlab.rxbus.Bus
 import com.eightbitlab.rxbus.registerInBus
-import com.jakewharton.rxbinding2.support.v7.widget.RxSearchView
-import com.trello.rxlifecycle2.android.lifecycle.kotlin.bindUntilEvent
 import de.markusressel.commons.android.themes.getThemeAttrColor
 import de.markusressel.kutepreferences.core.HighlighterFunction
 import de.markusressel.kutepreferences.core.KutePreferenceListItem
@@ -35,30 +31,38 @@ import de.markusressel.kutepreferences.core.event.SectionClickedEvent
 import de.markusressel.kutepreferences.core.extensions.children
 import de.markusressel.kutepreferences.core.preference.section.KuteSection
 import de.markusressel.kutepreferences.core.viewmodel.MainFragmentViewModel
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.rxkotlin.subscribeBy
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import reactivecircus.flowbinding.appcompat.queryTextChanges
 import java.lang.ref.WeakReference
 import java.util.concurrent.LinkedBlockingQueue
-import java.util.concurrent.TimeUnit
+import kotlin.time.Duration
+import kotlin.time.ExperimentalTime
 
 
 /**
  * The main class for all preferences.
  * All navigation between categories, subcategories and dividers is managed in here.
  */
-abstract class KutePreferencesMainFragment : LifecycleFragmentBase() {
+abstract class KutePreferencesMainFragment : StateFragmentBase() {
 
     private var _binding: KutePreferenceMainFragmentBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: MainFragmentViewModel by lazy { ViewModelProvider(this).get(MainFragmentViewModel::class.java) }
+    private val viewModel: MainFragmentViewModel by lazy {
+        ViewModelProvider(this).get(
+            MainFragmentViewModel::class.java
+        )
+    }
 
     internal val epoxyController by lazy { createEpoxyController() }
 
     private var searchView: SearchView? = null
     private var searchMenuItem: MenuItem? = null
     private val searchHighlightingColor by lazy {
-        context!!.getThemeAttrColor(R.attr.kute_preferences__search__highlighted_text_color)
+        requireContext().getThemeAttrColor(R.attr.kute_preferences__search__highlighted_text_color)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,8 +71,16 @@ abstract class KutePreferencesMainFragment : LifecycleFragmentBase() {
         IconHelper.contextRef = WeakReference(context)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        _binding = DataBindingUtil.inflate(layoutInflater, R.layout.kute_preference__main_fragment, container, false)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        _binding = KutePreferenceMainFragmentBinding.inflate(
+            layoutInflater,
+            container,
+            false
+        )
 
         viewModel.currentPreferenceItems.observe(viewLifecycleOwner) {
             epoxyController.setData(it)
@@ -95,11 +107,6 @@ abstract class KutePreferencesMainFragment : LifecycleFragmentBase() {
         return binding.root
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
     @CallSuper
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -113,26 +120,25 @@ abstract class KutePreferencesMainFragment : LifecycleFragmentBase() {
     private fun createEpoxyController(): TypedEpoxyController<List<KutePreferenceListItem>> {
         return object : TypedEpoxyController<List<KutePreferenceListItem>>() {
             override fun buildModels(data: List<KutePreferenceListItem>?) {
-                val highlighter = createHighlighterFunction(viewModel.currentSearchFilter.value ?: "")
+                val highlighter =
+                    createHighlighterFunction(viewModel.currentSearchFilter.value ?: "")
 
                 data?.forEach {
-                    createModel(it, highlighter).addTo(this)
-                    if (it is KuteSection && !viewModel.isSearching()) {
-                        it.children.forEach { child ->
-                            createModel(child, highlighter).addTo(this)
-                        }
+                    val model = it.createEpoxyModel(highlighter).apply {
+                        id(it.key)
                     }
-                }
-            }
+                    model.addTo(this)
 
-            private fun createModel(kutePreferenceListItem: KutePreferenceListItem, highlighter: HighlighterFunction): EpoxyModel<*> {
-                return kutePreferenceListItem.createEpoxyModel(highlighter).apply {
-                    id(kutePreferenceListItem.key)
+                    if (it is KuteSection && !viewModel.isSearching()) {
+                        buildModels(it.children)
+                    }
                 }
             }
         }
     }
 
+    @FlowPreview
+    @ExperimentalTime
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.kutepreferences__menu, menu)
 
@@ -159,45 +165,34 @@ abstract class KutePreferencesMainFragment : LifecycleFragmentBase() {
         }
 
         searchView = searchMenuItem?.actionView as SearchView
-        searchView?.let {
-            RxSearchView
-                    .queryTextChanges(it)
-                    .skipInitialValue()
-                    .bindUntilEvent(this, Lifecycle.Event.ON_DESTROY)
-                    .debounce(100, TimeUnit.MILLISECONDS)
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeBy(onNext = { text ->
-                        viewModel.setSearch(text.toString())
-                    }, onError = { error ->
-                        Log.e(TAG, "Error filtering list", error)
-                    })
-        }
+        searchView?.queryTextChanges()
+            ?.skipInitialValue()
+            ?.debounce(Duration.milliseconds(100))
+            ?.onEach {
+                viewModel.setSearch(it.toString())
+            }?.launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     override fun onStart() {
         super.onStart()
 
-        Bus.observe<CategoryClickedEvent>()
-                .subscribe {
-                    viewModel.showCategory(it.category)
-                }.registerInBus(this)
+        Bus.observe<CategoryClickedEvent>().subscribe {
+            viewModel.showCategory(it.category)
+        }.registerInBus(this)
 
-        Bus.observe<SectionClickedEvent>()
-                .subscribe {
-                    viewModel.showCategory(it.section)
-                }.registerInBus(this)
+        Bus.observe<SectionClickedEvent>().subscribe {
+            viewModel.showCategory(it.section)
+        }.registerInBus(this)
 
-        Bus.observe<PreferenceChangedEvent<*>>()
-                .subscribe {
-                    // force rebuilding of models
-                    epoxyController.setData(epoxyController.currentData)
-                }.registerInBus(this)
+        Bus.observe<PreferenceChangedEvent<*>>().subscribe {
+            // force rebuilding of models
+            epoxyController.setData(epoxyController.currentData)
+        }.registerInBus(this)
 
-        Bus.observe<RefreshPreferenceItemsEvent>()
-                .subscribe {
-                    // force rebuilding of models
-                    epoxyController.setData(epoxyController.currentData)
-                }.registerInBus(this)
+        Bus.observe<RefreshPreferenceItemsEvent>().subscribe {
+            // force rebuilding of models
+            epoxyController.setData(epoxyController.currentData)
+        }.registerInBus(this)
 
         // force rebuilding of models
         epoxyController.setData(epoxyController.currentData)
@@ -207,6 +202,11 @@ abstract class KutePreferencesMainFragment : LifecycleFragmentBase() {
         super.onStop()
 
         Bus.unregister(this)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     private fun forceRippleAnimation(view: View) {
@@ -236,7 +236,7 @@ abstract class KutePreferencesMainFragment : LifecycleFragmentBase() {
 
         while (queue.isNotEmpty()) {
             val current = queue.poll()
-            if (current.background is RippleDrawable) {
+            if (current?.background is RippleDrawable) {
                 return current
             } else {
                 if (current is ViewGroup) {
@@ -252,7 +252,10 @@ abstract class KutePreferencesMainFragment : LifecycleFragmentBase() {
 
     private fun checkKeyDuplication(key: Int, keySet: MutableSet<Int>) {
         if (keySet.contains(key)) {
-            Log.w("KutePreferences", "Duplicate key '$key' found! Did you accidentally add a KutePreference twice or reused an existing key?")
+            Log.w(
+                "KutePreferences",
+                "Duplicate key '$key' found! Did you accidentally add a KutePreference twice or reused an existing key?"
+            )
         } else {
             keySet.add(key)
         }
@@ -277,7 +280,8 @@ abstract class KutePreferencesMainFragment : LifecycleFragmentBase() {
             if (searchString.isBlank()) {
                 SpannedString.valueOf(text) as Spanned
             } else {
-                val regex = searchString.toRegex(setOf(RegexOption.IGNORE_CASE, RegexOption.LITERAL))
+                val regex =
+                    searchString.toRegex(setOf(RegexOption.IGNORE_CASE, RegexOption.LITERAL))
 
                 val highlightedText = SpannableStringBuilder()
                 var currentStartIndex = 0
@@ -286,10 +290,20 @@ abstract class KutePreferencesMainFragment : LifecycleFragmentBase() {
 
                     if (matchResult != null) {
                         // append normal text
-                        highlightedText.append(text.substring(currentStartIndex, matchResult.range.first))
+                        highlightedText.append(
+                            text.substring(
+                                currentStartIndex,
+                                matchResult.range.first
+                            )
+                        )
 
                         highlightedText.backgroundColor(searchHighlightingColor) {
-                            append(text.substring(matchResult.range.first, matchResult.range.last + 1))
+                            append(
+                                text.substring(
+                                    matchResult.range.first,
+                                    matchResult.range.last + 1
+                                )
+                            )
                         }
 
                         // set index for next iteration

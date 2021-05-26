@@ -79,6 +79,8 @@ abstract class KutePreferenceEditDialogBase<DataType : Any> : KutePreferenceEdit
 
     /**
      * Show this dialog
+     *
+     * @param context ui context
      */
     override fun show(context: Context) {
         userInput = persistedValue
@@ -86,19 +88,20 @@ abstract class KutePreferenceEditDialogBase<DataType : Any> : KutePreferenceEdit
         val layoutInflater = LayoutInflater.from(context)
         val contentView = layoutInflater.inflate(contentLayoutRes, null)
 
-        dialog = MaterialDialog(context).customView(view = contentView, scrollable = false)
-                .noAutoDismiss()
-                .title(text = preferenceItem.title)
-                .neutralButton(res = android.R.string.cancel, click = {
-                    dismiss()
-                })
-                .negativeButton(res = R.string.default_value, click = {
-                    resetToDefault()
-                })
-                .positiveButton(res = R.string.save, click = {
-                    save()
-                    dismiss()
-                })
+        dialog = MaterialDialog(context)
+            .customView(view = contentView, scrollable = false)
+            .noAutoDismiss()
+            .title(text = preferenceItem.title)
+            .neutralButton(res = android.R.string.cancel, click = {
+                dismiss()
+            })
+            .negativeButton(res = R.string.default_value, click = {
+                resetToDefault()
+            })
+            .positiveButton(res = R.string.save, click = {
+                save()
+                dismiss()
+            })
 
         onContentViewCreated(context, layoutInflater, contentView)
         dialog?.show()
@@ -108,6 +111,10 @@ abstract class KutePreferenceEditDialogBase<DataType : Any> : KutePreferenceEdit
      * Called when the content view has been created.
      * Find your views here and set listeners, properties, etc.
      */
-    abstract fun onContentViewCreated(context: Context, layoutInflater: LayoutInflater, contentView: View)
+    abstract fun onContentViewCreated(
+        context: Context,
+        layoutInflater: LayoutInflater,
+        contentView: View
+    )
 
 }
