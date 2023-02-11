@@ -66,7 +66,7 @@ dependencies {
     // add this if you want to add custom preference item layouts
     kapt "com.airbnb.android:epoxy-processor:$epoxyVersion"
 
-    implementation "androidx.startup:startup-runtime:1.0.0"
+    implementation "androidx.startup:startup-runtime:1.1.1"
 
     implementation "androidx.appcompat:appcompat:$appcompatVersion"
 
