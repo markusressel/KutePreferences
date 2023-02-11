@@ -25,7 +25,7 @@ buildscript {
 
         javaxAnnotationVersion = "10.0-b28"
 
-        hiltVersion = "2.35"
+        hiltVersion = "2.45"
 
         rxKotlinVersion = "2.3.0"
         rxBindingVersion = "2.2.0"
