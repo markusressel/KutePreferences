@@ -33,7 +33,7 @@ buildscript {
 
         epoxyVersion = "4.6.1"
 
-        iconicsVersion = "5.2.8"
+        iconicsVersion = "5.4.0"
     }
 
     repositories {
