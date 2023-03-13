@@ -90,7 +90,7 @@ dependencies {
     implementation "com.mikepenz:iconics-views:${iconics_version}"
     implementation "com.mikepenz:iconics-compose:${iconics_version}"
     implementation "com.mikepenz:iconics-typeface-api:${iconics_version}"
-    implementation "com.mikepenz:material-design-iconic-typeface:2.2.0.6-kotlin"
+    implementation "com.mikepenz:material-design-iconic-typeface:2.2.0.8-kotlin"
 
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
