@@ -42,6 +42,8 @@ in your desired module `build.gradle` file.
 
 ## Specify the preferences you need
 
+TODO: this needs a major rewrite for the compose implementation.
+
 Since **KutePreferences** provides navigation between categories, search and other things it is necessary to
 extend `KutePreferencesMainFragment` (that builds on `androidx.fragment.app.Fragment`) with a custom class of yours in
 your project and implements it's `fun initPreferenceTree(): KutePreferencesTree` method similar to this:
