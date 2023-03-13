@@ -22,21 +22,25 @@ Dependency Injection but this is not a requirement.
 
 To use this library just include it in your dependencies using
 
-    repositories {
-        ...
-        maven { url "https://jitpack.io" }
-    }
+```groovy
+repositories {
+    ...
+    maven { url "https://jitpack.io" }
+}
+```
 
 in your project build.gradle file and
 
-    dependencies {
-        ...
-    
-        def kutePreferencesVersion = "v3.0.0"
-        // choose the ones you need
-        implementation("com.github.markusressel.KutePreferences:core:${kutePreferencesVersion}")
-        implementation("com.github.markusressel.KutePreferences:ui:${kutePreferencesVersion}")
-    }
+```groovy
+dependencies {
+    ...
+
+    def kutePreferencesVersion = "v3.0.0"
+    // choose the ones you need
+    implementation("com.github.markusressel.KutePreferences:core:${kutePreferencesVersion}")
+    implementation("com.github.markusressel.KutePreferences:ui:${kutePreferencesVersion}")
+}
+```
 
 in your desired module `build.gradle` file.
 
@@ -48,7 +52,7 @@ Since **KutePreferences** provides navigation between categories, search and oth
 extend `KutePreferencesMainFragment` (that builds on `androidx.fragment.app.Fragment`) with a custom class of yours in
 your project and implements it's `fun initPreferenceTree(): KutePreferencesTree` method similar to this:
 
-```
+```kotlin
 class PreferencesFragment : KutePreferencesMainFragment() {
 
     private val dataProvider by lazy {
