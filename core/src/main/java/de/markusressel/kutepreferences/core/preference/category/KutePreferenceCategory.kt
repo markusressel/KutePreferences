@@ -1,6 +1,6 @@
 package de.markusressel.kutepreferences.core.preference.category
 
-import de.markusressel.kutepreferences.core.KutePreferenceListItem
+import de.markusressel.kutepreferences.core.preference.KutePreferenceListItem
 
 /**
  * Interface for a KutePreference category that holds a set preferences
@@ -15,6 +15,6 @@ interface KutePreferenceCategory : KutePreferenceListItem, KuteParent {
     /**
      * A short description of the contents of this category
      */
-    val description: String
+    val description: String?
 
 }

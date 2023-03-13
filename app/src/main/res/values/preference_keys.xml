@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <string name="pref_custom_item" translatable="false">pref_custom_item</string>
+
+    <string name="custom_items" translatable="false">custom_items</string>
+
+    <string name="sec_first" translatable="false">sec_first</string>
+    <string name="cat_hello" translatable="false">cat_hello</string>
+    <string name="pref_boolean" translatable="false">pref_boolean</string>
+    <string name="pref_string" translatable="false">pref_string</string>
+    <string name="pref_number_float" translatable="false">pref_number_float</string>
+
+
     <string name="key_section_system_hardware" translatable="false">key_section_system_hardware</string>
 
     <string name="key_category_battery" translatable="false">key_category_battery</string>

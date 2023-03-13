@@ -1,32 +1,26 @@
 package de.markusressel.kutepreferences.core.preference.section
 
-import com.airbnb.epoxy.EpoxyModel
-import com.eightbitlab.rxbus.Bus
-import de.markusressel.kutepreferences.core.HighlighterFunction
-import de.markusressel.kutepreferences.core.KutePreferenceListItem
-import de.markusressel.kutepreferences.core.KutePreferenceSectionListItemBindingModel_
-import de.markusressel.kutepreferences.core.event.SectionClickedEvent
-import de.markusressel.kutepreferences.core.viewmodel.SectionViewModel
+import de.markusressel.kutepreferences.core.preference.KutePreferenceListItem
+import de.markusressel.kutepreferences.core.search.SearchUtils.containsAnyWord
+
 
 /**
  * The default implementation of a KutePreference Section
  */
 open class KuteSection(
-        override val key: Int,
-        override val title: String,
-        override val children: List<KutePreferenceListItem>) : KutePreferenceSection {
+    override val key: Int,
+    override val title: String,
+    override val children: List<KutePreferenceListItem>,
+    override val onClick: (() -> Unit)? = null,
+    override val onLongClick: (() -> Unit)? = null
+) : KutePreferenceSection {
 
-    override fun getSearchableItems(): Set<String> = setOf(title)
+    override var searchTerm: String? = null
 
-    override fun createEpoxyModel(highlighterFunction: HighlighterFunction): EpoxyModel<*> {
-        val viewModel = SectionViewModel(
-                title = highlighterFunction.invoke(title),
-                onClick = {
-                    Bus.send(SectionClickedEvent(this))
-                },
-                onLongClick = { false })
-
-        return KutePreferenceSectionListItemBindingModel_().viewModel(viewModel)
+    override fun search(searchTerm: String): Boolean {
+        val searchTerm = this.searchTerm ?: searchTerm
+        return listOf(title).containsAnyWord(searchTerm) || children.any { it.search(searchTerm) }
     }
+
 
 }

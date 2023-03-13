@@ -1,102 +1,100 @@
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-kapt'
-apply plugin: 'dagger.hilt.android.plugin'
-
-apply plugin: 'com.github.dcendents.android-maven'
-group = rootProject.ext.group
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+    id 'com.google.dagger.hilt.android'
+}
 
 android {
-    compileSdkVersion rootProject.ext.compileSdkVersion
-    buildToolsVersion rootProject.ext.buildToolsVersion
+    compileSdk compile_sdk
 
     defaultConfig {
-        applicationId "de.markusressel.kutepreferences"
-        minSdkVersion rootProject.ext.minSdkVersion
-        targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode rootProject.ext.versionCode
-        versionName rootProject.ext.versionName
+        applicationId "de.markusressel.kutepreferencescomposeplayground"
+        minSdk min_sdk
+        targetSdk target_sdk
+        versionCode 1
+        versionName "1.0"
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-
-        setProperty("archivesBaseName", "KutePreferences_v${versionName}_(${versionCode})")
-
-        multiDexEnabled true
-    }
-
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_1_8.toString()
+        vectorDrawables {
+            useSupportLibrary true
+        }
     }
 
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-
-    buildFeatures {
-        dataBinding true
-        viewBinding true
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
-
-    lintOptions {
-        abortOnError false
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+    buildFeatures {
+        compose true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion compose_compiler_version
+    }
+    packagingOptions {
+        resources {
+            excludes += '/META-INF/{AL2.0,LGPL2.1}'
+        }
     }
 }
 
+// Allow references to generated code
 kapt {
     correctErrorTypes true
 }
 
 dependencies {
-    implementation project(':core')
-    implementation project(':bool')
-    implementation project(':color')
-    implementation project(':date')
-    implementation project(':time')
-    implementation project(':number')
-    implementation project(':selection')
-    implementation project(':text')
+    implementation project(":core")
+    implementation project(":ui")
 
-    // add this if you want to add custom preference item layouts
-    kapt "com.airbnb.android:epoxy-processor:$epoxyVersion"
+    implementation 'androidx.core:core-ktx:1.9.0'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
 
-    implementation "androidx.startup:startup-runtime:1.0.0"
+    // Compose
+    implementation "androidx.compose.ui:ui:1.3.3"
+    implementation 'com.google.android.material:material:1.8.0'
+    implementation "androidx.compose.material3:material3:1.1.0-alpha08"
+    implementation "androidx.compose.ui:ui-tooling-preview:1.3.3"
 
-    implementation "androidx.appcompat:appcompat:$appcompatVersion"
-
-    // Android KTX
-
-    implementation "androidx.core:core-ktx:$coreKtxVersion"
-    implementation "androidx.fragment:fragment-ktx:$fragmentKtxVersion"
-//    implementation "androidx.collection:collection-ktx:$androidKtxVersion"
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.0'
+    implementation 'androidx.activity:activity-compose:1.6.1'
+    // required because of this: https://stackoverflow.com/questions/70894168/targeting-s-version-31-and-above-requires-that-one-of-flag-immutable-or-flag
+    implementation 'androidx.work:work-runtime-ktx:2.8.0'
 
     // Hilt (Dagger wrapper)
-    implementation "com.google.dagger:hilt-android:$hiltVersion"
-    kapt "com.google.dagger:hilt-android-compiler:$hiltVersion"
+    implementation "com.google.dagger:hilt-android:$hilt_version"
+    kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
     // For instrumentation tests
-    androidTestImplementation "com.google.dagger:hilt-android-testing:$hiltVersion"
-    kaptAndroidTest "com.google.dagger:hilt-android-compiler:$hiltVersion"
+    androidTestImplementation "com.google.dagger:hilt-android-testing:$hilt_version"
+    kaptAndroidTest "com.google.dagger:hilt-android-compiler:$hilt_version"
     // For local unit tests
-    testImplementation "com.google.dagger:hilt-android-testing:$hiltVersion"
-    kaptTest "com.google.dagger:hilt-android-compiler:$hiltVersion"
+    testImplementation "com.google.dagger:hilt-android-testing:$hilt_version"
+    kaptTest "com.google.dagger:hilt-android-compiler:$hilt_version"
 
     // Hilt Jetpack integration
     implementation "androidx.hilt:hilt-work:1.0.0"
     kapt "androidx.hilt:hilt-compiler:1.0.0"
 
-    compileOnly "org.glassfish:javax.annotation:$javaxAnnotationVersion"
-
     //the core iconcis library (without any widgets)
-    implementation "com.mikepenz:iconics-core:${iconicsVersion}@aar"
+    implementation "com.mikepenz:iconics-core:${iconics_version}"
     //this adds all ui view widgets (IconicsButton, IconicsImageView, ...)
-    implementation "com.mikepenz:iconics-views:${iconicsVersion}@aar"
-    implementation "com.mikepenz:iconics-typeface-api:${iconicsVersion}@aar"
-    implementation "com.mikepenz:material-design-iconic-typeface:2.2.0.6-kotlin@aar"
+    implementation "com.mikepenz:iconics-views:${iconics_version}"
+    implementation "com.mikepenz:iconics-compose:${iconics_version}"
+    implementation "com.mikepenz:iconics-typeface-api:${iconics_version}"
+    implementation "com.mikepenz:material-design-iconic-typeface:2.2.0.6-kotlin"
 
+    testImplementation 'junit:junit:4.+'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
+    debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
 }

@@ -1,39 +1,26 @@
 package de.markusressel.kutepreferences.core.preference.category
 
 import android.graphics.drawable.Drawable
-import com.airbnb.epoxy.EpoxyModel
-import com.eightbitlab.rxbus.Bus
-import de.markusressel.kutepreferences.core.HighlighterFunction
-import de.markusressel.kutepreferences.core.KutePreferenceCategoryListItemBindingModel_
-import de.markusressel.kutepreferences.core.KutePreferenceListItem
-import de.markusressel.kutepreferences.core.event.CategoryClickedEvent
-import de.markusressel.kutepreferences.core.viewmodel.base.PreferenceItemDataModel
+import de.markusressel.kutepreferences.core.preference.KutePreferenceListItem
+import de.markusressel.kutepreferences.core.search.SearchUtils.containsAnyWord
 
 /**
  * The default implementation of a KutePreference Category
  */
 open class KuteCategory(
-        override val key: Int,
-        private val icon: Drawable,
-        override val title: String,
-        override val description: String,
-        override val children: List<KutePreferenceListItem>) :
-        KutePreferenceCategory {
+    override val key: Int,
+    val icon: Drawable? = null,
+    override val title: String,
+    override val description: String = "",
+    override val children: List<KutePreferenceListItem> = emptyList(),
+    override val onClick: (() -> Unit)? = null,
+    override val onLongClick: (() -> Unit)? = null,
+) : KutePreferenceCategory {
 
-    override fun getSearchableItems(): Set<String> = setOf(title, description)
+    override var searchTerm: String? = null
 
-    override fun createEpoxyModel(highlighterFunction: HighlighterFunction): EpoxyModel<*> {
-        val dataModel = PreferenceItemDataModel(
-                title = highlighterFunction.invoke(title),
-                description = highlighterFunction.invoke(description),
-                icon = icon,
-                onClick = { v ->
-                    Bus.send(CategoryClickedEvent(this))
-                },
-                onLongClick = { false }
-        )
-
-        return KutePreferenceCategoryListItemBindingModel_().viewModel(dataModel)
+    override fun search(searchTerm: String): Boolean {
+        val searchTerm = this.searchTerm ?: searchTerm
+        return listOf(title, description).containsAnyWord(searchTerm)
     }
-
 }

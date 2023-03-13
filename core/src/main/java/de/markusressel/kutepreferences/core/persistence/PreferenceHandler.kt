@@ -18,8 +18,11 @@ class PreferenceHandler(context: Context) : PreferencesHandlerBase(context) {
      * @param defaultValue the default value for the preference
      * @return a PreferenceItem
      */
-    fun <PreferenceType : Any> createPreferenceItem(@StringRes key: Int,
-                                                    defaultValue: PreferenceType): PreferenceItem<PreferenceType> {
+    @Suppress("UNCHECKED_CAST")
+    fun <PreferenceType : Any> createPreferenceItem(
+        @StringRes key: Int,
+        defaultValue: PreferenceType
+    ): PreferenceItem<PreferenceType> {
         val keyString = context.getString(key)
 
         return currentPreferenceItems.getOrPut(keyString) {

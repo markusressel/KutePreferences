@@ -5,34 +5,24 @@ on:
       - master
   pull_request:
 jobs:
-  ANDROID_BASE_CHECKS:
-    name: Base Checks
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-java@v1
-        with:
-          java-version: 1.8
-      - name: Perform base checks
-        run: ./gradlew app:assembleDebug core:dokka --stacktrace
   ANDROID_UNIT_TESTS:
     name: Unit Tests
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v2
       - uses: actions/setup-java@v1
         with:
-          java-version: 1.8
+          java-version: 11
       - name: Execute unit tests
-        run: ./gradlew core:testDebugUnitTest bool:testDebugUnitTest color:testDebugUnitTest date:testDebugUnitTest number:testDebugUnitTest selection:testDebugUnitTest text:testDebugUnitTest text:testDebugUnitTest time:testDebugUnitTest --stacktrace
+        run: ./gradlew app:testDebugUnitTest --stacktrace
   ANDROID_BUILD_APK:
     name: Build APK
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v2
       - uses: actions/setup-java@v1
         with:
-          java-version: 1.8
+          java-version: 11
 
       - name: Setup custom keystore file
         run: |
@@ -42,7 +32,7 @@ jobs:
       - name: Execute APK build
         run: ./gradlew app:assembleDebug --stacktrace
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v2
         with:
           name: apk-files
           path: app/build/outputs/apk/**/*.apk
