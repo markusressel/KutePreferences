@@ -2,21 +2,23 @@ package de.markusressel.kutepreferences.core.persistence
 
 import androidx.annotation.StringRes
 import de.markusressel.kutepreferences.core.preference.KutePreferenceItem
+import kotlinx.coroutines.flow.StateFlow
 
 /**
  * Data provider responsible for storing and retrieving
  * preference values from some kind of (hopefully) persisted storage.
- *
- * @param DataType data type returned by the provider
  */
 interface KutePreferenceDataProvider {
 
     /**
      * Stores a new value
      *
-     * @param the new value to store
+     * @param newValue the new value to store
      */
-    fun <DataType : Any> storeValue(kutePreference: KutePreferenceItem<DataType>, newValue: DataType)
+    fun <DataType : Any> storeValue(
+        kutePreference: KutePreferenceItem<DataType>,
+        newValue: DataType
+    )
 
     /**
      * WARNING: This method can break type safety!
@@ -31,6 +33,11 @@ interface KutePreferenceDataProvider {
      * @param newValue the new value to store
      */
     fun <DataType : Any> storeValueUnsafe(@StringRes key: Int, newValue: DataType)
+
+    /**
+     * @return a flow containing the currently persisted value
+     */
+    fun <DataType : Any> getValueFlow(kutePreference: KutePreferenceItem<DataType>): StateFlow<DataType>
 
     /**
      * @return the currently persisted value

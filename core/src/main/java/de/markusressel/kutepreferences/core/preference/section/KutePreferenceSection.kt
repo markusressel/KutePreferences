@@ -1,6 +1,6 @@
 package de.markusressel.kutepreferences.core.preference.section
 
-import de.markusressel.kutepreferences.core.KutePreferenceListItem
+import de.markusressel.kutepreferences.core.preference.KutePreferenceListItem
 import de.markusressel.kutepreferences.core.preference.category.KuteParent
 
 /**

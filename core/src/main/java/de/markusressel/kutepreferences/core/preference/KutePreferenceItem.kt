@@ -3,9 +3,8 @@ package de.markusressel.kutepreferences.core.preference
 import android.graphics.drawable.Drawable
 import androidx.annotation.CallSuper
 import androidx.annotation.CheckResult
-import com.eightbitlab.rxbus.Bus
-import de.markusressel.kutepreferences.core.event.PreferenceChangedEvent
 import de.markusressel.kutepreferences.core.persistence.KutePreferenceDataProvider
+import kotlinx.coroutines.flow.StateFlow
 
 /**
  * Interface for Preferences
@@ -31,7 +30,7 @@ interface KutePreferenceItem<DataType : Any> {
      * The description of this KutePreference according to it's persisted value
      */
     val description: String
-        get() = createDescription(persistedValue)
+        get() = createDescription(persistedValue.value)
 
     /**
      * Override this method if you want to provide a more sophisticated description.
@@ -47,23 +46,26 @@ interface KutePreferenceItem<DataType : Any> {
         return "$currentValue"
     }
 
+    val persistedValue: StateFlow<DataType>
+
     /**
      * The default value of this preference
      */
     fun getDefaultValue(): DataType
 
-    /**
-     * The persisted value of this preference
-     */
-    var persistedValue: DataType
-        get() = dataProvider.getValue(this)
-        set(newValue) {
-            val oldValue = persistedValue
-            if (oldValue != newValue) {
-                dataProvider.storeValue(this, newValue)
-                onPreferenceChanged(oldValue, newValue)
-            }
+    fun getCurrentPersistedValue(): DataType = dataProvider.getValue(this)
+
+    fun getPersistedValueFlow(): StateFlow<DataType> {
+        return dataProvider.getValueFlow(this)
+    }
+
+    fun persistValue(newValue: DataType) {
+        val oldValue = persistedValue.value
+        if (oldValue != newValue) {
+            dataProvider.storeValue(this, newValue)
+            onPreferenceChanged(oldValue, newValue)
         }
+    }
 
     /**
      * Persistence for this PreferenceItem
@@ -75,7 +77,7 @@ interface KutePreferenceItem<DataType : Any> {
      */
     @CallSuper
     fun reset() {
-        persistedValue = getDefaultValue()
+        persistValue(getDefaultValue())
     }
 
     /**
@@ -88,21 +90,10 @@ interface KutePreferenceItem<DataType : Any> {
      */
     @CallSuper
     fun onPreferenceChanged(oldValue: DataType, newValue: DataType) {
-        Bus.send(PreferenceChangedEvent(this, oldValue, newValue))
         onPreferenceChangedListener?.invoke(oldValue, newValue)
     }
 
-//    /**
-//     * Returns an instance of an epoxy viewmodel for this KutePreferenceItem
-//     */
-//    fun createEpoxyModel(): EpoxyModel<*> {
-//        val dataModel = PreferenceItemDataModel(
-//                title = title,
-//                description = description,
-//                icon = icon
-//        )
-//
-//        return KutePreferenceDefaultListItemBindingModel_().viewModel(dataModel)
-//    }
-
 }
+
+/** Validator function, returns true if the input is valid, false otherwise */
+typealias Validator<T> = (T) -> Boolean

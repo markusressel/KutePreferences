@@ -1,4 +1,3 @@
 <resources>
-    <string name="app_name"></string>
-    <string name="kute_preferences__app_name">KutePreferences</string>
+    <string name="app_name">KutePreferences</string>
 </resources>
