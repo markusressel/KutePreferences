@@ -7,7 +7,7 @@ dependencyResolutionManagement {
         maven { url "https://jitpack.io" }
     }
 }
-rootProject.name = "KutePreferencesComposePlayground"
+rootProject.name = "KutePreferencesDemo"
 include ':app'
 include ':core'
 include ':ui'
