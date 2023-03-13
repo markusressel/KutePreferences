@@ -1,4 +1,4 @@
-package de.markusressel.kutepreferences.ui
+package de.markusressel.kutepreferences.app.ui
 
 import android.content.res.Configuration
 import android.os.Bundle
@@ -18,7 +18,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import de.markusressel.kutepreferences.core.preference.category.KuteCategory
 import de.markusressel.kutepreferences.ui.theme.KutePreferencesTheme
 import de.markusressel.kutepreferences.ui.views.KuteOverview
-import de.markusressel.kutepreferences.ui.theme.KutePreferencesComposePlaygroundTheme
+import de.markusressel.kutepreferences.app.ui.theme.KutePreferencesDemoAppTheme
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -38,7 +38,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            KutePreferencesComposePlaygroundTheme {
+            KutePreferencesDemoAppTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
@@ -62,7 +62,7 @@ class MainActivity : ComponentActivity() {
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true, backgroundColor = 0xFF000000)
 @Composable
 private fun DefaultPreview() {
-    KutePreferencesComposePlaygroundTheme {
+    KutePreferencesDemoAppTheme {
         KuteOverview(
             items = listOf(
                 KuteCategory(

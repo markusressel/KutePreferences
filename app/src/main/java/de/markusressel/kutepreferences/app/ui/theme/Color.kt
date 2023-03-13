@@ -1,4 +1,4 @@
-package de.markusressel.kutepreferences.ui.theme
+package de.markusressel.kutepreferences.app.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

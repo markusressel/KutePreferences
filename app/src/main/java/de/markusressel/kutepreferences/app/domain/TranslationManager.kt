@@ -1,4 +1,4 @@
-package de.markusressel.kutepreferences.domain
+package de.markusressel.kutepreferences.app.domain
 
 import android.content.Context
 import androidx.annotation.StringRes

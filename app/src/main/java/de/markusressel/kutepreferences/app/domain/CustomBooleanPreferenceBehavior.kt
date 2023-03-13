@@ -1,4 +1,4 @@
-package de.markusressel.kutepreferences.domain
+package de.markusressel.kutepreferences.app.domain
 
 import de.markusressel.kutepreferences.core.preference.PersistedPreferenceBehavior
 

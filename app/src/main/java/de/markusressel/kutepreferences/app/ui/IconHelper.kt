@@ -1,4 +1,4 @@
-package de.markusressel.kutepreferences.ui
+package de.markusressel.kutepreferences.app.ui
 
 import android.content.Context
 import android.graphics.Color

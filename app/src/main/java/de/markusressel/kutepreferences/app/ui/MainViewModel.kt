@@ -1,7 +1,8 @@
-package de.markusressel.kutepreferences.ui
+package de.markusressel.kutepreferences.app.ui
 
 import com.mikepenz.iconics.typeface.library.materialdesigniconic.MaterialDesignIconic
 import dagger.hilt.android.lifecycle.HiltViewModel
+import de.markusressel.kutepreferences.app.domain.*
 import de.markusressel.kutepreferences.core.KuteNavigator
 import de.markusressel.kutepreferences.core.persistence.KutePreferenceDataProvider
 import de.markusressel.kutepreferences.core.preference.KutePreferenceListItem
@@ -12,7 +13,7 @@ import de.markusressel.kutepreferences.core.preference.section.KuteSection
 import de.markusressel.kutepreferences.core.preference.text.KuteTextPreference
 import de.markusressel.kutepreferences.ui.views.KuteStyleManager
 import de.markusressel.kutepreferences.ui.vm.KutePreferencesViewModel
-import de.markusressel.kutepreferences.domain.*
+import de.markusressel.kutepreferences.app.R
 import javax.inject.Inject
 
 @HiltViewModel

@@ -1,4 +1,4 @@
-package de.markusressel.kutepreferences.ui.theme
+package de.markusressel.kutepreferences.app.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

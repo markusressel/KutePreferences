@@ -1,4 +1,4 @@
-package de.markusressel.kutepreferences.di
+package de.markusressel.kutepreferences.app.di
 
 import android.content.Context
 import dagger.Module

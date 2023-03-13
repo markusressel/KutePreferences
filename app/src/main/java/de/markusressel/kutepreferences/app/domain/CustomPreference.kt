@@ -1,4 +1,4 @@
-package de.markusressel.kutepreferences.domain
+package de.markusressel.kutepreferences.app.domain
 
 import android.content.res.Configuration
 import android.graphics.drawable.Drawable
