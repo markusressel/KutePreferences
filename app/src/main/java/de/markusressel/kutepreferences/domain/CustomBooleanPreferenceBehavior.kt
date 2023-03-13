@@ -1,4 +1,4 @@
-package de.markusressel.kutepreferencescomposeplayground.domain
+package de.markusressel.kutepreferences.domain
 
 import de.markusressel.kutepreferences.core.preference.PersistedPreferenceBehavior
 

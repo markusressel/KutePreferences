@@ -1,4 +1,4 @@
-package de.markusressel.kutepreferencescomposeplayground.di
+package de.markusressel.kutepreferences.di
 
 import android.content.Context
 import dagger.Module

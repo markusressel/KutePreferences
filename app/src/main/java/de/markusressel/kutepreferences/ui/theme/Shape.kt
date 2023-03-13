@@ -1,4 +1,4 @@
-package de.markusressel.kutepreferencescomposeplayground.ui.theme
+package de.markusressel.kutepreferences.ui.theme
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Shapes

@@ -1,4 +1,4 @@
-package de.markusressel.kutepreferencescomposeplayground.ui
+package de.markusressel.kutepreferences.ui
 
 import android.content.res.Configuration
 import android.os.Bundle
@@ -18,7 +18,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import de.markusressel.kutepreferences.core.preference.category.KuteCategory
 import de.markusressel.kutepreferences.ui.theme.KutePreferencesTheme
 import de.markusressel.kutepreferences.ui.views.KuteOverview
-import de.markusressel.kutepreferencescomposeplayground.ui.theme.KutePreferencesComposePlaygroundTheme
+import de.markusressel.kutepreferences.ui.theme.KutePreferencesComposePlaygroundTheme
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {

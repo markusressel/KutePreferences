@@ -1,4 +1,4 @@
-package de.markusressel.kutepreferencescomposeplayground.application
+package de.markusressel.kutepreferences.application
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp

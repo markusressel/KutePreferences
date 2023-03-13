@@ -1,11 +1,10 @@
-package de.markusressel.kutepreferencescomposeplayground.ui.theme
+package de.markusressel.kutepreferences.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
-import de.markusressel.kutepreferences.ui.theme.GRAY_200
 
 private val DarkColorPalette = darkColorScheme(
     primary = Purple200,

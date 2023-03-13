@@ -1,4 +1,4 @@
-package de.markusressel.kutepreferencescomposeplayground.ui
+package de.markusressel.kutepreferences.ui
 
 import android.content.Context
 import android.graphics.Color

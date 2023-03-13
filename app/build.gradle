@@ -9,7 +9,7 @@ android {
     compileSdk compile_sdk
 
     defaultConfig {
-        applicationId "de.markusressel.kutepreferencescomposeplayground"
+        applicationId "de.markusressel.kutepreferences"
         minSdk min_sdk
         targetSdk target_sdk
         versionCode 1

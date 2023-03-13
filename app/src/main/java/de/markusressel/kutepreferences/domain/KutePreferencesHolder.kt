@@ -1,4 +1,4 @@
-package de.markusressel.kutepreferencescomposeplayground.domain
+package de.markusressel.kutepreferences.domain
 
 import android.content.Context
 import android.widget.Toast
@@ -20,8 +20,8 @@ import de.markusressel.kutepreferences.core.preference.text.KuteTextPreference
 import de.markusressel.kutepreferences.core.preference.text.KuteUrlPreference
 import de.markusressel.kutepreferences.core.preference.time.KuteTimePreference
 import de.markusressel.kutepreferences.core.preference.time.TimePersistenceModel
-import de.markusressel.kutepreferencescomposeplayground.R
-import de.markusressel.kutepreferencescomposeplayground.ui.IconHelper
+import de.markusressel.kutepreferences.R
+import de.markusressel.kutepreferences.ui.IconHelper
 import java.time.LocalDate
 import javax.inject.Inject
 import javax.inject.Singleton
