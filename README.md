@@ -103,26 +103,26 @@ building an app.
 | `KuteDatePreference`         | `Date`                 | Let's the user select and store a date.                                                                           |
 | `KuteTimePreference`         | `TimePersistenceModel` | Let's the user select and store a time of the day.                                                                |
 | `KuteColorPreference`        | `Color`                | Let's the user select and store an ARGB color.                                                                    |
-| `KuteSingleSelectPreference` | `List\<T\>`            | Allows a single selection from a specified list of items.                                                         |
-| `KuteMultiSelectPreference`  | `List\<T\>`            | Allows to select multiple items from a specified list of items.                                                   |
+| `KuteSingleSelectPreference` | `List<T>`              | Allows a single selection from a specified list of items.                                                         |
+| `KuteMultiSelectPreference`  | `List<T>`              | Allows to select multiple items from a specified list of items.                                                   |
 
 ### Other Types
 
 If you want to implement other list items that don't need any persistence you can use one of these implementations:
 
-| Name       | Description                                   |
-|------------|-----------------------------------------------|
-| KuteAction | A simple `click` action provided with a name. |
+| Name         | Description                                   |
+|--------------|-----------------------------------------------|
+| `KuteAction` | A simple `click` action provided with a name. |
 
 ### Grouping
 
 For better context preference items can be grouped in categories or divided by simple headlines. To do this you can use
 one of these classes:
 
-| Name         | Description                                                               |
-|--------------|---------------------------------------------------------------------------|
-| KuteCategory | A category groups sections, preference items and/or other category items. |
-| KuteSection  | A group of preference items inside a single preference category.          |
+| Name           | Description                                                               |
+|----------------|---------------------------------------------------------------------------|
+| `KuteCategory` | A category groups sections, preference items and/or other category items. |
+| `KuteSection`  | A group of preference items inside a single preference category.          |
 
 ## Render the UI
 
