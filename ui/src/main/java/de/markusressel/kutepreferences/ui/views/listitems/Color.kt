@@ -19,7 +19,6 @@ import com.godaddy.android.colorpicker.toColorInt
 import de.markusressel.kutepreferences.core.preference.color.ColorPreferenceBehavior
 import de.markusressel.kutepreferences.core.preference.color.KuteColorPreference
 import de.markusressel.kutepreferences.ui.theme.KutePreferencesTheme
-import de.markusressel.kutepreferences.ui.theme.LocalKuteColors
 import de.markusressel.kutepreferences.ui.views.common.InlineExpandablePreferenceView
 import de.markusressel.kutepreferences.ui.views.dummy
 
@@ -66,7 +65,6 @@ fun ColorPreferenceView(
                         .weight(1f),
                     icon = behavior.preferenceItem.icon,
                     title = behavior.preferenceItem.title,
-                    titleColor = LocalKuteColors.current.defaultItem.titleColor,
                     subtitle = behavior.preferenceItem.createDescription(persistedValue),
                 )
 
