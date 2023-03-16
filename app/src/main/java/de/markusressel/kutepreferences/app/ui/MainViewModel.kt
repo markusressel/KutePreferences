@@ -190,14 +190,14 @@ class MainViewModel @Inject constructor(
         KuteBooleanPreference(
             key = R.string.pref_boolean,
             icon = iconHelper.getIcon(MaterialDesignIconic.Icon.gmi_check),
-            title = "Boolean Preference",
+            title = "Boolean",
             dataProvider = dataProvider,
             defaultValue = true,
         ),
         KuteTextPreference(
             key = R.string.pref_string,
             icon = iconHelper.getIcon(MaterialDesignIconic.Icon.gmi_text_format),
-            title = "Text Preference",
+            title = "Text",
             dataProvider = dataProvider,
             defaultValue = "Current Value"
         ),
@@ -206,11 +206,12 @@ class MainViewModel @Inject constructor(
         KuteNumberPreference(
             key = R.string.pref_number_float,
             icon = iconHelper.getIcon(MaterialDesignIconic.Icon.gmi_confirmation_number),
-            title = "Number Preference",
+            title = translationManager.getTranslation(R.string.title_demo_number_pref),
             dataProvider = dataProvider,
             defaultValue = 1337,
         ),
         kutePreferencesHolder.sliderPreference,
+        kutePreferencesHolder.intRangePreference,
         kutePreferencesHolder.floatRangePreference,
         kutePreferencesHolder.datePreference,
         kutePreferencesHolder.timePreference,

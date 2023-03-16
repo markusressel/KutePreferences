@@ -10,15 +10,15 @@
     <string name="title_section_taste">Taste</string>
     <string name="title_section_security">Security</string>
 
-    <string name="title_demo_url_pref">Website</string>
+    <string name="title_demo_url_pref">URL</string>
 
     <string name="title_demo_text_pref_password">Password</string>
 
     <string name="title_demo_toggle_pref">Airplane Mode</string>
 
-    <string name="title_demo_number_pref">Connection Timeout</string>
+    <string name="title_demo_number_pref">Number</string>
 
-    <string name="title_demo_slider_pref">Volume</string>
+    <string name="title_demo_slider_pref">Int Slider</string>
 
     <string name="title_demo_int_range_pref">Int Range</string>
     <string name="title_demo_float_range_pref">Float Range</string>

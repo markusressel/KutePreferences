@@ -4,6 +4,8 @@ import android.content.Context
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.mikepenz.iconics.typeface.library.materialdesigniconic.MaterialDesignIconic
+import de.markusressel.kutepreferences.app.R
+import de.markusressel.kutepreferences.app.ui.IconHelper
 import de.markusressel.kutepreferences.core.persistence.DefaultKutePreferenceDataProvider
 import de.markusressel.kutepreferences.core.preference.action.KuteAction
 import de.markusressel.kutepreferences.core.preference.bool.KuteBooleanPreference
@@ -20,8 +22,6 @@ import de.markusressel.kutepreferences.core.preference.text.KuteTextPreference
 import de.markusressel.kutepreferences.core.preference.text.KuteUrlPreference
 import de.markusressel.kutepreferences.core.preference.time.KuteTimePreference
 import de.markusressel.kutepreferences.core.preference.time.TimePersistenceModel
-import de.markusressel.kutepreferences.app.R
-import de.markusressel.kutepreferences.app.ui.IconHelper
 import java.time.LocalDate
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -125,17 +125,18 @@ class KutePreferencesHolder @Inject constructor(
         )
     }
 
-//    val intRangePreference by lazy {
-//        KuteIntRangePreference(
-//            key = R.string.key_demo_int_range_pref,
-//            icon = iconHelper.getIcon(MaterialDesignIconic.Icon.gmi_arrows),
-//            title = translationManager.getTranslation(R.string.title_demo_int_range_pref),
-//            minimum = 0,
-//            maximum = 100,
-//            defaultValue = RangePersistenceModel(0, 100),
-//            dataProvider = dataProvider
-//        )
-//    }
+    val intRangePreference by lazy {
+        KuteFloatRangePreference(
+            key = R.string.key_demo_int_range_pref,
+            icon = iconHelper.getIcon(MaterialDesignIconic.Icon.gmi_arrows),
+            title = translationManager.getTranslation(R.string.title_demo_int_range_pref),
+            decimalPlaces = 0,
+            minimum = 0f,
+            maximum = 10f,
+            defaultValue = RangePersistenceModel(0f, 5f),
+            dataProvider = dataProvider
+        )
+    }
 
     val floatRangePreference by lazy {
         KuteFloatRangePreference(
