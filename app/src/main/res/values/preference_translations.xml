@@ -23,11 +23,11 @@
     <string name="title_demo_int_range_pref">Int Range</string>
     <string name="title_demo_float_range_pref">Float Range</string>
 
-    <string name="title_demo_color_pref">Favorite Color</string>
+    <string name="title_demo_color_pref">Color</string>
 
-    <string name="title_demo_date_pref">Day of Birth</string>
+    <string name="title_demo_date_pref">Date</string>
 
-    <string name="title_demo_time_pref">Time of Birth</string>
+    <string name="title_demo_time_pref">Time</string>
 
     <string name="title_demo_action">About</string>
 
@@ -44,14 +44,14 @@
     <string name="title_category_user">User</string>
     <string name="description_category_user">Profile, Password, etc.</string>
 
-    <string name="title_demo_single_select">Gender</string>
-    <string name="title_single_select_1">Male</string>
-    <string name="title_single_select_2">Female</string>
-    <string name="title_single_select_3">Other</string>
+    <string name="title_demo_single_select">Single Selection</string>
+    <string name="title_single_select_1">First</string>
+    <string name="title_single_select_2">Second</string>
+    <string name="title_single_select_3">Third</string>
 
-    <string name="title_demo_multi_select">Music Genres</string>
-    <string name="title_multi_select_1">Jazz</string>
-    <string name="title_multi_select_2">Rock</string>
-    <string name="title_multi_select_3">House</string>
+    <string name="title_demo_multi_select">Multi Selection</string>
+    <string name="title_multi_select_1">First</string>
+    <string name="title_multi_select_2">Second</string>
+    <string name="title_multi_select_3">Third</string>
 
 </resources>
