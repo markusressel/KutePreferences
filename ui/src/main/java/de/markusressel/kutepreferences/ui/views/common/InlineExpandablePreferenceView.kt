@@ -19,7 +19,7 @@ fun InlineExpandablePreferenceView(
         DefaultPreferenceListItemCardContent(
             icon = icon,
             title = title,
-            titleColor = LocalKuteColors.current.category.titleColor,
+            titleColor = LocalKuteColors.current.defaultItem.titleColor,
             subtitle = subtitle,
         )
     },

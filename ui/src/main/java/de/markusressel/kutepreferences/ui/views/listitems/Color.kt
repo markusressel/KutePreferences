@@ -66,7 +66,7 @@ fun ColorPreferenceView(
                         .weight(1f),
                     icon = behavior.preferenceItem.icon,
                     title = behavior.preferenceItem.title,
-                    titleColor = LocalKuteColors.current.category.titleColor,
+                    titleColor = LocalKuteColors.current.defaultItem.titleColor,
                     subtitle = behavior.preferenceItem.createDescription(persistedValue),
                 )
 
