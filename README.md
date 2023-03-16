@@ -91,19 +91,20 @@ parameter that defines how the current state of the preference item is persisted
 KutePreferences includes implementation for most of the commonly needed preference items that you might encounter when
 building an app.
 
-| Name                       | Item Type            | Description                                                                                                       |
-|----------------------------|----------------------|-------------------------------------------------------------------------------------------------------------------|
-| KuteBooleanPreference      | Boolean              | A simple on/off preference.                                                                                       |
-| KuteTextPreference         | String               | A simple text preference.                                                                                         |
-| KuteUrlPreference          | String               | A url preference.                                                                                                 |
-| KutePasswordPreference     | String               | A password text preference. This type works exactly like `KuteTextPreference` but includes obscuring typed input. |
-| KuteNumberPreference       | Integer              | A preference for number values.                                                                                   |
-| KuteSliderPreference       | Integer              | Like `KuteNumberPreference` but with a slider GUI instead of a direct input field.                                |
-| KuteDatePreference         | Date                 | Let's the user select and store a date.                                                                           |
-| KuteTimePreference         | TimePersistenceModel | Let's the user select and store a time of the day.                                                                |
-| KuteColorPreference        | Color                | Let's the user select and store an ARGB color.                                                                    |
-| KuteSingleSelectPreference | List\<T\>            | Allows a single selection from a specified list of items.                                                         |
-| KuteMultiSelectPreference  | List\<T\>            | Allows to select multiple items from a specified list of items.                                                   |
+| Name                         | Item Type              | Description                                                                                                       |
+|------------------------------|------------------------|-------------------------------------------------------------------------------------------------------------------|
+| `KuteBooleanPreference`      | `Boolean`              | A simple on/off preference.                                                                                       |
+| `KuteTextPreference`         | `String`               | A simple text preference.                                                                                         |
+| `KuteUrlPreference`          | `String`               | A url preference.                                                                                                 |
+| `KutePasswordPreference`     | `String`               | A password text preference. This type works exactly like `KuteTextPreference` but includes obscuring typed input. |
+| `KuteNumberPreference`       | `Integer`              | A preference for number values.                                                                                   |
+| `KuteSliderPreference`       | `Integer`              | Like `KuteNumberPreference` but with a slider GUI instead of a direct input field.                                |
+| `KuteFloatRangePreference`   | `Integer`              | A preference for a number range.                                                                                  |
+| `KuteDatePreference`         | `Date`                 | Let's the user select and store a date.                                                                           |
+| `KuteTimePreference`         | `TimePersistenceModel` | Let's the user select and store a time of the day.                                                                |
+| `KuteColorPreference`        | `Color`                | Let's the user select and store an ARGB color.                                                                    |
+| `KuteSingleSelectPreference` | `List\<T\>`            | Allows a single selection from a specified list of items.                                                         |
+| `KuteMultiSelectPreference`  | `List\<T\>`            | Allows to select multiple items from a specified list of items.                                                   |
 
 ### Other Types
 
