@@ -49,8 +49,6 @@ in your desired module `build.gradle` file.
 
 ## Create a KutePreferences ViewModel
 
-TODO: this needs a major rewrite for the compose implementation.
-
 Since **KutePreferences** provides navigation between categories, search and other things, you have to create a
 ViewModel for your preferences and extend the provided `KutePreferencesViewModel`. Make sure to call the
 `initPreferenceTree()` to setup the items that should be shown:
