@@ -2,7 +2,9 @@
 
 A **GUI** library for easy to use, fast and beautiful **preferences** in your app.
 
-![Main](.images/main.png)
+<p align="center">
+  <img src="https://raw.githubusercontent.com/markusressel/KutePreferences/master/.images/main_light.png" width="400"> <img src="https://raw.githubusercontent.com/markusressel/KutePreferences/master/.images/main_dark.png" width="400"> 
+</p>
 
 # Features
 
