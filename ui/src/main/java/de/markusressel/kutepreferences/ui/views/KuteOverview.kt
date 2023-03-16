@@ -1,6 +1,7 @@
 package de.markusressel.kutepreferences.ui.views
 
 import android.content.res.Configuration
+import androidx.activity.compose.BackHandler
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.compose.animation.*
 import androidx.compose.foundation.layout.*
@@ -37,12 +38,18 @@ fun KuteOverview(
 ) {
     var searching by remember { mutableStateOf(false) }
     var searchTerm by remember { mutableStateOf("") }
+    val searchFocusRequester = remember { FocusRequester() }
+
+    BackHandler(enabled = searching) {
+        searchFocusRequester.freeFocus()
+        searchTerm = ""
+        searching = false
+    }
 
     AnimatedContent(
         modifier = modifier,
         targetState = searching,
     ) { isSearching ->
-        val searchFocusRequester = remember { FocusRequester() }
 
         Column {
             if (isSearching) {
