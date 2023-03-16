@@ -1,6 +1,6 @@
 # KutePreferences | [![codebeat badge](https://codebeat.co/badges/418ec567-fa53-4f97-ad98-eb8c4bb816ec)](https://codebeat.co/projects/github-com-markusressel-kutepreferences-master) |
 
-A **GUI** library for easy to use, fast and beautiful **preferences** in your app.
+A Material Design 3 **GUI** library for easy to use, fast and beautiful **preferences** in your app.
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/markusressel/KutePreferences/master/.images/main_light.png" width="400"> <img src="https://raw.githubusercontent.com/markusressel/KutePreferences/master/.images/main_dark.png" width="400"> 
@@ -8,6 +8,7 @@ A **GUI** library for easy to use, fast and beautiful **preferences** in your ap
 
 # Features
 
+* [x] Material Design 3
 * [x] Easy to use
 * [x] Many included preference types
 * [x] Expandable with custom styles and logic
