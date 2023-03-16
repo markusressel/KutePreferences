@@ -44,38 +44,35 @@ dependencies {
 
 in your desired module `build.gradle` file.
 
-## Specify the preferences you need
+## Create a KutePreferences ViewModel
 
 TODO: this needs a major rewrite for the compose implementation.
 
-Since **KutePreferences** provides navigation between categories, search and other things it is necessary to
-extend `KutePreferencesMainFragment` (that builds on `androidx.fragment.app.Fragment`) with a custom class of yours in
-your project and implements it's `fun initPreferenceTree(): KutePreferencesTree` method similar to this:
+Since **KutePreferences** provides navigation between categories, search and other things, you have to create a
+ViewModel for your preferences and extend the provided `KutePreferencesViewModel`. Make sure to call the
+`initPreferenceTree()` to setup the items that should be shown:
 
 ```kotlin
-class PreferencesFragment : KutePreferencesMainFragment() {
+class YourPreferencesViewModel(
+    navigator: KuteNavigator,
+) : KutePreferencesViewModel(navigator) {
 
     private val dataProvider by lazy {
-        DefaultKutePreferenceDataProvider(activity as Context)
+        DefaultKutePreferenceDataProvider(context)
     }
 
-    private val togglePreference by lazy {
-        KuteTogglePreference(key = R.string.key_demo_toggle_pref,
-                icon = getIcon(MaterialDesignIconic.Icon.gmi_airplane),
-                title = getString(R.string.title_demo_toggle_pref),
-                defaultValue = false,
-                dataProvider = dataProvider)
+    init {
+        val preferenceTree = createPreferenceTree()
+        initPreferencesTree(preferenceTree)
     }
 
-    override fun initPreferenceTree(): KutePreferencesTree {
-        return KutePreferencesTree(
-            KuteCategory(
-                key = R.string.key_category_battery,
-                title = getString(R.string.title_category_battery),
-                description = getString(R.string.description_category_battery),
-                children = listOf(
-                        togglePreference
-                )
+    private fun createPreferenceTree(): List<KutePreferenceListItem> {
+        return listOf(
+            KuteTextPreference(
+                key = R.string.key_demo_text_pref,
+                title = R.string.title_demo_text_pref,
+                defaultValue = "",
+                dataProvider = dataProvider
             )
         )
     }
@@ -125,32 +122,88 @@ one of these classes:
 | KuteCategory | A category groups sections, preference items and/or other category items. |
 | KuteSection  | A group of preference items inside a single preference category.          |
 
-### Implement custom preferences
+## Render the UI
 
-If the integrated preference classes don't fit your needs you can easily create your own custom preference
-implementation. To do so you have to create an implementation of `KutePreferenceItem`. You can use `KutePreferenceBase`
-as a base class instead of implementing everything from scratch (which has some basic functionality implemented already)
-if it fit's your needs.
+At the location of choice use the `KutePreferencesTheme` together with the `KuteOverview` and pass the preferences tree
+to it:
+
+```kotlin
+KutePreferencesTheme {
+    val currentItems by vm.currentPreferenceItems.collectAsState(initial = emptyList())
+
+    KuteOverview(
+        modifier = Modifier.fillMaxSize(),
+        items = currentItems
+    )
+}
+```
+
+### Theming
+
+KutePreferences is based on Material Design 3 by default, and will automatically inherit the styling of your app (if you
+use MD3 in you app). You can override the styling by passing colors to the `KutePreferencesTheme`:
+
+```kotlin
+val defaultColors = defaultColors()
+KutePreferencesTheme(
+    colors = defaultColors.copy(
+        category = defaultColors.category.copy(
+            titleColor = Color.Red
+        )
+    )
+) {
+    ...
+}
+```
+
+## Implement custom preferences
+
+To implement a custom type, first create a class that implements
+the [KutePreferenceListItem](core/src/main/java/de/markusressel/kutepreferences/core/preference/KutePreferenceListItem.kt)
+interface. Take a look at
+the [CustomPreference](app/src/main/java/de/markusressel/kutepreferences/app/domain/CustomPreference.kt)
+for a complete example. If it fits your needs
+the [KutePreferenceItem](core/src/main/java/de/markusressel/kutepreferences/core/preference/KutePreferenceItem.kt) base
+class can be used instead of implementing everything from scratch (which has some basic functionality implemented
+already).
 
 Important things to keep in mind if you implement your own preference item:
 
 * remember to update the description of a preference item to always reflect the currently persisted value
-* when defining layouts remember to use the existing styles like
-    * KutePreferences.Preference.Icon
-    * KutePreferences.Preference.Title
-    * KutePreferences.Preference.Description
-    * etc.
+* when defining layouts remember to use theme values from the `LocalKuteColors.current` object
+* to replicate the look of a "default list item", use the `DefaultPreferenceListItem` composable
+
+### Register Custom Types
+
+KutePreferences already has built-in types for most of the commonly required preferences. If you need change/override an
+existing type, or create a completely custom one, you can register your own like this:
+
+```kotlin
+class YourPreferencesViewModel(...) : KutePreferencesViewModel(navigator) {
+
+    init {
+        KuteStyleManager.registerTypeHook { listItem ->
+            when (listItem) {
+                is YourCustomPreference -> {
+                    YourCustomPreferenceView(listItem)
+                    true
+                }
+                else -> false
+            }
+        }
+
+        ...
+    }
+}
+```
 
 # Troubleshooting
 
 ## Navigation
 
 * The back button doesn't work
-    * ensure that you are calling the `onBackPressed()` methof of your `KutePreferencesMainFragment` implementation from
-      the activity that is hosting it (like seen in the example app)
-* The back button in the toolbar doesn't work
-    * Similar to the issue above ensure that you are passing the `onOptionsItemSelected()` event for
-      the `android.R.id.home` id to your `KutePreferencesMainFragment`
+    * ensure that you are calling the `kuteNavigator.goBack()` method when a back press is registered
+      by the activity that is hosting it (like seen in the example app)
 
 # Contributing
 
@@ -160,6 +213,7 @@ this repository. Create GitHub tickets for bugs and new features and comment on 
 # License
 
 ```
+
 MIT License
 
 Copyright (c) 2018 Markus Ressel
@@ -181,4 +235,5 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
 ```
