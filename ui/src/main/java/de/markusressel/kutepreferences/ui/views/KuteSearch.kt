@@ -75,10 +75,6 @@ fun KuteSearch(
             )
         }
     }
-
-    LaunchedEffect(key1 = true) {
-        searchFocusRequester.requestFocus()
-    }
 }
 
 

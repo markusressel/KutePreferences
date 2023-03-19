@@ -4,11 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import de.markusressel.kutepreferences.core.KuteNavigator
 import de.markusressel.kutepreferences.core.preference.KutePreferenceListItem
-import de.markusressel.kutepreferences.core.preference.filterRecursive
 import de.markusressel.kutepreferences.ui.views.KuteStyleManager
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 open class KutePreferencesViewModel(
@@ -16,8 +14,12 @@ open class KutePreferencesViewModel(
 ) : ViewModel() {
 
     private val findCategoryByKeyUseCase: FindCategoryByKeyUseCase = FindCategoryByKeyUseCase()
+    private val searchItemsUseCase: SearchItemsUseCase = SearchItemsUseCase()
 
-    val preferencesUiState = MutableStateFlow(UiState())
+    val preferencesUiState = MutableStateFlow<UiState>(UiState.Loading)
+
+    private val uiActionChannel = Channel<UiAction>(Channel.BUFFERED)
+    val uiActions = uiActionChannel.receiveAsFlow()
 
     private val preferenceItems = MutableStateFlow<List<KutePreferenceListItem>>(emptyList())
 
@@ -26,21 +28,32 @@ open class KutePreferencesViewModel(
 
         viewModelScope.launch {
             navigator.currentCategory.collectLatest {
-                updateCurrentlyDisplayedItems()
+                uiActionChannel.send(UiAction.ScrollToTop(false))
             }
         }
 
         viewModelScope.launch {
-            preferenceItems.collectLatest {
-                updateCurrentlyDisplayedItems(newPreferencesList = it)
+            combine(
+                navigator.currentCategory,
+                preferenceItems,
+            ) { category, allItems ->
+                computeOverviewState(category, allItems)
+            }.collectLatest { newState ->
+                preferencesUiState.update { newState }
             }
+        }
+    }
+
+    private fun computeOverviewState(category: Int?, allItems: List<KutePreferenceListItem>): UiState.Overview {
+        val items = when {
+            category != null -> findCategoryByKeyUseCase(allItems, category)?.children ?: emptyList()
+            else -> allItems
         }
 
-        viewModelScope.launch {
-            preferencesUiState.collectLatest {
-                updateCurrentlyDisplayedItems(newUiState = it)
-            }
-        }
+        return UiState.Overview(
+            currentCategory = category,
+            preferenceItems = items
+        )
     }
 
 
@@ -55,58 +68,40 @@ open class KutePreferencesViewModel(
         when (event) {
             is KuteUiEvent.StartSearch -> {
                 preferencesUiState.update { oldState ->
-                    oldState.copy(
-                        searching = true,
-                        searchTerm = ""
-                    )
+                    UiState.Searching()
                 }
             }
             is KuteUiEvent.SearchTermChanged -> {
                 preferencesUiState.update { oldState ->
-                    oldState.copy(searchTerm = event.searchTerm)
+                    (oldState as UiState.Searching).copy(
+                        searchTerm = event.searchTerm,
+                        preferenceItems = searchItemsUseCase(preferenceItems.value, event.searchTerm)
+                    )
                 }
             }
             is KuteUiEvent.CloseSearch -> {
                 preferencesUiState.update { oldState ->
-                    oldState.copy(
-                        searching = false,
-                        searchTerm = ""
-                    )
+                    computeOverviewState(navigator.currentCategory.value, preferenceItems.value)
                 }
             }
         }
     }
-
-    private fun updateCurrentlyDisplayedItems(
-        newUiState: UiState? = null,
-        newPreferencesList: List<KutePreferenceListItem>? = null
-    ) {
-        val currentCategoryKey = navigator.currentCategory.value
-        val allPreferenceItems = newPreferencesList ?: preferenceItems.value
-
-        preferencesUiState.update { oldState ->
-            val targetState = (newUiState ?: oldState)
-            targetState.copy(
-                preferenceItems = when {
-                    targetState.searching -> searchItems(allPreferenceItems, targetState.searchTerm)
-                    currentCategoryKey != null -> findCategoryByKeyUseCase(allPreferenceItems, currentCategoryKey)?.children
-                        ?: emptyList()
-                    else -> allPreferenceItems
-                }
-            )
-        }
-    }
-
-    private fun searchItems(items: List<KutePreferenceListItem>, searchTerm: String): List<KutePreferenceListItem> {
-        return when {
-            searchTerm.isBlank() -> emptyList()
-            else -> items.filterRecursive(searchTerm)
-        }
-    }
 }
 
-data class UiState(
-    val searching: Boolean = false,
-    val searchTerm: String = "",
-    val preferenceItems: List<KutePreferenceListItem> = emptyList(),
-)
+sealed class UiAction {
+    data class ScrollToTop(val animate: Boolean) : UiAction()
+}
+
+sealed class UiState {
+    object Loading : UiState()
+
+    data class Searching(
+        val searchTerm: String = "",
+        val preferenceItems: List<KutePreferenceListItem> = emptyList(),
+    ) : UiState()
+
+    data class Overview(
+        val currentCategory: Int? = null,
+        val preferenceItems: List<KutePreferenceListItem> = emptyList(),
+    ) : UiState()
+}

@@ -2,6 +2,7 @@ package de.markusressel.kutepreferences.ui.views
 
 import android.content.res.Configuration
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -25,10 +26,11 @@ fun KuteOverview(
     items: List<KutePreferenceListItem>,
     modifier: Modifier = Modifier,
     onSearchStarted: () -> Unit,
+    scrollState: ScrollState,
 ) {
     Column(
         modifier = Modifier
-            .verticalScroll(rememberScrollState())
+            .verticalScroll(scrollState)
             .then(modifier)
     ) {
         KutePreferenceSearch(
@@ -107,5 +109,6 @@ private fun KuteOverviewPreview() {
             ),
         ),
         onSearchStarted = { },
+        scrollState = rememberScrollState(),
     )
 }

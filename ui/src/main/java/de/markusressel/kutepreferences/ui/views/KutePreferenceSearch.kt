@@ -28,34 +28,6 @@ import androidx.compose.ui.unit.dp
 import de.markusressel.kutepreferences.ui.R
 import de.markusressel.kutepreferences.ui.theme.LocalKuteColors
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, showBackground = true)
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true, backgroundColor = 0xFF000000)
-@Composable
-private fun KutePreferenceSearchPreview() {
-    var searchTerm by remember { mutableStateOf("") }
-
-    KutePreferenceSearch(
-        searchTerm = searchTerm,
-        onSearchClicked = {},
-        onSearchTermChanged = {},
-        onClearSearchTerm = { searchTerm = "" }
-    )
-}
-
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, showBackground = true)
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true, backgroundColor = 0xFF000000)
-@Composable
-private fun KutePreferenceSearchWithInputPreview() {
-    var searchTerm by remember { mutableStateOf("") }
-
-    KutePreferenceSearch(
-        searchTerm = searchTerm,
-        onSearchClicked = {},
-        onSearchTermChanged = {},
-        onClearSearchTerm = { searchTerm = "" }
-    )
-}
-
 @Composable
 fun KutePreferenceSearch(
     modifier: Modifier = Modifier,
@@ -82,7 +54,7 @@ fun KutePreferenceSearch(
             value = searchTerm,
             textStyle = TextStyle.Default.copy(color = LocalKuteColors.current.searchBar.textColor),
             cursorBrush = SolidColor(LocalKuteColors.current.searchBar.textColor),
-            onValueChange = { onSearchTermChanged(it) },
+            onValueChange = onSearchTermChanged,
             decorationBox = { innerTextField ->
                 Card(
                     modifier = Modifier.defaultMinSize(minHeight = 64.dp),
@@ -150,4 +122,33 @@ fun KutePreferenceSearch(
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
         )
     }
+}
+
+
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, showBackground = true)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true, backgroundColor = 0xFF000000)
+@Composable
+private fun KutePreferenceSearchPreview() {
+    var searchTerm by remember { mutableStateOf("") }
+
+    KutePreferenceSearch(
+        searchTerm = searchTerm,
+        onSearchClicked = {},
+        onSearchTermChanged = {},
+        onClearSearchTerm = { searchTerm = "" }
+    )
+}
+
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, showBackground = true)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true, backgroundColor = 0xFF000000)
+@Composable
+private fun KutePreferenceSearchWithInputPreview() {
+    var searchTerm by remember { mutableStateOf("") }
+
+    KutePreferenceSearch(
+        searchTerm = searchTerm,
+        onSearchClicked = {},
+        onSearchTermChanged = {},
+        onClearSearchTerm = { searchTerm = "" }
+    )
 }
