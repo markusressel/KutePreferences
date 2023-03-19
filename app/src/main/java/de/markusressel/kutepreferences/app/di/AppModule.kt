@@ -8,6 +8,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import de.markusressel.kutepreferences.core.DefaultKuteNavigator
 import de.markusressel.kutepreferences.core.KuteNavigator
+import de.markusressel.kutepreferences.core.persistence.DataStoreKutePreferenceDataProvider
 import de.markusressel.kutepreferences.core.persistence.DefaultKutePreferenceDataProvider
 import de.markusressel.kutepreferences.core.persistence.KutePreferenceDataProvider
 import javax.inject.Singleton
@@ -28,7 +29,8 @@ class AppModule {
     @Provides
     @Singleton
     internal fun provideDataProvider(context: Context): KutePreferenceDataProvider {
-        return DefaultKutePreferenceDataProvider(context)
+//        return DefaultKutePreferenceDataProvider(context)
+        return DataStoreKutePreferenceDataProvider(context)
     }
 
     @Provides

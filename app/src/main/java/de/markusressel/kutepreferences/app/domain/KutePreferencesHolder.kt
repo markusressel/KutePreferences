@@ -6,7 +6,9 @@ import androidx.core.content.ContextCompat
 import com.mikepenz.iconics.typeface.library.materialdesigniconic.MaterialDesignIconic
 import de.markusressel.kutepreferences.app.R
 import de.markusressel.kutepreferences.app.ui.IconHelper
+import de.markusressel.kutepreferences.core.persistence.DataStoreKutePreferenceDataProvider
 import de.markusressel.kutepreferences.core.persistence.DefaultKutePreferenceDataProvider
+import de.markusressel.kutepreferences.core.persistence.KutePreferenceDataProvider
 import de.markusressel.kutepreferences.core.preference.action.KuteAction
 import de.markusressel.kutepreferences.core.preference.bool.KuteBooleanPreference
 import de.markusressel.kutepreferences.core.preference.color.KuteColorPreference
@@ -34,12 +36,9 @@ import javax.inject.Singleton
 class KutePreferencesHolder @Inject constructor(
     private val context: Context,
     private val translationManager: TranslationManager,
-    private val iconHelper: IconHelper
+    private val iconHelper: IconHelper,
+    private val dataProvider: KutePreferenceDataProvider,
 ) {
-
-    private val dataProvider by lazy {
-        DefaultKutePreferenceDataProvider(context)
-    }
 
     val textPreference by lazy {
         KuteTextPreference(

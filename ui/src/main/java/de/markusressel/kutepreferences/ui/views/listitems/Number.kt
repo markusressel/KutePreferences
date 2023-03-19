@@ -85,7 +85,11 @@ private fun numberPreferenceEditDialog(
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
         onInputChanged = { input ->
             value = input
-            behavior.onInputChanged(input.toLong())
+            try {
+                behavior.onInputChanged(input.toLong())
+            } catch (Exception: Exception) {
+                // ignore
+            }
         },
         onCancelClicked = onCancelClicked,
         onDefaultClicked = onDefaultClicked,
