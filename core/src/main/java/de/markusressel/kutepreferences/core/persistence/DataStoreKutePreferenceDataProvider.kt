@@ -65,56 +65,50 @@ class DataStoreAdapter(val context: Context) {
     private var gson: Gson = Gson()
 
 
-    fun <T : Any> storeValue(key: String, value: T) {
-        runBlocking {
-            try {
-                val keyTyped = createKeyFor(key, value::class.java)
-                context.dataStore.edit { settings ->
-                    settings[keyTyped as Preferences.Key<T>] = value
-                }
-            } catch (e: IllegalArgumentException) {
-                val keyTyped = stringPreferencesKey(key)
-                val json = gson.toJson(value, value::class.java)
-                context.dataStore.edit { settings ->
-                    settings[keyTyped] = json
-                }
+    suspend fun <T : Any> storeValue(key: String, value: T) {
+        try {
+            val keyTyped = createKeyFor(key, value::class.java)
+            context.dataStore.edit { settings ->
+                settings[keyTyped as Preferences.Key<T>] = value
+            }
+        } catch (e: IllegalArgumentException) {
+            val keyTyped = stringPreferencesKey(key)
+            val json = gson.toJson(value, value::class.java)
+            context.dataStore.edit { settings ->
+                settings[keyTyped] = json
             }
         }
     }
 
-    fun <T : Any> getValue(key: String, defaultValue: T): T {
-        return runBlocking {
-            try {
-                val keyTyped = createKeyFor(key, defaultValue::class.java)
-                context.dataStore.data.first()[keyTyped] ?: defaultValue
-            } catch (e: IllegalArgumentException) {
-                val keyTyped = stringPreferencesKey(key)
-                @Suppress("UNCHECKED_CAST")
-                gson.fromJson<Any>(context.dataStore.data.first()[keyTyped] as String, defaultValue::class.java) as T
-            }
-
+    suspend fun <T : Any> getValue(key: String, defaultValue: T): T {
+        return try {
+            val keyTyped = createKeyFor(key, defaultValue::class.java)
+            context.dataStore.data.first()[keyTyped] ?: defaultValue
+        } catch (e: IllegalArgumentException) {
+            val keyTyped = stringPreferencesKey(key)
+            @Suppress("UNCHECKED_CAST")
+            gson.fromJson<Any>(context.dataStore.data.first()[keyTyped] as String, defaultValue::class.java) as T
         }
+
     }
 
     fun <T : Any> getValueFlow(key: String, defaultValue: T): Flow<T> {
-        return runBlocking {
-            try {
-                val keyTyped = createKeyFor(key, defaultValue::class.java)
-                context.dataStore.data.map { settings ->
-                    settings[keyTyped] ?: defaultValue
-                }
-            } catch (e: IllegalArgumentException) {
-                val keyTyped = stringPreferencesKey(key)
-                @Suppress("UNCHECKED_CAST")
-                context.dataStore.data.map { settings ->
-                    settings[keyTyped]
-                }.map {
-                    if (it == null) {
-                        return@map defaultValue
-                    } else {
-                        @Suppress("UNCHECKED_CAST")
-                        gson.fromJson<Any>(it, defaultValue::class.java) as T
-                    }
+        return try {
+            val keyTyped = createKeyFor(key, defaultValue::class.java)
+            context.dataStore.data.map { settings ->
+                settings[keyTyped] ?: defaultValue
+            }
+        } catch (e: IllegalArgumentException) {
+            val keyTyped = stringPreferencesKey(key)
+            @Suppress("UNCHECKED_CAST")
+            context.dataStore.data.map { settings ->
+                settings[keyTyped]
+            }.map {
+                if (it == null) {
+                    return@map defaultValue
+                } else {
+                    @Suppress("UNCHECKED_CAST")
+                    gson.fromJson<Any>(it, defaultValue::class.java) as T
                 }
             }
         }
