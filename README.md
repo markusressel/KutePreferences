@@ -133,7 +133,7 @@ to it:
 KutePreferencesTheme {
     val currentItems by vm.currentPreferenceItems.collectAsState(initial = emptyList())
 
-    KuteOverview(
+    KutePreferencesScreen(
         modifier = Modifier.fillMaxSize(),
         items = currentItems
     )

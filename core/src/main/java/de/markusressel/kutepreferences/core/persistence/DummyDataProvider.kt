@@ -4,6 +4,10 @@ import de.markusressel.kutepreferences.core.preference.KutePreferenceItem
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
+/**
+ * A [KutePreferenceDataProvider] that stores all data in memory.
+ * Can be used for compose previews and testing purposes.
+ */
 class DummyDataProvider : KutePreferenceDataProvider {
 
     private val memoryStorage = mutableMapOf<Any, Any>()

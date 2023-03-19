@@ -1,17 +1,17 @@
 package de.markusressel.kutepreferences.ui.views
 
 import android.content.res.Configuration
+import androidx.activity.compose.BackHandler
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.compose.animation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import de.markusressel.kutepreferences.core.persistence.DummyDataProvider
 import de.markusressel.kutepreferences.core.preference.KutePreferenceListItem
 import de.markusressel.kutepreferences.core.preference.bool.KuteBooleanPreference
 import de.markusressel.kutepreferences.core.preference.category.KuteCategory
@@ -19,35 +19,46 @@ import de.markusressel.kutepreferences.core.preference.number.KuteNumberPreferen
 import de.markusressel.kutepreferences.core.preference.section.KuteSection
 import de.markusressel.kutepreferences.core.preference.text.KuteTextPreference
 
+val dummy = DummyDataProvider()
+
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun KuteOverview(
+fun KutePreferencesScreen(
     items: List<KutePreferenceListItem>,
-    modifier: Modifier = Modifier,
-    onSearchStarted: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
-    Column(
-        modifier = Modifier
-            .verticalScroll(rememberScrollState())
-            .then(modifier)
-    ) {
-        KutePreferenceSearch(
-            modifier = Modifier.onFocusChanged {
-                if (it.isFocused || it.isCaptured) {
-                    onSearchStarted()
-                }
-            },
-            searchTerm = "",
-            onSearchClicked = onSearchStarted,
-            onSearchTermChanged = { },
-            onClearSearchTerm = { },
-        )
+    var searching by remember { mutableStateOf(false) }
+    var searchTerm by remember { mutableStateOf("") }
+    val searchFocusRequester = remember { FocusRequester() }
 
-        KutePreferenceListContent(
-            modifier = Modifier.fillMaxWidth(),
-            items = items,
-            searchTerm = "",
-        )
+    BackHandler(enabled = searching) {
+        searchFocusRequester.freeFocus()
+        searchTerm = ""
+        searching = false
+    }
+
+    AnimatedContent(
+        modifier = modifier,
+        targetState = searching,
+    ) { isSearching ->
+        if (isSearching) {
+            KuteSearch(
+                searchTerm = searchTerm,
+                onSearchTermChanged = { searchTerm = it },
+                items = items,
+                searchFocusRequester = searchFocusRequester,
+                onClearSearchTerm = { searchTerm = "" },
+                onCancelSearch = {
+                    searchTerm = ""
+                    searching = false
+                },
+            )
+        } else {
+            KuteOverview(
+                items = items,
+                onSearchStarted = { searching = true },
+            )
+        }
     }
 }
 
@@ -110,3 +121,25 @@ private fun SampleOverviewPreview() {
         onSearchStarted = { },
     )
 }
+
+@Composable
+fun KuteItemList(
+    modifier: Modifier = Modifier,
+    items: List<KutePreferenceListItem>,
+) {
+    Column(
+        verticalArrangement = Arrangement.spacedBy(4.dp),
+        modifier = modifier
+    ) {
+        items.forEach {
+            it.Composable()
+        }
+    }
+}
+
+@Composable
+fun KutePreferenceListItem.Composable() {
+    val styleManager = remember { KuteStyleManager }
+    styleManager.renderComposable(this)
+}
+

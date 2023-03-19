@@ -15,10 +15,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import dagger.hilt.android.AndroidEntryPoint
+import de.markusressel.kutepreferences.app.ui.theme.KutePreferencesDemoAppTheme
 import de.markusressel.kutepreferences.core.preference.category.KuteCategory
 import de.markusressel.kutepreferences.ui.theme.KutePreferencesTheme
-import de.markusressel.kutepreferences.ui.views.KuteOverview
-import de.markusressel.kutepreferences.app.ui.theme.KutePreferencesDemoAppTheme
+import de.markusressel.kutepreferences.ui.views.KutePreferencesScreen
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -47,9 +47,9 @@ class MainActivity : ComponentActivity() {
                     KutePreferencesTheme {
                         val currentItems by vm.currentPreferenceItems.collectAsState(initial = emptyList())
 
-                        KuteOverview(
+                        KutePreferencesScreen(
                             modifier = Modifier.fillMaxSize(),
-                            items = currentItems
+                            items = currentItems,
                         )
                     }
                 }
@@ -63,14 +63,16 @@ class MainActivity : ComponentActivity() {
 @Composable
 private fun DefaultPreview() {
     KutePreferencesDemoAppTheme {
-        KuteOverview(
-            items = listOf(
-                KuteCategory(
-                    key = 1,
-                    title = "hello",
-                    description = "test",
-                ),
+        KutePreferencesTheme {
+            KutePreferencesScreen(
+                items = listOf(
+                    KuteCategory(
+                        key = 1,
+                        title = "hello",
+                        description = "test",
+                    ),
+                )
             )
-        )
+        }
     }
 }
