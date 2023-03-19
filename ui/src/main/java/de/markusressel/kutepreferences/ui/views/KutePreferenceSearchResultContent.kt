@@ -10,22 +10,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import de.markusressel.kutepreferences.core.preference.KutePreferenceListItem
-import de.markusressel.kutepreferences.core.preference.filterRecursive
 
 
 @Composable
 fun KutePreferenceSearchingContent(
     modifier: Modifier = Modifier,
     items: List<KutePreferenceListItem>,
-    searchTerm: String,
 ) {
     Column(modifier) {
         KuteItemList(
             modifier = Modifier.fillMaxWidth(),
-            items = when {
-                searchTerm.isBlank() -> emptyList()
-                else -> items.filterRecursive(searchTerm)
-            }
+            items = items
         )
         Spacer(
             modifier = Modifier
@@ -40,6 +35,5 @@ fun KutePreferenceSearchingContent(
 private fun KutePreferenceSearchingContentPreview() {
     KutePreferenceSearchingContent(
         items = listOf(),
-        searchTerm = "hel",
     )
 }

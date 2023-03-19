@@ -18,45 +18,43 @@ import de.markusressel.kutepreferences.core.preference.category.KuteCategory
 import de.markusressel.kutepreferences.core.preference.number.KuteNumberPreference
 import de.markusressel.kutepreferences.core.preference.section.KuteSection
 import de.markusressel.kutepreferences.core.preference.text.KuteTextPreference
+import de.markusressel.kutepreferences.ui.vm.KutePreferencesViewModel
+import de.markusressel.kutepreferences.ui.vm.KuteUiEvent
 
 val dummy = DummyDataProvider()
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun KutePreferencesScreen(
-    items: List<KutePreferenceListItem>,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    kuteViewModel: KutePreferencesViewModel
 ) {
-    var searching by remember { mutableStateOf(false) }
-    var searchTerm by remember { mutableStateOf("") }
+    val uiState by kuteViewModel.preferencesUiState.collectAsState()
+
     val searchFocusRequester = remember { FocusRequester() }
 
-    BackHandler(enabled = searching) {
+    BackHandler(enabled = uiState.searching) {
         searchFocusRequester.freeFocus()
-        searchTerm = ""
-        searching = false
+        kuteViewModel.onUiEvent(KuteUiEvent.CloseSearch)
     }
 
     AnimatedContent(
         modifier = modifier,
-        targetState = searching,
+        targetState = uiState.searching,
     ) { isSearching ->
         if (isSearching) {
             KuteSearch(
-                searchTerm = searchTerm,
-                onSearchTermChanged = { searchTerm = it },
-                items = items,
+                searchTerm = uiState.searchTerm,
+                onSearchTermChanged = { kuteViewModel.onUiEvent(KuteUiEvent.SearchTermChanged(it)) },
+                items = uiState.preferenceItems,
                 searchFocusRequester = searchFocusRequester,
-                onClearSearchTerm = { searchTerm = "" },
-                onCancelSearch = {
-                    searchTerm = ""
-                    searching = false
-                },
+                onClearSearchTerm = { kuteViewModel.onUiEvent(KuteUiEvent.SearchTermChanged("")) },
+                onCancelSearch = { kuteViewModel.onUiEvent(KuteUiEvent.CloseSearch) },
             )
         } else {
             KuteOverview(
-                items = items,
-                onSearchStarted = { searching = true },
+                items = uiState.preferenceItems,
+                onSearchStarted = { kuteViewModel.onUiEvent(KuteUiEvent.StartSearch) },
             )
         }
     }
@@ -66,7 +64,7 @@ fun KutePreferencesScreen(
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, showBackground = true)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true, backgroundColor = 0xFF000000)
 @Composable
-private fun SampleOverviewPreview() {
+private fun KutePreferencesScreenPreview() {
     val icon =
         AppCompatResources.getDrawable(LocalContext.current, android.R.drawable.ic_media_next)
 

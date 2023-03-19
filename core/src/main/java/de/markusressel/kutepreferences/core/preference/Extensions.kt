@@ -4,15 +4,13 @@ import de.markusressel.kutepreferences.core.preference.category.KuteParent
 
 fun List<KutePreferenceListItem>.filterRecursive(
     searchTerm: String
-): List<KutePreferenceListItem> {
-    forEach {
-        when (it) {
-            is KuteParent -> {
-                it.searchTerm = searchTerm.ifBlank { null }
-            }
+): List<KutePreferenceListItem> = map {
+    when (it) {
+        is KuteParent -> {
+            it.children.filterRecursive(searchTerm)
         }
+        else -> listOf(it)
     }
-    return filter {
-        it.search(searchTerm)
-    }
+}.flatten().filter {
+    it.search(searchTerm)
 }

@@ -72,7 +72,6 @@ fun KuteSearch(
             KutePreferenceSearchingContent(
                 modifier = Modifier.fillMaxWidth(),
                 items = items,
-                searchTerm = searchTerm,
             )
         }
     }
@@ -86,7 +85,7 @@ fun KuteSearch(
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, showBackground = true)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true, backgroundColor = 0xFF000000)
 @Composable
-private fun SampleOverviewPreview() {
+private fun KuteSearchPreview() {
     val icon =
         AppCompatResources.getDrawable(LocalContext.current, android.R.drawable.ic_media_next)
 

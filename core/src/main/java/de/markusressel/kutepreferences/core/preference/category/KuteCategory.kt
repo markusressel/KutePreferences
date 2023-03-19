@@ -17,10 +17,8 @@ open class KuteCategory(
     override val onLongClick: (() -> Unit)? = null,
 ) : KutePreferenceCategory {
 
-    override var searchTerm: String? = null
-
     override fun search(searchTerm: String): Boolean {
-        val searchTerm = this.searchTerm ?: searchTerm
         return listOf(title, description).containsAnyWord(searchTerm)
     }
+
 }

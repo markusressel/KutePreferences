@@ -2,11 +2,12 @@ package de.markusressel.kutepreferences.ui.views
 
 import android.content.res.Configuration
 import androidx.appcompat.content.res.AppCompatResources
-import androidx.compose.animation.*
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalContext
@@ -19,7 +20,6 @@ import de.markusressel.kutepreferences.core.preference.number.KuteNumberPreferen
 import de.markusressel.kutepreferences.core.preference.section.KuteSection
 import de.markusressel.kutepreferences.core.preference.text.KuteTextPreference
 
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun KuteOverview(
     items: List<KutePreferenceListItem>,
@@ -46,7 +46,6 @@ fun KuteOverview(
         KutePreferenceListContent(
             modifier = Modifier.fillMaxWidth(),
             items = items,
-            searchTerm = "",
         )
     }
 }
@@ -55,7 +54,7 @@ fun KuteOverview(
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, showBackground = true)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true, backgroundColor = 0xFF000000)
 @Composable
-private fun SampleOverviewPreview() {
+private fun KuteOverviewPreview() {
     val icon =
         AppCompatResources.getDrawable(LocalContext.current, android.R.drawable.ic_media_next)
 

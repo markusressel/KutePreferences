@@ -79,10 +79,7 @@ fun KuteSectionView(
                     .background(color = LocalKuteColors.current.section.contentBackgroundColor)
             ) {
                 behavior.preferenceItem.children.forEach {
-                    val searchTerm = behavior.preferenceItem.searchTerm
-                    if (searchTerm == null || it.search(searchTerm)) {
-                        it.Composable()
-                    }
+                    it.Composable()
                 }
             }
         },

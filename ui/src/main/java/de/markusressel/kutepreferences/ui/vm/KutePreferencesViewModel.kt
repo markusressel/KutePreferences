@@ -1,92 +1,112 @@
 package de.markusressel.kutepreferences.ui.vm
 
-import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import de.markusressel.kutepreferences.core.KuteNavigator
 import de.markusressel.kutepreferences.core.preference.KutePreferenceListItem
-import de.markusressel.kutepreferences.core.preference.category.KuteParent
-import de.markusressel.kutepreferences.core.preference.category.KutePreferenceCategory
+import de.markusressel.kutepreferences.core.preference.filterRecursive
 import de.markusressel.kutepreferences.ui.views.KuteStyleManager
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 open class KutePreferencesViewModel(
-    val navigator: KuteNavigator
+    val navigator: KuteNavigator,
 ) : ViewModel() {
 
-    private val preferencesUiState = MutableStateFlow(UiState())
+    private val findCategoryByKeyUseCase: FindCategoryByKeyUseCase = FindCategoryByKeyUseCase()
 
-    private val currentCategory = preferencesUiState.map { uiState ->
-        uiState.preferenceItems.findRecursive { it.key == uiState.currentCategoryKey } as KutePreferenceCategory?
-    }
+    val preferencesUiState = MutableStateFlow(UiState())
 
-    val title = currentCategory.map {
-        it?.title ?: "Preferences"
-    }
-
-    val currentPreferenceItems = combine(preferencesUiState, currentCategory) { uiState, category ->
-        when (category) {
-            null -> uiState.preferenceItems
-            else -> category.children
-        }
-    }
+    private val preferenceItems = MutableStateFlow<List<KutePreferenceListItem>>(emptyList())
 
     init {
         KuteStyleManager.registerDefaultStyles(navigator)
 
         viewModelScope.launch {
-            navigator.currentCategory.collectLatest { key ->
-                preferencesUiState.value = preferencesUiState.value.copy(
-                    currentCategoryKey = key
-                )
+            navigator.currentCategory.collectLatest {
+                updateCurrentlyDisplayedItems()
+            }
+        }
+
+        viewModelScope.launch {
+            preferenceItems.collectLatest {
+                updateCurrentlyDisplayedItems(newPreferencesList = it)
+            }
+        }
+
+        viewModelScope.launch {
+            preferencesUiState.collectLatest {
+                updateCurrentlyDisplayedItems(newUiState = it)
             }
         }
     }
+
 
     /**
      * Set the full tree of [KutePreferenceListItem] entries
      */
     open fun initPreferencesTree(items: List<KutePreferenceListItem>) {
-        preferencesUiState.value = preferencesUiState.value.copy(
-            preferenceItems = items
-        )
+        preferenceItems.value = items
     }
 
-}
-
-private fun List<KutePreferenceListItem>.findRecursive(
-    predicate: (KutePreferenceListItem) -> Boolean
-): KutePreferenceListItem? {
-    val topLevelResult = firstOrNull(predicate)
-    if (topLevelResult != null) {
-        return topLevelResult
-    }
-
-    forEach {
-        val itemResult = it.findRecursive(predicate)
-        if (itemResult != null) {
-            return itemResult
+    open fun onUiEvent(event: KuteUiEvent) {
+        when (event) {
+            is KuteUiEvent.StartSearch -> {
+                preferencesUiState.update { oldState ->
+                    oldState.copy(
+                        searching = true,
+                        searchTerm = ""
+                    )
+                }
+            }
+            is KuteUiEvent.SearchTermChanged -> {
+                preferencesUiState.update { oldState ->
+                    oldState.copy(searchTerm = event.searchTerm)
+                }
+            }
+            is KuteUiEvent.CloseSearch -> {
+                preferencesUiState.update { oldState ->
+                    oldState.copy(
+                        searching = false,
+                        searchTerm = ""
+                    )
+                }
+            }
         }
     }
 
-    return null
-}
+    private fun updateCurrentlyDisplayedItems(
+        newUiState: UiState? = null,
+        newPreferencesList: List<KutePreferenceListItem>? = null
+    ) {
+        val currentCategoryKey = navigator.currentCategory.value
+        val allPreferenceItems = newPreferencesList ?: preferenceItems.value
 
-private fun KutePreferenceListItem.findRecursive(
-    predicate: (KutePreferenceListItem) -> Boolean
-): KutePreferenceListItem? {
-    return when (this) {
-        predicate -> this
-        is KuteParent -> children.findRecursive(predicate)
-        else -> null
+        preferencesUiState.update { oldState ->
+            val targetState = (newUiState ?: oldState)
+            targetState.copy(
+                preferenceItems = when {
+                    targetState.searching -> searchItems(allPreferenceItems, targetState.searchTerm)
+                    currentCategoryKey != null -> findCategoryByKeyUseCase(allPreferenceItems, currentCategoryKey)?.children
+                        ?: emptyList()
+                    else -> allPreferenceItems
+                }
+            )
+        }
+    }
+
+    private fun searchItems(items: List<KutePreferenceListItem>, searchTerm: String): List<KutePreferenceListItem> {
+        return when {
+            searchTerm.isBlank() -> emptyList()
+            else -> items.filterRecursive(searchTerm)
+        }
     }
 }
 
 data class UiState(
+    val searching: Boolean = false,
+    val searchTerm: String = "",
     val preferenceItems: List<KutePreferenceListItem> = emptyList(),
-    @StringRes val currentCategoryKey: Int? = null
 )
