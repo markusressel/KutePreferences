@@ -58,12 +58,14 @@ object KuteStyleManager {
                 )
                 true
             }
+
             is KuteSection -> {
                 KuteSectionView(
                     KuteSectionBehavior(preferenceItem = it)
                 )
                 true
             }
+
             is KuteCategory -> {
                 val behavior = KuteCategoryBehavior(
                     preferenceItem = it,
@@ -72,6 +74,7 @@ object KuteStyleManager {
                 KuteCategoryView(behavior)
                 true
             }
+
             is KuteBooleanPreference -> {
                 val behavior = BooleanPreferenceBehavior(it)
                 BooleanPreference(
@@ -79,6 +82,7 @@ object KuteStyleManager {
                 )
                 true
             }
+
             is KuteColorPreference -> {
                 val behavior = ColorPreferenceBehavior(it)
                 ColorPreferenceView(
@@ -102,6 +106,7 @@ object KuteStyleManager {
                 )
                 true
             }
+
             is KuteTextPreference -> {
                 val behavior = TextPreferenceBehavior(it)
                 TextPreference(
@@ -109,6 +114,7 @@ object KuteStyleManager {
                 )
                 true
             }
+
             is KuteNumberPreference -> {
                 val behavior = NumberPreferenceBehavior(it)
                 NumberPreference(
@@ -116,6 +122,7 @@ object KuteStyleManager {
                 )
                 true
             }
+
             is KuteFloatRangePreference -> {
                 val behavior = FloatRangeSliderPreferenceBehavior(it)
                 NumberRangeSliderPreference(
@@ -123,6 +130,7 @@ object KuteStyleManager {
                 )
                 true
             }
+
             is KuteSliderPreference -> {
                 val behavior = NumberSliderPreferenceBehavior(it)
                 NumberSliderPreference(
@@ -130,6 +138,7 @@ object KuteStyleManager {
                 )
                 true
             }
+
             is KuteDatePreference -> {
                 val behavior = DatePreferenceBehavior(it)
                 DatePreference(
@@ -137,6 +146,7 @@ object KuteStyleManager {
                 )
                 true
             }
+
             is KuteTimePreference -> {
                 val behavior = TimePreferenceBehavior(it)
                 TimePreference(
@@ -144,6 +154,7 @@ object KuteStyleManager {
                 )
                 true
             }
+
             is KuteSingleSelectStringPreference -> {
                 val behavior = SingleSelectionPreferenceBehavior(it)
                 SingleSelectionPreference(
@@ -151,6 +162,7 @@ object KuteStyleManager {
                 )
                 true
             }
+
             is KuteMultiSelectStringPreference -> {
                 val behavior = MultiSelectionPreferenceBehavior(it)
                 MultiSelectionPreference(

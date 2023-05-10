@@ -25,7 +25,9 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import de.markusressel.kutepreferences.core.DefaultKuteNavigator
 import de.markusressel.kutepreferences.ui.R
+import de.markusressel.kutepreferences.ui.theme.KutePreferencesTheme
 import de.markusressel.kutepreferences.ui.theme.LocalKuteColors
 
 @Composable
@@ -131,12 +133,20 @@ fun KutePreferenceSearch(
 private fun KutePreferenceSearchPreview() {
     var searchTerm by remember { mutableStateOf("") }
 
-    KutePreferenceSearch(
-        searchTerm = searchTerm,
-        onSearchClicked = {},
-        onSearchTermChanged = {},
-        onClearSearchTerm = { searchTerm = "" }
-    )
+    remember {
+        val nav = DefaultKuteNavigator()
+        KuteStyleManager.registerDefaultStyles(nav)
+        false
+    }
+
+    KutePreferencesTheme {
+        KutePreferenceSearch(
+            searchTerm = searchTerm,
+            onSearchClicked = {},
+            onSearchTermChanged = {},
+            onClearSearchTerm = { searchTerm = "" }
+        )
+    }
 }
 
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, showBackground = true)
@@ -145,10 +155,18 @@ private fun KutePreferenceSearchPreview() {
 private fun KutePreferenceSearchWithInputPreview() {
     var searchTerm by remember { mutableStateOf("") }
 
-    KutePreferenceSearch(
-        searchTerm = searchTerm,
-        onSearchClicked = {},
-        onSearchTermChanged = {},
-        onClearSearchTerm = { searchTerm = "" }
-    )
+    remember {
+        val nav = DefaultKuteNavigator()
+        KuteStyleManager.registerDefaultStyles(nav)
+        false
+    }
+
+    KutePreferencesTheme {
+        KutePreferenceSearch(
+            searchTerm = searchTerm,
+            onSearchClicked = {},
+            onSearchTermChanged = {},
+            onClearSearchTerm = { searchTerm = "" }
+        )
+    }
 }
