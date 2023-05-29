@@ -74,12 +74,9 @@ dependencies {
 
     implementation(libs.androidx.appcompat)
 
-
     // Animations
     implementation(libs.androidx.compose.animation)
 
-    debugImplementation(libs.androidx.compose.ui.tooling)
-    implementation(libs.androidx.compose.ui.tooling.preview)
 
     implementation(libs.androidx.compose.runtime)
     // Compose
@@ -96,6 +93,8 @@ dependencies {
     // When using a MDC theme
     implementation(libs.android.material.compose.theme.adapter)
 
+    debugImplementation(libs.androidx.compose.ui.tooling)
+    implementation(libs.androidx.compose.ui.tooling.preview)
 
     testImplementation(libs.junit4)
     androidTestImplementation(libs.androidx.test.ext.junit)
