@@ -163,7 +163,7 @@ KutePreferencesTheme(
 To implement a custom type, first create a class that implements
 the [KutePreferenceListItem](core/src/main/java/de/markusressel/kutepreferences/core/preference/KutePreferenceListItem.kt)
 interface. Take a look at
-the [CustomPreference](app/src/main/java/de/markusressel/kutepreferences/app/domain/CustomPreference.kt)
+the [CustomPreference](app/src/main/java/de/markusressel/kutepreferences/demo/domain/CustomPreference.kt)
 for a complete example. If it fits your needs
 the [KutePreferenceItem](core/src/main/java/de/markusressel/kutepreferences/core/preference/KutePreferenceItem.kt) base
 class can be used instead of implementing everything from scratch (which has some basic functionality implemented
