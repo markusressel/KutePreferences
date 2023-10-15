@@ -29,7 +29,7 @@ materialDialogs = "0.9.0"
 android-desugarJdkLibs = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "androidDesugarJdkLibs" }
 android-gradle-plugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
 
-android-material = { group = "com.google.android.material", name = "material", version = "1.9.0" }
+android-material = { group = "com.google.android.material", name = "material", version = "1.10.0" }
 android-material-compose-theme-adapter = { group = "com.google.android.material", name = "compose-theme-adapter", version = "1.2.1" }
 
 
@@ -43,7 +43,7 @@ androidx-compose-animation-graphics = { group = "androidx.compose.animation", na
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidxComposeBom" }
 androidx-compose-foundation = { group = "androidx.compose.foundation", name = "foundation", version.ref = "androidxComposeUi" }
 androidx-compose-material = { group = "androidx.compose.material", name = "material", version.ref = "androidxComposeUiText" }
-androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3", version = "1.2.0-alpha02" }
+androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3", version = "1.2.0-alpha09" }
 androidx-compose-runtime = { group = "androidx.compose.runtime", name = "runtime", version.ref = "androidxComposeUi" }
 androidx-compose-ui = { group = "androidx.compose.ui", name = "ui", version.ref = "androidxComposeUi" }
 androidx-compose-ui-text = { group = "androidx.compose.ui", name = "ui-text", version.ref = "androidxComposeUiText" }
@@ -72,7 +72,7 @@ dokka-gradle-plugin = { group = "org.jetbrains.dokka", name = "dokka-gradle-plug
 
 godaddy-colorpicker = { group = "com.godaddy.android.colorpicker", name = "compose-color-picker", version = "0.5.1" }
 
-gson = { group = "com.google.code.gson", name = "gson", version = "2.9.0" }
+gson = { group = "com.google.code.gson", name = "gson", version = "2.10" }
 
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-android-testing = { group = "com.google.dagger", name = "hilt-android-testing", version.ref = "hilt" }
