@@ -20,13 +20,7 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
             configureKotlinAndroidToolchain()
             extensions.configure<ApplicationExtension> {
                 configureKotlinAndroid(this)
-                defaultConfig.targetSdk = 33
-
-
-                // Allow references to generated code
-//                kapt {
-//                    correctErrorTypes = true
-//                }
+                defaultConfig.targetSdk = 34
             }
             extensions.configure<ApplicationAndroidComponentsExtension> {
             }
