@@ -1,5 +1,6 @@
 package de.markusressel.kutepreferences.ui.theme
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -14,7 +15,7 @@ import androidx.compose.ui.unit.dp
 fun defaultColors() = KuteColors(
     searchBar = SearchBarTheme(
         backgroundColor = MaterialTheme.colorScheme.surfaceVariant,
-        textColor = Color.White.copy(alpha = 0.87f),
+        textColor = KutePreferencesSearchBarDefaults.textColor,
         hintColor = MaterialTheme.colorScheme.onSurfaceVariant,
         iconColor = MaterialTheme.colorScheme.onSurfaceVariant,
     ),
@@ -39,6 +40,18 @@ fun defaultColors() = KuteColors(
         buttonTextColor = MaterialTheme.colorScheme.onBackground,
     )
 )
+
+object KutePreferencesSearchBarDefaults {
+
+    val textColor: Color
+        @Composable
+        get() {
+            return when {
+                isSystemInDarkTheme() -> Color.White.copy(alpha = 0.87f)
+                else -> Color.Black.copy(alpha = 0.87f)
+            }
+        }
+}
 
 val LocalKuteColors = staticCompositionLocalOf { KuteColors() }
 
