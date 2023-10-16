@@ -14,12 +14,15 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import dagger.hilt.android.AndroidEntryPoint
-import de.markusressel.kutepreferences.demo.ui.theme.KutePreferencesDemoAppTheme
 import de.markusressel.kutepreferences.core.DefaultKuteNavigator
 import de.markusressel.kutepreferences.core.preference.category.KuteCategory
+import de.markusressel.kutepreferences.demo.ui.theme.KutePreferencesDemoAppTheme
+import de.markusressel.kutepreferences.ui.theme.KutePreferencesSearchBarDefaults
 import de.markusressel.kutepreferences.ui.theme.KutePreferencesTheme
+import de.markusressel.kutepreferences.ui.theme.KutePreferencesThemeDefaults
 import de.markusressel.kutepreferences.ui.views.KutePreferencesScreen
 import de.markusressel.kutepreferences.ui.vm.KutePreferencesViewModel
 
@@ -47,7 +50,13 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    KutePreferencesTheme {
+                    KutePreferencesTheme(
+                        colors = KutePreferencesThemeDefaults.defaultColors.copy(
+                            searchBar = KutePreferencesSearchBarDefaults.defaultTheme.copy(
+                                textColor = Color.Red
+                            )
+                        )
+                    ) {
                         KutePreferencesScreen(
                             modifier = Modifier.fillMaxSize(),
                             kuteViewModel = vm,
