@@ -40,7 +40,7 @@ private fun TimePreferencePreview() {
 fun TimePreference(
     behavior: TimePreferenceBehavior,
     dialogState: MaterialDialogState = rememberMaterialDialogState(),
-    editDialog: @Composable () -> Unit = { timePreferenceEditDialog(behavior, dialogState) }
+    editDialog: @Composable () -> Unit = { TimePreferenceEditDialog(behavior, dialogState) }
 ) {
     val persistedValue by behavior.persistedValue.collectAsState()
 
@@ -56,7 +56,7 @@ fun TimePreference(
 }
 
 @Composable
-private fun timePreferenceEditDialog(
+private fun TimePreferenceEditDialog(
     behavior: TimePreferenceBehavior,
     state: MaterialDialogState,
     label: String = behavior.preferenceItem.title,

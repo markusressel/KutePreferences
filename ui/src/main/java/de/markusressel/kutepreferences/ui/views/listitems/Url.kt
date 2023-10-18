@@ -42,7 +42,7 @@ fun UrlPreference(
     behavior: UrlPreferenceBehavior,
     dialogState: MaterialDialogState = rememberMaterialDialogState(),
     editDialog: @Composable () -> Unit = {
-        textPreferenceEditDialog(
+        TextPreferenceEditDialog(
             dialogState, behavior
         )
     }
@@ -62,7 +62,7 @@ fun UrlPreference(
 
 
 @Composable
-private fun textPreferenceEditDialog(
+private fun TextPreferenceEditDialog(
     dialogState: MaterialDialogState,
     behavior: UrlPreferenceBehavior,
     label: String = behavior.preferenceItem.title,

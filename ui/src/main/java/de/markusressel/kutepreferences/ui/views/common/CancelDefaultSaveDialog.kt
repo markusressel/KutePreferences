@@ -1,6 +1,5 @@
 package de.markusressel.kutepreferences.ui.views.common
 
-import androidx.compose.material.ContentAlpha
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
@@ -41,7 +40,7 @@ fun CancelDefaultSaveDialog(
                 text = stringResource(de.markusressel.kutepreferences.ui.R.string.save),
                 textStyle = buttonTextStyle.let {
                     when {
-                        isSavable.not() -> it.copy(color = buttonTextStyle.color.copy(alpha = ContentAlpha.disabled))
+                        isSavable.not() -> it.copy(color = buttonTextStyle.color.copy(alpha = 0.38f))
                         else -> it
                     }
                 },

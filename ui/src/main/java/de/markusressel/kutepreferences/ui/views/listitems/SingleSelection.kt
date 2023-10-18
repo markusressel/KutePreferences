@@ -55,7 +55,7 @@ fun SingleSelectionPreference(
     behavior: SingleSelectionPreferenceBehavior,
     dialogState: MaterialDialogState = rememberMaterialDialogState(),
     editDialog: @Composable () -> Unit = {
-        singleSelectionPreferenceEditDialog(
+        SingleSelectionPreferenceEditDialog(
             dialogState, behavior
         )
     }
@@ -74,7 +74,7 @@ fun SingleSelectionPreference(
 }
 
 @Composable
-private fun singleSelectionPreferenceEditDialog(
+private fun SingleSelectionPreferenceEditDialog(
     dialogState: MaterialDialogState,
     behavior: SingleSelectionPreferenceBehavior,
     onCancelClicked: () -> Unit = behavior::onCancelClicked,

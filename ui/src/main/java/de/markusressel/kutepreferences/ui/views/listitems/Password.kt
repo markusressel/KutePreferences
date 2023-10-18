@@ -41,7 +41,7 @@ fun PasswordPreference(
     behavior: PasswordPreferenceBehavior,
     dialogState: MaterialDialogState = rememberMaterialDialogState(),
     editDialog: @Composable () -> Unit = {
-        passwordPreferenceEditDialog(
+        PasswordPreferenceEditDialog(
             dialogState, behavior
         )
     }
@@ -61,7 +61,7 @@ fun PasswordPreference(
 
 
 @Composable
-private fun passwordPreferenceEditDialog(
+private fun PasswordPreferenceEditDialog(
     dialogState: MaterialDialogState,
     behavior: PasswordPreferenceBehavior,
     label: String = behavior.preferenceItem.title,

@@ -121,7 +121,8 @@ private fun SliderEditInputView(
             finishedListener = {
                 isSliderAnimating = false
                 touchedByUser = false
-            }
+            },
+            label = "Slider Animation",
         )
 
         LaunchedEffect(key1 = true, block = {
@@ -177,6 +178,7 @@ private fun SliderEditInputView(
                 },
                 easing = LinearOutSlowInEasing
             ),
+            label = "MarkerAlphaAnimation",
         )
 
         Box {

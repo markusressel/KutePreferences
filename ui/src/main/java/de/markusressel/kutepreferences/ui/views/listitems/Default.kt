@@ -1,6 +1,5 @@
 package de.markusressel.kutepreferences.ui.views.listitems
 
-import android.R
 import android.content.res.Configuration
 import android.graphics.drawable.Drawable
 import androidx.annotation.DrawableRes
@@ -40,7 +39,7 @@ private fun DefaultItemPreview() {
         )
     ) {
         DefaultPreferenceListItem(
-            icon = R.drawable.ic_menu_gallery,
+            icon = android.R.drawable.ic_menu_gallery,
         )
     }
 }

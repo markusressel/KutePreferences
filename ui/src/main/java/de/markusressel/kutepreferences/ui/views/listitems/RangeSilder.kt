@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.RangeSlider
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -63,7 +62,6 @@ fun NumberRangeSliderPreference(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RangeSliderEditView(
     behavior: FloatRangeSliderPreferenceBehavior,
@@ -98,7 +96,8 @@ fun RangeSliderEditView(
             finishedListener = {
                 animating = false
                 touchedByUser = false
-            }
+            },
+            label = "sliderStartAnimation",
         )
 
         val sliderEndAnimation by animateFloatAsState(
@@ -107,7 +106,8 @@ fun RangeSliderEditView(
             finishedListener = {
                 animating = false
                 touchedByUser = false
-            }
+            },
+            label = "sliderEndAnimation",
         )
 
         LaunchedEffect(key1 = true, block = {

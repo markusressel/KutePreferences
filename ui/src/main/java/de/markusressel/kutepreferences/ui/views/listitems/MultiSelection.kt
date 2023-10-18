@@ -55,7 +55,7 @@ fun MultiSelectionPreference(
     behavior: MultiSelectionPreferenceBehavior,
     dialogState: MaterialDialogState = rememberMaterialDialogState(),
     editDialog: @Composable () -> Unit = {
-        multiSelectionPreferenceEditDialog(
+        MultiSelectionPreferenceEditDialog(
             dialogState, behavior
         )
     }
@@ -74,7 +74,7 @@ fun MultiSelectionPreference(
 }
 
 @Composable
-private fun multiSelectionPreferenceEditDialog(
+private fun MultiSelectionPreferenceEditDialog(
     dialogState: MaterialDialogState,
     behavior: MultiSelectionPreferenceBehavior,
     onCancelClicked: () -> Unit = behavior::onCancelClicked,

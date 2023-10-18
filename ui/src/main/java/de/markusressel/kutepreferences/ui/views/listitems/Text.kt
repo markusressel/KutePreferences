@@ -40,7 +40,7 @@ fun TextPreference(
     behavior: TextPreferenceBehavior,
     dialogState: MaterialDialogState = rememberMaterialDialogState(),
     editDialog: @Composable () -> Unit = {
-        textPreferenceEditDialog(
+        TextPreferenceEditDialog(
             dialogState, behavior
         )
     }
@@ -60,7 +60,7 @@ fun TextPreference(
 
 
 @Composable
-private fun textPreferenceEditDialog(
+private fun TextPreferenceEditDialog(
     dialogState: MaterialDialogState,
     behavior: TextPreferenceBehavior,
     label: String = behavior.preferenceItem.title,

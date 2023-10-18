@@ -1,12 +1,11 @@
 package de.markusressel.kutepreferences.ui.views
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -50,6 +49,7 @@ fun KutePreferencesScreen(
                     onCancelSearch = { kuteViewModel.onUiEvent(KuteUiEvent.CloseSearch) },
                 )
             }
+
             is UiState.Overview -> {
                 val scrollState = rememberScrollState()
 
@@ -73,6 +73,7 @@ fun KutePreferencesScreen(
                     scrollState = scrollState,
                 )
             }
+
             is UiState.Loading -> {
                 Box(
                     modifier = Modifier.fillMaxSize(),

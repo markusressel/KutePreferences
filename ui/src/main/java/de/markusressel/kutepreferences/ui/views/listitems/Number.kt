@@ -41,7 +41,7 @@ private fun NumberRangeSliderPreferencePreview() {
 fun NumberPreference(
     behavior: NumberPreferenceBehavior,
     dialogState: MaterialDialogState = rememberMaterialDialogState(),
-    editDialog: @Composable () -> Unit = { numberPreferenceEditDialog(behavior, dialogState) }
+    editDialog: @Composable () -> Unit = { NumberPreferenceEditDialog(behavior, dialogState) }
 ) {
     val persistedValue by behavior.persistedValue.collectAsState()
 
@@ -57,7 +57,7 @@ fun NumberPreference(
 }
 
 @Composable
-private fun numberPreferenceEditDialog(
+private fun NumberPreferenceEditDialog(
     behavior: NumberPreferenceBehavior,
     state: MaterialDialogState = rememberMaterialDialogState(),
     label: String = behavior.preferenceItem.title,

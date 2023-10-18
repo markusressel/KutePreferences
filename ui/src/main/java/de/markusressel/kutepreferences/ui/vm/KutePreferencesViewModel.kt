@@ -67,7 +67,7 @@ open class KutePreferencesViewModel(
     open fun onUiEvent(event: KuteUiEvent) {
         when (event) {
             is KuteUiEvent.StartSearch -> {
-                preferencesUiState.update { oldState ->
+                preferencesUiState.update { _ ->
                     UiState.Searching()
                 }
             }
@@ -80,7 +80,7 @@ open class KutePreferencesViewModel(
                 }
             }
             is KuteUiEvent.CloseSearch -> {
-                preferencesUiState.update { oldState ->
+                preferencesUiState.update { _ ->
                     computeOverviewState(navigator.currentCategory.value, preferenceItems.value)
                 }
             }
@@ -93,7 +93,7 @@ sealed class UiAction {
 }
 
 sealed class UiState {
-    object Loading : UiState()
+    data object Loading : UiState()
 
     data class Searching(
         val searchTerm: String = "",
