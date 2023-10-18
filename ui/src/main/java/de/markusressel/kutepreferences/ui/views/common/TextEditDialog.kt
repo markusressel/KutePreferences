@@ -46,7 +46,7 @@ fun TextEditDialog(
     ) {
         TextField(
             modifier = Modifier.fillMaxWidth(),
-            colors = TextFieldDefaults.textFieldColors(),
+            colors = TextFieldDefaults.colors(),
             value = value,
             onValueChange = { input ->
                 onInputChanged(input)
