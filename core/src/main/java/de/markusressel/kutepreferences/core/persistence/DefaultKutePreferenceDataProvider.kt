@@ -1,3 +1,5 @@
+@file:Suppress("UNCHECKED_CAST")
+
 package de.markusressel.kutepreferences.core.persistence
 
 import android.content.Context

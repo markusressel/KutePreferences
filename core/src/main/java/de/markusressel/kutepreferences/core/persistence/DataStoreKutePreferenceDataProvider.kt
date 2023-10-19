@@ -1,3 +1,5 @@
+@file:Suppress("UNCHECKED_CAST")
+
 package de.markusressel.kutepreferences.core.persistence
 
 import android.content.Context
@@ -121,16 +123,22 @@ class DataStoreAdapter(val context: Context) {
         return when (clazz) {
             Boolean::class.javaPrimitiveType,
             Boolean::class.javaObjectType -> booleanPreferencesKey(key)
+
             Int::class.javaPrimitiveType,
             Int::class.javaObjectType -> intPreferencesKey(key)
+
             Float::class.javaPrimitiveType,
             Float::class.javaObjectType -> floatPreferencesKey(key)
+
             Long::class.javaPrimitiveType,
             Long::class.javaObjectType -> longPreferencesKey(key)
+
             Double::class.javaPrimitiveType,
             Double::class.javaObjectType -> doublePreferencesKey(key)
+
             String::class.javaPrimitiveType,
             String::class.javaObjectType -> stringPreferencesKey(key)
+
             else -> throw IllegalArgumentException("Type is not supported: $clazz")
         } as Preferences.Key<T>
     }

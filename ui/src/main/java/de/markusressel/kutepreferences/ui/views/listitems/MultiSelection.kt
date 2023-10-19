@@ -18,6 +18,8 @@ import de.markusressel.kutepreferences.core.preference.Validator
 import de.markusressel.kutepreferences.core.preference.select.KuteMultiSelectStringPreference
 import de.markusressel.kutepreferences.core.preference.select.MultiSelectionPreferenceBehavior
 import de.markusressel.kutepreferences.ui.theme.KutePreferencesTheme
+import de.markusressel.kutepreferences.ui.util.highlightingShimmer
+import de.markusressel.kutepreferences.ui.util.modifyIf
 import de.markusressel.kutepreferences.ui.views.common.CancelDefaultSaveDialog
 import de.markusressel.kutepreferences.ui.views.dummy
 
@@ -60,15 +62,17 @@ fun MultiSelectionPreference(
         )
     }
 ) {
+    val uiState by behavior.uiState.collectAsState()
     val subtitle by behavior.persistedValue.collectAsState()
 
     DefaultPreferenceListItem(
+        modifier = Modifier.modifyIf(uiState.shimmering) {
+            highlightingShimmer()
+        },
         icon = behavior.preferenceItem.icon,
         title = behavior.preferenceItem.title,
         subtitle = behavior.preferenceItem.createDescription(subtitle),
-        onClick = {
-            dialogState.show()
-        }
+        onClick = { dialogState.show() },
     )
     editDialog()
 }

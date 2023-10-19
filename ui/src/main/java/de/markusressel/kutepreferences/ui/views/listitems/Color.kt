@@ -19,6 +19,8 @@ import com.godaddy.android.colorpicker.toColorInt
 import de.markusressel.kutepreferences.core.preference.color.ColorPreferenceBehavior
 import de.markusressel.kutepreferences.core.preference.color.KuteColorPreference
 import de.markusressel.kutepreferences.ui.theme.KutePreferencesTheme
+import de.markusressel.kutepreferences.ui.util.highlightingShimmer
+import de.markusressel.kutepreferences.ui.util.modifyIf
 import de.markusressel.kutepreferences.ui.views.common.InlineExpandablePreferenceView
 import de.markusressel.kutepreferences.ui.views.dummy
 
@@ -44,6 +46,8 @@ private fun ColorPreferencePreview() {
 fun ColorPreferenceView(
     behavior: ColorPreferenceBehavior,
 ) {
+    val uiState by behavior.uiState.collectAsState()
+
     var collapsed by remember {
         mutableStateOf(true)
     }
@@ -56,7 +60,11 @@ fun ColorPreferenceView(
         subtitle = behavior.preferenceItem.createDescription(persistedValue),
         header = {
             Row(
-                modifier = Modifier.padding(end = 4.dp),
+                modifier = Modifier
+                    .modifyIf(uiState.shimmering) {
+                        highlightingShimmer()
+                    }
+                    .padding(end = 4.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 DefaultPreferenceListItemCardContent(

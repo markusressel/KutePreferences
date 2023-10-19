@@ -16,6 +16,8 @@ import de.markusressel.kutepreferences.ui.theme.KuteColors
 import de.markusressel.kutepreferences.ui.theme.KutePreferencesTheme
 import de.markusressel.kutepreferences.ui.theme.LocalKuteColors
 import de.markusressel.kutepreferences.ui.theme.SectionTheme
+import de.markusressel.kutepreferences.ui.util.highlightingShimmer
+import de.markusressel.kutepreferences.ui.util.modifyIf
 import de.markusressel.kutepreferences.ui.views.Composable
 import de.markusressel.kutepreferences.ui.views.common.CollapsibleCard
 
@@ -46,10 +48,15 @@ private fun KuteSectionPreview() {
 fun KuteSectionView(
     behavior: KuteSectionBehavior
 ) {
+    val uiState by behavior.uiState.collectAsState()
     var collapsed by remember { mutableStateOf(false) }
 
     CollapsibleCard(
-        modifier = Modifier.padding(8.dp),
+        modifier = Modifier
+            .modifyIf(uiState.shimmering) {
+                highlightingShimmer()
+            }
+            .padding(8.dp),
         title = {
             Row(
                 modifier = Modifier

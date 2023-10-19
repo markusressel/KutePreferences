@@ -38,6 +38,9 @@ dependencies {
     // color picker
     implementation(libs.godaddy.colorpicker)
 
+    // shimmer effect
+    implementation(libs.compose.shimmer)
+
     testImplementation(libs.junit4)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.androidx.test.espresso.core)

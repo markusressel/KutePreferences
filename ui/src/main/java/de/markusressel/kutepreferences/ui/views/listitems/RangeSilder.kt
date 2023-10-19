@@ -15,6 +15,8 @@ import de.markusressel.kutepreferences.core.preference.number.range.FloatRangeSl
 import de.markusressel.kutepreferences.core.preference.number.range.KuteFloatRangePreference
 import de.markusressel.kutepreferences.core.preference.number.range.RangePersistenceModel
 import de.markusressel.kutepreferences.ui.theme.KutePreferencesTheme
+import de.markusressel.kutepreferences.ui.util.highlightingShimmer
+import de.markusressel.kutepreferences.ui.util.modifyIf
 import de.markusressel.kutepreferences.ui.views.common.InlineExpandablePreferenceView
 import de.markusressel.kutepreferences.ui.views.dummy
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -46,11 +48,15 @@ private fun NumberRangeSliderPreferencePreview() {
 fun NumberRangeSliderPreference(
     behavior: FloatRangeSliderPreferenceBehavior,
 ) {
+    val uiState by behavior.uiState.collectAsState()
     var collapsed by remember { mutableStateOf(true) }
 
     val persistedValue by behavior.persistedValue.collectAsState()
 
     InlineExpandablePreferenceView(
+        modifier = Modifier.modifyIf(uiState.shimmering) {
+            highlightingShimmer()
+        },
         icon = behavior.preferenceItem.icon,
         title = behavior.preferenceItem.title,
         subtitle = behavior.preferenceItem.createDescription(persistedValue),

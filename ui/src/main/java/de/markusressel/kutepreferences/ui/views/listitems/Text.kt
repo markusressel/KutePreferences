@@ -3,6 +3,7 @@ package de.markusressel.kutepreferences.ui.views.listitems
 import android.content.res.Configuration
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import com.vanpra.composematerialdialogs.MaterialDialogState
@@ -11,6 +12,8 @@ import de.markusressel.kutepreferences.core.preference.Validator
 import de.markusressel.kutepreferences.core.preference.text.KuteTextPreference
 import de.markusressel.kutepreferences.core.preference.text.TextPreferenceBehavior
 import de.markusressel.kutepreferences.ui.theme.KutePreferencesTheme
+import de.markusressel.kutepreferences.ui.util.highlightingShimmer
+import de.markusressel.kutepreferences.ui.util.modifyIf
 import de.markusressel.kutepreferences.ui.views.common.TextEditDialog
 import de.markusressel.kutepreferences.ui.views.dummy
 
@@ -45,9 +48,14 @@ fun TextPreference(
         )
     }
 ) {
+    val uiState by behavior.uiState.collectAsState()
+
     val subtitle by behavior.persistedValue.collectAsState()
 
     DefaultPreferenceListItem(
+        modifier = Modifier.modifyIf(uiState.shimmering) {
+            highlightingShimmer()
+        },
         icon = behavior.preferenceItem.icon,
         title = behavior.preferenceItem.title,
         subtitle = behavior.preferenceItem.createDescription(subtitle),

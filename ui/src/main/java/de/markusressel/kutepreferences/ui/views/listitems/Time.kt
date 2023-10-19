@@ -3,6 +3,7 @@ package de.markusressel.kutepreferences.ui.views.listitems
 import android.content.res.Configuration
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import com.vanpra.composematerialdialogs.MaterialDialogState
@@ -14,6 +15,8 @@ import de.markusressel.kutepreferences.core.preference.time.KuteTimePreference
 import de.markusressel.kutepreferences.core.preference.time.TimePersistenceModel
 import de.markusressel.kutepreferences.core.preference.time.TimePreferenceBehavior
 import de.markusressel.kutepreferences.ui.theme.KutePreferencesTheme
+import de.markusressel.kutepreferences.ui.util.highlightingShimmer
+import de.markusressel.kutepreferences.ui.util.modifyIf
 import de.markusressel.kutepreferences.ui.views.common.CancelDefaultSaveDialog
 import de.markusressel.kutepreferences.ui.views.dummy
 import java.time.LocalTime
@@ -42,9 +45,13 @@ fun TimePreference(
     dialogState: MaterialDialogState = rememberMaterialDialogState(),
     editDialog: @Composable () -> Unit = { TimePreferenceEditDialog(behavior, dialogState) }
 ) {
+    val uiState by behavior.uiState.collectAsState()
     val persistedValue by behavior.persistedValue.collectAsState()
 
     DefaultPreferenceListItem(
+        modifier = Modifier.modifyIf(uiState.shimmering) {
+            highlightingShimmer()
+        },
         icon = behavior.preferenceItem.icon,
         title = behavior.preferenceItem.title,
         subtitle = behavior.preferenceItem.createDescription(persistedValue),

@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import de.markusressel.kutepreferences.core.KuteNavigator
+import de.markusressel.kutepreferences.core.preference.KuteItemBehavior
 import de.markusressel.kutepreferences.core.preference.KutePreferenceListItem
 import de.markusressel.kutepreferences.core.preference.action.ActionPreferenceBehavior
 import de.markusressel.kutepreferences.core.preference.action.KuteAction
@@ -36,6 +37,20 @@ import de.markusressel.kutepreferences.core.preference.time.KuteTimePreference
 import de.markusressel.kutepreferences.core.preference.time.TimePreferenceBehavior
 import de.markusressel.kutepreferences.ui.views.listitems.*
 
+object BehaviorStore {
+
+    private val behaviorMap = mutableMapOf<KutePreferenceListItem, KuteItemBehavior>()
+
+    fun add(behavior: KuteItemBehavior, item: KutePreferenceListItem) {
+        behaviorMap[item] = behavior
+    }
+
+    fun get(item: KutePreferenceListItem): KuteItemBehavior? {
+        return behaviorMap[item]
+    }
+
+}
+
 /**
  * Global place for the associations between [KutePreferenceListItem] implementations
  * and their UI.
@@ -53,6 +68,7 @@ object KuteStyleManager {
         when (it) {
             is KuteAction -> {
                 val kuteActionBehavior = ActionPreferenceBehavior(it)
+                BehaviorStore.add(kuteActionBehavior, it)
                 ActionPreference(
                     behavior = kuteActionBehavior
                 )

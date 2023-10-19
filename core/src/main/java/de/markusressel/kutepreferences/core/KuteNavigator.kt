@@ -23,10 +23,8 @@ interface KuteNavigator {
     fun goBack(): Boolean
 
     /**
-     * Navigates to the given [KutePreferenceListItem].
-     *
-     * @param key the key of a [KutePreferenceListItem]
+     * Set the current category stack.
      */
-    fun navigateTo(@StringRes key: Int)
+    fun setStack(stack: Collection<Int>)
 
 }

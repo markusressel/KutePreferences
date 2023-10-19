@@ -21,6 +21,8 @@ import androidx.compose.ui.unit.dp
 import de.markusressel.kutepreferences.core.preference.number.slider.KuteSliderPreference
 import de.markusressel.kutepreferences.core.preference.number.slider.NumberSliderPreferenceBehavior
 import de.markusressel.kutepreferences.ui.theme.KutePreferencesTheme
+import de.markusressel.kutepreferences.ui.util.highlightingShimmer
+import de.markusressel.kutepreferences.ui.util.modifyIf
 import de.markusressel.kutepreferences.ui.views.common.InlineExpandablePreferenceView
 import de.markusressel.kutepreferences.ui.views.common.Marker
 import de.markusressel.kutepreferences.ui.views.dummy
@@ -55,11 +57,15 @@ private fun NumberSliderPreferencePreview() {
 fun NumberSliderPreference(
     behavior: NumberSliderPreferenceBehavior,
 ) {
+    val uiState by behavior.uiState.collectAsState()
     val persistedValue by behavior.persistedValue.collectAsState()
 
     var collapsed by remember { mutableStateOf(true) }
 
     InlineExpandablePreferenceView(
+        modifier = Modifier.modifyIf(uiState.shimmering) {
+            highlightingShimmer()
+        },
         icon = behavior.preferenceItem.icon,
         title = behavior.preferenceItem.title,
         subtitle = behavior.preferenceItem.createDescription(persistedValue),

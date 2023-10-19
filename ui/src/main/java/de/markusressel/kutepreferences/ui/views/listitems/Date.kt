@@ -3,6 +3,7 @@ package de.markusressel.kutepreferences.ui.views.listitems
 import android.content.res.Configuration
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.vanpra.composematerialdialogs.MaterialDialogState
 import com.vanpra.composematerialdialogs.datetime.date.DatePickerDefaults
@@ -12,6 +13,8 @@ import de.markusressel.kutepreferences.core.preference.Validator
 import de.markusressel.kutepreferences.core.preference.date.DatePreferenceBehavior
 import de.markusressel.kutepreferences.core.preference.date.KuteDatePreference
 import de.markusressel.kutepreferences.ui.theme.KutePreferencesTheme
+import de.markusressel.kutepreferences.ui.util.highlightingShimmer
+import de.markusressel.kutepreferences.ui.util.modifyIf
 import de.markusressel.kutepreferences.ui.views.common.CancelDefaultSaveDialog
 import de.markusressel.kutepreferences.ui.views.dummy
 import java.time.LocalDate
@@ -40,15 +43,18 @@ fun DatePreference(
     dialogState: MaterialDialogState = rememberMaterialDialogState(),
     editDialog: @Composable () -> Unit = { DatePreferenceEditDialog(behavior, dialogState) }
 ) {
+    val uiState by behavior.uiState.collectAsState()
+
     val persistedValue by behavior.persistedValue.collectAsState()
 
     DefaultPreferenceListItem(
+        modifier = Modifier.modifyIf(uiState.shimmering) {
+            highlightingShimmer()
+        },
         icon = behavior.preferenceItem.icon,
         title = behavior.preferenceItem.title,
         subtitle = behavior.preferenceItem.createDescription(persistedValue),
-        onClick = {
-            dialogState.show()
-        }
+        onClick = { dialogState.show() },
     )
     editDialog()
 }

@@ -1,7 +1,8 @@
 package de.markusressel.kutepreferences.ui.views.listitems
 
 import android.content.res.Configuration
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
@@ -17,6 +18,8 @@ import de.markusressel.kutepreferences.core.preference.bool.BooleanPreferenceBeh
 import de.markusressel.kutepreferences.core.preference.bool.KuteBooleanPreference
 import de.markusressel.kutepreferences.ui.theme.KutePreferencesTheme
 import de.markusressel.kutepreferences.ui.theme.listItemMinHeight
+import de.markusressel.kutepreferences.ui.util.highlightingShimmer
+import de.markusressel.kutepreferences.ui.util.modifyIf
 import de.markusressel.kutepreferences.ui.views.dummy
 
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, showBackground = true)
@@ -39,19 +42,25 @@ private fun BooleanPreferencePreview() {
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun BooleanPreference(
     behavior: BooleanPreferenceBehavior
 ) {
+    val uiState by behavior.uiState.collectAsState()
     val persistedValue by behavior.persistedValue.collectAsState()
 
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .defaultMinSize(minHeight = listItemMinHeight)
-            .clickable {
-                behavior.onInputChanged(behavior.persistedValue.value.not())
-            },
+            .modifyIf(uiState.shimmering) {
+                highlightingShimmer()
+            }
+            .combinedClickable(
+                onClick = { behavior.onInputChanged(behavior.persistedValue.value.not()) },
+                onLongClick = { }
+            ),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Column(

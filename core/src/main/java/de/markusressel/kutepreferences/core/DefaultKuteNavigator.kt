@@ -13,8 +13,9 @@ class DefaultKuteNavigator : KuteNavigator {
         currentCategory.value = key
     }
 
-    override fun navigateTo(key: Int) {
-        TODO("Not yet implemented")
+    override fun setStack(stack: Collection<Int>) {
+        categoryStack.clear()
+        categoryStack.addAll(stack)
     }
 
     override fun goBack(): Boolean {

@@ -4,8 +4,9 @@ import android.content.res.Configuration
 import android.graphics.drawable.Drawable
 import androidx.annotation.DrawableRes
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
@@ -52,28 +53,34 @@ private fun DefaultItemPreview() {
 
 @Composable
 internal fun DefaultPreferenceListItem(
+    modifier: Modifier = Modifier,
     icon: Drawable?,
     title: String = "Some Preference Label",
     subtitle: String = "some-value",
     onClick: () -> Unit = {},
+    onLongClick: () -> Unit = {},
 ) {
     DefaultPreferenceListItemCardContent(
+        modifier = modifier,
         icon = icon,
         title = title,
         titleColor = LocalKuteColors.current.defaultItem.titleColor,
         subtitle = subtitle,
         onClick = onClick,
+        onLongClick = onLongClick,
     )
 }
 
 @Composable
 internal fun DefaultPreferenceListItem(
+    modifier: Modifier = Modifier,
     @DrawableRes icon: Int?,
     title: String = "Some Preference Label",
     subtitle: String = "some-value",
     onClick: () -> Unit = {},
 ) {
     DefaultPreferenceListItem(
+        modifier = modifier,
         icon = icon?.let { AppCompatResources.getDrawable(LocalContext.current, it) },
         title = title,
         subtitle = subtitle,
@@ -101,6 +108,7 @@ internal fun DefaultPreferenceListItemCard(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun DefaultPreferenceListItemCardContent(
     modifier: Modifier = Modifier,
@@ -111,12 +119,16 @@ internal fun DefaultPreferenceListItemCardContent(
     subtitle: String = "some-value",
     subtitleColor: Color = LocalKuteColors.current.defaultItem.subtitleColor,
     onClick: (() -> Unit)? = null,
+    onLongClick: (() -> Unit)? = null,
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .modifyIf({ onClick != null }) {
-                clickable { onClick?.invoke() }
+            .modifyIf(onClick != null || onLongClick != null) {
+                combinedClickable(
+                    onClick = onClick ?: {},
+                    onLongClick = onLongClick,
+                )
             }
             .padding(
                 vertical = 8.dp,

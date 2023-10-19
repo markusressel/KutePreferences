@@ -8,11 +8,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -44,25 +39,28 @@ fun KuteSearch(
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
-            IconButton(
-                onClick = {
-                    searchFocusRequester.freeFocus()
-                    onCancelSearch()
-                }
-            ) {
-                Icon(
-                    imageVector = Icons.Default.ArrowBack,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onBackground,
-                )
-            }
+//            IconButton(
+//                onClick = {
+//                    searchFocusRequester.freeFocus()
+//                    onCancelSearch()
+//                }
+//            ) {
+//                Icon(
+//                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+//                    contentDescription = null,
+//                    tint = MaterialTheme.colorScheme.onBackground,
+//                )
+//            }
 
             KutePreferenceSearch(
-                modifier.weight(1f),
+                modifier = modifier.fillMaxWidth(), //.weight(1f),
                 searchTerm = searchTerm,
                 onSearchTermChanged = onSearchTermChanged,
                 onSearchClicked = { },
-                onClearSearchTerm = onClearSearchTerm,
+                onClearSearchTerm = {
+                    onClearSearchTerm()
+                    onCancelSearch()
+                },
                 focusRequester = searchFocusRequester,
             )
         }
