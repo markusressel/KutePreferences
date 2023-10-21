@@ -4,6 +4,7 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.*
@@ -13,7 +14,6 @@ import androidx.compose.ui.focus.FocusRequester
 import de.markusressel.kutepreferences.core.persistence.DummyDataProvider
 import de.markusressel.kutepreferences.core.preference.KutePreferenceListItem
 import de.markusressel.kutepreferences.ui.views.KuteOverview
-import de.markusressel.kutepreferences.ui.views.KuteSearch
 import de.markusressel.kutepreferences.ui.views.KuteStyleManager
 import de.markusressel.kutepreferences.ui.vm.KutePreferencesViewModel
 import de.markusressel.kutepreferences.ui.vm.KuteUiEvent
@@ -33,7 +33,7 @@ fun KutePreferencesScreen(
     Column(modifier) {
         BackHandler {
             searchFocusRequester.freeFocus()
-            kuteViewModel.onUiEvent(KuteUiEvent.CloseSearch)
+            kuteViewModel.onUiEvent(KuteUiEvent.BackPressed)
         }
 
         LaunchedEffect(Unit) {
@@ -41,10 +41,12 @@ fun KutePreferencesScreen(
         }
 
         KuteSearch(
+            modifier = Modifier
+                .fillMaxWidth(),
             active = uiState.isSearchActive,
             onActiveChange = { newActive ->
                 when {
-                    newActive -> kuteViewModel.onUiEvent(KuteUiEvent.StartSearch)
+                    newActive -> kuteViewModel.onUiEvent(KuteUiEvent.SearchFieldSelected)
                     else -> kuteViewModel.onUiEvent(KuteUiEvent.CloseSearch)
                 }
             },
@@ -54,8 +56,8 @@ fun KutePreferencesScreen(
             },
             items = uiState.preferenceItems,
             searchFocusRequester = searchFocusRequester,
-            onClearSearchTerm = { kuteViewModel.onUiEvent(KuteUiEvent.SearchTermChanged("")) },
             onCancelSearch = { kuteViewModel.onUiEvent(KuteUiEvent.CloseSearch) },
+            onSearchResultSelected = { kuteViewModel.onUiEvent(KuteUiEvent.SearchResultSelected(it)) },
         )
 
 
@@ -77,7 +79,7 @@ fun KutePreferencesScreen(
 
         KuteOverview(
             items = uiState.preferenceItems,
-            onSearchStarted = { kuteViewModel.onUiEvent(KuteUiEvent.StartSearch) },
+            onSearchStarted = { kuteViewModel.onUiEvent(KuteUiEvent.SearchFieldSelected) },
             scrollState = scrollState,
         )
     }

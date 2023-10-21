@@ -22,11 +22,13 @@ import de.markusressel.kutepreferences.ui.views.KuteStyleManager
 fun KutePreferenceSearchingContent(
     modifier: Modifier = Modifier,
     items: List<KutePreferenceListItem>,
+    onSearchResultSelected: (KutePreferenceListItem) -> Unit,
 ) {
     Column(modifier) {
         KuteSearchResultItemList(
             modifier = Modifier.fillMaxWidth(),
-            items = items
+            items = items,
+            onSearchResultSelected = onSearchResultSelected,
         )
         Spacer(
             modifier = Modifier
@@ -68,5 +70,6 @@ private fun KutePreferenceSearchingContentPreview() {
                 dataProvider = dummy
             )
         ),
+        onSearchResultSelected = {},
     )
 }

@@ -26,8 +26,7 @@ fun KutePreferenceSearch(
     modifier: Modifier = Modifier,
     searchTerm: String,
     onSearchTermChanged: (String) -> Unit,
-    onSearchClicked: () -> Unit,
-    onClearSearchTerm: () -> Unit,
+    onCloseSearch: () -> Unit,
     placeholder: String = stringResource(id = R.string.kute_preferences_search_label),
     focusRequester: FocusRequester = FocusRequester(),
     searchContent: @Composable () -> Unit,
@@ -49,8 +48,7 @@ fun KutePreferenceSearch(
             IconButton(
                 onClick = {
                     focusRequester.freeFocus()
-                    onClearSearchTerm()
-
+                    onCloseSearch()
                 }
             ) {
                 Icon(
@@ -77,7 +75,7 @@ fun KutePreferenceSearch(
             if (newActive) {
                 onActiveChange(newActive)
             } else {
-                onClearSearchTerm()
+                onCloseSearch()
             }
         },
         leadingIcon = leadingIcon.takeIf { active },
@@ -103,8 +101,7 @@ private fun KutePreferenceSearchPreview() {
         KutePreferenceSearch(
             searchTerm = searchTerm,
             onSearchTermChanged = {},
-            onSearchClicked = {},
-            onClearSearchTerm = { searchTerm = "" },
+            onCloseSearch = { searchTerm = "" },
             searchContent = {},
             active = true,
             onActiveChange = { },
@@ -128,8 +125,7 @@ private fun KutePreferenceSearchWithInputPreview() {
         KutePreferenceSearch(
             searchTerm = searchTerm,
             onSearchTermChanged = {},
-            onSearchClicked = {},
-            onClearSearchTerm = { searchTerm = "" },
+            onCloseSearch = { searchTerm = "" },
             searchContent = {},
             active = true,
             onActiveChange = {},

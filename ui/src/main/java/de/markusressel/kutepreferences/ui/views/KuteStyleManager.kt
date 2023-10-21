@@ -67,17 +67,18 @@ object KuteStyleManager {
     fun registerDefaultStyles(navigator: KuteNavigator) = registerTypeHook {
         when (it) {
             is KuteAction -> {
-                val kuteActionBehavior = ActionPreferenceBehavior(it)
-                BehaviorStore.add(kuteActionBehavior, it)
+                val behavior = ActionPreferenceBehavior(it)
+                BehaviorStore.add(behavior, it)
                 ActionPreference(
-                    behavior = kuteActionBehavior
+                    behavior = behavior
                 )
                 true
             }
 
             is KuteSection -> {
+                val behavior = KuteSectionBehavior(preferenceItem = it)
                 KuteSectionView(
-                    KuteSectionBehavior(preferenceItem = it)
+                    behavior = behavior
                 )
                 true
             }
@@ -87,12 +88,15 @@ object KuteStyleManager {
                     preferenceItem = it,
                     navigator = navigator,
                 )
-                KuteCategoryView(behavior)
+                KuteCategoryView(
+                    behavior = behavior
+                )
                 true
             }
 
             is KuteBooleanPreference -> {
                 val behavior = BooleanPreferenceBehavior(it)
+                BehaviorStore.add(behavior, it)
                 BooleanPreference(
                     behavior = behavior
                 )
@@ -101,6 +105,7 @@ object KuteStyleManager {
 
             is KuteColorPreference -> {
                 val behavior = ColorPreferenceBehavior(it)
+                BehaviorStore.add(behavior, it)
                 ColorPreferenceView(
                     behavior = behavior
                 )
@@ -109,6 +114,7 @@ object KuteStyleManager {
             // NOTE: must be checked before KuteTextPreference
             is KuteUrlPreference -> {
                 val behavior = UrlPreferenceBehavior(it)
+                BehaviorStore.add(behavior, it)
                 UrlPreference(
                     behavior = behavior
                 )
@@ -117,6 +123,7 @@ object KuteStyleManager {
             // NOTE: must be checked before KuteTextPreference
             is KutePasswordPreference -> {
                 val behavior = PasswordPreferenceBehavior(it)
+                BehaviorStore.add(behavior, it)
                 PasswordPreference(
                     behavior = behavior
                 )
@@ -125,6 +132,7 @@ object KuteStyleManager {
 
             is KuteTextPreference -> {
                 val behavior = TextPreferenceBehavior(it)
+                BehaviorStore.add(behavior, it)
                 TextPreference(
                     behavior = behavior
                 )
@@ -133,6 +141,7 @@ object KuteStyleManager {
 
             is KuteNumberPreference -> {
                 val behavior = NumberPreferenceBehavior(it)
+                BehaviorStore.add(behavior, it)
                 NumberPreference(
                     behavior = behavior
                 )
@@ -141,6 +150,7 @@ object KuteStyleManager {
 
             is KuteFloatRangePreference -> {
                 val behavior = FloatRangeSliderPreferenceBehavior(it)
+                BehaviorStore.add(behavior, it)
                 NumberRangeSliderPreference(
                     behavior = behavior
                 )
@@ -149,6 +159,7 @@ object KuteStyleManager {
 
             is KuteSliderPreference -> {
                 val behavior = NumberSliderPreferenceBehavior(it)
+                BehaviorStore.add(behavior, it)
                 NumberSliderPreference(
                     behavior = behavior,
                 )
@@ -157,6 +168,7 @@ object KuteStyleManager {
 
             is KuteDatePreference -> {
                 val behavior = DatePreferenceBehavior(it)
+                BehaviorStore.add(behavior, it)
                 DatePreference(
                     behavior = behavior,
                 )
@@ -165,6 +177,7 @@ object KuteStyleManager {
 
             is KuteTimePreference -> {
                 val behavior = TimePreferenceBehavior(it)
+                BehaviorStore.add(behavior, it)
                 TimePreference(
                     behavior = behavior,
                 )
@@ -173,6 +186,7 @@ object KuteStyleManager {
 
             is KuteSingleSelectStringPreference -> {
                 val behavior = SingleSelectionPreferenceBehavior(it)
+                BehaviorStore.add(behavior, it)
                 SingleSelectionPreference(
                     behavior = behavior,
                 )
@@ -181,6 +195,7 @@ object KuteStyleManager {
 
             is KuteMultiSelectStringPreference -> {
                 val behavior = MultiSelectionPreferenceBehavior(it)
+                BehaviorStore.add(behavior, it)
                 MultiSelectionPreference(
                     behavior = behavior,
                 )

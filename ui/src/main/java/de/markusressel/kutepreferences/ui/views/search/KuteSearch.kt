@@ -1,16 +1,11 @@
-package de.markusressel.kutepreferences.ui.views
+package de.markusressel.kutepreferences.ui.views.search
 
 import android.content.res.Configuration
 import androidx.appcompat.content.res.AppCompatResources
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalContext
@@ -24,9 +19,7 @@ import de.markusressel.kutepreferences.core.preference.number.KuteNumberPreferen
 import de.markusressel.kutepreferences.core.preference.section.KuteSection
 import de.markusressel.kutepreferences.core.preference.text.KuteTextPreference
 import de.markusressel.kutepreferences.ui.theme.KutePreferencesTheme
-import de.markusressel.kutepreferences.ui.views.search.KutePreferenceSearch
-import de.markusressel.kutepreferences.ui.views.search.KutePreferenceSearchingContent
-import de.markusressel.kutepreferences.ui.views.search.dummy
+import de.markusressel.kutepreferences.ui.views.KuteStyleManager
 
 @Composable
 fun KuteSearch(
@@ -36,44 +29,28 @@ fun KuteSearch(
     items: List<KutePreferenceListItem>,
     onCancelSearch: () -> Unit,
     onSearchTermChanged: (String) -> Unit,
-    onClearSearchTerm: () -> Unit,
     active: Boolean,
     onActiveChange: (Boolean) -> Unit,
+    onSearchResultSelected: (KutePreferenceListItem) -> Unit,
 ) {
-    Column {
-        Row(
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            KutePreferenceSearch(
-                modifier = modifier.fillMaxWidth(), //.weight(1f),
-                active = active,
-                searchTerm = searchTerm,
-                onActiveChange = onActiveChange,
-                onSearchTermChanged = onSearchTermChanged,
-                onSearchClicked = { },
-                onClearSearchTerm = {
-                    onClearSearchTerm()
-                    onCancelSearch()
-                },
-                focusRequester = searchFocusRequester,
-                searchContent = {
-                    KutePreferenceSearchingContent(
-                        modifier = Modifier.fillMaxWidth(),
-                        items = items,
-                    )
-                },
-            )
-        }
-
-        Column(
-            modifier = Modifier.verticalScroll(rememberScrollState())
-        ) {
+    KutePreferenceSearch(
+        modifier = modifier,
+        active = active,
+        searchTerm = searchTerm,
+        onActiveChange = onActiveChange,
+        onSearchTermChanged = onSearchTermChanged,
+        onCloseSearch = {
+            onCancelSearch()
+        },
+        focusRequester = searchFocusRequester,
+        searchContent = {
             KutePreferenceSearchingContent(
                 modifier = Modifier.fillMaxWidth(),
                 items = items,
+                onSearchResultSelected = onSearchResultSelected,
             )
-        }
-    }
+        },
+    )
 }
 
 
@@ -144,9 +121,9 @@ private fun KuteSearchPreview() {
             ),
             onCancelSearch = { },
             onSearchTermChanged = { },
-            onClearSearchTerm = { },
             active = true,
             onActiveChange = { },
+            onSearchResultSelected = { },
         )
     }
 }

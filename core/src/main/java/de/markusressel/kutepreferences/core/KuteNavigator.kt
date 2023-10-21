@@ -16,6 +16,11 @@ interface KuteNavigator {
     fun enterCategory(@StringRes key: Int)
 
     /**
+     * Set a specific set of categories.
+     */
+    fun setCategories(keys: List<Int>)
+
+    /**
      * Navigates back to the previous category, or overview screen, or the previous backstack entry.
      *
      * @return true, if the event was consumed, false otherwise
@@ -23,8 +28,8 @@ interface KuteNavigator {
     fun goBack(): Boolean
 
     /**
-     * Set the current category stack.
+     * Clears the current category stack.
      */
-    fun setStack(stack: Collection<Int>)
+    fun backToTop()
 
 }

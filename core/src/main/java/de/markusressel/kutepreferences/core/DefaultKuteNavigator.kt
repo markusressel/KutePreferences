@@ -13,9 +13,18 @@ class DefaultKuteNavigator : KuteNavigator {
         currentCategory.value = key
     }
 
-    override fun setStack(stack: Collection<Int>) {
-        categoryStack.clear()
-        categoryStack.addAll(stack)
+    override fun setCategories(keys: List<Int>) {
+        for (key in keys) {
+            categoryStack.push(key)
+            currentCategory.value = key
+        }
+    }
+
+
+    override fun backToTop() {
+        do {
+            val result = goBack()
+        } while (result)
     }
 
     override fun goBack(): Boolean {
