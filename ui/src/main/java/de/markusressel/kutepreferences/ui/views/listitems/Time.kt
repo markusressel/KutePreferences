@@ -18,7 +18,7 @@ import de.markusressel.kutepreferences.ui.theme.KutePreferencesTheme
 import de.markusressel.kutepreferences.ui.util.highlightingShimmer
 import de.markusressel.kutepreferences.ui.util.modifyIf
 import de.markusressel.kutepreferences.ui.views.common.CancelDefaultSaveDialog
-import de.markusressel.kutepreferences.ui.views.dummy
+import de.markusressel.kutepreferences.ui.views.search.dummy
 import java.time.LocalTime
 
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, showBackground = true)

@@ -11,7 +11,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -23,6 +22,7 @@ import de.markusressel.kutepreferences.core.preference.number.KuteNumberPreferen
 import de.markusressel.kutepreferences.core.preference.section.KuteSection
 import de.markusressel.kutepreferences.core.preference.text.KuteTextPreference
 import de.markusressel.kutepreferences.ui.theme.KutePreferencesTheme
+import de.markusressel.kutepreferences.ui.views.search.dummy
 
 @Composable
 fun KuteOverview(
@@ -36,18 +36,6 @@ fun KuteOverview(
             .verticalScroll(scrollState)
             .then(modifier)
     ) {
-        KutePreferenceSearch(
-            modifier = Modifier.onFocusChanged {
-                if (it.isFocused || it.isCaptured) {
-                    onSearchStarted()
-                }
-            },
-            searchTerm = "",
-            onSearchClicked = onSearchStarted,
-            onSearchTermChanged = { },
-            onClearSearchTerm = { },
-        )
-
         KutePreferenceListContent(
             modifier = Modifier.fillMaxWidth(),
             items = items,

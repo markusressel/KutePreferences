@@ -23,7 +23,7 @@ import de.markusressel.kutepreferences.core.persistence.KutePreferenceDataProvid
 import de.markusressel.kutepreferences.core.preference.KutePreferenceItem
 import de.markusressel.kutepreferences.core.preference.KutePreferenceListItem
 import de.markusressel.kutepreferences.core.search.SearchUtils.containsAnyWord
-import de.markusressel.kutepreferences.ui.views.dummy
+import de.markusressel.kutepreferences.ui.views.search.dummy
 
 class CustomPreference(
     override val key: Int,

@@ -18,8 +18,8 @@ import de.markusressel.kutepreferences.ui.theme.LocalKuteColors
 import de.markusressel.kutepreferences.ui.theme.SectionTheme
 import de.markusressel.kutepreferences.ui.util.highlightingShimmer
 import de.markusressel.kutepreferences.ui.util.modifyIf
-import de.markusressel.kutepreferences.ui.views.Composable
 import de.markusressel.kutepreferences.ui.views.common.CollapsibleCard
+import de.markusressel.kutepreferences.ui.views.search.Composable
 
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, showBackground = true)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true, backgroundColor = 0xFF000000)

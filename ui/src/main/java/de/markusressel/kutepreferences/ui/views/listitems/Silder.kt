@@ -25,7 +25,7 @@ import de.markusressel.kutepreferences.ui.util.highlightingShimmer
 import de.markusressel.kutepreferences.ui.util.modifyIf
 import de.markusressel.kutepreferences.ui.views.common.InlineExpandablePreferenceView
 import de.markusressel.kutepreferences.ui.views.common.Marker
-import de.markusressel.kutepreferences.ui.views.dummy
+import de.markusressel.kutepreferences.ui.views.search.dummy
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.drop

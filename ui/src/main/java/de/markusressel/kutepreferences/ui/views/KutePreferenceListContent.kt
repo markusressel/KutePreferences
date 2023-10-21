@@ -14,6 +14,7 @@ import de.markusressel.kutepreferences.core.DefaultKuteNavigator
 import de.markusressel.kutepreferences.core.preference.KutePreferenceListItem
 import de.markusressel.kutepreferences.core.preference.text.KuteTextPreference
 import de.markusressel.kutepreferences.ui.theme.KutePreferencesTheme
+import de.markusressel.kutepreferences.ui.views.search.dummy
 
 
 @Composable

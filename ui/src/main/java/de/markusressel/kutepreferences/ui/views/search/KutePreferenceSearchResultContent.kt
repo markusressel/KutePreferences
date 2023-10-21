@@ -1,4 +1,4 @@
-package de.markusressel.kutepreferences.ui.views
+package de.markusressel.kutepreferences.ui.views.search
 
 import android.content.res.Configuration
 import androidx.appcompat.content.res.AppCompatResources
@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import de.markusressel.kutepreferences.core.DefaultKuteNavigator
 import de.markusressel.kutepreferences.core.preference.KutePreferenceListItem
 import de.markusressel.kutepreferences.core.preference.text.KuteTextPreference
+import de.markusressel.kutepreferences.ui.views.KuteStyleManager
 
 
 @Composable
@@ -23,7 +24,7 @@ fun KutePreferenceSearchingContent(
     items: List<KutePreferenceListItem>,
 ) {
     Column(modifier) {
-        KuteItemList(
+        KuteSearchResultItemList(
             modifier = Modifier.fillMaxWidth(),
             items = items
         )
@@ -33,6 +34,7 @@ fun KutePreferenceSearchingContent(
         )
     }
 }
+
 
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, showBackground = true)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true, backgroundColor = 0xFF000000)

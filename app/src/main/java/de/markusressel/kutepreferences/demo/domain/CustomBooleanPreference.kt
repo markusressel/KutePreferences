@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.sp
 import de.markusressel.kutepreferences.core.persistence.KutePreferenceDataProvider
 import de.markusressel.kutepreferences.core.preference.bool.KuteBooleanPreference
 import de.markusressel.kutepreferences.ui.theme.itemShape
-import de.markusressel.kutepreferences.ui.views.dummy
+import de.markusressel.kutepreferences.ui.views.search.dummy
 
 class CustomBooleanPreference(
     override val key: Int,

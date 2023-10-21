@@ -24,6 +24,9 @@ import de.markusressel.kutepreferences.core.preference.number.KuteNumberPreferen
 import de.markusressel.kutepreferences.core.preference.section.KuteSection
 import de.markusressel.kutepreferences.core.preference.text.KuteTextPreference
 import de.markusressel.kutepreferences.ui.theme.KutePreferencesTheme
+import de.markusressel.kutepreferences.ui.views.search.KutePreferenceSearch
+import de.markusressel.kutepreferences.ui.views.search.KutePreferenceSearchingContent
+import de.markusressel.kutepreferences.ui.views.search.dummy
 
 @Composable
 fun KuteSearch(
@@ -34,27 +37,18 @@ fun KuteSearch(
     onCancelSearch: () -> Unit,
     onSearchTermChanged: (String) -> Unit,
     onClearSearchTerm: () -> Unit,
+    active: Boolean,
+    onActiveChange: (Boolean) -> Unit,
 ) {
     Column {
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
-//            IconButton(
-//                onClick = {
-//                    searchFocusRequester.freeFocus()
-//                    onCancelSearch()
-//                }
-//            ) {
-//                Icon(
-//                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-//                    contentDescription = null,
-//                    tint = MaterialTheme.colorScheme.onBackground,
-//                )
-//            }
-
             KutePreferenceSearch(
                 modifier = modifier.fillMaxWidth(), //.weight(1f),
+                active = active,
                 searchTerm = searchTerm,
+                onActiveChange = onActiveChange,
                 onSearchTermChanged = onSearchTermChanged,
                 onSearchClicked = { },
                 onClearSearchTerm = {
@@ -62,6 +56,12 @@ fun KuteSearch(
                     onCancelSearch()
                 },
                 focusRequester = searchFocusRequester,
+                searchContent = {
+                    KutePreferenceSearchingContent(
+                        modifier = Modifier.fillMaxWidth(),
+                        items = items,
+                    )
+                },
             )
         }
 
@@ -97,6 +97,7 @@ private fun KuteSearchPreview() {
                 .padding(8.dp)
                 .fillMaxWidth(),
             searchTerm = "some search term",
+            searchFocusRequester = remember { FocusRequester() },
             items = listOf(
                 KuteSection(
                     key = 0,
@@ -141,10 +142,11 @@ private fun KuteSearchPreview() {
                     )
                 ),
             ),
-            searchFocusRequester = remember { FocusRequester() },
             onCancelSearch = { },
             onSearchTermChanged = { },
             onClearSearchTerm = { },
+            active = true,
+            onActiveChange = { },
         )
     }
 }

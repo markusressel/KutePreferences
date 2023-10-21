@@ -20,7 +20,7 @@ open class KutePreferencesViewModel(
     private val findItemStackUseCase: FindItemStackUseCase = FindItemStackUseCase()
     private val searchItemsUseCase: SearchItemsUseCase = SearchItemsUseCase()
 
-    val preferencesUiState = MutableStateFlow<UiState>(UiState.Loading)
+    val preferencesUiState = MutableStateFlow(UiState())
 
     private val uiActionChannel = Channel<UiAction>(Channel.BUFFERED)
     val uiActions = uiActionChannel.receiveAsFlow()
@@ -48,13 +48,15 @@ open class KutePreferencesViewModel(
         }
     }
 
-    private fun computeOverviewState(category: Int?, allItems: List<KutePreferenceListItem>): UiState.Overview {
+    private fun computeOverviewState(category: Int?, allItems: List<KutePreferenceListItem>): UiState {
         val items = when {
             category != null -> findCategoryByKeyUseCase(allItems, category)?.children ?: emptyList()
             else -> allItems
         }
 
-        return UiState.Overview(
+        return UiState(
+            isSearchActive = false,
+            searchTerm = "",
             currentCategory = category,
             preferenceItems = items
         )
@@ -100,14 +102,17 @@ open class KutePreferencesViewModel(
     open fun onUiEvent(event: KuteUiEvent) {
         when (event) {
             is KuteUiEvent.StartSearch -> {
-                preferencesUiState.update { _ ->
-                    UiState.Searching()
+                preferencesUiState.update { old ->
+                    old.copy(
+                        isSearchActive = true,
+                        preferenceItems = emptyList()
+                    )
                 }
             }
 
             is KuteUiEvent.SearchTermChanged -> {
                 preferencesUiState.update { oldState ->
-                    (oldState as UiState.Searching).copy(
+                    oldState.copy(
                         searchTerm = event.searchTerm,
                         preferenceItems = searchItemsUseCase(preferenceItems.value, event.searchTerm)
                     )
@@ -127,16 +132,12 @@ sealed class UiAction {
     data class ScrollToTop(val animate: Boolean) : UiAction()
 }
 
-sealed class UiState {
-    data object Loading : UiState()
+data class UiState(
+    val loading: Boolean = false,
 
-    data class Searching(
-        val searchTerm: String = "",
-        val preferenceItems: List<KutePreferenceListItem> = emptyList(),
-    ) : UiState()
+    val isSearchActive: Boolean = false,
+    val searchTerm: String = "",
 
-    data class Overview(
-        val currentCategory: Int? = null,
-        val preferenceItems: List<KutePreferenceListItem> = emptyList(),
-    ) : UiState()
-}
+    val currentCategory: Int? = null,
+    val preferenceItems: List<KutePreferenceListItem> = emptyList(),
+)
