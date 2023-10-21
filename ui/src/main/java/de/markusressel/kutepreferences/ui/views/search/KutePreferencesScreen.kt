@@ -31,7 +31,7 @@ fun KutePreferencesScreen(
     val searchFocusRequester = remember { FocusRequester() }
 
     Column(modifier) {
-        BackHandler {
+        BackHandler(enabled = uiState.isSearchActive || uiState.currentCategory != null) {
             searchFocusRequester.freeFocus()
             kuteViewModel.onUiEvent(KuteUiEvent.BackPressed)
         }

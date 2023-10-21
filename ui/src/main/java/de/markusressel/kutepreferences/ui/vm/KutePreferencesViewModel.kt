@@ -136,7 +136,9 @@ open class KutePreferencesViewModel(
                     if (preferencesUiState.value.isSearchActive) {
                         closeSearch()
                     } else {
-                        navigator.goBack()
+                        if (navigator.goBack().not()) {
+
+                        }
                     }
                 }
             }
