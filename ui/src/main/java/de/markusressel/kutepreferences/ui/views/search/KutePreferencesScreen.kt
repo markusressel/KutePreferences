@@ -36,10 +36,6 @@ fun KutePreferencesScreen(
             kuteViewModel.onUiEvent(KuteUiEvent.BackPressed)
         }
 
-        LaunchedEffect(Unit) {
-            searchFocusRequester.requestFocus()
-        }
-
         KuteSearch(
             modifier = Modifier
                 .fillMaxWidth(),
