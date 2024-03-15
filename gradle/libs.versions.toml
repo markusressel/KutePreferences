@@ -1,24 +1,24 @@
 [versions]
-androidDesugarJdkLibs = "2.0.3"
-androidGradlePlugin = "8.1.2"
-androidxActivityCompose = "1.8.0"
+androidDesugarJdkLibs = "2.0.4"
+androidGradlePlugin = "8.1.4"
+androidxActivityCompose = "1.8.2"
 androidxAppCompat = "1.6.1"
 androidxDatastore = "1.0.0"
-androidxComposeBom = "2023.10.00"
+androidxComposeBom = "2024.02.02"
 androidxComposeCompiler = "1.5.3"
-androidxComposeUi = "1.5.3"
-androidxComposeUiText = "1.5.3"
+androidxComposeUi = "1.6.3"
+androidxComposeUiText = "1.6.3"
 androidxCore = "1.12.0"
-androidxLifecycle = "2.6.2"
+androidxLifecycle = "2.7.0"
 androidxTestExtJunit = "1.1.5"
 androidxTestEspressoCore = "3.5.1"
-androidxWork = "2.8.1"
+androidxWork = "2.9.0"
 dokkaGradlePlugin = "1.8.10"
-hilt = "2.48"
-hiltExt = "1.0.0"
+hilt = "2.49"
+hiltExt = "1.2.0"
 iconicsVersion = "5.4.0"
 junit4 = "4.13.2"
-kotlin = "1.9.10"
+kotlin = "1.9.20"
 kotlinCoroutinesCore = "1.7.3"
 kotlinCoroutinesAndroid = "1.7.3"
 ksp = "1.9.0-1.0.13"
@@ -29,7 +29,7 @@ materialDialogs = "0.9.0"
 android-desugarJdkLibs = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "androidDesugarJdkLibs" }
 android-gradle-plugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
 
-android-material = { group = "com.google.android.material", name = "material", version = "1.10.0" }
+android-material = { group = "com.google.android.material", name = "material", version = "1.11.0" }
 android-material-compose-theme-adapter = { group = "com.google.android.material", name = "compose-theme-adapter", version = "1.2.1" }
 
 
@@ -43,7 +43,7 @@ androidx-compose-animation-graphics = { group = "androidx.compose.animation", na
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidxComposeBom" }
 androidx-compose-foundation = { group = "androidx.compose.foundation", name = "foundation", version.ref = "androidxComposeUi" }
 androidx-compose-material = { group = "androidx.compose.material", name = "material", version.ref = "androidxComposeUiText" }
-androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3", version = "1.2.0-alpha09" }
+androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3", version = "1.2.1" }
 androidx-compose-runtime = { group = "androidx.compose.runtime", name = "runtime", version.ref = "androidxComposeUi" }
 androidx-compose-ui = { group = "androidx.compose.ui", name = "ui", version.ref = "androidxComposeUi" }
 androidx-compose-ui-text = { group = "androidx.compose.ui", name = "ui-text", version.ref = "androidxComposeUiText" }
@@ -72,7 +72,7 @@ dokka-gradle-plugin = { group = "org.jetbrains.dokka", name = "dokka-gradle-plug
 
 godaddy-colorpicker = { group = "com.godaddy.android.colorpicker", name = "compose-color-picker", version = "0.5.1" }
 
-gson = { group = "com.google.code.gson", name = "gson", version = "2.10" }
+gson = { group = "com.google.code.gson", name = "gson", version = "2.10.1" }
 
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-android-testing = { group = "com.google.dagger", name = "hilt-android-testing", version.ref = "hilt" }
