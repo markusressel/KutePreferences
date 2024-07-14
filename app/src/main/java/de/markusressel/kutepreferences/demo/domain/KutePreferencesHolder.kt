@@ -4,8 +4,6 @@ import android.content.Context
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.mikepenz.iconics.typeface.library.materialdesigniconic.MaterialDesignIconic
-import de.markusressel.kutepreferences.demo.R
-import de.markusressel.kutepreferences.demo.ui.IconHelper
 import de.markusressel.kutepreferences.core.persistence.KutePreferenceDataProvider
 import de.markusressel.kutepreferences.core.preference.action.KuteAction
 import de.markusressel.kutepreferences.core.preference.bool.KuteBooleanPreference
@@ -22,6 +20,8 @@ import de.markusressel.kutepreferences.core.preference.text.KuteTextPreference
 import de.markusressel.kutepreferences.core.preference.text.KuteUrlPreference
 import de.markusressel.kutepreferences.core.preference.time.KuteTimePreference
 import de.markusressel.kutepreferences.core.preference.time.TimePersistenceModel
+import de.markusressel.kutepreferences.demo.R
+import de.markusressel.kutepreferences.demo.ui.IconHelper
 import java.time.LocalDate
 import javax.inject.Inject
 import javax.inject.Singleton

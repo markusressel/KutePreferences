@@ -1,6 +1,7 @@
 package de.markusressel.kutepreferences.core.preference.action
 
 import de.markusressel.kutepreferences.core.preference.KuteItemBehavior
+import de.markusressel.kutepreferences.core.preference.category.shimmerLengthMillis
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -26,7 +27,7 @@ open class ActionPreferenceBehavior(
         // TODO: figure out how to use the correct coroutine scope
         GlobalScope.launch {
             _uiState.update { old -> old.copy(shimmering = true) }
-            delay(5000)
+            delay(shimmerLengthMillis.toLong())
             _uiState.update { old -> old.copy(shimmering = false) }
         }
     }

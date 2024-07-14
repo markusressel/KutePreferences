@@ -237,7 +237,7 @@ object KuteStyleManager {
     }
 
     @Composable
-    fun renderComposable(
+    fun Content(
         item: KutePreferenceListItem,
     ) {
         for (hook in hooks.reversed()) {

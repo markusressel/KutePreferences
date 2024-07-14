@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 const val durationMillis = 800
 const val delayMillis = 300
 const val iterations = 2
-const val shimmerLengthMillis = (durationMillis + delayMillis) * iterations
+const val shimmerLengthMillis = (durationMillis * iterations) + (delayMillis * (iterations))
 
 
 open class KuteCategoryBehavior(

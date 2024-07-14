@@ -1,5 +1,4 @@
 package de.markusressel.kutepreferences.ui.views.search
-
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -90,9 +89,9 @@ fun KutePreferencesScreen(
     }
 }
 
+
 @Composable
 fun KutePreferenceListItem.Composable() {
     val styleManager = remember { KuteStyleManager }
-    KuteStyleManager.renderComposable(this)
+    styleManager.Content(this)
 }
-

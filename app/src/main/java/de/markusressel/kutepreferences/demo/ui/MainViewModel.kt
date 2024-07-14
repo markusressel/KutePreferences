@@ -2,8 +2,6 @@ package de.markusressel.kutepreferences.demo.ui
 
 import com.mikepenz.iconics.typeface.library.materialdesigniconic.MaterialDesignIconic
 import dagger.hilt.android.lifecycle.HiltViewModel
-import de.markusressel.kutepreferences.demo.R
-import de.markusressel.kutepreferences.demo.domain.*
 import de.markusressel.kutepreferences.core.KuteNavigator
 import de.markusressel.kutepreferences.core.persistence.KutePreferenceDataProvider
 import de.markusressel.kutepreferences.core.preference.KutePreferenceListItem
@@ -12,6 +10,8 @@ import de.markusressel.kutepreferences.core.preference.category.KuteCategory
 import de.markusressel.kutepreferences.core.preference.number.KuteNumberPreference
 import de.markusressel.kutepreferences.core.preference.section.KuteSection
 import de.markusressel.kutepreferences.core.preference.text.KuteTextPreference
+import de.markusressel.kutepreferences.demo.R
+import de.markusressel.kutepreferences.demo.domain.*
 import de.markusressel.kutepreferences.ui.views.KuteStyleManager
 import de.markusressel.kutepreferences.ui.vm.KutePreferencesViewModel
 import javax.inject.Inject
@@ -37,11 +37,13 @@ class MainViewModel @Inject constructor(
                     CustomPreferenceView(listItem)
                     true
                 }
+
                 is CustomBooleanPreference -> {
                     val behavior = CustomBooleanPreferenceBehavior(listItem)
                     CustomBooleanPreferenceView(behavior)
                     true
                 }
+
                 else -> false
             }
         }
