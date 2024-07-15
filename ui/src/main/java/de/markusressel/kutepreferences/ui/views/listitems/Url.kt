@@ -89,11 +89,11 @@ private fun TextPreferenceEditDialog(
         mutableStateOf(behavior.currentValue.value)
     }
 
-    LaunchedEffect(key1 = null, block = {
+    LaunchedEffect(Unit) {
         behavior.currentValue.collect {
             value = it
         }
-    })
+    }
 
     TextEditDialog(
         dialogState = dialogState,

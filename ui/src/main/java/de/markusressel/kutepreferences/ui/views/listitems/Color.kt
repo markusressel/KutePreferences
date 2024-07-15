@@ -48,9 +48,7 @@ fun ColorPreferenceView(
 ) {
     val uiState by behavior.uiState.collectAsState()
 
-    var collapsed by remember {
-        mutableStateOf(true)
-    }
+    var collapsed by remember { mutableStateOf(true) }
 
     val persistedValue by behavior.persistedValue.collectAsState()
 
@@ -116,13 +114,9 @@ private fun ColorPreferenceEditView(behavior: ColorPreferenceBehavior) {
             .padding(horizontal = 8.dp)
             .padding(bottom = 8.dp)
     ) {
-        val currentValue by remember {
-            mutableStateOf(behavior.persistedValue.value)
-        }
-
-        ClassicColorPicker(
-            modifier = Modifier.height(200.dp),
-            color = Color(currentValue),
+        val currentValue by remember { mutableIntStateOf(behavior.persistedValue.value) }
+        ClassicColorPicker(modifier = Modifier.height(200.dp),
+            color = HsvColor.from(color = Color(currentValue)),
             onColorChanged = { color: HsvColor ->
                 behavior.onInputChanged(color.toColorInt())
                 behavior.persistCurrentValue()
