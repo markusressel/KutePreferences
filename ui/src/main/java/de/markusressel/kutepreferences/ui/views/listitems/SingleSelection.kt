@@ -1,6 +1,5 @@
 package de.markusressel.kutepreferences.ui.views.listitems
 
-import android.content.res.Configuration
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
@@ -11,20 +10,19 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
-import com.vanpra.composematerialdialogs.MaterialDialogState
-import com.vanpra.composematerialdialogs.rememberMaterialDialogState
 import de.markusressel.kutepreferences.core.preference.Validator
 import de.markusressel.kutepreferences.core.preference.select.KuteSingleSelectStringPreference
 import de.markusressel.kutepreferences.core.preference.select.SingleSelectionPreferenceBehavior
 import de.markusressel.kutepreferences.ui.theme.KutePreferencesTheme
+import de.markusressel.kutepreferences.ui.util.CombinedPreview
 import de.markusressel.kutepreferences.ui.util.highlightingShimmer
 import de.markusressel.kutepreferences.ui.util.modifyIf
 import de.markusressel.kutepreferences.ui.views.common.CancelDefaultSaveDialog
+import de.markusressel.kutepreferences.ui.views.common.CancelDefaultSaveDialogState
+import de.markusressel.kutepreferences.ui.views.common.rememberCancelDefaultSaveDialogState
 import de.markusressel.kutepreferences.ui.views.search.dummy
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, showBackground = true)
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true, backgroundColor = 0xFF000000)
+@CombinedPreview
 @Composable
 private fun SingleSelectionPreferencePreview() {
     val icon =
@@ -55,7 +53,7 @@ private fun SingleSelectionPreferencePreview() {
 @Composable
 fun SingleSelectionPreference(
     behavior: SingleSelectionPreferenceBehavior,
-    dialogState: MaterialDialogState = rememberMaterialDialogState(),
+    dialogState: CancelDefaultSaveDialogState = rememberCancelDefaultSaveDialogState(),
     editDialog: @Composable () -> Unit = {
         SingleSelectionPreferenceEditDialog(
             dialogState, behavior
@@ -81,7 +79,7 @@ fun SingleSelectionPreference(
 
 @Composable
 private fun SingleSelectionPreferenceEditDialog(
-    dialogState: MaterialDialogState,
+    dialogState: CancelDefaultSaveDialogState,
     behavior: SingleSelectionPreferenceBehavior,
     onCancelClicked: () -> Unit = behavior::onCancelClicked,
     onDefaultClicked: () -> Unit = behavior::onDefaultClicked,
@@ -128,8 +126,7 @@ private fun SingleSelectionPreferenceEditDialog(
     }
 }
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, showBackground = true)
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true, backgroundColor = 0xFF000000)
+@CombinedPreview
 @Composable
 private fun SelectionOptionPreview() {
     SelectionOption(

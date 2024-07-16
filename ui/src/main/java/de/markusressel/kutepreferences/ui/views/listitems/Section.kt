@@ -1,6 +1,5 @@
 package de.markusressel.kutepreferences.ui.views.listitems
 
-import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.MaterialTheme
@@ -8,7 +7,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import de.markusressel.kutepreferences.core.preference.section.KuteSection
 import de.markusressel.kutepreferences.core.preference.section.KuteSectionBehavior
@@ -16,13 +14,13 @@ import de.markusressel.kutepreferences.ui.theme.KuteColors
 import de.markusressel.kutepreferences.ui.theme.KutePreferencesTheme
 import de.markusressel.kutepreferences.ui.theme.LocalKuteColors
 import de.markusressel.kutepreferences.ui.theme.SectionTheme
+import de.markusressel.kutepreferences.ui.util.CombinedPreview
 import de.markusressel.kutepreferences.ui.util.highlightingShimmer
 import de.markusressel.kutepreferences.ui.util.modifyIf
 import de.markusressel.kutepreferences.ui.views.common.CollapsibleCard
 import de.markusressel.kutepreferences.ui.views.search.Composable
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, showBackground = true)
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true, backgroundColor = 0xFF000000)
+@CombinedPreview
 @Composable
 private fun KuteSectionPreview() {
     val preferenceItem = KuteSection(

@@ -1,28 +1,29 @@
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package de.markusressel.kutepreferences.ui.views.listitems
 
-import android.content.res.Configuration
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.TimePicker
+import androidx.compose.material3.TimePickerDefaults
+import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
-import com.vanpra.composematerialdialogs.MaterialDialogState
-import com.vanpra.composematerialdialogs.datetime.time.TimePickerDefaults
-import com.vanpra.composematerialdialogs.datetime.time.timepicker
-import com.vanpra.composematerialdialogs.rememberMaterialDialogState
 import de.markusressel.kutepreferences.core.preference.Validator
 import de.markusressel.kutepreferences.core.preference.time.KuteTimePreference
 import de.markusressel.kutepreferences.core.preference.time.TimePersistenceModel
 import de.markusressel.kutepreferences.core.preference.time.TimePreferenceBehavior
 import de.markusressel.kutepreferences.ui.theme.KutePreferencesTheme
+import de.markusressel.kutepreferences.ui.util.CombinedPreview
 import de.markusressel.kutepreferences.ui.util.highlightingShimmer
 import de.markusressel.kutepreferences.ui.util.modifyIf
 import de.markusressel.kutepreferences.ui.views.common.CancelDefaultSaveDialog
+import de.markusressel.kutepreferences.ui.views.common.CancelDefaultSaveDialogState
+import de.markusressel.kutepreferences.ui.views.common.rememberCancelDefaultSaveDialogState
 import de.markusressel.kutepreferences.ui.views.search.dummy
-import java.time.LocalTime
+import java.util.*
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, showBackground = true)
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true, backgroundColor = 0xFF000000)
+@CombinedPreview
 @Composable
 private fun TimePreferencePreview() {
     KutePreferencesTheme {
@@ -42,7 +43,7 @@ private fun TimePreferencePreview() {
 @Composable
 fun TimePreference(
     behavior: TimePreferenceBehavior,
-    dialogState: MaterialDialogState = rememberMaterialDialogState(),
+    dialogState: CancelDefaultSaveDialogState = rememberCancelDefaultSaveDialogState(),
     editDialog: @Composable () -> Unit = { TimePreferenceEditDialog(behavior, dialogState) }
 ) {
     val uiState by behavior.uiState.collectAsState()
@@ -65,7 +66,7 @@ fun TimePreference(
 @Composable
 private fun TimePreferenceEditDialog(
     behavior: TimePreferenceBehavior,
-    state: MaterialDialogState,
+    dialogState: CancelDefaultSaveDialogState,
     label: String = behavior.preferenceItem.title,
     hint: String = "${behavior.preferenceItem.getDefaultValue()}",
     onCancelClicked: () -> Unit = { behavior.reset() },
@@ -85,13 +86,22 @@ private fun TimePreferenceEditDialog(
 
     var defaultClicked by remember { mutableStateOf(false) }
 
-    LaunchedEffect(key1 = defaultClicked) {
+    LaunchedEffect(defaultClicked) {
         // workaround for reinitializing the UI with the new "currentValue"
         defaultClicked = false
     }
 
+    val currentValue by behavior.currentValue.collectAsState()
+
+    val currentTime = currentValue.let {
+        Calendar.getInstance().apply {
+            set(Calendar.HOUR_OF_DAY, it.hourOfDay)
+            set(Calendar.MINUTE, it.minute)
+        }
+    }
+
     CancelDefaultSaveDialog(
-        dialogState = state,
+        dialogState = dialogState,
         onCancelClicked = onCancelClicked,
         onSaveClicked = onSaveClicked,
         isSavable = isError.not(),
@@ -101,25 +111,26 @@ private fun TimePreferenceEditDialog(
         },
     ) {
         if (defaultClicked.not()) {
-            timepicker(
-                colors = TimePickerDefaults.colors(
-                    activeBackgroundColor = MaterialTheme.colorScheme.primary,
-                    inactiveBackgroundColor = MaterialTheme.colorScheme.onBackground.copy(0.3f),
-                    activeTextColor = MaterialTheme.colorScheme.onPrimary,
-                    inactiveTextColor = MaterialTheme.colorScheme.onBackground,
-                    inactivePeriodBackground = Color.Transparent,
-                    selectorColor = MaterialTheme.colorScheme.primary,
-                    selectorTextColor = MaterialTheme.colorScheme.onPrimary,
-                    headerTextColor = MaterialTheme.colorScheme.onBackground,
-                    borderColor = MaterialTheme.colorScheme.onBackground,
-                ),
-                initialTime = LocalTime.of(value.hourOfDay, value.minute),
-                is24HourClock = true,
-                onTimeChange = { time ->
-                    behavior.onInputChanged(
-                        TimePersistenceModel(time.hour, time.minute)
+            val timePickerState = rememberTimePickerState(
+                initialHour = currentTime.get(Calendar.HOUR_OF_DAY),
+                initialMinute = currentTime.get(Calendar.MINUTE),
+                is24Hour = true,
+            )
+
+            LaunchedEffect(timePickerState.minute, timePickerState.hour) {
+                behavior.onInputChanged(
+                    TimePersistenceModel(
+                        timePickerState.hour,
+                        timePickerState.minute
                     )
-                }
+                )
+            }
+
+            TimePicker(
+                modifier = Modifier.fillMaxWidth(),
+                state = timePickerState,
+                colors = TimePickerDefaults.colors(),
+                layoutType = TimePickerDefaults.layoutType(),
             )
         }
     }

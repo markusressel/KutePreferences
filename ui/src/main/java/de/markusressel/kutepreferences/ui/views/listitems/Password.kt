@@ -1,25 +1,23 @@
 package de.markusressel.kutepreferences.ui.views.listitems
 
-import android.content.res.Configuration
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.tooling.preview.Preview
-import com.vanpra.composematerialdialogs.MaterialDialogState
-import com.vanpra.composematerialdialogs.rememberMaterialDialogState
 import de.markusressel.kutepreferences.core.preference.Validator
 import de.markusressel.kutepreferences.core.preference.text.KutePasswordPreference
 import de.markusressel.kutepreferences.core.preference.text.PasswordPreferenceBehavior
 import de.markusressel.kutepreferences.ui.theme.KutePreferencesTheme
+import de.markusressel.kutepreferences.ui.util.CombinedPreview
 import de.markusressel.kutepreferences.ui.util.highlightingShimmer
 import de.markusressel.kutepreferences.ui.util.modifyIf
+import de.markusressel.kutepreferences.ui.views.common.CancelDefaultSaveDialogState
 import de.markusressel.kutepreferences.ui.views.common.TextEditDialog
+import de.markusressel.kutepreferences.ui.views.common.rememberCancelDefaultSaveDialogState
 import de.markusressel.kutepreferences.ui.views.search.dummy
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, showBackground = true)
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true, backgroundColor = 0xFF000000)
+@CombinedPreview
 @Composable
 private fun PasswordPreferencePreview() {
     val icon =
@@ -42,7 +40,7 @@ private fun PasswordPreferencePreview() {
 @Composable
 fun PasswordPreference(
     behavior: PasswordPreferenceBehavior,
-    dialogState: MaterialDialogState = rememberMaterialDialogState(),
+    dialogState: CancelDefaultSaveDialogState = rememberCancelDefaultSaveDialogState(),
     editDialog: @Composable () -> Unit = {
         PasswordPreferenceEditDialog(
             dialogState, behavior
@@ -67,7 +65,7 @@ fun PasswordPreference(
 
 @Composable
 private fun PasswordPreferenceEditDialog(
-    dialogState: MaterialDialogState,
+    dialogState: CancelDefaultSaveDialogState,
     behavior: PasswordPreferenceBehavior,
     label: String = behavior.preferenceItem.title,
     hint: String = behavior.preferenceItem.getDefaultValue(),

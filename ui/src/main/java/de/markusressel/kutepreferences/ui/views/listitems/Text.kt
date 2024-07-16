@@ -1,24 +1,22 @@
 package de.markusressel.kutepreferences.ui.views.listitems
 
-import android.content.res.Configuration
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
-import com.vanpra.composematerialdialogs.MaterialDialogState
-import com.vanpra.composematerialdialogs.rememberMaterialDialogState
 import de.markusressel.kutepreferences.core.preference.Validator
 import de.markusressel.kutepreferences.core.preference.text.KuteTextPreference
 import de.markusressel.kutepreferences.core.preference.text.TextPreferenceBehavior
 import de.markusressel.kutepreferences.ui.theme.KutePreferencesTheme
+import de.markusressel.kutepreferences.ui.util.CombinedPreview
 import de.markusressel.kutepreferences.ui.util.highlightingShimmer
 import de.markusressel.kutepreferences.ui.util.modifyIf
+import de.markusressel.kutepreferences.ui.views.common.CancelDefaultSaveDialogState
 import de.markusressel.kutepreferences.ui.views.common.TextEditDialog
+import de.markusressel.kutepreferences.ui.views.common.rememberCancelDefaultSaveDialogState
 import de.markusressel.kutepreferences.ui.views.search.dummy
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, showBackground = true)
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true, backgroundColor = 0xFF000000)
+@CombinedPreview
 @Composable
 private fun TextPreferencePreview() {
     val icon =
@@ -41,7 +39,7 @@ private fun TextPreferencePreview() {
 @Composable
 fun TextPreference(
     behavior: TextPreferenceBehavior,
-    dialogState: MaterialDialogState = rememberMaterialDialogState(),
+    dialogState: CancelDefaultSaveDialogState = rememberCancelDefaultSaveDialogState(),
     editDialog: @Composable () -> Unit = {
         TextPreferenceEditDialog(
             dialogState, behavior
@@ -69,7 +67,7 @@ fun TextPreference(
 
 @Composable
 private fun TextPreferenceEditDialog(
-    dialogState: MaterialDialogState,
+    dialogState: CancelDefaultSaveDialogState,
     behavior: TextPreferenceBehavior,
     label: String = behavior.preferenceItem.title,
     hint: String = behavior.preferenceItem.getDefaultValue(),

@@ -1,6 +1,5 @@
 package de.markusressel.kutepreferences.demo.domain
 
-import android.content.res.Configuration
 import android.graphics.drawable.Drawable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,12 +12,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import de.markusressel.kutepreferences.core.persistence.KutePreferenceDataProvider
 import de.markusressel.kutepreferences.core.preference.bool.KuteBooleanPreference
 import de.markusressel.kutepreferences.ui.theme.itemShape
+import de.markusressel.kutepreferences.ui.util.CombinedPreview
 import de.markusressel.kutepreferences.ui.views.search.dummy
 
 class CustomBooleanPreference(
@@ -43,8 +42,7 @@ class CustomBooleanPreference(
     onPreferenceChangedListener = onPreferenceChangedListener,
 )
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, showBackground = true)
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true, backgroundColor = 0xFF000000)
+@CombinedPreview
 @Composable
 private fun CustomBooleanPreferencePreview() {
     CustomBooleanPreferenceView(

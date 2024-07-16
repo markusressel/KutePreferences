@@ -2,7 +2,7 @@ package de.markusressel.kutepreferences.ui.util
 
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
-import androidx.compose.animation.core.repeatable
+import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.tween
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
@@ -15,7 +15,6 @@ import com.valentinilk.shimmer.rememberShimmer
 import com.valentinilk.shimmer.shimmer
 import de.markusressel.kutepreferences.core.preference.category.delayMillis
 import de.markusressel.kutepreferences.core.preference.category.durationMillis
-import de.markusressel.kutepreferences.core.preference.category.iterations
 
 fun Modifier.modifyIf(condition: Boolean, modifier: Modifier.() -> Modifier): Modifier {
     return when {
@@ -34,10 +33,9 @@ fun Modifier.modifyIf(predicate: () -> Boolean, modifier: Modifier.() -> Modifie
 
 fun Modifier.highlightingShimmer() = composed {
     val highlightingShimmerTheme = defaultShimmerTheme.copy(
-        animationSpec = repeatable(
-            iterations = iterations,
+        animationSpec = infiniteRepeatable(
             animation = tween(
-                durationMillis,
+                durationMillis = durationMillis,
                 easing = LinearEasing,
                 delayMillis = delayMillis,
             ),

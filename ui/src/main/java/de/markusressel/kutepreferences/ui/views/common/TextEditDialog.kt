@@ -9,13 +9,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.VisualTransformation
-import com.vanpra.composematerialdialogs.MaterialDialogState
 import de.markusressel.kutepreferences.core.preference.Validator
 
 
 @Composable
 fun TextEditDialog(
-    dialogState: MaterialDialogState,
+    dialogState: CancelDefaultSaveDialogState,
     label: String,
     hint: String,
     keyboardOptions: KeyboardOptions = KeyboardOptions(),

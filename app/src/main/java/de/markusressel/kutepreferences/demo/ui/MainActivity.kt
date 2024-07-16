@@ -1,6 +1,5 @@
 package de.markusressel.kutepreferences.demo.ui
 
-import android.content.res.Configuration
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.addCallback
@@ -14,8 +13,6 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import dagger.hilt.android.AndroidEntryPoint
 import de.markusressel.kutepreferences.core.DefaultKuteNavigator
 import de.markusressel.kutepreferences.core.preference.category.KuteCategory
@@ -24,6 +21,7 @@ import de.markusressel.kutepreferences.ui.theme.KutePreferencesDialogDefaults
 import de.markusressel.kutepreferences.ui.theme.KutePreferencesSearchBarDefaults
 import de.markusressel.kutepreferences.ui.theme.KutePreferencesTheme
 import de.markusressel.kutepreferences.ui.theme.KutePreferencesThemeDefaults
+import de.markusressel.kutepreferences.ui.util.CombinedPreview
 import de.markusressel.kutepreferences.ui.views.search.KutePreferencesScreen
 import de.markusressel.kutepreferences.ui.vm.KutePreferencesViewModel
 
@@ -54,11 +52,11 @@ class MainActivity : ComponentActivity() {
                     KutePreferencesTheme(
                         colors = KutePreferencesThemeDefaults.defaultColors.copy(
                             searchBar = KutePreferencesSearchBarDefaults.defaultTheme.copy(
-                                textColor = Color.Red
+//                                textColor = Color.Red
                             ),
                             dialog = KutePreferencesDialogDefaults.defaultTheme.copy(
-                                backgroundColor = Color.Red,
-                                buttonTextColor = Color.Red,
+//                                backgroundColor = Color.Red,
+//                                buttonTextColor = Color.Red,
                             ),
                         )
                     ) {
@@ -73,8 +71,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, showBackground = true)
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true, backgroundColor = 0xFF000000)
+@CombinedPreview
 @Composable
 private fun DefaultPreview() {
     val vm by remember {

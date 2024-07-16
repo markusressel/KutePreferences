@@ -1,24 +1,22 @@
 package de.markusressel.kutepreferences.ui.views.listitems
 
-import android.content.res.Configuration
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
-import com.vanpra.composematerialdialogs.MaterialDialogState
-import com.vanpra.composematerialdialogs.rememberMaterialDialogState
 import de.markusressel.kutepreferences.core.preference.Validator
 import de.markusressel.kutepreferences.core.preference.number.KuteNumberPreference
 import de.markusressel.kutepreferences.core.preference.number.NumberPreferenceBehavior
 import de.markusressel.kutepreferences.ui.theme.KutePreferencesTheme
+import de.markusressel.kutepreferences.ui.util.CombinedPreview
 import de.markusressel.kutepreferences.ui.util.highlightingShimmer
 import de.markusressel.kutepreferences.ui.util.modifyIf
+import de.markusressel.kutepreferences.ui.views.common.CancelDefaultSaveDialogState
 import de.markusressel.kutepreferences.ui.views.common.TextEditDialog
+import de.markusressel.kutepreferences.ui.views.common.rememberCancelDefaultSaveDialogState
 import de.markusressel.kutepreferences.ui.views.search.dummy
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, showBackground = true)
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true, backgroundColor = 0xFF000000)
+@CombinedPreview
 @Composable
 private fun NumberRangeSliderPreferencePreview() {
     KutePreferencesTheme {
@@ -43,7 +41,7 @@ private fun NumberRangeSliderPreferencePreview() {
 @Composable
 fun NumberPreference(
     behavior: NumberPreferenceBehavior,
-    dialogState: MaterialDialogState = rememberMaterialDialogState(),
+    dialogState: CancelDefaultSaveDialogState = rememberCancelDefaultSaveDialogState(),
     editDialog: @Composable () -> Unit = { NumberPreferenceEditDialog(behavior, dialogState) }
 ) {
     val uiState by behavior.uiState.collectAsState()
@@ -64,7 +62,7 @@ fun NumberPreference(
 @Composable
 private fun NumberPreferenceEditDialog(
     behavior: NumberPreferenceBehavior,
-    state: MaterialDialogState = rememberMaterialDialogState(),
+    state: CancelDefaultSaveDialogState = rememberCancelDefaultSaveDialogState(),
     label: String = behavior.preferenceItem.title,
     hint: String = "${behavior.preferenceItem.getDefaultValue()}",
     onCancelClicked: () -> Unit = { behavior.reset() },
