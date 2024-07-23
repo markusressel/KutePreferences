@@ -24,11 +24,11 @@ class DummyDataProvider : KutePreferenceDataProvider {
 
     override fun <DataType : Any> storeValueUnsafe(key: Int, newValue: DataType) {
         memoryStorage[key] = newValue
-        getStateFlow(key).value = newValue
+        getStateFlow(key, newValue).value = newValue
     }
 
     override fun <DataType : Any> getValueFlow(kutePreference: KutePreferenceItem<DataType>): StateFlow<DataType> {
-        return getStateFlow(kutePreference.key).asStateFlow() as StateFlow<DataType>
+        return getStateFlow(kutePreference.key, kutePreference.getDefaultValue()).asStateFlow()
     }
 
     override fun <DataType : Any> getValue(kutePreference: KutePreferenceItem<DataType>): DataType {
@@ -40,8 +40,9 @@ class DummyDataProvider : KutePreferenceDataProvider {
         return memoryStorage.getOrDefault(key, defaultValue) as DataType
     }
 
-    private fun getStateFlow(key: Int): MutableStateFlow<Any> {
-        return valueFlows.getOrPut(key) { MutableStateFlow(getValueUnsafe(key, Any())) }
+    private fun <DataType : Any> getStateFlow(key: Int, defaultValue: DataType): MutableStateFlow<DataType> {
+        @Suppress("UNCHECKED_CAST")
+        return valueFlows.getOrPut(key) { MutableStateFlow(getValueUnsafe(key, defaultValue)) } as MutableStateFlow<DataType>
     }
 
 }
