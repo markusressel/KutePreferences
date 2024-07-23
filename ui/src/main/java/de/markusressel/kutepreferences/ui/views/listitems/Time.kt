@@ -3,12 +3,11 @@
 package de.markusressel.kutepreferences.ui.views.listitems
 
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.TimePicker
-import androidx.compose.material3.TimePickerDefaults
-import androidx.compose.material3.rememberTimePickerState
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import de.markusressel.kutepreferences.core.preference.Validator
 import de.markusressel.kutepreferences.core.preference.time.KuteTimePreference
 import de.markusressel.kutepreferences.core.preference.time.TimePersistenceModel
@@ -74,11 +73,10 @@ private fun TimePreferenceEditDialog(
     onSaveClicked: () -> Unit = { behavior.persistCurrentValue() },
     validator: Validator<TimePersistenceModel> = { behavior.isValid() },
 ) {
-    val value by behavior.currentValue.collectAsState()
-
-    val isError = remember(value) {
+    val currentValue by behavior.currentValue.collectAsState()
+    val isError = remember(currentValue) {
         try {
-            validator(value).not()
+            validator(currentValue).not()
         } catch (ex: Exception) {
             true
         }
@@ -90,8 +88,6 @@ private fun TimePreferenceEditDialog(
         // workaround for reinitializing the UI with the new "currentValue"
         defaultClicked = false
     }
-
-    val currentValue by behavior.currentValue.collectAsState()
 
     val currentTime = currentValue.let {
         Calendar.getInstance().apply {
@@ -126,12 +122,40 @@ private fun TimePreferenceEditDialog(
                 )
             }
 
+            Text(
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .padding(vertical = 16.dp),
+                text = label
+            )
+
+            val timePickerStateRemembered by remember(timePickerState) {
+                derivedStateOf { timePickerState }
+            }
             TimePicker(
                 modifier = Modifier.fillMaxWidth(),
-                state = timePickerState,
+                state = timePickerStateRemembered,
                 colors = TimePickerDefaults.colors(),
                 layoutType = TimePickerDefaults.layoutType(),
             )
         }
+    }
+}
+
+@CombinedPreview
+@Composable
+private fun TimePreferenceEditDialogPreview() {
+    KutePreferencesTheme {
+        TimePreferenceEditDialog(
+            behavior = TimePreferenceBehavior(
+                preferenceItem = KuteTimePreference(
+                    key = 0,
+                    title = "Time Preference",
+                    defaultValue = TimePersistenceModel(hourOfDay = 13, minute = 37),
+                    dataProvider = dummy,
+                )
+            ),
+            dialogState = rememberCancelDefaultSaveDialogState(initialIsVisibile = true)
+        )
     }
 }

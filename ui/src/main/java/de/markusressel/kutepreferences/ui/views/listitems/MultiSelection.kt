@@ -3,6 +3,7 @@ package de.markusressel.kutepreferences.ui.views.listitems
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -10,6 +11,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import de.markusressel.kutepreferences.core.preference.Validator
 import de.markusressel.kutepreferences.core.preference.select.KuteMultiSelectStringPreference
 import de.markusressel.kutepreferences.core.preference.select.MultiSelectionPreferenceBehavior
@@ -51,6 +54,7 @@ fun MultiSelectionPreference(
 private fun MultiSelectionPreferenceEditDialog(
     dialogState: CancelDefaultSaveDialogState,
     behavior: MultiSelectionPreferenceBehavior,
+    label: String = behavior.preferenceItem.title,
     onCancelClicked: () -> Unit = behavior::onCancelClicked,
     onDefaultClicked: () -> Unit = behavior::onDefaultClicked,
     onSaveClicked: () -> Unit = behavior::persistCurrentValue,
@@ -82,18 +86,24 @@ private fun MultiSelectionPreferenceEditDialog(
             }
         })
 
-        val context = LocalContext.current
+        Text(
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .padding(top = 16.dp),
+            text = label
+        )
 
-        behavior.preferenceItem.possibleValues.forEach { (key, title) ->
+        behavior.preferenceItem.possibleValues.forEach { (keyRes, titleRes) ->
+            val titleText = stringResource(titleRes)
+            val stringValue = stringResource(keyRes)
             SelectionOption(
-                title = remember { context.getString(title) },
-                selected = value.contains(context.getString(key)),
+                title = titleText,
+                selected = value.contains(stringValue),
                 onClick = {
-                    val keyString = context.getString(key)
-                    if (behavior.currentValue.value.contains(keyString)) {
-                        behavior.currentValue.value = behavior.currentValue.value.minus(keyString)
+                    if (behavior.currentValue.value.contains(stringValue)) {
+                        behavior.currentValue.value = behavior.currentValue.value.minus(stringValue)
                     } else {
-                        behavior.currentValue.value = behavior.currentValue.value.plus(keyString)
+                        behavior.currentValue.value = behavior.currentValue.value.plus(stringValue)
                     }
                 }
             )

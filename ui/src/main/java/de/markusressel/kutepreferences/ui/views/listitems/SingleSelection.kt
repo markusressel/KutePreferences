@@ -3,6 +3,7 @@ package de.markusressel.kutepreferences.ui.views.listitems
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
@@ -10,6 +11,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import de.markusressel.kutepreferences.core.preference.Validator
 import de.markusressel.kutepreferences.core.preference.select.KuteSingleSelectStringPreference
 import de.markusressel.kutepreferences.core.preference.select.SingleSelectionPreferenceBehavior
@@ -27,9 +30,7 @@ fun SingleSelectionPreference(
     behavior: SingleSelectionPreferenceBehavior,
     dialogState: CancelDefaultSaveDialogState = rememberCancelDefaultSaveDialogState(),
     editDialog: @Composable () -> Unit = {
-        SingleSelectionPreferenceEditDialog(
-            dialogState, behavior
-        )
+        SingleSelectionPreferenceEditDialog(dialogState, behavior)
     }
 ) {
     val uiState by behavior.uiState.collectAsState()
@@ -53,6 +54,7 @@ fun SingleSelectionPreference(
 private fun SingleSelectionPreferenceEditDialog(
     dialogState: CancelDefaultSaveDialogState,
     behavior: SingleSelectionPreferenceBehavior,
+    label: String = behavior.preferenceItem.title,
     onCancelClicked: () -> Unit = behavior::onCancelClicked,
     onDefaultClicked: () -> Unit = behavior::onDefaultClicked,
     onSaveClicked: () -> Unit = behavior::persistCurrentValue,
@@ -84,14 +86,20 @@ private fun SingleSelectionPreferenceEditDialog(
             }
         })
 
-        val context = LocalContext.current
+        Text(
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .padding(top = 16.dp),
+            text = label
+        )
 
         behavior.preferenceItem.possibleValues.forEach { (key, title) ->
+            val stringValue = stringResource(key)
             SelectionOption(
                 title = title,
-                selected = value == context.getString(key),
+                selected = value == stringValue,
                 onClick = {
-                    behavior.currentValue.value = context.getString(key)
+                    behavior.currentValue.value = stringValue
                 }
             )
         }

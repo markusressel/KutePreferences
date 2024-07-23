@@ -67,6 +67,7 @@ fun rememberCancelDefaultSaveDialogState(initialIsVisibile: Boolean = false): Ca
 
 @Composable
 fun CancelDefaultSaveDialog(
+    modifier: Modifier = Modifier,
     dialogState: CancelDefaultSaveDialogState = rememberCancelDefaultSaveDialogState(false),
     onCancelClicked: () -> Unit,
     onDefaultClicked: () -> Unit,
@@ -88,9 +89,11 @@ fun CancelDefaultSaveDialog(
         properties = DialogProperties(
             dismissOnBackPress = true,
             dismissOnClickOutside = true,
+            usePlatformDefaultWidth = false,
         )
     ) {
         DialogContent(
+            modifier = modifier,
             onCancelClicked = {
                 onCancelClicked()
                 dialogState.dismiss()
@@ -116,7 +119,9 @@ private fun DialogContent(
     content: @Composable ColumnScope.() -> Unit,
 ) {
     Card(
-        modifier = modifier,
+        modifier = Modifier
+            .padding(16.dp)
+            .then(modifier),
         elevation = CardDefaults.elevatedCardElevation(),
     ) {
         Column {
@@ -124,7 +129,7 @@ private fun DialogContent(
 
             HorizontalDivider()
             Row(
-                modifier = Modifier.padding(horizontal = 8.dp),
+                modifier = Modifier.padding(horizontal = 8.dp, vertical = 8.dp),
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
             ) {
                 val buttonTextStyle: TextStyle = MaterialTheme.typography.labelMedium.copy(

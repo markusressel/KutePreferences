@@ -10,6 +10,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.VisualTransformation
 import de.markusressel.kutepreferences.core.preference.Validator
+import de.markusressel.kutepreferences.ui.theme.KutePreferencesTheme
+import de.markusressel.kutepreferences.ui.util.CombinedPreview
 
 
 @Composable
@@ -57,6 +59,24 @@ fun TextEditDialog(
             keyboardOptions = keyboardOptions,
             visualTransformation = visualTransformation,
             isError = isError,
+        )
+    }
+}
+
+@CombinedPreview
+@Composable
+private fun TextEditDialogPreview() {
+    KutePreferencesTheme {
+        TextEditDialog(
+            dialogState = rememberCancelDefaultSaveDialogState(true),
+            label = "Label",
+            hint = "Hint",
+            onInputChanged = {},
+            value = "Value",
+            onCancelClicked = {},
+            onDefaultClicked = {},
+            onSaveClicked = {},
+            validator = { true }
         )
     }
 }

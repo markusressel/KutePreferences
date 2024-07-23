@@ -2,14 +2,14 @@
 
 package de.markusressel.kutepreferences.ui.views.listitems
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import de.markusressel.kutepreferences.core.preference.Validator
 import de.markusressel.kutepreferences.core.preference.date.DatePreferenceBehavior
 import de.markusressel.kutepreferences.core.preference.date.KuteDatePreference
@@ -95,12 +95,17 @@ private fun DatePreferenceEditDialog(
                 }
             }
 
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                DatePicker(
-                    modifier = Modifier.wrapContentSize(),
-                    state = datePickerState,
-                )
-            }
+            DatePicker(
+                state = datePickerState,
+                title = {
+                    Text(
+                        modifier = Modifier
+                            .padding(horizontal = 24.dp)
+                            .padding(top = 16.dp),
+                        text = label
+                    )
+                },
+            )
         }
     }
 }
