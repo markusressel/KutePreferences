@@ -2,6 +2,7 @@ package de.markusressel.kutepreferences.ui.views.search
 
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -22,7 +23,6 @@ import de.markusressel.kutepreferences.ui.vm.SearchItemsUseCase
 
 @Composable
 fun KuteSearch(
-    modifier: Modifier = Modifier,
     searchTerm: String,
     searchFocusRequester: FocusRequester,
     items: List<SearchItemsUseCase.KuteSearchResultItem>,
@@ -31,6 +31,7 @@ fun KuteSearch(
     active: Boolean,
     onActiveChange: (Boolean) -> Unit,
     onSearchResultSelected: (SearchItemsUseCase.KuteSearchResultItem) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     KutePreferenceSearch(
         modifier = modifier,
@@ -44,7 +45,9 @@ fun KuteSearch(
         focusRequester = searchFocusRequester,
         searchContent = {
             KutePreferenceSearchingContent(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .imePadding(),
                 items = items,
                 onSearchResultSelected = onSearchResultSelected,
             )

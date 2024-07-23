@@ -1,16 +1,14 @@
 package de.markusressel.kutepreferences.ui.views.search
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.platform.LocalLayoutDirection
 import de.markusressel.kutepreferences.core.persistence.DummyDataProvider
 import de.markusressel.kutepreferences.core.preference.KutePreferenceListItem
 import de.markusressel.kutepreferences.ui.views.KuteOverview
@@ -24,7 +22,8 @@ val dummy = DummyDataProvider()
 @Composable
 fun KutePreferencesScreen(
     modifier: Modifier = Modifier,
-    kuteViewModel: KutePreferencesViewModel
+    kuteViewModel: KutePreferencesViewModel,
+    contentPadding: PaddingValues
 ) {
     val uiState by kuteViewModel.preferencesUiState.collectAsState()
 
@@ -56,7 +55,6 @@ fun KutePreferencesScreen(
             onSearchResultSelected = { kuteViewModel.onUiEvent(KuteUiEvent.SearchResultSelected(it)) },
         )
 
-
         val scrollState = rememberScrollState()
 
         LaunchedEffect(Unit) {
@@ -74,6 +72,14 @@ fun KutePreferencesScreen(
         }
 
         KuteOverview(
+            modifier = Modifier
+                .padding(
+                    start = contentPadding.calculateStartPadding(LocalLayoutDirection.current),
+                    end = contentPadding.calculateEndPadding(LocalLayoutDirection.current),
+                    bottom = contentPadding.calculateBottomPadding(),
+                )
+                .consumeWindowInsets(contentPadding)
+                .imePadding(),
             items = uiState.preferenceItems,
             scrollState = scrollState,
         )

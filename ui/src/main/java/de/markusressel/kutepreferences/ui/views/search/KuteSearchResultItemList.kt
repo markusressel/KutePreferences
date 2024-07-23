@@ -68,6 +68,7 @@ fun KuteSearchResultItemList(
         item {
             Spacer(
                 modifier = Modifier
+                    .windowInsetsBottomHeight(WindowInsets.systemBars)
                     .defaultMinSize(minHeight = 128.dp)
             )
         }
