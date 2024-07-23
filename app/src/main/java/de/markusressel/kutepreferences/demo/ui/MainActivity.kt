@@ -17,10 +17,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import de.markusressel.kutepreferences.core.DefaultKuteNavigator
 import de.markusressel.kutepreferences.core.preference.category.KuteCategory
 import de.markusressel.kutepreferences.demo.ui.theme.KutePreferencesDemoAppTheme
-import de.markusressel.kutepreferences.ui.theme.KutePreferencesDialogDefaults
-import de.markusressel.kutepreferences.ui.theme.KutePreferencesSearchBarDefaults
-import de.markusressel.kutepreferences.ui.theme.KutePreferencesTheme
-import de.markusressel.kutepreferences.ui.theme.KutePreferencesThemeDefaults
+import de.markusressel.kutepreferences.ui.theme.*
 import de.markusressel.kutepreferences.ui.util.CombinedPreview
 import de.markusressel.kutepreferences.ui.views.search.KutePreferencesScreen
 import de.markusressel.kutepreferences.ui.vm.KutePreferencesViewModel
@@ -51,8 +48,10 @@ class MainActivity : ComponentActivity() {
                 ) {
                     KutePreferencesTheme(
                         colors = KutePreferencesThemeDefaults.defaultColors.copy(
-                            searchBar = KutePreferencesSearchBarDefaults.defaultTheme.copy(
-//                                textColor = Color.Red
+                            search = KutePreferencesSearchDefaults.defaultTheme.copy(
+                                searchBar = KutePreferencesSearchBarDefaults.defaultTheme.copy(
+//                                    textColor = Color.Red
+                                ),
                             ),
                             dialog = KutePreferencesDialogDefaults.defaultTheme.copy(
 //                                backgroundColor = Color.Red,

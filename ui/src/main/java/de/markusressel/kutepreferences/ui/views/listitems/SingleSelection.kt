@@ -3,6 +3,7 @@ package de.markusressel.kutepreferences.ui.views.listitems
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
@@ -36,17 +37,24 @@ fun SingleSelectionPreference(
     val uiState by behavior.uiState.collectAsState()
     val subtitle by behavior.persistedValue.collectAsState()
 
-    DefaultPreferenceListItem(
-        modifier = Modifier.modifyIf(uiState.shimmering) {
-            highlightingShimmer()
-        },
-        icon = behavior.preferenceItem.icon,
-        title = behavior.preferenceItem.title,
-        subtitle = behavior.preferenceItem.createDescription(subtitle),
-        onClick = {
-            dialogState.show()
-        }
-    )
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .modifyIf(uiState.shimmering) {
+                highlightingShimmer()
+            },
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        DefaultPreferenceListItem(
+            icon = behavior.preferenceItem.icon,
+            title = behavior.preferenceItem.title,
+            subtitle = behavior.preferenceItem.createDescription(subtitle),
+            onClick = {
+                dialogState.show()
+            }
+        )
+    }
+
     editDialog()
 }
 

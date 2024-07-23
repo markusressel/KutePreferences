@@ -48,7 +48,6 @@ fun BooleanPreference(
             DefaultPreferenceListItemCardContent(
                 icon = behavior.preferenceItem.icon,
                 title = behavior.preferenceItem.title,
-                //titleColor = LocalKuteColors.current.defaultItem.titleColor,
                 subtitle = behavior.preferenceItem.createDescription(persistedValue),
             )
         }

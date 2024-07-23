@@ -1,6 +1,8 @@
 package de.markusressel.kutepreferences.ui.views.listitems
 
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -9,6 +11,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
@@ -37,17 +40,24 @@ fun UrlPreference(
     val uiState by behavior.uiState.collectAsState()
     val subtitle by behavior.persistedValue.collectAsState()
 
-    DefaultPreferenceListItem(
-        modifier = Modifier.modifyIf(uiState.shimmering) {
-            highlightingShimmer()
-        },
-        icon = behavior.preferenceItem.icon,
-        title = behavior.preferenceItem.title,
-        subtitle = behavior.preferenceItem.createDescription(subtitle),
-        onClick = {
-            dialogState.show()
-        }
-    )
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .modifyIf(uiState.shimmering) {
+                highlightingShimmer()
+            },
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        DefaultPreferenceListItem(
+            icon = behavior.preferenceItem.icon,
+            title = behavior.preferenceItem.title,
+            subtitle = behavior.preferenceItem.createDescription(subtitle),
+            onClick = {
+                dialogState.show()
+            }
+        )
+    }
+
     editDialog()
 }
 

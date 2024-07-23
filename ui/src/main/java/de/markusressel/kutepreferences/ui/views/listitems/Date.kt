@@ -4,6 +4,7 @@ package de.markusressel.kutepreferences.ui.views.listitems
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.*
@@ -38,15 +39,22 @@ fun DatePreference(
 
     val persistedValue by behavior.persistedValue.collectAsState()
 
-    DefaultPreferenceListItem(
-        modifier = Modifier.modifyIf(uiState.shimmering) {
-            highlightingShimmer()
-        },
-        icon = behavior.preferenceItem.icon,
-        title = behavior.preferenceItem.title,
-        subtitle = behavior.preferenceItem.createDescription(persistedValue),
-        onClick = { dialogState.show() },
-    )
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .modifyIf(uiState.shimmering) {
+                highlightingShimmer()
+            },
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        DefaultPreferenceListItem(
+            icon = behavior.preferenceItem.icon,
+            title = behavior.preferenceItem.title,
+            subtitle = behavior.preferenceItem.createDescription(persistedValue),
+            onClick = { dialogState.show() },
+        )
+    }
+
     editDialog()
 }
 

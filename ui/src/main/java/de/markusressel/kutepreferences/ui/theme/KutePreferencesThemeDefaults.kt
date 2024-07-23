@@ -10,11 +10,11 @@ object KutePreferencesThemeDefaults {
         @Composable
         get() {
             return KuteColors(
-                searchBar = KutePreferencesSearchBarDefaults.defaultTheme,
+                dialog = KutePreferencesDialogDefaults.defaultTheme,
+                search = KutePreferencesSearchDefaults.defaultTheme,
                 section = KutePreferencesSectionDefaults.defaultTheme,
                 category = KutePreferencesCategoryDefaults.defaultTheme,
                 defaultItem = KutePreferencesDefaultItemDefaults.defaultTheme,
-                dialog = KutePreferencesDialogDefaults.defaultTheme,
             )
         }
 }
@@ -23,7 +23,7 @@ object KutePreferencesThemeDefaults {
 @Immutable
 data class KuteColors(
     val dialog: DialogTheme = DialogTheme(),
-    val searchBar: SearchBarTheme = SearchBarTheme(),
+    val search: SearchTheme = SearchTheme(),
     val section: SectionTheme = SectionTheme(),
     val category: CategoryTheme = CategoryTheme(),
     val defaultItem: DefaultItemTheme = DefaultItemTheme(),
