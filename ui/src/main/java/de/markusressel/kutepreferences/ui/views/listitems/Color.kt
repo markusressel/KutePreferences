@@ -1,5 +1,7 @@
 package de.markusressel.kutepreferences.ui.views.listitems
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Card
@@ -58,7 +60,7 @@ fun ColorPreferenceView(
                 ColorCircle(
                     modifier = Modifier
                         .size(48.dp)
-                        .padding(8.dp),
+                        .padding(4.dp),
                     fillColor = Color(persistedValue),
                     outlineColor = MaterialTheme.colorScheme.secondary,
                     onClick = { collapsed = collapsed.not() }
@@ -74,16 +76,18 @@ fun ColorPreferenceView(
 @CombinedPreview
 @Composable
 private fun ColorPreferenceEditViewPreview() {
-    ColorPreferenceEditView(
-        behavior = ColorPreferenceBehavior(
-            preferenceItem = KuteColorPreference(
-                key = 0,
-                title = "Color Preference",
-                defaultValue = Color.Red.toArgb(),
-                dataProvider = dummy,
+    KutePreferencesTheme {
+        ColorPreferenceEditView(
+            behavior = ColorPreferenceBehavior(
+                preferenceItem = KuteColorPreference(
+                    key = 0,
+                    title = "Color Preference",
+                    defaultValue = Color.Red.copy(alpha = 0.5f).toArgb(),
+                    dataProvider = dummy,
+                )
             )
         )
-    )
+    }
 }
 
 @Composable
@@ -114,7 +118,7 @@ private fun ColorPreferencePreview() {
                 preferenceItem = KuteColorPreference(
                     key = 0,
                     title = "Color Preference",
-                    defaultValue = Color.Red.toArgb(),
+                    defaultValue = Color.Red.copy(alpha = 0.5f).toArgb(),
                     dataProvider = dummy,
                 )
             )
@@ -131,25 +135,58 @@ private fun ColorCircle(
 ) {
     Card(
         modifier = Modifier
-            //.border(2.dp, outlineColor)
             .then(modifier),
         colors = CardDefaults.cardColors(
-            containerColor = fillColor
+            containerColor = fillColor,
         ),
         shape = CircleShape,
-        elevation = CardDefaults.cardElevation(4.dp)
+        onClick = { onClick() }
     ) {
+        CheckerBoard(
+            modifier = Modifier.border(
+                width = 1.dp,
+                color = outlineColor,
+                shape = CircleShape
+            ),
+            alpha = 1f - fillColor.alpha,
+        )
+    }
+}
+
+@Composable
+private fun CheckerBoard(
+    modifier: Modifier = Modifier,
+    alpha: Float
+) {
+    Column(modifier) {
+        for (i in 6 downTo 0) {
+            Row {
+                for (j in 6 downTo 0) {
+                    Box(
+                        modifier = Modifier
+                            .size(8.dp)
+                            .background(
+                                when {
+                                    (i + j) % 2 == 0 -> Color.White
+                                    else -> Color.LightGray
+                                }.copy(alpha = alpha)
+                            )
+                    )
+                }
+            }
+        }
     }
 }
 
 @CombinedPreview
 @Composable
 private fun ColorCirclePreview() {
-    ColorCircle(
-        modifier = Modifier
-            .size(48.dp)
-            .padding(8.dp),
-        fillColor = Color.Red,
-        outlineColor = Color.Yellow,
-    )
+    KutePreferencesTheme {
+        ColorCircle(
+            modifier = Modifier
+                .size(48.dp),
+            fillColor = Color.Red.copy(alpha = 0.5f),
+            outlineColor = Color.Yellow,
+        )
+    }
 }
