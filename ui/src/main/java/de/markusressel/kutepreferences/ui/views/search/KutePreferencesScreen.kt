@@ -49,7 +49,7 @@ fun KutePreferencesScreen(
             onSearchTermChanged = {
                 kuteViewModel.onUiEvent(KuteUiEvent.SearchTermChanged(it))
             },
-            items = uiState.preferenceItems,
+            items = uiState.searchResults,
             searchFocusRequester = searchFocusRequester,
             onCancelSearch = { kuteViewModel.onUiEvent(KuteUiEvent.CloseSearch) },
             onSearchResultSelected = { kuteViewModel.onUiEvent(KuteUiEvent.SearchResultSelected(it)) },

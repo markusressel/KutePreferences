@@ -59,7 +59,8 @@ open class KutePreferencesViewModel(
             isSearchActive = false,
             searchTerm = "",
             currentCategory = category,
-            preferenceItems = items
+            preferenceItems = items,
+            searchResults = emptyList(),
         )
     }
 
@@ -107,7 +108,7 @@ open class KutePreferencesViewModel(
                     preferencesUiState.update { old ->
                         old.copy(
                             isSearchActive = true,
-                            preferenceItems = emptyList()
+                            searchResults = emptyList(),
                         )
                     }
                 }
@@ -116,13 +117,13 @@ open class KutePreferencesViewModel(
                     preferencesUiState.update { oldState ->
                         oldState.copy(
                             searchTerm = event.searchTerm,
-                            preferenceItems = searchItemsUseCase(preferenceItems.value, event.searchTerm)
+                            searchResults = searchItemsUseCase(preferenceItems.value, event.searchTerm)
                         )
                     }
                 }
 
                 is KuteUiEvent.SearchResultSelected -> {
-                    navigateTo(event.item)
+                    navigateTo(event.searchResult.item)
                     preferencesUiState.update { old ->
                         computeOverviewState(navigator.currentCategory.value, preferenceItems.value)
                     }
@@ -161,6 +162,7 @@ data class UiState(
 
     val isSearchActive: Boolean = false,
     val searchTerm: String = "",
+    val searchResults: List<SearchItemsUseCase.KuteSearchResultItem> = emptyList(),
 
     val currentCategory: Int? = null,
     val preferenceItems: List<KutePreferenceListItem> = emptyList(),

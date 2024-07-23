@@ -11,17 +11,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import de.markusressel.kutepreferences.core.DefaultKuteNavigator
-import de.markusressel.kutepreferences.core.preference.KutePreferenceListItem
 import de.markusressel.kutepreferences.core.preference.text.KuteTextPreference
 import de.markusressel.kutepreferences.ui.util.CombinedPreview
 import de.markusressel.kutepreferences.ui.views.KuteStyleManager
+import de.markusressel.kutepreferences.ui.vm.SearchItemsUseCase
 
 
 @Composable
 fun KutePreferenceSearchingContent(
     modifier: Modifier = Modifier,
-    items: List<KutePreferenceListItem>,
-    onSearchResultSelected: (KutePreferenceListItem) -> Unit,
+    items: List<SearchItemsUseCase.KuteSearchResultItem>,
+    onSearchResultSelected: (SearchItemsUseCase.KuteSearchResultItem) -> Unit,
 ) {
     Column(modifier) {
         KuteSearchResultItemList(
@@ -59,14 +59,22 @@ private fun KutePreferenceSearchingContentPreview() {
 
     KutePreferenceSearchingContent(
         items = listOf(
-            preferenceItem,
-            KuteTextPreference(
-                key = 0,
-                icon = null,
-                title = "Hello World!",
-                defaultValue = "Hey there!",
-                dataProvider = dummy
-            )
+            SearchItemsUseCase.KuteSearchResultItem(
+                key = "0",
+                item = preferenceItem,
+                searchTerm = "search term"
+            ),
+            SearchItemsUseCase.KuteSearchResultItem(
+                key = "1",
+                item = KuteTextPreference(
+                    key = 0,
+                    icon = null,
+                    title = "Hello World!",
+                    defaultValue = "Hey there!",
+                    dataProvider = dummy
+                ),
+                searchTerm = "search term"
+            ),
         ),
         onSearchResultSelected = {},
     )

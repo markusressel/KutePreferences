@@ -10,7 +10,6 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import de.markusressel.kutepreferences.core.DefaultKuteNavigator
-import de.markusressel.kutepreferences.core.preference.KutePreferenceListItem
 import de.markusressel.kutepreferences.core.preference.bool.KuteBooleanPreference
 import de.markusressel.kutepreferences.core.preference.category.KuteCategory
 import de.markusressel.kutepreferences.core.preference.number.KuteNumberPreference
@@ -19,18 +18,19 @@ import de.markusressel.kutepreferences.core.preference.text.KuteTextPreference
 import de.markusressel.kutepreferences.ui.theme.KutePreferencesTheme
 import de.markusressel.kutepreferences.ui.util.CombinedPreview
 import de.markusressel.kutepreferences.ui.views.KuteStyleManager
+import de.markusressel.kutepreferences.ui.vm.SearchItemsUseCase
 
 @Composable
 fun KuteSearch(
     modifier: Modifier = Modifier,
     searchTerm: String,
     searchFocusRequester: FocusRequester,
-    items: List<KutePreferenceListItem>,
+    items: List<SearchItemsUseCase.KuteSearchResultItem>,
     onCancelSearch: () -> Unit,
     onSearchTermChanged: (String) -> Unit,
     active: Boolean,
     onActiveChange: (Boolean) -> Unit,
-    onSearchResultSelected: (KutePreferenceListItem) -> Unit,
+    onSearchResultSelected: (SearchItemsUseCase.KuteSearchResultItem) -> Unit,
 ) {
     KutePreferenceSearch(
         modifier = modifier,
@@ -74,47 +74,54 @@ private fun KuteSearchPreview() {
             searchTerm = "some search term",
             searchFocusRequester = remember { FocusRequester() },
             items = listOf(
-                KuteSection(
-                    key = 0,
-                    title = "Section",
-                    children = listOf(
-                        KuteBooleanPreference(
-                            key = 1,
-                            icon = icon,
-                            title = "A KuteBooleanPreference",
-                            defaultValue = true,
-                            dataProvider = dummy
-                        ),
-                        KuteTextPreference(
-                            key = 1,
-                            icon = icon,
-                            title = "A KuteTextPreference",
-                            defaultValue = "Default",
-                            dataProvider = dummy
-                        ),
-                        KuteNumberPreference(
-                            key = 1,
-                            icon = icon,
-                            title = "A KuteNumberPreference",
-                            defaultValue = 1337,
-                            dataProvider = dummy
+                SearchItemsUseCase.KuteSearchResultItem(
+                    key = "0",
+                    item = KuteSection(
+                        key = 0,
+                        title = "Section",
+                        children = listOf(
+                            KuteBooleanPreference(
+                                key = 1,
+                                icon = icon,
+                                title = "A KuteBooleanPreference",
+                                defaultValue = true,
+                                dataProvider = dummy
+                            ),
+                            KuteTextPreference(
+                                key = 1,
+                                icon = icon,
+                                title = "A KuteTextPreference",
+                                defaultValue = "Default",
+                                dataProvider = dummy
+                            ),
+                            KuteNumberPreference(
+                                key = 1,
+                                icon = icon,
+                                title = "A KuteNumberPreference",
+                                defaultValue = 1337,
+                                dataProvider = dummy
+                            ),
                         ),
                     ),
-
-                    ),
-                KuteCategory(
-                    key = 1,
-                    title = "Category Title",
-                    description = "This is a description of a category.",
-                    children = listOf(
-                        KuteTextPreference(
-                            key = 1,
-                            icon = icon,
-                            title = "Some Text Preference",
-                            defaultValue = "Default",
-                            dataProvider = dummy
+                    searchTerm = "search term",
+                ),
+                SearchItemsUseCase.KuteSearchResultItem(
+                    key = "1",
+                    item = KuteCategory(
+                        key = 1,
+                        title = "Category Title",
+                        description = "This is a description of a category.",
+                        children = listOf(
+                            KuteTextPreference(
+                                key = 1,
+                                icon = icon,
+                                title = "Some Text Preference",
+                                defaultValue = "Default",
+                                dataProvider = dummy
+                            )
                         )
-                    )
+                    ),
+                    searchTerm = "search term",
                 ),
             ),
             onCancelSearch = { },

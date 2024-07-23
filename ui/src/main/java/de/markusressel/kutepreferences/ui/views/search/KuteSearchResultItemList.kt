@@ -1,7 +1,9 @@
 package de.markusressel.kutepreferences.ui.views.search
 
-import androidx.appcompat.content.res.AppCompatResources
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowForward
 import androidx.compose.material3.Icon
@@ -12,36 +14,36 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import de.markusressel.kutepreferences.core.DefaultKuteNavigator
-import de.markusressel.kutepreferences.core.preference.KutePreferenceListItem
 import de.markusressel.kutepreferences.core.preference.date.KuteDatePreference
-import de.markusressel.kutepreferences.core.preference.text.KuteTextPreference
 import de.markusressel.kutepreferences.ui.theme.KutePreferencesTheme
 import de.markusressel.kutepreferences.ui.util.CombinedPreview
 import de.markusressel.kutepreferences.ui.views.KuteStyleManager
+import de.markusressel.kutepreferences.ui.vm.SearchItemsUseCase
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun KuteSearchResultItemList(
     modifier: Modifier = Modifier,
-    items: List<KutePreferenceListItem>,
-    onSearchResultSelected: (KutePreferenceListItem) -> Unit,
+    items: List<SearchItemsUseCase.KuteSearchResultItem>,
+    onSearchResultSelected: (SearchItemsUseCase.KuteSearchResultItem) -> Unit,
 ) {
-    Column(modifier) {
-        items.forEach {
+    LazyColumn(modifier) {
+        items(items, key = { it.key }) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(IntrinsicSize.Min),
+                    .height(IntrinsicSize.Min)
+                    .animateItemPlacement(),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Column(
                     modifier = Modifier.weight(1f)
                 ) {
-                    it.Composable()
+                    it.item.Composable()
                 }
 
                 VerticalDivider(
@@ -74,17 +76,6 @@ private fun KuteSearchResultItemListPreview() {
         false
     }
 
-    val icon =
-        AppCompatResources.getDrawable(LocalContext.current, android.R.drawable.ic_media_next)
-
-    val preferenceItem = KuteTextPreference(
-        key = 0,
-        icon = null,
-        title = "Text Preference",
-        dataProvider = dummy,
-        defaultValue = "Current Value"
-    )
-
     val preferenceItem2 = KuteDatePreference(
         key = 0,
         icon = null,
@@ -96,8 +87,11 @@ private fun KuteSearchResultItemListPreview() {
     KutePreferencesTheme {
         KuteSearchResultItemList(
             items = listOf(
-//                preferenceItem,
-                preferenceItem2
+                SearchItemsUseCase.KuteSearchResultItem(
+                    key = "0",
+                    item = preferenceItem2,
+                    searchTerm = "search term",
+                ),
             ),
             onSearchResultSelected = {},
         )
