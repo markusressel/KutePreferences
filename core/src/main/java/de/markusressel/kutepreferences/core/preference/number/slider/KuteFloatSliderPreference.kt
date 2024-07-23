@@ -1,39 +1,37 @@
-package de.markusressel.kutepreferences.core.preference.number.range
+package de.markusressel.kutepreferences.core.preference.number.slider
 
 import android.graphics.drawable.Drawable
 import de.markusressel.kutepreferences.core.persistence.KutePreferenceDataProvider
+import de.markusressel.kutepreferences.core.preference.KutePreferenceListItem
 import kotlin.math.floor
 
-open class KuteFloatRangePreference(
+open class KuteFloatSliderPreference(
     key: Int,
     icon: Drawable? = null,
     title: String,
     minimum: Float,
     maximum: Float,
-    decimalPlaces: Int = 1,
-    defaultValue: RangePersistenceModel<Float>,
+    val decimalPlacesWhenNotWhole: Int = 2,
+    defaultValue: Float,
     dataProvider: KutePreferenceDataProvider,
-    onPreferenceChangedListener: ((oldValue: RangePersistenceModel<Float>, newValue: RangePersistenceModel<Float>) -> Unit)? = null,
+    onPreferenceChangedListener: ((oldValue: Float, newValue: Float) -> Unit)? = null,
     onClick: (() -> Unit)? = null,
     onLongClick: (() -> Unit)? = null
-) : KuteRangePreference<Float>(
+) : KuteSliderPreference<Float>(
     key = key,
     icon = icon,
     title = title,
     minimum = minimum,
     maximum = maximum,
-    decimalPlaces = decimalPlaces,
     defaultValue = defaultValue,
     dataProvider = dataProvider,
     onPreferenceChangedListener = onPreferenceChangedListener,
     onClick = onClick,
     onLongClick = onLongClick,
-) {
-    override fun createDescription(currentValue: RangePersistenceModel<Float>): String {
-        val start = formatNumberForDescription(currentValue.min, decimalPlaces)
-        val end = formatNumberForDescription(currentValue.max, decimalPlaces)
+), KutePreferenceListItem {
 
-        return "$start .. $end"
+    override fun createDescription(currentValue: Float): String {
+        return formatNumberForDescription(currentValue, decimalPlacesWhenNotWhole)
     }
 
     private fun formatNumberForDescription(
@@ -49,4 +47,5 @@ open class KuteFloatRangePreference(
 
         return "%.${decimalPlaces}f".format(number)
     }
+
 }

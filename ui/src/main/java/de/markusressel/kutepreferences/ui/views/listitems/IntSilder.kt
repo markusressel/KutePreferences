@@ -16,8 +16,8 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
-import de.markusressel.kutepreferences.core.preference.number.slider.KuteSliderPreference
-import de.markusressel.kutepreferences.core.preference.number.slider.NumberSliderPreferenceBehavior
+import de.markusressel.kutepreferences.core.preference.number.slider.IntSliderPreferenceBehavior
+import de.markusressel.kutepreferences.core.preference.number.slider.KuteIntSliderPreference
 import de.markusressel.kutepreferences.ui.theme.KutePreferencesTheme
 import de.markusressel.kutepreferences.ui.util.CombinedPreview
 import de.markusressel.kutepreferences.ui.util.highlightingShimmer
@@ -25,14 +25,13 @@ import de.markusressel.kutepreferences.ui.util.modifyIf
 import de.markusressel.kutepreferences.ui.views.common.InlineExpandablePreferenceView
 import de.markusressel.kutepreferences.ui.views.common.Marker
 import de.markusressel.kutepreferences.ui.views.search.dummy
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.drop
 import kotlin.math.round
 
 @Composable
 fun NumberSliderPreference(
-    behavior: NumberSliderPreferenceBehavior,
+    behavior: IntSliderPreferenceBehavior,
 ) {
     val uiState by behavior.uiState.collectAsState()
     val persistedValue by behavior.persistedValue.collectAsState()
@@ -47,9 +46,9 @@ fun NumberSliderPreference(
         title = behavior.preferenceItem.title,
         subtitle = behavior.preferenceItem.createDescription(persistedValue),
         content = {
-            SliderEditInputView(
-                persistedValue,
-                behavior,
+            NumberSliderEditInputView(
+                persistedValue = persistedValue,
+                behavior = behavior,
             )
         },
         collapsed = collapsed,
@@ -62,8 +61,8 @@ fun NumberSliderPreference(
 private fun NumberSliderPreferencePreview() {
     KutePreferencesTheme {
         NumberSliderPreference(
-            behavior = NumberSliderPreferenceBehavior(
-                KuteSliderPreference(
+            behavior = IntSliderPreferenceBehavior(
+                KuteIntSliderPreference(
                     key = 0,
                     onClick = {},
                     onLongClick = {},
@@ -79,9 +78,9 @@ private fun NumberSliderPreferencePreview() {
 }
 
 @Composable
-private fun SliderEditInputView(
+private fun NumberSliderEditInputView(
     persistedValue: Long,
-    behavior: NumberSliderPreferenceBehavior
+    behavior: IntSliderPreferenceBehavior
 ) {
     Box(
         modifier = Modifier
@@ -93,11 +92,11 @@ private fun SliderEditInputView(
         var isSliderAnimating by remember { mutableStateOf(false) }
 
         var sliderPosition by remember {
-            mutableStateOf(persistedValue.toFloat())
+            mutableFloatStateOf(persistedValue.toFloat())
         }
 
         var animatedSliderPosition by remember {
-            mutableStateOf(sliderPosition)
+            mutableFloatStateOf(sliderPosition)
         }
         val sliderAnimation by animateFloatAsState(
             targetValue = animatedSliderPosition,
@@ -139,13 +138,12 @@ private fun SliderEditInputView(
 
         // hide marker after delay
         LaunchedEffect(touchedByUser, isSliderAnimating, sliderIsDragged, sliderIsPressed) {
-            if (touchedByUser || isSliderAnimating || sliderIsDragged || sliderIsPressed) {
-                markerIsVisible = true
+            markerIsVisible = when {
+                touchedByUser || isSliderAnimating || sliderIsDragged || sliderIsPressed -> true
+                else -> false
             }
-            delay(2000)
-            markerIsVisible = false
         }
-        var markerWidthPx by remember { mutableStateOf(0) }
+        var markerWidthPx by remember { mutableIntStateOf(0) }
 
         var markerPosition by remember { mutableStateOf(Offset.Zero) }
         val animatedMarkerAlpha by animateFloatAsState(
@@ -192,7 +190,7 @@ private fun SliderEditInputView(
                 value = sliderValue,
                 enabled = isSliderAnimating.not(),
                 valueRange = valueRange,
-                steps = (behavior.preferenceItem.maximum - behavior.preferenceItem.minimum) - 1,
+                steps = ((behavior.preferenceItem.maximum - behavior.preferenceItem.minimum) - 1).toInt(),
                 onValueChange = {
                     if (isSliderAnimating.not()) {
                         sliderPosition = it
@@ -234,11 +232,11 @@ private fun SliderEditInputView(
 
 @CombinedPreview
 @Composable
-private fun SliderEditInputViewPreview() {
-    SliderEditInputView(
+private fun NumberSliderEditInputViewPreview() {
+    NumberSliderEditInputView(
         persistedValue = 2,
-        behavior = NumberSliderPreferenceBehavior(
-            KuteSliderPreference(
+        behavior = IntSliderPreferenceBehavior(
+            KuteIntSliderPreference(
                 key = 0,
                 onClick = {},
                 onLongClick = {},
@@ -253,7 +251,7 @@ private fun SliderEditInputViewPreview() {
 }
 
 @Composable
-fun SliderRangeIndicator(
+private fun SliderRangeIndicator(
     valueRange: ClosedFloatingPointRange<Float>,
     modifier: Modifier = Modifier,
 ) {

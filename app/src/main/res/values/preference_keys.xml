@@ -32,7 +32,8 @@
     <string name="key_demo_text_pref_password" translatable="false">key_demo_text_pref_password</string>
 
     <string name="key_demo_number_pref" translatable="false">key_demo_number_pref</string>
-    <string name="key_demo_slider_pref" translatable="false">key_demo_slider_pref</string>
+    <string name="key_demo_int_slider_pref" translatable="false">key_demo_int_slider_pref</string>
+    <string name="key_demo_float_slider_pref" translatable="false">key_demo_float_slider_pref</string>
 
     <string name="key_demo_int_range_pref" translatable="false">key_demo_int_range_pref</string>
     <string name="key_demo_float_range_pref" translatable="false">key_demo_float_range_pref</string>

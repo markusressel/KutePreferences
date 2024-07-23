@@ -12,7 +12,8 @@ import de.markusressel.kutepreferences.core.preference.date.KuteDatePreference
 import de.markusressel.kutepreferences.core.preference.number.KuteNumberPreference
 import de.markusressel.kutepreferences.core.preference.number.range.KuteFloatRangePreference
 import de.markusressel.kutepreferences.core.preference.number.range.RangePersistenceModel
-import de.markusressel.kutepreferences.core.preference.number.slider.KuteSliderPreference
+import de.markusressel.kutepreferences.core.preference.number.slider.KuteFloatSliderPreference
+import de.markusressel.kutepreferences.core.preference.number.slider.KuteIntSliderPreference
 import de.markusressel.kutepreferences.core.preference.select.KuteMultiSelectStringPreference
 import de.markusressel.kutepreferences.core.preference.select.KuteSingleSelectStringPreference
 import de.markusressel.kutepreferences.core.preference.text.KutePasswordPreference
@@ -110,14 +111,26 @@ class KutePreferencesHolder @Inject constructor(
         )
     }
 
-    val sliderPreference by lazy {
-        KuteSliderPreference(
-            key = R.string.key_demo_slider_pref,
+    val intSliderPreference by lazy {
+        KuteIntSliderPreference(
+            key = R.string.key_demo_int_slider_pref,
             icon = iconHelper.getIcon(MaterialDesignIconic.Icon.gmi_volume_up),
-            title = translationManager.getTranslation(R.string.title_demo_slider_pref),
+            title = translationManager.getTranslation(R.string.title_demo_int_slider_pref),
             minimum = 0,
             maximum = 7,
             defaultValue = 5,
+            dataProvider = dataProvider
+        )
+    }
+
+    val floatSliderPreference by lazy {
+        KuteFloatSliderPreference(
+            key = R.string.key_demo_float_slider_pref,
+            icon = iconHelper.getIcon(MaterialDesignIconic.Icon.gmi_volume_up),
+            title = translationManager.getTranslation(R.string.title_demo_float_slider_pref),
+            minimum = -1f,
+            maximum = 1f,
+            defaultValue = 0.35f,
             dataProvider = dataProvider
         )
     }

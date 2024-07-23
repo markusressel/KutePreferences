@@ -18,7 +18,8 @@
 
     <string name="title_demo_number_pref">Number</string>
 
-    <string name="title_demo_slider_pref">Int Slider</string>
+    <string name="title_demo_int_slider_pref">Int Slider</string>
+    <string name="title_demo_float_slider_pref">Float Slider</string>
 
     <string name="title_demo_int_range_pref">Int Range</string>
     <string name="title_demo_float_range_pref">Float Range</string>

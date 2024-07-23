@@ -24,8 +24,10 @@ import de.markusressel.kutepreferences.core.preference.number.KuteNumberPreferen
 import de.markusressel.kutepreferences.core.preference.number.NumberPreferenceBehavior
 import de.markusressel.kutepreferences.core.preference.number.range.FloatRangeSliderPreferenceBehavior
 import de.markusressel.kutepreferences.core.preference.number.range.KuteFloatRangePreference
-import de.markusressel.kutepreferences.core.preference.number.slider.KuteSliderPreference
-import de.markusressel.kutepreferences.core.preference.number.slider.NumberSliderPreferenceBehavior
+import de.markusressel.kutepreferences.core.preference.number.slider.FloatSliderPreferenceBehavior
+import de.markusressel.kutepreferences.core.preference.number.slider.IntSliderPreferenceBehavior
+import de.markusressel.kutepreferences.core.preference.number.slider.KuteFloatSliderPreference
+import de.markusressel.kutepreferences.core.preference.number.slider.KuteIntSliderPreference
 import de.markusressel.kutepreferences.core.preference.section.KuteSection
 import de.markusressel.kutepreferences.core.preference.section.KuteSectionBehavior
 import de.markusressel.kutepreferences.core.preference.select.KuteMultiSelectStringPreference
@@ -152,9 +154,17 @@ object KuteStyleManager {
                 true
             }
 
-            is KuteSliderPreference -> {
-                val behavior = BehaviorStore.get(it) { NumberSliderPreferenceBehavior(it) }
+            is KuteIntSliderPreference -> {
+                val behavior = BehaviorStore.get(it) { IntSliderPreferenceBehavior(it) }
                 NumberSliderPreference(
+                    behavior = behavior,
+                )
+                true
+            }
+
+            is KuteFloatSliderPreference -> {
+                val behavior = BehaviorStore.get(it) { FloatSliderPreferenceBehavior(it) }
+                DecimalSliderPreference(
                     behavior = behavior,
                 )
                 true

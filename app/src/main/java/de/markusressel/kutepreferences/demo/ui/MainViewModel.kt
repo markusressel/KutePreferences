@@ -87,7 +87,7 @@ class MainViewModel @Inject constructor(
         val systemHardwareSectionContent = listOf(
             categoryBattery,
             categoryNetwork,
-            kutePreferencesHolder.sliderPreference,
+            kutePreferencesHolder.intSliderPreference,
 //            kutePreferencesHolder.intRangePreference,
             kutePreferencesHolder.floatRangePreference
         )
@@ -212,7 +212,8 @@ class MainViewModel @Inject constructor(
             dataProvider = dataProvider,
             defaultValue = 1337,
         ),
-        kutePreferencesHolder.sliderPreference,
+        kutePreferencesHolder.intSliderPreference,
+        kutePreferencesHolder.floatSliderPreference,
         kutePreferencesHolder.intRangePreference,
         kutePreferencesHolder.floatRangePreference,
         kutePreferencesHolder.datePreference,

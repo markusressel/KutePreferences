@@ -2,9 +2,9 @@ package de.markusressel.kutepreferences.core.preference.number.slider
 
 import de.markusressel.kutepreferences.core.preference.PersistedPreferenceBehavior
 
-open class NumberSliderPreferenceBehavior(
-    preferenceItem: KuteSliderPreference,
-) : PersistedPreferenceBehavior<KuteSliderPreference, Long>(
+open class IntSliderPreferenceBehavior(
+    preferenceItem: KuteIntSliderPreference,
+) : PersistedPreferenceBehavior<KuteIntSliderPreference, Long>(
     preferenceItem
 ) {
 
