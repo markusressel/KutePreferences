@@ -2,12 +2,13 @@
 
 package de.markusressel.kutepreferences.ui.views.listitems
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.DatePicker
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Text
-import androidx.compose.material3.rememberDatePickerState
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import de.markusressel.kutepreferences.core.preference.Validator
@@ -21,6 +22,7 @@ import de.markusressel.kutepreferences.ui.views.common.CancelDefaultSaveDialog
 import de.markusressel.kutepreferences.ui.views.common.CancelDefaultSaveDialogState
 import de.markusressel.kutepreferences.ui.views.common.rememberCancelDefaultSaveDialogState
 import de.markusressel.kutepreferences.ui.views.search.dummy
+import kotlinx.coroutines.delay
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
@@ -59,20 +61,20 @@ private fun DatePreferenceEditDialog(
     onSaveClicked: () -> Unit = { behavior.persistCurrentValue() },
     validator: Validator<Long> = { behavior.isValid() },
 ) {
-    val value by behavior.currentValue.collectAsState()
+    val currentValue by behavior.currentValue.collectAsState()
 
-    val isError = remember(value) {
+    val isError = remember(currentValue) {
         try {
-            validator(value).not()
+            validator(currentValue).not()
         } catch (ex: Exception) {
             true
         }
     }
 
     var defaultClicked by remember { mutableStateOf(false) }
-
-    LaunchedEffect(key1 = defaultClicked) {
+    LaunchedEffect(defaultClicked) {
         // workaround for reinitializing the UI with the new "currentValue"
+        delay(300)
         defaultClicked = false
     }
 
@@ -80,32 +82,51 @@ private fun DatePreferenceEditDialog(
         CancelDefaultSaveDialog(
             dialogState = dialogState,
             onCancelClicked = onCancelClicked,
-            onDefaultClicked = onDefaultClicked,
+            onDefaultClicked = {
+                defaultClicked = true
+                onDefaultClicked()
+            },
             onSaveClicked = onSaveClicked,
             isSavable = isError.not(),
         ) {
-            val datePickerState = rememberDatePickerState(
-                initialSelectedDateMillis = LocalDate.ofEpochDay(value).atStartOfDay().toInstant(ZoneOffset.UTC).toEpochMilli(),
-            )
+            AnimatedContent(
+                targetState = defaultClicked,
+                label = "resetting date picker"
+            ) { defaultClicked ->
+                if (defaultClicked.not()) {
+                    val datePickerState = rememberDatePickerState(
+                        initialSelectedDateMillis = LocalDate.ofEpochDay(currentValue).atStartOfDay().toInstant(ZoneOffset.UTC).toEpochMilli(),
+                    )
 
-            LaunchedEffect(datePickerState.selectedDateMillis) {
-                datePickerState.selectedDateMillis?.let {
-                    val instant = Instant.ofEpochMilli(it)
-                    behavior.onInputChanged(LocalDate.ofInstant(instant, ZoneId.systemDefault()).toEpochDay())
+                    LaunchedEffect(datePickerState.selectedDateMillis) {
+                        datePickerState.selectedDateMillis?.let {
+                            val instant = Instant.ofEpochMilli(it)
+                            behavior.onInputChanged(LocalDate.ofInstant(instant, ZoneId.systemDefault()).toEpochDay())
+                        }
+                    }
+
+                    DatePicker(
+                        state = datePickerState,
+                        title = {
+                            Text(
+                                modifier = Modifier
+                                    .padding(horizontal = 24.dp)
+                                    .padding(top = 16.dp),
+                                text = label
+                            )
+                        },
+                    )
+                } else {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 230.dp),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        CircularProgressIndicator()
+                    }
                 }
             }
-
-            DatePicker(
-                state = datePickerState,
-                title = {
-                    Text(
-                        modifier = Modifier
-                            .padding(horizontal = 24.dp)
-                            .padding(top = 16.dp),
-                        text = label
-                    )
-                },
-            )
         }
     }
 }

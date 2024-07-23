@@ -2,10 +2,14 @@
 
 package de.markusressel.kutepreferences.ui.views.listitems
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import de.markusressel.kutepreferences.core.preference.Validator
@@ -20,6 +24,7 @@ import de.markusressel.kutepreferences.ui.views.common.CancelDefaultSaveDialog
 import de.markusressel.kutepreferences.ui.views.common.CancelDefaultSaveDialogState
 import de.markusressel.kutepreferences.ui.views.common.rememberCancelDefaultSaveDialogState
 import de.markusressel.kutepreferences.ui.views.search.dummy
+import kotlinx.coroutines.delay
 import java.util.*
 
 @Composable
@@ -83,9 +88,9 @@ private fun TimePreferenceEditDialog(
     }
 
     var defaultClicked by remember { mutableStateOf(false) }
-
     LaunchedEffect(defaultClicked) {
         // workaround for reinitializing the UI with the new "currentValue"
+        delay(300)
         defaultClicked = false
     }
 
@@ -106,38 +111,54 @@ private fun TimePreferenceEditDialog(
             onDefaultClicked()
         },
     ) {
-        if (defaultClicked.not()) {
-            val timePickerState = rememberTimePickerState(
-                initialHour = currentTime.get(Calendar.HOUR_OF_DAY),
-                initialMinute = currentTime.get(Calendar.MINUTE),
-                is24Hour = true,
-            )
-
-            LaunchedEffect(timePickerState.minute, timePickerState.hour) {
-                behavior.onInputChanged(
-                    TimePersistenceModel(
-                        timePickerState.hour,
-                        timePickerState.minute
-                    )
+        AnimatedContent(
+            targetState = defaultClicked,
+            label = "resetting date picker"
+        ) { defaultClicked ->
+            if (defaultClicked.not()) {
+                val timePickerState = rememberTimePickerState(
+                    initialHour = currentTime.get(Calendar.HOUR_OF_DAY),
+                    initialMinute = currentTime.get(Calendar.MINUTE),
+                    is24Hour = true,
                 )
-            }
 
-            Text(
-                modifier = Modifier
-                    .padding(horizontal = 16.dp)
-                    .padding(vertical = 16.dp),
-                text = label
-            )
+                LaunchedEffect(timePickerState.minute, timePickerState.hour) {
+                    behavior.onInputChanged(
+                        TimePersistenceModel(
+                            timePickerState.hour,
+                            timePickerState.minute
+                        )
+                    )
+                }
 
-            val timePickerStateRemembered by remember(timePickerState) {
-                derivedStateOf { timePickerState }
+                Column {
+                    Text(
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp)
+                            .padding(vertical = 16.dp),
+                        text = label
+                    )
+
+                    val timePickerStateRemembered by remember(timePickerState) {
+                        derivedStateOf { timePickerState }
+                    }
+                    TimePicker(
+                        modifier = Modifier.fillMaxWidth(),
+                        state = timePickerStateRemembered,
+                        colors = TimePickerDefaults.colors(),
+                        layoutType = TimePickerDefaults.layoutType(),
+                    )
+                }
+            } else {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 136.dp),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    CircularProgressIndicator()
+                }
             }
-            TimePicker(
-                modifier = Modifier.fillMaxWidth(),
-                state = timePickerStateRemembered,
-                colors = TimePickerDefaults.colors(),
-                layoutType = TimePickerDefaults.layoutType(),
-            )
         }
     }
 }
