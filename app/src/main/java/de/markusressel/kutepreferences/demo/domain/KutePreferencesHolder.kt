@@ -87,7 +87,7 @@ class KutePreferencesHolder @Inject constructor(
             title = translationManager.getTranslation(R.string.title_demo_toggle_pref),
             descriptionFunction = {
                 if (it) {
-                    "All radios in this device are disabled"
+                    "All radios are disabled"
                 } else {
                     "Normal operation"
                 }
