@@ -2,14 +2,11 @@ package de.markusressel.kutepreferences.ui.views.search
 
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.dp
 import de.markusressel.kutepreferences.core.DefaultKuteNavigator
 import de.markusressel.kutepreferences.core.preference.text.KuteTextPreference
 import de.markusressel.kutepreferences.ui.util.CombinedPreview
@@ -28,10 +25,6 @@ fun KutePreferenceSearchingContent(
             modifier = Modifier.fillMaxWidth(),
             items = items,
             onSearchResultSelected = onSearchResultSelected,
-        )
-        Spacer(
-            modifier = Modifier
-                .defaultMinSize(minHeight = 128.dp)
         )
     }
 }

@@ -64,6 +64,13 @@ fun KuteSearchResultItemList(
                 }
             }
         }
+
+        item {
+            Spacer(
+                modifier = Modifier
+                    .defaultMinSize(minHeight = 128.dp)
+            )
+        }
     }
 }
 

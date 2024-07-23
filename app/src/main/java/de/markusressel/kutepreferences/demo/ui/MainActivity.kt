@@ -6,8 +6,8 @@ import androidx.activity.addCallback
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -42,10 +42,9 @@ class MainActivity : ComponentActivity() {
         setContent {
             KutePreferencesDemoAppTheme {
                 // A surface container using the 'background' color from the theme
-                Surface(
+                Scaffold(
                     modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
+                ) { contentPadding ->
                     KutePreferencesTheme(
                         colors = KutePreferencesThemeDefaults.defaultColors.copy(
                             search = KutePreferencesSearchDefaults.defaultTheme.copy(
@@ -60,7 +59,9 @@ class MainActivity : ComponentActivity() {
                         )
                     ) {
                         KutePreferencesScreen(
-                            modifier = Modifier.fillMaxSize(),
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(contentPadding),
                             kuteViewModel = vm,
                         )
                     }

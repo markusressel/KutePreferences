@@ -27,7 +27,6 @@ import de.markusressel.kutepreferences.ui.views.search.dummy
 fun KuteOverview(
     items: List<KutePreferenceListItem>,
     modifier: Modifier = Modifier,
-    onSearchStarted: () -> Unit,
     scrollState: ScrollState,
 ) {
     Column(
@@ -104,7 +103,6 @@ private fun KuteOverviewPreview() {
                     )
                 ),
             ),
-            onSearchStarted = { },
             scrollState = rememberScrollState(),
         )
     }

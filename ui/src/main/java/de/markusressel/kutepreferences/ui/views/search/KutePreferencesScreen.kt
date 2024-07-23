@@ -1,4 +1,5 @@
 package de.markusressel.kutepreferences.ui.views.search
+
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -74,7 +75,6 @@ fun KutePreferencesScreen(
 
         KuteOverview(
             items = uiState.preferenceItems,
-            onSearchStarted = { kuteViewModel.onUiEvent(KuteUiEvent.SearchFieldSelected) },
             scrollState = scrollState,
         )
     }
