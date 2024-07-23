@@ -21,25 +21,6 @@ import de.markusressel.kutepreferences.ui.util.highlightingShimmer
 import de.markusressel.kutepreferences.ui.util.modifyIf
 import de.markusressel.kutepreferences.ui.views.search.dummy
 
-@CombinedPreview
-@Composable
-private fun BooleanPreferencePreview() {
-    val preferenceItem = KuteBooleanPreference(
-        key = 0,
-        title = "Boolean Preference",
-        descriptionFunction = {
-            "The value of this Preference item is: $it"
-        },
-        dataProvider = dummy,
-        defaultValue = true
-    )
-    KutePreferencesTheme {
-        BooleanPreference(
-            behavior = BooleanPreferenceBehavior(preferenceItem)
-        )
-    }
-}
-
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun BooleanPreference(
@@ -84,6 +65,25 @@ fun BooleanPreference(
             ),
             checked = persistedValue,
             onCheckedChange = { behavior.onInputChanged(it) }
+        )
+    }
+}
+
+@CombinedPreview
+@Composable
+private fun BooleanPreferencePreview() {
+    val preferenceItem = KuteBooleanPreference(
+        key = 0,
+        title = "Boolean Preference",
+        descriptionFunction = {
+            "The value of this Preference item is: $it"
+        },
+        dataProvider = dummy,
+        defaultValue = true
+    )
+    KutePreferencesTheme {
+        BooleanPreference(
+            behavior = BooleanPreferenceBehavior(preferenceItem)
         )
     }
 }

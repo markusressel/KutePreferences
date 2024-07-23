@@ -20,28 +20,6 @@ import de.markusressel.kutepreferences.ui.util.modifyIf
 import de.markusressel.kutepreferences.ui.views.common.CollapsibleCard
 import de.markusressel.kutepreferences.ui.views.search.Composable
 
-@CombinedPreview
-@Composable
-private fun KuteSectionPreview() {
-    val preferenceItem = KuteSection(
-        key = 0,
-        title = "Section Title",
-        children = emptyList(),
-    )
-
-    KutePreferencesTheme(
-        colors = KuteColors(
-            section = SectionTheme(
-                //titleTextColor = Color.Blue
-            ),
-        )
-    ) {
-        KuteSectionView(
-            behavior = KuteSectionBehavior(preferenceItem),
-        )
-    }
-}
-
 @Composable
 fun KuteSectionView(
     behavior: KuteSectionBehavior
@@ -91,4 +69,26 @@ fun KuteSectionView(
         collapsed = collapsed,
         onToggleCollapsedState = { collapsed = collapsed.not() },
     )
+}
+
+@CombinedPreview
+@Composable
+private fun KuteSectionPreview() {
+    val preferenceItem = KuteSection(
+        key = 0,
+        title = "Section Title",
+        children = emptyList(),
+    )
+
+    KutePreferencesTheme(
+        colors = KuteColors(
+            section = SectionTheme(
+                //titleTextColor = Color.Blue
+            ),
+        )
+    ) {
+        KuteSectionView(
+            behavior = KuteSectionBehavior(preferenceItem),
+        )
+    }
 }

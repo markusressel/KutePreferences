@@ -16,28 +16,6 @@ import de.markusressel.kutepreferences.ui.views.common.TextEditDialog
 import de.markusressel.kutepreferences.ui.views.common.rememberCancelDefaultSaveDialogState
 import de.markusressel.kutepreferences.ui.views.search.dummy
 
-@CombinedPreview
-@Composable
-private fun NumberRangeSliderPreferencePreview() {
-    KutePreferencesTheme {
-        NumberPreference(
-            behavior = NumberPreferenceBehavior(
-                KuteNumberPreference(
-                    key = 0,
-                    onClick = {},
-                    onLongClick = {},
-                    dataProvider = dummy,
-                    title = "Number Slider Preference",
-                    defaultValue = 1000,
-                    minimum = 0,
-                    maximum = 10000,
-                )
-            )
-        )
-    }
-}
-
-
 @Composable
 fun NumberPreference(
     behavior: NumberPreferenceBehavior,
@@ -58,6 +36,7 @@ fun NumberPreference(
     )
     editDialog()
 }
+
 
 @Composable
 private fun NumberPreferenceEditDialog(
@@ -101,4 +80,25 @@ private fun NumberPreferenceEditDialog(
             validator(it.toLong())
         }
     )
+}
+
+@CombinedPreview
+@Composable
+private fun NumberRangeSliderPreferencePreview() {
+    KutePreferencesTheme {
+        NumberPreference(
+            behavior = NumberPreferenceBehavior(
+                KuteNumberPreference(
+                    key = 0,
+                    onClick = {},
+                    onLongClick = {},
+                    dataProvider = dummy,
+                    title = "Number Slider Preference",
+                    defaultValue = 1000,
+                    minimum = 0,
+                    maximum = 10000,
+                )
+            )
+        )
+    }
 }

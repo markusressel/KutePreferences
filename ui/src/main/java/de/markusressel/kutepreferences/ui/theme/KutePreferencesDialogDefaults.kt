@@ -12,6 +12,7 @@ object KutePreferencesDialogDefaults {
             return DialogTheme(
                 backgroundColor = MaterialTheme.colorScheme.surfaceVariant,
                 buttonTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                positiveButtonTextColor = MaterialTheme.colorScheme.onPrimary,
             )
         }
 }
@@ -20,4 +21,5 @@ object KutePreferencesDialogDefaults {
 data class DialogTheme(
     val backgroundColor: Color = Color.Black,
     val buttonTextColor: Color = Color.Black,
+    val positiveButtonTextColor: Color = Color.Black,
 )

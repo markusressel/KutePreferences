@@ -9,7 +9,6 @@ import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,24 +23,6 @@ import androidx.core.graphics.drawable.toBitmap
 import de.markusressel.kutepreferences.ui.theme.*
 import de.markusressel.kutepreferences.ui.util.CombinedPreview
 import de.markusressel.kutepreferences.ui.util.modifyIf
-
-@CombinedPreview
-@Composable
-private fun DefaultItemPreview() {
-    KutePreferencesTheme(
-        colors = KuteColors(
-            defaultItem = DefaultItemTheme(
-                titleColor = Color.Red,
-                subtitleColor = Color.Green,
-                iconColor = Color.Blue,
-            )
-        )
-    ) {
-        DefaultPreferenceListItem(
-            icon = android.R.drawable.ic_menu_gallery,
-        )
-    }
-}
 
 /**
  * Simple default UI to present a preference item
@@ -86,7 +67,6 @@ internal fun DefaultPreferenceListItem(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun DefaultPreferenceListItemCard(
     modifier: Modifier = Modifier,
@@ -181,5 +161,23 @@ internal fun DefaultPreferenceListItemTitle(
                 color = subtitleColor,
             )
         }
+    }
+}
+
+@CombinedPreview
+@Composable
+private fun DefaultItemPreview() {
+    KutePreferencesTheme(
+        colors = KuteColors(
+            defaultItem = DefaultItemTheme(
+                titleColor = Color.Red,
+                subtitleColor = Color.Green,
+                iconColor = Color.Blue,
+            )
+        )
+    ) {
+        DefaultPreferenceListItem(
+            icon = android.R.drawable.ic_menu_gallery,
+        )
     }
 }

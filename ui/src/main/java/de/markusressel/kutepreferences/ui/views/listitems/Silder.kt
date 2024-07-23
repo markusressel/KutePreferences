@@ -30,27 +30,6 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.drop
 import kotlin.math.round
 
-@CombinedPreview
-@Composable
-private fun NumberSliderPreferencePreview() {
-    KutePreferencesTheme {
-        NumberSliderPreference(
-            behavior = NumberSliderPreferenceBehavior(
-                KuteSliderPreference(
-                    key = 0,
-                    onClick = {},
-                    onLongClick = {},
-                    dataProvider = dummy,
-                    title = "Number Slider Preference",
-                    defaultValue = 5,
-                    minimum = -100,
-                    maximum = 100,
-                )
-            )
-        )
-    }
-}
-
 @Composable
 fun NumberSliderPreference(
     behavior: NumberSliderPreferenceBehavior,
@@ -80,22 +59,23 @@ fun NumberSliderPreference(
 
 @CombinedPreview
 @Composable
-private fun SliderEditInputViewPreview() {
-    SliderEditInputView(
-        persistedValue = 2,
-        behavior = NumberSliderPreferenceBehavior(
-            KuteSliderPreference(
-                key = 0,
-                onClick = {},
-                onLongClick = {},
-                dataProvider = dummy,
-                title = "Number Slider Preference",
-                defaultValue = 5,
-                minimum = -100,
-                maximum = 100,
+private fun NumberSliderPreferencePreview() {
+    KutePreferencesTheme {
+        NumberSliderPreference(
+            behavior = NumberSliderPreferenceBehavior(
+                KuteSliderPreference(
+                    key = 0,
+                    onClick = {},
+                    onLongClick = {},
+                    dataProvider = dummy,
+                    title = "Number Slider Preference",
+                    defaultValue = 5,
+                    minimum = -100,
+                    maximum = 100,
+                )
             )
         )
-    )
+    }
 }
 
 @Composable
@@ -250,6 +230,26 @@ private fun SliderEditInputView(
             )
         }
     }
+}
+
+@CombinedPreview
+@Composable
+private fun SliderEditInputViewPreview() {
+    SliderEditInputView(
+        persistedValue = 2,
+        behavior = NumberSliderPreferenceBehavior(
+            KuteSliderPreference(
+                key = 0,
+                onClick = {},
+                onLongClick = {},
+                dataProvider = dummy,
+                title = "Number Slider Preference",
+                defaultValue = 5,
+                minimum = -100,
+                maximum = 100,
+            )
+        )
+    )
 }
 
 @Composable

@@ -21,27 +21,6 @@ import de.markusressel.kutepreferences.ui.views.search.dummy
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.drop
 
-@CombinedPreview
-@Composable
-private fun NumberRangeSliderPreferencePreview() {
-    KutePreferencesTheme {
-        NumberRangeSliderPreference(
-            behavior = FloatRangeSliderPreferenceBehavior(
-                KuteFloatRangePreference(
-                    key = 0,
-                    onClick = {},
-                    onLongClick = {},
-                    dataProvider = dummy,
-                    title = "Number Slider Preference",
-                    defaultValue = RangePersistenceModel(min = 2f, max = 5f),
-                    minimum = 0f,
-                    maximum = 10f,
-                )
-            )
-        )
-    }
-}
-
 @Composable
 fun NumberRangeSliderPreference(
     behavior: FloatRangeSliderPreferenceBehavior,
@@ -151,6 +130,27 @@ fun RangeSliderEditView(
                 )
                 behavior.persistCurrentValue()
             }
+        )
+    }
+}
+
+@CombinedPreview
+@Composable
+private fun NumberRangeSliderPreferencePreview() {
+    KutePreferencesTheme {
+        NumberRangeSliderPreference(
+            behavior = FloatRangeSliderPreferenceBehavior(
+                KuteFloatRangePreference(
+                    key = 0,
+                    onClick = {},
+                    onLongClick = {},
+                    dataProvider = dummy,
+                    title = "Number Slider Preference",
+                    defaultValue = RangePersistenceModel(min = 2f, max = 5f),
+                    minimum = 0f,
+                    maximum = 10f,
+                )
+            )
         )
     }
 }

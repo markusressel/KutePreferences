@@ -23,23 +23,6 @@ import de.markusressel.kutepreferences.ui.util.modifyIf
 import de.markusressel.kutepreferences.ui.views.common.InlineExpandablePreferenceView
 import de.markusressel.kutepreferences.ui.views.search.dummy
 
-@CombinedPreview
-@Composable
-private fun ColorPreferencePreview() {
-    KutePreferencesTheme {
-        ColorPreferenceView(
-            behavior = ColorPreferenceBehavior(
-                preferenceItem = KuteColorPreference(
-                    key = 0,
-                    title = "Color Preference",
-                    defaultValue = Color.Red.toArgb(),
-                    dataProvider = dummy,
-                )
-            )
-        )
-    }
-}
-
 @Composable
 fun ColorPreferenceView(
     behavior: ColorPreferenceBehavior,
@@ -124,14 +107,19 @@ private fun ColorPreferenceEditView(behavior: ColorPreferenceBehavior) {
 
 @CombinedPreview
 @Composable
-private fun ColorCirclePreview() {
-    ColorCircle(
-        modifier = Modifier
-            .size(48.dp)
-            .padding(8.dp),
-        fillColor = Color.Red,
-        outlineColor = Color.Yellow,
-    )
+private fun ColorPreferencePreview() {
+    KutePreferencesTheme {
+        ColorPreferenceView(
+            behavior = ColorPreferenceBehavior(
+                preferenceItem = KuteColorPreference(
+                    key = 0,
+                    title = "Color Preference",
+                    defaultValue = Color.Red.toArgb(),
+                    dataProvider = dummy,
+                )
+            )
+        )
+    }
 }
 
 @Composable
@@ -152,4 +140,16 @@ private fun ColorCircle(
         elevation = CardDefaults.cardElevation(4.dp)
     ) {
     }
+}
+
+@CombinedPreview
+@Composable
+private fun ColorCirclePreview() {
+    ColorCircle(
+        modifier = Modifier
+            .size(48.dp)
+            .padding(8.dp),
+        fillColor = Color.Red,
+        outlineColor = Color.Yellow,
+    )
 }

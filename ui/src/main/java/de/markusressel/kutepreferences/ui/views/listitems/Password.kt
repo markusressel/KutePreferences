@@ -17,26 +17,6 @@ import de.markusressel.kutepreferences.ui.views.common.TextEditDialog
 import de.markusressel.kutepreferences.ui.views.common.rememberCancelDefaultSaveDialogState
 import de.markusressel.kutepreferences.ui.views.search.dummy
 
-@CombinedPreview
-@Composable
-private fun PasswordPreferencePreview() {
-    val icon =
-        AppCompatResources.getDrawable(LocalContext.current, android.R.drawable.ic_media_next)
-
-    val preferenceItem = KutePasswordPreference(
-        key = 0,
-        icon = icon,
-        title = "Password Preference",
-        dataProvider = dummy,
-        defaultValue = "Current Value"
-    )
-    KutePreferencesTheme {
-        PasswordPreference(
-            behavior = PasswordPreferenceBehavior(preferenceItem)
-        )
-    }
-}
-
 @Composable
 fun PasswordPreference(
     behavior: PasswordPreferenceBehavior,
@@ -61,7 +41,6 @@ fun PasswordPreference(
     )
     editDialog()
 }
-
 
 @Composable
 private fun PasswordPreferenceEditDialog(
@@ -99,4 +78,25 @@ private fun PasswordPreferenceEditDialog(
         onSaveClicked = onSaveClicked,
         validator = validator
     )
+}
+
+
+@CombinedPreview
+@Composable
+private fun PasswordPreferencePreview() {
+    val icon =
+        AppCompatResources.getDrawable(LocalContext.current, android.R.drawable.ic_media_next)
+
+    val preferenceItem = KutePasswordPreference(
+        key = 0,
+        icon = icon,
+        title = "Password Preference",
+        dataProvider = dummy,
+        defaultValue = "Current Value"
+    )
+    KutePreferencesTheme {
+        PasswordPreference(
+            behavior = PasswordPreferenceBehavior(preferenceItem)
+        )
+    }
 }

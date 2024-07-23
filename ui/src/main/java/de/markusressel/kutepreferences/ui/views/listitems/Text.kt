@@ -16,26 +16,6 @@ import de.markusressel.kutepreferences.ui.views.common.TextEditDialog
 import de.markusressel.kutepreferences.ui.views.common.rememberCancelDefaultSaveDialogState
 import de.markusressel.kutepreferences.ui.views.search.dummy
 
-@CombinedPreview
-@Composable
-private fun TextPreferencePreview() {
-    val icon =
-        AppCompatResources.getDrawable(LocalContext.current, android.R.drawable.ic_media_next)
-
-    val preferenceItem = KuteTextPreference(
-        key = 0,
-        icon = icon,
-        title = "Text Preference",
-        dataProvider = dummy,
-        defaultValue = "Current Value"
-    )
-    KutePreferencesTheme {
-        TextPreference(
-            behavior = TextPreferenceBehavior(preferenceItem)
-        )
-    }
-}
-
 @Composable
 fun TextPreference(
     behavior: TextPreferenceBehavior,
@@ -62,6 +42,26 @@ fun TextPreference(
         }
     )
     editDialog()
+}
+
+@CombinedPreview
+@Composable
+private fun TextPreferencePreview() {
+    val icon =
+        AppCompatResources.getDrawable(LocalContext.current, android.R.drawable.ic_media_next)
+
+    val preferenceItem = KuteTextPreference(
+        key = 0,
+        icon = icon,
+        title = "Text Preference",
+        dataProvider = dummy,
+        defaultValue = "Current Value"
+    )
+    KutePreferencesTheme {
+        TextPreference(
+            behavior = TextPreferenceBehavior(preferenceItem)
+        )
+    }
 }
 
 

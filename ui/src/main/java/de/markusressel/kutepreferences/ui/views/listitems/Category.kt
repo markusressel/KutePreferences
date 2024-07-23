@@ -27,38 +27,6 @@ import de.markusressel.kutepreferences.ui.util.highlightingShimmer
 import de.markusressel.kutepreferences.ui.util.modifyIf
 
 
-@CombinedPreview
-@Composable
-private fun KuteCategoryPreview() {
-    val icon = AppCompatResources.getDrawable(
-        LocalContext.current,
-        android.R.drawable.ic_menu_gallery
-    )
-
-    KutePreferencesTheme(
-        colors = KuteColors(
-            category = CategoryTheme(
-                cardBackgroundColor = Color.Gray,
-                titleColor = Color.Blue,
-                subtitleColor = Color.Green,
-                iconColor = Color.Red,
-            ),
-        )
-    ) {
-        KuteCategoryView(
-            behavior = KuteCategoryBehavior(
-                KuteCategory(
-                    key = 0,
-                    icon = icon,
-                    title = "Category Title",
-                    description = "This is a long description of this category.",
-                ),
-                navigator = DefaultKuteNavigator()
-            ),
-        )
-    }
-}
-
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun KuteCategoryView(
@@ -101,5 +69,37 @@ fun KuteCategoryView(
                 subtitleColor = LocalKuteColors.current.category.subtitleColor,
             )
         }
+    }
+}
+
+@CombinedPreview
+@Composable
+private fun KuteCategoryPreview() {
+    val icon = AppCompatResources.getDrawable(
+        LocalContext.current,
+        android.R.drawable.ic_menu_gallery
+    )
+
+    KutePreferencesTheme(
+        colors = KuteColors(
+            category = CategoryTheme(
+                cardBackgroundColor = Color.Gray,
+                titleColor = Color.Blue,
+                subtitleColor = Color.Green,
+                iconColor = Color.Red,
+            ),
+        )
+    ) {
+        KuteCategoryView(
+            behavior = KuteCategoryBehavior(
+                KuteCategory(
+                    key = 0,
+                    icon = icon,
+                    title = "Category Title",
+                    description = "This is a long description of this category.",
+                ),
+                navigator = DefaultKuteNavigator()
+            ),
+        )
     }
 }

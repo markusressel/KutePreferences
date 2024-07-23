@@ -23,23 +23,6 @@ import de.markusressel.kutepreferences.ui.views.common.rememberCancelDefaultSave
 import de.markusressel.kutepreferences.ui.views.search.dummy
 import java.util.*
 
-@CombinedPreview
-@Composable
-private fun TimePreferencePreview() {
-    KutePreferencesTheme {
-        TimePreference(
-            behavior = TimePreferenceBehavior(
-                preferenceItem = KuteTimePreference(
-                    key = 0,
-                    title = "Time Preference",
-                    defaultValue = TimePersistenceModel(hourOfDay = 13, minute = 37),
-                    dataProvider = dummy,
-                )
-            )
-        )
-    }
-}
-
 @Composable
 fun TimePreference(
     behavior: TimePreferenceBehavior,
@@ -61,6 +44,23 @@ fun TimePreference(
         }
     )
     editDialog()
+}
+
+@CombinedPreview
+@Composable
+private fun TimePreferencePreview() {
+    KutePreferencesTheme {
+        TimePreference(
+            behavior = TimePreferenceBehavior(
+                preferenceItem = KuteTimePreference(
+                    key = 0,
+                    title = "Time Preference",
+                    defaultValue = TimePersistenceModel(hourOfDay = 13, minute = 37),
+                    dataProvider = dummy,
+                )
+            )
+        )
+    }
 }
 
 @Composable

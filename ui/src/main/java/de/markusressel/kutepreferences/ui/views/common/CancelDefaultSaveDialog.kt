@@ -1,9 +1,6 @@
 package de.markusressel.kutepreferences.ui.views.common
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.Saver
@@ -18,6 +15,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.vanpra.composematerialdialogs.MaterialDialogState
 import de.markusressel.kutepreferences.ui.R
+import de.markusressel.kutepreferences.ui.theme.KutePreferencesTheme
 import de.markusressel.kutepreferences.ui.theme.LocalKuteColors
 import de.markusressel.kutepreferences.ui.util.CombinedPreview
 import java.util.*
@@ -58,12 +56,12 @@ class CancelDefaultSaveDialogState(
 /**
  * Create and [remember] a [CancelDefaultSaveDialogState].
  *
- * @param initialValue the initial showing state of the dialog
+ * @param initialIsVisibile the initial showing state of the dialog
  */
 @Composable
-fun rememberCancelDefaultSaveDialogState(initialValue: Boolean = false): CancelDefaultSaveDialogState {
+fun rememberCancelDefaultSaveDialogState(initialIsVisibile: Boolean = false): CancelDefaultSaveDialogState {
     return rememberSaveable(saver = CancelDefaultSaveDialogState.Saver()) {
-        CancelDefaultSaveDialogState(isVisible = initialValue)
+        CancelDefaultSaveDialogState(isVisible = initialIsVisibile)
     }
 }
 
@@ -74,12 +72,8 @@ fun CancelDefaultSaveDialog(
     onDefaultClicked: () -> Unit,
     onSaveClicked: () -> Unit,
     isSavable: Boolean = true,
-    content: @Composable () -> Unit,
+    content: @Composable ColumnScope.() -> Unit,
 ) {
-    val buttonTextStyle = MaterialTheme.typography.labelMedium.copy(
-        color = LocalKuteColors.current.dialog.buttonTextColor
-    )
-
     if (dialogState.isVisible.not()) {
         return
     }
@@ -97,7 +91,6 @@ fun CancelDefaultSaveDialog(
         )
     ) {
         DialogContent(
-            buttonTextStyle = buttonTextStyle,
             onCancelClicked = {
                 onCancelClicked()
                 dialogState.dismiss()
@@ -116,14 +109,11 @@ fun CancelDefaultSaveDialog(
 @Composable
 private fun DialogContent(
     modifier: Modifier = Modifier,
-    buttonTextStyle: TextStyle = MaterialTheme.typography.labelMedium.copy(
-        color = LocalKuteColors.current.dialog.buttonTextColor
-    ),
     onCancelClicked: () -> Unit,
     onDefaultClicked: () -> Unit,
     onSaveClicked: () -> Unit,
     isSavable: Boolean = true,
-    content: @Composable () -> Unit,
+    content: @Composable ColumnScope.() -> Unit,
 ) {
     Card(
         modifier = modifier,
@@ -134,8 +124,13 @@ private fun DialogContent(
 
             HorizontalDivider()
             Row(
-                modifier = Modifier.padding(horizontal = 8.dp)
+                modifier = Modifier.padding(horizontal = 8.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
             ) {
+                val buttonTextStyle: TextStyle = MaterialTheme.typography.labelMedium.copy(
+                    color = LocalKuteColors.current.dialog.buttonTextColor
+                )
+
                 DefaultDialogButton(
                     text = stringResource(R.string.str_default),
                     textStyle = buttonTextStyle,
@@ -150,9 +145,12 @@ private fun DialogContent(
                     onClick = onCancelClicked,
                 )
 
+                val positiveButtonTextStyle: TextStyle = MaterialTheme.typography.labelMedium.copy(
+                    color = LocalKuteColors.current.dialog.positiveButtonTextColor
+                )
                 PositiveDialogButton(
                     text = stringResource(R.string.save),
-                    textStyle = buttonTextStyle,
+                    textStyle = positiveButtonTextStyle,
                     onClick = onSaveClicked,
                     isSavable = isSavable,
                     positiveButtonEnabled = mapOf("save" to isSavable),
@@ -191,7 +189,7 @@ private fun PositiveDialogButton(
     val buttonText = text.uppercase(Locale.ROOT)
     val buttonEnabled = positiveButtonEnabled.values.all { it }
 
-    TextButton(
+    Button(
         onClick = {
             if (isSavable) {
                 onClick()
@@ -217,7 +215,7 @@ private fun NegativeDialogButton(
     onClick: () -> Unit
 ) {
     val buttonText = text.uppercase(Locale.ROOT)
-    TextButton(
+    OutlinedButton(
         onClick = onClick,
         modifier = modifier
     ) {
@@ -228,16 +226,18 @@ private fun NegativeDialogButton(
 @CombinedPreview
 @Composable
 private fun DialogContentPreview() {
-    DialogContent(
-        onCancelClicked = {},
-        onDefaultClicked = {},
-        onSaveClicked = {},
-        content = {
-            Column(
-                modifier = Modifier.padding(16.dp)
-            ) {
-                Text("Content")
+    KutePreferencesTheme {
+        DialogContent(
+            onCancelClicked = {},
+            onDefaultClicked = {},
+            onSaveClicked = {},
+            content = {
+                Column(
+                    modifier = Modifier.padding(16.dp)
+                ) {
+                    Text("Content")
+                }
             }
-        }
-    )
+        )
+    }
 }

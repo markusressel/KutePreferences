@@ -18,22 +18,6 @@ import de.markusressel.kutepreferences.ui.util.CombinedPreview
 import de.markusressel.kutepreferences.ui.util.highlightingShimmer
 import de.markusressel.kutepreferences.ui.util.modifyIf
 
-@CombinedPreview
-@Composable
-private fun ActionPreferencePreview() {
-    val preferenceItem = KuteAction(
-        key = 0,
-        title = "Action Preference",
-        description = "This is an action Preference.",
-        onClick = {}
-    )
-    KutePreferencesTheme {
-        ActionPreference(
-            behavior = ActionPreferenceBehavior(preferenceItem)
-        )
-    }
-}
-
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ActionPreference(
@@ -58,6 +42,22 @@ fun ActionPreference(
             icon = behavior.preferenceItem.icon,
             title = behavior.preferenceItem.title,
             subtitle = behavior.preferenceItem.description,
+        )
+    }
+}
+
+@CombinedPreview
+@Composable
+private fun ActionPreferencePreview() {
+    val preferenceItem = KuteAction(
+        key = 0,
+        title = "Action Preference",
+        description = "This is an action Preference.",
+        onClick = {}
+    )
+    KutePreferencesTheme {
+        ActionPreference(
+            behavior = ActionPreferenceBehavior(preferenceItem)
         )
     }
 }

@@ -22,34 +22,6 @@ import de.markusressel.kutepreferences.ui.views.common.CancelDefaultSaveDialogSt
 import de.markusressel.kutepreferences.ui.views.common.rememberCancelDefaultSaveDialogState
 import de.markusressel.kutepreferences.ui.views.search.dummy
 
-@CombinedPreview
-@Composable
-private fun MultiSelectionPreferencePreview() {
-    val icon =
-        AppCompatResources.getDrawable(LocalContext.current, android.R.drawable.ic_media_next)
-
-    val context = LocalContext.current
-
-    val preferenceItem = KuteMultiSelectStringPreference(
-        context = context,
-        key = 0,
-        icon = icon,
-        title = "Multiple Selection Preference",
-        dataProvider = dummy,
-        possibleValues = mapOf(
-            0 to 0,
-            1 to 1,
-            2 to 2,
-        ),
-        defaultValue = setOf(0),
-    )
-    KutePreferencesTheme {
-        MultiSelectionPreference(
-            behavior = MultiSelectionPreferenceBehavior(preferenceItem)
-        )
-    }
-}
-
 @Composable
 fun MultiSelectionPreference(
     behavior: MultiSelectionPreferenceBehavior,
@@ -126,6 +98,34 @@ private fun MultiSelectionPreferenceEditDialog(
                 }
             )
         }
+    }
+}
+
+@CombinedPreview
+@Composable
+private fun MultiSelectionPreferencePreview() {
+    val icon =
+        AppCompatResources.getDrawable(LocalContext.current, android.R.drawable.ic_media_next)
+
+    val context = LocalContext.current
+
+    val preferenceItem = KuteMultiSelectStringPreference(
+        context = context,
+        key = 0,
+        icon = icon,
+        title = "Multiple Selection Preference",
+        dataProvider = dummy,
+        possibleValues = mapOf(
+            0 to 0,
+            1 to 1,
+            2 to 2,
+        ),
+        defaultValue = setOf(0),
+    )
+    KutePreferencesTheme {
+        MultiSelectionPreference(
+            behavior = MultiSelectionPreferenceBehavior(preferenceItem)
+        )
     }
 }
 

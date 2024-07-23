@@ -2,11 +2,13 @@
 
 package de.markusressel.kutepreferences.ui.views.listitems
 
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import de.markusressel.kutepreferences.core.preference.Validator
 import de.markusressel.kutepreferences.core.preference.date.DatePreferenceBehavior
@@ -23,23 +25,6 @@ import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
 import java.time.ZoneOffset
-
-@CombinedPreview
-@Composable
-private fun DatePreferencePreview() {
-    KutePreferencesTheme {
-        DatePreference(
-            behavior = DatePreferenceBehavior(
-                preferenceItem = KuteDatePreference(
-                    key = 0,
-                    title = "Date Preference",
-                    defaultValue = 0L,
-                    dataProvider = dummy,
-                )
-            )
-        )
-    }
-}
 
 @Composable
 fun DatePreference(
@@ -110,10 +95,47 @@ private fun DatePreferenceEditDialog(
                 }
             }
 
-            DatePicker(
-                modifier = Modifier.fillMaxWidth(),
-                state = datePickerState
-            )
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                DatePicker(
+                    modifier = Modifier.wrapContentSize(),
+                    state = datePickerState,
+                )
+            }
         }
+    }
+}
+
+@CombinedPreview
+@Composable
+private fun DatePreferencePreview() {
+    KutePreferencesTheme {
+        DatePreference(
+            behavior = DatePreferenceBehavior(
+                preferenceItem = KuteDatePreference(
+                    key = 0,
+                    title = "Date Preference",
+                    defaultValue = 0L,
+                    dataProvider = dummy,
+                )
+            )
+        )
+    }
+}
+
+@Composable
+@CombinedPreview
+private fun CancelDefaultSaveDialog() {
+    KutePreferencesTheme {
+        DatePreferenceEditDialog(
+            behavior = DatePreferenceBehavior(
+                preferenceItem = KuteDatePreference(
+                    key = 0,
+                    title = "Date Preference",
+                    defaultValue = 0L,
+                    dataProvider = dummy,
+                )
+            ),
+            dialogState = rememberCancelDefaultSaveDialogState(initialIsVisibile = true)
+        )
     }
 }

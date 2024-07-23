@@ -24,26 +24,6 @@ import de.markusressel.kutepreferences.ui.views.common.TextEditDialog
 import de.markusressel.kutepreferences.ui.views.common.rememberCancelDefaultSaveDialogState
 import de.markusressel.kutepreferences.ui.views.search.dummy
 
-@CombinedPreview
-@Composable
-private fun UrlPreferencePreview() {
-    val icon =
-        AppCompatResources.getDrawable(LocalContext.current, android.R.drawable.ic_media_next)
-
-    val preferenceItem = KuteUrlPreference(
-        key = 0,
-        icon = icon,
-        title = "Text Preference",
-        dataProvider = dummy,
-        defaultValue = "Current Value"
-    )
-    KutePreferencesTheme {
-        UrlPreference(
-            behavior = UrlPreferenceBehavior(preferenceItem)
-        )
-    }
-}
-
 @Composable
 fun UrlPreference(
     behavior: UrlPreferenceBehavior,
@@ -69,6 +49,26 @@ fun UrlPreference(
         }
     )
     editDialog()
+}
+
+@CombinedPreview
+@Composable
+private fun UrlPreferencePreview() {
+    val icon =
+        AppCompatResources.getDrawable(LocalContext.current, android.R.drawable.ic_media_next)
+
+    val preferenceItem = KuteUrlPreference(
+        key = 0,
+        icon = icon,
+        title = "Text Preference",
+        dataProvider = dummy,
+        defaultValue = "Current Value"
+    )
+    KutePreferencesTheme {
+        UrlPreference(
+            behavior = UrlPreferenceBehavior(preferenceItem)
+        )
+    }
 }
 
 

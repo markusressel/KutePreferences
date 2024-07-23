@@ -22,34 +22,6 @@ import de.markusressel.kutepreferences.ui.views.common.CancelDefaultSaveDialogSt
 import de.markusressel.kutepreferences.ui.views.common.rememberCancelDefaultSaveDialogState
 import de.markusressel.kutepreferences.ui.views.search.dummy
 
-@CombinedPreview
-@Composable
-private fun SingleSelectionPreferencePreview() {
-    val icon =
-        AppCompatResources.getDrawable(LocalContext.current, android.R.drawable.ic_media_next)
-
-    val context = LocalContext.current
-
-    val preferenceItem = KuteSingleSelectStringPreference(
-        context = context,
-        key = 0,
-        icon = icon,
-        title = "Single Selection Preference",
-        dataProvider = dummy,
-        possibleValues = mapOf(
-            0 to 0,
-            1 to 1,
-            2 to 2,
-        ),
-        defaultValue = 0,
-    )
-    KutePreferencesTheme {
-        SingleSelectionPreference(
-            behavior = SingleSelectionPreferenceBehavior(preferenceItem)
-        )
-    }
-}
-
 @Composable
 fun SingleSelectionPreference(
     behavior: SingleSelectionPreferenceBehavior,
@@ -128,12 +100,30 @@ private fun SingleSelectionPreferenceEditDialog(
 
 @CombinedPreview
 @Composable
-private fun SelectionOptionPreview() {
-    SelectionOption(
-        title = "Option 1",
-        selected = true,
-        onClick = {},
+private fun SingleSelectionPreferencePreview() {
+    val icon =
+        AppCompatResources.getDrawable(LocalContext.current, android.R.drawable.ic_media_next)
+
+    val context = LocalContext.current
+
+    val preferenceItem = KuteSingleSelectStringPreference(
+        context = context,
+        key = 0,
+        icon = icon,
+        title = "Single Selection Preference",
+        dataProvider = dummy,
+        possibleValues = mapOf(
+            0 to 0,
+            1 to 1,
+            2 to 2,
+        ),
+        defaultValue = 0,
     )
+    KutePreferencesTheme {
+        SingleSelectionPreference(
+            behavior = SingleSelectionPreferenceBehavior(preferenceItem)
+        )
+    }
 }
 
 @Composable
@@ -160,4 +150,14 @@ private fun SelectionOption(
             color = MaterialTheme.colorScheme.onBackground
         )
     }
+}
+
+@CombinedPreview
+@Composable
+private fun SelectionOptionPreview() {
+    SelectionOption(
+        title = "Option 1",
+        selected = true,
+        onClick = {},
+    )
 }
