@@ -66,7 +66,7 @@ iconics-core = { group = "com.mikepenz", name = "iconics-core", version.ref = "i
 iconics-views = { group = "com.mikepenz", name = "iconics-views", version.ref = "iconicsVersion" }
 iconics-compose = { group = "com.mikepenz", name = "iconics-compose", version.ref = "iconicsVersion" }
 iconics-typefaceapi = { group = "com.mikepenz", name = "iconics-typeface-api", version.ref = "iconicsVersion" }
-iconics-typeface-material = { group = "com.mikepenz", name = "material-design-iconic-typeface", version = "2.2.0.8-kotlin" }
+iconics-typeface-material = { group = "com.mikepenz", name = "material-design-iconic-typeface", version = "2.2.0.9-kotlin" }
 
 
 dokka-gradle-plugin = { group = "org.jetbrains.dokka", name = "dokka-gradle-plugin", version.ref = "dokkaGradlePlugin" }
