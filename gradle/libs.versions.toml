@@ -11,15 +11,15 @@ androidxCore = "1.15.0"
 androidxLifecycle = "2.8.7"
 androidxTestExtJunit = "1.2.1"
 androidxTestEspressoCore = "3.6.1"
-androidxWork = "2.10.0"
-composeShimmer = "1.3.0"
+androidxWork = "2.10.1"
+composeShimmer = "1.3.1"
 dokkaGradlePlugin = "1.9.20"
-hilt = "2.51.1"
+hilt = "2.52"
 hiltExt = "1.2.0"
 iconicsVersion = "5.4.0"
 junit4 = "4.13.2"
 kotlin = "2.0.20"
-kotlinCoroutinesCore = "1.8.0"
+kotlinCoroutinesCore = "1.8.1"
 kotlinCoroutinesAndroid = "1.8.1"
 ksp = "2.0.20-1.0.25"
 typedPreferences = "v2.1.1"
@@ -66,7 +66,7 @@ iconics-core = { group = "com.mikepenz", name = "iconics-core", version.ref = "i
 iconics-views = { group = "com.mikepenz", name = "iconics-views", version.ref = "iconicsVersion" }
 iconics-compose = { group = "com.mikepenz", name = "iconics-compose", version.ref = "iconicsVersion" }
 iconics-typefaceapi = { group = "com.mikepenz", name = "iconics-typeface-api", version.ref = "iconicsVersion" }
-iconics-typeface-material = { group = "com.mikepenz", name = "material-design-iconic-typeface", version = "2.2.0.8-kotlin" }
+iconics-typeface-material = { group = "com.mikepenz", name = "material-design-iconic-typeface", version = "2.2.0.9-kotlin" }
 
 
 dokka-gradle-plugin = { group = "org.jetbrains.dokka", name = "dokka-gradle-plugin", version.ref = "dokkaGradlePlugin" }
