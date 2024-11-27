@@ -11,6 +11,10 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmOptions
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
+const val COMPILE_SDK = 35
+const val MIN_SDK = 21
+const val TARGET_SDK = 35
+
 /**
  * Configure base Kotlin with Android options
  */
@@ -18,10 +22,10 @@ internal fun Project.configureKotlinAndroid(
     commonExtension: CommonExtension<*, *, *, *, *, *>,
 ) {
     commonExtension.apply {
-        compileSdk = 34
+        compileSdk = COMPILE_SDK
 
         defaultConfig {
-            minSdk = 21
+            minSdk = MIN_SDK
         }
 
         compileOptions {
