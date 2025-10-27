@@ -13,7 +13,7 @@ open class KuteSingleSelectStringPreference(
     override val key: Int,
     override val icon: Drawable? = null,
     override val title: String,
-    @StringRes
+    @field:StringRes
     val defaultValue: Int,
     possibleValues: Map<Int, Int>,
     override val dataProvider: KutePreferenceDataProvider,

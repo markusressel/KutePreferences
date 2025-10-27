@@ -13,7 +13,7 @@ open class KuteMultiSelectStringPreference(
     override val key: Int,
     override val icon: Drawable? = null,
     override val title: String,
-    @StringRes
+    @field:StringRes
     private val defaultValue: Set<Int>,
     override val possibleValues: Map<Int, Int>,
     override val dataProvider: KutePreferenceDataProvider,

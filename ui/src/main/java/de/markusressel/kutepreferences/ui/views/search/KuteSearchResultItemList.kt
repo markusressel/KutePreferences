@@ -37,7 +37,7 @@ fun KuteSearchResultItemList(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(IntrinsicSize.Min)
-                    .animateItemPlacement(),
+                    .animateItem(),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Column(

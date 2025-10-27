@@ -16,7 +16,7 @@ open class KuteColorPreference(
     override val key: Int,
     override val icon: Drawable? = null,
     override val title: String,
-    @ColorInt
+    @field:ColorInt
     private val defaultValue: Int,
     override val dataProvider: KutePreferenceDataProvider,
     override val onPreferenceChangedListener: ((oldValue: Int, newValue: Int) -> Unit)? = null,

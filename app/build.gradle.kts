@@ -11,8 +11,15 @@ android {
         versionCode = 1
         versionName = "1.0.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
 
-        setProperty("archivesBaseName", "KutePreferences_v${versionName}_(${versionCode})")
+    androidComponents {
+        onVariants { variant ->
+            variant.outputs.forEach { output ->
+                val outputImpl = output as com.android.build.api.variant.impl.VariantOutputImpl
+                outputImpl.outputFileName.set("KutePreferences_v${defaultConfig.versionName}_(${defaultConfig.versionCode}).apk")
+            }
+        }
     }
 
     packaging {
@@ -43,6 +50,7 @@ dependencies {
     // Compose
     implementation(libs.androidx.compose.ui)
     implementation(libs.android.material)
+    implementation(libs.androidx.compose.material.icons.extended)
     implementation(libs.androidx.compose.material3)
 
     implementation(libs.androidx.lifecycle.runtime.ktx)
