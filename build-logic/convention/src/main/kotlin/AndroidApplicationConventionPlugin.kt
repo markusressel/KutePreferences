@@ -2,7 +2,6 @@ import com.android.build.api.dsl.ApplicationExtension
 import com.android.build.api.variant.ApplicationAndroidComponentsExtension
 import de.markusressel.kutepreferences.TARGET_SDK
 import de.markusressel.kutepreferences.configureKotlinAndroid
-import de.markusressel.kutepreferences.configureKotlinAndroidToolchain
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
@@ -18,7 +17,6 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
 
             group = "de.markusressel.kutepreferences.demo"
 
-            configureKotlinAndroidToolchain()
             extensions.configure<ApplicationExtension> {
                 configureKotlinAndroid(this)
                 defaultConfig.targetSdk = TARGET_SDK

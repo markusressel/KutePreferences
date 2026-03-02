@@ -1,4 +1,4 @@
-import com.android.build.gradle.TestExtension
+import com.android.build.api.dsl.TestExtension
 import de.markusressel.kutepreferences.TARGET_SDK
 import de.markusressel.kutepreferences.configureKotlinAndroid
 import org.gradle.api.Plugin
@@ -19,5 +19,4 @@ class AndroidTestConventionPlugin : Plugin<Project> {
             }
         }
     }
-
 }

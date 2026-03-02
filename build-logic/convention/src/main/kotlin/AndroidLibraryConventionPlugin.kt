@@ -1,8 +1,7 @@
+import com.android.build.api.dsl.LibraryExtension
 import com.android.build.api.variant.LibraryAndroidComponentsExtension
-import com.android.build.gradle.LibraryExtension
 import de.markusressel.kutepreferences.TARGET_SDK
 import de.markusressel.kutepreferences.configureKotlinAndroid
-import de.markusressel.kutepreferences.configureKotlinAndroidToolchain
 import de.markusressel.kutepreferences.disableUnnecessaryAndroidTests
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -22,10 +21,8 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
 
             group = "de.markusressel.kutepreferences.library"
 
-            configureKotlinAndroidToolchain()
             extensions.configure<LibraryExtension> {
                 configureKotlinAndroid(this)
-                defaultConfig.targetSdk = TARGET_SDK
             }
             extensions.configure<LibraryAndroidComponentsExtension> {
                 disableUnnecessaryAndroidTests(target)
