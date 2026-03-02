@@ -31,6 +31,7 @@ import de.markusressel.kutepreferences.ui.util.modifyIf
 @Composable
 fun KuteCategoryView(
     behavior: KuteCategoryBehavior,
+    modifier: Modifier = Modifier,
 ) {
     val uiState by behavior.uiState.collectAsState()
 
@@ -41,7 +42,8 @@ fun KuteCategoryView(
             .modifyIf(uiState.shimmering) {
                 highlightingShimmer()
             }
-            .padding(8.dp),
+            .padding(horizontal = 8.dp)
+            .then(modifier),
         elevation = CardDefaults.cardElevation(LocalKuteColors.current.category.elevation),
         shape = itemShape,
         colors = CardDefaults.cardColors(

@@ -22,17 +22,18 @@ import de.markusressel.kutepreferences.ui.views.search.Composable
 
 @Composable
 fun KuteSectionView(
-    behavior: KuteSectionBehavior
+    behavior: KuteSectionBehavior,
+    modifier: Modifier = Modifier,
 ) {
     val uiState by behavior.uiState.collectAsState()
-    var collapsed by remember { mutableStateOf(false) }
 
     CollapsibleCard(
         modifier = Modifier
-            .modifyIf(uiState.shimmering) {
+            .modifyIf(uiState.isShimmering) {
                 highlightingShimmer()
             }
-            .padding(8.dp),
+            .padding(horizontal = 8.dp)
+            .then(modifier),
         title = {
             Row(
                 modifier = Modifier
@@ -66,8 +67,8 @@ fun KuteSectionView(
                 }
             }
         },
-        collapsed = collapsed,
-        onToggleCollapsedState = { collapsed = collapsed.not() },
+        collapsed = uiState.isCollapsed,
+        onToggleCollapsedState = { behavior.toggleCollapsed() },
     )
 }
 

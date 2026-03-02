@@ -23,7 +23,7 @@ fun KuteItemList(
     items: List<KutePreferenceListItem>,
 ) {
     Column(
-        verticalArrangement = Arrangement.spacedBy(4.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
         modifier = Modifier.then(modifier)
     ) {
         items.forEach {

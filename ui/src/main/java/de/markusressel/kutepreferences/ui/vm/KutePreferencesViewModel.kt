@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import de.markusressel.kutepreferences.core.KuteNavigator
 import de.markusressel.kutepreferences.core.preference.KutePreferenceListItem
 import de.markusressel.kutepreferences.core.preference.category.KuteCategory
+import de.markusressel.kutepreferences.core.preference.section.KuteSectionBehavior
 import de.markusressel.kutepreferences.ui.views.BehaviorStore
 import de.markusressel.kutepreferences.ui.views.KuteStyleManager
 import kotlinx.coroutines.channels.Channel
@@ -89,6 +90,7 @@ open class KutePreferencesViewModel(
             return
         }
 
+        val parentItem = itemStack.getOrNull(itemStack.size - 2)
         val lastItem = itemStack.last()
 
         val categoryStack = itemStack.filterIsInstance<KuteCategory>()
@@ -96,6 +98,13 @@ open class KutePreferencesViewModel(
         navigator.setCategories(categoryStack.map { it.key })
 
         delay(300)
+
+        // TODO: this should expand the whole stack, not just the immediate parent.
+        //  generally speaking it seemslike an architectural flaw, that there has to be 1. a global store involved
+        //  and 2. casting to a specific behavior type is necessary in order to let the section expand itself.
+        parentItem?.let {
+            (BehaviorStore.get(it) as? KuteSectionBehavior)?.expand()
+        }
 
         val behavior = BehaviorStore.get(lastItem)
         behavior?.highlight()

@@ -9,6 +9,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.unit.dp
 import de.markusressel.kutepreferences.core.persistence.DummyDataProvider
 import de.markusressel.kutepreferences.core.preference.KutePreferenceListItem
 import de.markusressel.kutepreferences.ui.views.KuteOverview
@@ -37,7 +38,8 @@ fun KutePreferencesScreen(
 
         KuteSearch(
             modifier = Modifier
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .padding(horizontal = 8.dp),
             active = uiState.isSearchActive,
             onActiveChange = { newActive ->
                 when {
@@ -79,7 +81,8 @@ fun KutePreferencesScreen(
                     bottom = contentPadding.calculateBottomPadding(),
                 )
                 .consumeWindowInsets(contentPadding)
-                .imePadding(),
+                .imePadding()
+                .padding(top = 8.dp),
             items = uiState.preferenceItems,
             scrollState = scrollState,
         )

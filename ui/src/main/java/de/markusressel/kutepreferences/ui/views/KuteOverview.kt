@@ -32,7 +32,7 @@ fun KuteOverview(
     Column(
         modifier = Modifier
             .verticalScroll(scrollState)
-            .then(modifier)
+            .then(modifier),
     ) {
         KutePreferenceListContent(
             modifier = Modifier.fillMaxWidth(),
