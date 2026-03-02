@@ -67,7 +67,6 @@ class MainViewModel @Inject constructor(
                     ),
                 )
             ),
-            onClick = { navigator.enterCategory(R.string.key_category_battery) },
         )
 
         val categoryNetwork = KuteCategory(
@@ -79,7 +78,6 @@ class MainViewModel @Inject constructor(
                 kutePreferencesHolder.togglePreference,
                 kutePreferencesHolder.numberPreference
             ),
-            onClick = { navigator.enterCategory(R.string.key_category_network) },
         )
 
         val typeSectionContent = createTypeSectionContent()
@@ -97,7 +95,6 @@ class MainViewModel @Inject constructor(
             icon = iconHelper.getIcon(MaterialDesignIconic.Icon.gmi_nature_people),
             title = translationManager.getTranslation(R.string.title_category_user),
             description = translationManager.getTranslation(R.string.description_category_user),
-            onClick = { navigator.enterCategory(R.string.key_category_user) },
             children = listOf(
                 KuteSection(
                     key = R.string.key_section_person,
@@ -142,7 +139,6 @@ class MainViewModel @Inject constructor(
                 icon = iconHelper.getIcon(MaterialDesignIconic.Icon.gmi_developer_board),
                 title = "Example Category",
                 description = "This category contains example preferences that might be realistic in a real app.",
-                onClick = { navigator.enterCategory(R.string.cat_hello) },
                 children = listOf(
                     KuteSection(
                         key = R.string.key_section_system_hardware,

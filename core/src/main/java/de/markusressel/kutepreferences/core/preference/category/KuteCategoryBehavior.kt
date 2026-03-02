@@ -24,7 +24,7 @@ open class KuteCategoryBehavior(
     val uiState = _uiState.asStateFlow()
 
     fun onClick() {
-        navigator.enterCategory(preferenceItem.key)
+        preferenceItem.onClick?.invoke() ?: navigator.enterCategory(preferenceItem.key)
     }
 
     override fun highlight() {
