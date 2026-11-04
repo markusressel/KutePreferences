@@ -8,7 +8,7 @@ published through JitPack. See `README.md` for consumer-facing usage.
 | Path           | Purpose                                                                                                   |
 |----------------|-----------------------------------------------------------------------------------------------------------|
 | `core/`        | Published library. Preference items, behaviors, persistence (`KutePreferenceDataProvider`), navigator, search. |
-| `ui/`          | Published library. Compose views, theme, `KutePreferencesViewModel`, `KuteStyleManager`, `BehaviorStore`.  |
+| `ui/`          | Published library. Compose views, theme, `KutePreferencesViewModel`, `KuteRegistry`.                 |
 | `app/`         | Demo app using Hilt. Not published; excluded from JitPack builds through the `JITPACK` env var.             |
 | `build-logic/` | Gradle convention plugins (`kutepreferences.android.*`) and the shared SDK and JVM configuration.           |
 
@@ -21,8 +21,8 @@ How the pieces fit together:
 - A **behavior** (`*Behavior`) in `core` holds the state of an item. `PersistedPreferenceBehavior` exposes
   `persistedValue` (saved) and `currentValue` (being edited).
 - A **view** (composable in `ui/.../views/listitems/`) renders a behavior.
-- `KuteStyleManager` maps item types to views through type hooks. Hooks run newest first, so a later hook overrides an
-  earlier one. `BehaviorStore` caches one behavior per item instance.
+- `KuteRegistry` maps item types to views and creates one behavior per item instance. Each `KutePreferencesViewModel`
+  owns one. The closest registered supertype of an item wins, and a later registration replaces an earlier one.
 
 ## Setup and commands
 
@@ -32,6 +32,9 @@ Requires JDK 21 and the Android SDK (compile and target SDK 36, min SDK 23). Alw
 ./gradlew assembleDebug                  # build all modules and the demo APK
 ./gradlew testDebugUnitTest              # run all unit tests
 ./gradlew lintDebug                      # Android Lint; reports in <module>/build/reports/
+./gradlew detekt                         # static analysis; existing findings are listed in detekt-baseline.xml
+./gradlew :ui:verifyRoborazziDebug       # compare the views with the screenshots in ui/src/test/snapshots/
+./gradlew :ui:recordRoborazziDebug       # update those screenshots after an intended UI change
 ./gradlew :core:testDebugUnitTest --tests 'de.markusressel.kutepreferences.core.SomeTest'   # run one test class
 ```
 
@@ -42,8 +45,8 @@ Run the demo app on a device or emulator:
 adb shell am start -n de.markusressel.kutepreferences.demo/de.markusressel.kutepreferences.demo.ui.MainActivity
 ```
 
-There is no formatter or static analysis task (no ktlint, no detekt). Format according to `.editorconfig` and the rules
-below.
+There is no formatter task. Format according to `.editorconfig` and the rules below. Fix new detekt findings instead of
+adding them to the baseline.
 
 ## Code style
 
@@ -82,13 +85,11 @@ not reformat unrelated lines.
 | Use case         | `<Action>UseCase` with `operator fun invoke` | `ui/vm/SearchItemsUseCase`              |
 | UI events        | Sealed class with `data object`/`data class` | `ui/vm/KuteUiEvent`                     |
 
-Do not copy the `Silder` misspelling from existing file names (`IntSilder.kt`, `FloatSilder.kt`, `RangeSilder.kt`).
-
 ### Compose and state
 
 - Expose state as `private val _uiState = MutableStateFlow(UiState())` plus `val uiState = _uiState.asStateFlow()`, with
   an immutable `UiState` data class. Update it with `_uiState.update { old -> old.copy(...) }`.
-- Collect flows in composables with `collectAsState()` and `by` delegates.
+- Collect flows in composables with `collectAsStateWithLifecycle()` and `by` delegates.
 - Accept `modifier: Modifier = Modifier` on reusable composables.
 - Read colors from the theme: `MaterialTheme.colorScheme` or `LocalKuteColors.current`. Do not hardcode colors.
 - Put user-visible library strings in `ui/src/main/res/values/strings.xml`.
@@ -99,21 +100,18 @@ Do not copy the `Silder` misspelling from existing file names (`IntSilder.kt`, `
 
 1. Add the item and behavior in `core/preference/<type>/`.
 2. Add the view and its preview in `ui/views/listitems/<Type>.kt`.
-3. Register it in `KuteStyleManager.registerDefaultStyles`. The `when` is order-sensitive: a subclass must come before
-   its parent (for example `KuteUrlPreference` before `KuteTextPreference`).
+3. Register it in `KuteRegistry.registerDefaults`.
 4. Add an example to `KutePreferencesHolder` and `MainViewModel` in `app`.
 5. Add the type to the table in `README.md`.
 
 ## Testing
 
-- The repository has no tests yet, so `testDebugUnitTest` currently passes without running anything. A green run proves
-  nothing unless you added tests.
-- Put new unit tests in `<module>/src/test/java/`. JUnit 4 and `kotlin("test")` are available in `core` and `ui`.
+- Put new unit tests in `<module>/src/test/java/`. JUnit 4 and `kotlin("test")` are available in `core` and `ui`, and
+  `ui` also has Robolectric, Compose UI tests and Roborazzi screenshot tests.
 - Add tests for logic you change, such as search, navigation, behaviors and data providers. `DummyDataProvider` is an
   in-memory provider for tests.
-- Before finishing a change, run `./gradlew assembleDebug testDebugUnitTest lintDebug`.
-- CI (`.github/workflows/build.yml`) runs only `app:testDebugUnitTest` and `app:assembleDebug`, so also run the local
-  commands above.
+- Before finishing a change, run `./gradlew assembleDebug testDebugUnitTest lintDebug detekt :ui:verifyRoborazziDebug`.
+- CI (`.github/workflows/build.yml`) does not verify the screenshots, so also run that task locally.
 
 ## Compatibility rules
 
@@ -125,18 +123,20 @@ Do not copy the `Silder` misspelling from existing file names (`IntSilder.kt`, `
   `TimePersistenceModel` or `RangePersistenceModel` loses or corrupts saved user data. The same applies to the store name
   `kute_preferences` and to the string values behind preference keys.
 - Add dependencies through `gradle/libs.versions.toml`, not with inline coordinates.
+- Declare a dependency as `api` when its types appear in the public API of a module, otherwise consumers cannot compile
+  against it. Keep `core` free of Compose.
+- Keep the JVM target at 17 or lower, because consumers cannot inline code from a newer target than their own.
 - Share build configuration through `build-logic/` rather than copying it into module build files.
 
 ## Known pitfalls
 
 Do not copy these patterns into new code. Fix them only when that is the task.
 
-- `GlobalScope` and `runBlocking` are used in behaviors and `DataStoreKutePreferenceDataProvider`.
-- `KuteStyleManager` and `BehaviorStore` are global singletons that never release entries.
-- The built-in hook's `else` branch returns `true`, so hooks registered before it never run for unknown types.
-- The `onClick` and `onLongClick` parameters only take effect on `KuteCategory` and `KuteAction`. Other views ignore them.
-- Preference keys are `@StringRes Int` values, resolved through a `Context`. Previews use arbitrary integers, which is
-  only safe with `DummyDataProvider`.
+- `runBlocking` is used for synchronous reads in `DataStoreKutePreferenceDataProvider`, and values are read on the main
+  thread. Call `load()` first, as `initPreferencesTree` does, so that those reads do not block.
+- `TextEditDialog` catches every exception from its validator and treats it as invalid input, which hides programming
+  errors in a validator.
+- Preference keys identify saved data. Previews use arbitrary keys, which is only safe with `DummyDataProvider`.
 
 ## Security
 
