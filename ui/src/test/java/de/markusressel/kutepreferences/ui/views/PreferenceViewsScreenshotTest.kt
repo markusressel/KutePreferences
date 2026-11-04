@@ -21,6 +21,10 @@ import de.markusressel.kutepreferences.core.preference.number.slider.FloatSlider
 import de.markusressel.kutepreferences.core.preference.number.slider.IntSliderPreferenceBehavior
 import de.markusressel.kutepreferences.core.preference.number.slider.KuteFloatSliderPreference
 import de.markusressel.kutepreferences.core.preference.number.slider.KuteIntSliderPreference
+import de.markusressel.kutepreferences.core.preference.select.KuteChoicePreference
+import de.markusressel.kutepreferences.core.preference.select.KuteMultiChoicePreference
+import de.markusressel.kutepreferences.core.preference.select.MultiSelectionPreferenceBehavior
+import de.markusressel.kutepreferences.core.preference.select.SingleSelectionPreferenceBehavior
 import de.markusressel.kutepreferences.core.preference.text.KutePasswordPreference
 import de.markusressel.kutepreferences.core.preference.text.KuteTextPreference
 import de.markusressel.kutepreferences.core.preference.text.KuteUrlPreference
@@ -29,10 +33,12 @@ import de.markusressel.kutepreferences.core.preference.text.TextPreferenceBehavi
 import de.markusressel.kutepreferences.core.preference.text.UrlPreferenceBehavior
 import de.markusressel.kutepreferences.ui.theme.KutePreferencesTheme
 import de.markusressel.kutepreferences.ui.views.listitems.DecimalSliderPreference
+import de.markusressel.kutepreferences.ui.views.listitems.MultiSelectionPreference
 import de.markusressel.kutepreferences.ui.views.listitems.NumberPreference
 import de.markusressel.kutepreferences.ui.views.listitems.NumberRangeSliderPreference
 import de.markusressel.kutepreferences.ui.views.listitems.NumberSliderPreference
 import de.markusressel.kutepreferences.ui.views.listitems.PasswordPreference
+import de.markusressel.kutepreferences.ui.views.listitems.SingleSelectionPreference
 import de.markusressel.kutepreferences.ui.views.listitems.TextPreference
 import de.markusressel.kutepreferences.ui.views.listitems.UrlPreference
 import de.markusressel.kutepreferences.ui.views.search.KutePreferencesScreen
@@ -205,6 +211,36 @@ class PreferenceViewsScreenshotTest {
             )
         )
         }
+    }
+
+    @Test
+    fun `choice dialog`() = screenshot("choice_dialog", expand = "Choice") {
+        SingleSelectionPreference(
+            SingleSelectionPreferenceBehavior(
+                KuteChoicePreference(
+                    key = "c",
+                    title = "Choice",
+                    defaultValue = "b",
+                    options = mapOf("a" to "First", "b" to "Second"),
+                    dataProvider = dataProvider,
+                )
+            )
+        )
+    }
+
+    @Test
+    fun `multi choice dialog`() = screenshot("multi_choice_dialog", expand = "Multi choice") {
+        MultiSelectionPreference(
+            MultiSelectionPreferenceBehavior(
+                KuteMultiChoicePreference(
+                    key = "m",
+                    title = "Multi choice",
+                    defaultValue = setOf("a", "c"),
+                    options = mapOf("a" to "First", "b" to "Second", "c" to "Third"),
+                    dataProvider = dataProvider,
+                )
+            )
+        )
     }
 
 }

@@ -51,6 +51,8 @@ import de.markusressel.kutepreferences.core.preference.number.slider.KuteIntSlid
 import de.markusressel.kutepreferences.core.preference.section.KutePreferenceSection
 import de.markusressel.kutepreferences.core.preference.section.KuteSection
 import de.markusressel.kutepreferences.core.preference.section.KuteSectionBehavior
+import de.markusressel.kutepreferences.core.preference.select.KuteChoicePreference
+import de.markusressel.kutepreferences.core.preference.select.KuteMultiChoicePreference
 import de.markusressel.kutepreferences.core.preference.select.KuteMultiSelectStringPreference
 import de.markusressel.kutepreferences.core.preference.select.KuteSingleSelectStringPreference
 import de.markusressel.kutepreferences.core.preference.select.MultiSelectionPreferenceBehavior
@@ -207,6 +209,12 @@ class KuteRegistry(navigator: KuteNavigator) {
         }
         register<KuteDatePreference, DatePreferenceBehavior>(::DatePreferenceBehavior) { DatePreference(it) }
         register<KuteTimePreference, TimePreferenceBehavior>(::TimePreferenceBehavior) { TimePreference(it) }
+        register<KuteChoicePreference, SingleSelectionPreferenceBehavior>(::SingleSelectionPreferenceBehavior) {
+            SingleSelectionPreference(it)
+        }
+        register<KuteMultiChoicePreference, MultiSelectionPreferenceBehavior>(::MultiSelectionPreferenceBehavior) {
+            MultiSelectionPreference(it)
+        }
         register<KuteSingleSelectStringPreference, SingleSelectionPreferenceBehavior>(
             ::SingleSelectionPreferenceBehavior
         ) {

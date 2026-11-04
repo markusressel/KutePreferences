@@ -10,6 +10,8 @@ import de.markusressel.kutepreferences.core.preference.category.KuteCategory
 import de.markusressel.kutepreferences.core.preference.matches
 import de.markusressel.kutepreferences.core.preference.number.KuteNumberPreference
 import de.markusressel.kutepreferences.core.preference.section.KuteSection
+import de.markusressel.kutepreferences.core.preference.select.KuteChoicePreference
+import de.markusressel.kutepreferences.core.preference.select.KuteMultiChoicePreference
 import de.markusressel.kutepreferences.core.preference.text.KuteTextPreference
 import de.markusressel.kutepreferences.demo.R
 import de.markusressel.kutepreferences.demo.domain.*
@@ -172,7 +174,23 @@ class MainViewModel @Inject constructor(
             enabledWhen = authenticate.matches { it },
         )
 
-        return listOf(useProxy, authenticate, proxyUser)
+        val proxyProtocol = KuteChoicePreference(
+            key = "demo_proxy_protocol",
+            title = "Proxy protocol",
+            defaultValue = "http",
+            options = mapOf("http" to "HTTP", "socks" to "SOCKS"),
+            dataProvider = dataProvider,
+            visibleWhen = useProxy.matches { it },
+        )
+        val proxyBypass = KuteMultiChoicePreference(
+            key = "demo_proxy_bypass",
+            title = "Bypass the proxy for",
+            options = mapOf("local" to "Local addresses", "vpn" to "VPN"),
+            dataProvider = dataProvider,
+            visibleWhen = useProxy.matches { it },
+        )
+
+        return listOf(useProxy, proxyProtocol, proxyBypass, authenticate, proxyUser)
     }
 
     private fun createCustomTypeSectionItems(): List<KutePreferenceListItem> = listOf(

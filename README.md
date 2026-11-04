@@ -160,11 +160,29 @@ KutePreferences includes implementations for most of the commonly needed prefere
 | `KuteDatePreference`               | `Long`                         | A date, stored as epoch milliseconds.                           |
 | `KuteTimePreference`               | `TimePersistenceModel`         | A time of the day.                                              |
 | `KuteColorPreference`              | `Int`                          | An ARGB color.                                                  |
-| `KuteSingleSelectStringPreference` | `String`                       | A single selection from a list of items.                        |
-| `KuteMultiSelectStringPreference`  | `Set<String>`                  | Multiple selections from a list of items.                       |
+| `KuteChoicePreference`             | `String`                       | A single selection from a list of options.                      |
+| `KuteMultiChoicePreference`        | `Set<String>`                  | Multiple selections from a list of options.                     |
+| `KuteSingleSelectStringPreference` | `String`                       | Like `KuteChoicePreference`, with string resources.             |
+| `KuteMultiSelectStringPreference`  | `Set<String>`                  | Like `KuteMultiChoicePreference`, with string resources.        |
 
 > **Warning:** `KutePasswordPreference` only masks the value on screen. It is stored in plaintext, so do not use it for
 > secrets that need protection.
+
+### Selecting from options
+
+Options map the value to save to the title to show, so they can come from anywhere, like an enum or a server response:
+
+```kotlin
+KuteChoicePreference(
+    key = "theme",
+    title = "Theme",
+    defaultValue = Theme.SYSTEM.name,
+    options = Theme.entries.associate { it.name to context.getString(it.title) },
+    dataProvider = dataProvider,
+)
+```
+
+Saved values stay valid when titles change or get translated, as long as the values stay the same.
 
 ### Validating input
 

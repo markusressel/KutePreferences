@@ -27,6 +27,9 @@ open class KuteMultiSelectStringPreference(
     override val enabledWhen: KuteCondition? = null,
 ) : KuteMultiSelectPreference<Int, String>() {
 
+    override val options: Map<String, String>
+        get() = possibleValues.entries.associate { context.getString(it.key) to context.getString(it.value) }
+
     override fun getDefaultValue(): Set<String> = defaultValue.asSequence().map { context.getString(it) }.toSet()
 
     override fun createDescription(currentValue: Set<String>): String {
