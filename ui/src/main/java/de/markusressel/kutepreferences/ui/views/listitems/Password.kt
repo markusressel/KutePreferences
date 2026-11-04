@@ -21,6 +21,7 @@ fun PasswordPreference(
             dialogState = dialogState,
             behavior = behavior,
             visualTransformation = PasswordVisualTransformation(),
+            revealable = true,
         )
     }
 ) {
