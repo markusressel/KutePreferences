@@ -45,11 +45,11 @@ fun KuteCategoryView(
         colors = CardDefaults.cardColors(
             containerColor = LocalKuteColors.current.category.cardBackgroundColor
         ),
-        onClick = { behavior.onClick() },
     ) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
+                .defaultMinSize(minHeight = listItemMinHeight)
                 .background(LocalKuteColors.current.category.cardBackgroundColor)
                 .combinedClickable(
                     onClick = { behavior.onClick() },

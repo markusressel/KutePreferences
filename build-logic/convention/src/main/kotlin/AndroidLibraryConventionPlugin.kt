@@ -30,9 +30,6 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
             val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
             configurations.configureEach {
                 resolutionStrategy {
-                    // TODO:
-                    //cacheChangingModulesFor(0, 'seconds')
-
                     force(libs.findLibrary("kotlin-stdlib").get())
                     force(libs.findLibrary("kotlin-stdlib-jdk8").get())
 

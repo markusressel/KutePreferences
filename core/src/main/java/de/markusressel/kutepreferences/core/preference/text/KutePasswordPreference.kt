@@ -36,7 +36,15 @@ class KutePasswordPreference(
 
     @CheckResult
     override fun createDescription(currentValue: String): String {
-        return '\u2022'.toString().repeat(currentValue.length)
+        return when {
+            currentValue.isEmpty() -> ""
+            // NOTE: the mask has a fixed length to not reveal the length of the password
+            else -> '\u2022'.toString().repeat(MASK_LENGTH)
+        }
+    }
+
+    private companion object {
+        const val MASK_LENGTH = 8
     }
 
 }
