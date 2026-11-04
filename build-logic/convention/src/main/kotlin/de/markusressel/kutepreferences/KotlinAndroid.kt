@@ -37,6 +37,11 @@ internal fun Project.configureKotlinAndroid(commonExtension: CommonExtension) {
             targetCompatibility = JavaVersion.VERSION_21
             isCoreLibraryDesugaringEnabled = true
         }
+
+        testOptions.apply {
+            unitTests.isIncludeAndroidResources = true
+            unitTests.isReturnDefaultValues = true
+        }
     }
 
     // Use withType to workaround https://youtrack.jetbrains.com/issue/KT-55947

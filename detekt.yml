@@ -1,0 +1,26 @@
+# Rules on top of the detekt defaults. Existing findings are recorded in detekt-baseline.xml.
+naming:
+  FunctionNaming:
+    # composables are named like types
+    ignoreAnnotated: [ 'Composable' ]
+  TopLevelPropertyNaming:
+    constantPattern: '[a-z][A-Za-z0-9]*|[A-Z][_A-Z0-9]*'
+
+complexity:
+  LongMethod:
+    ignoreAnnotated: [ 'Composable' ]
+  LongParameterList:
+    ignoreAnnotated: [ 'Composable' ]
+    # preference items are configured through named constructor parameters
+    allowedConstructorParameters: 15
+
+style:
+  MagicNumber:
+    active: false
+  MaxLineLength:
+    maxLineLength: 120
+  # .editorconfig uses star imports from 5 names of the same package
+  WildcardImport:
+    active: false
+  UnusedPrivateFunction:
+    ignoreAnnotated: [ 'Preview', 'CombinedPreview' ]

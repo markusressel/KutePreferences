@@ -24,6 +24,9 @@ kotlinCoroutinesAndroid = "1.10.2"
 ksp = "2.3.2"
 typedPreferences = "v2.1.1"
 materialDialogs = "0.9.0"
+robolectric = "4.17"
+detekt = "2.0.0-alpha.6"
+androidxTestCore = "1.7.0"
 
 [libraries]
 android-desugarJdkLibs = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "androidDesugarJdkLibs" }
@@ -96,10 +99,16 @@ vanpra-compose-material-dialogs = { group = "io.github.vanpra.compose-material-d
 vanpra-compose-material-dialogs-datetime = { group = "io.github.vanpra.compose-material-dialogs", name = "datetime", version.ref = "materialDialogs" }
 
 junit4 = { group = "junit", name = "junit", version.ref = "junit4" }
+kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinCoroutinesCore" }
+robolectric = { group = "org.robolectric", name = "robolectric", version.ref = "robolectric" }
+androidx-test-core = { group = "androidx.test", name = "core-ktx", version.ref = "androidxTestCore" }
+androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
+androidx-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidxTestExtJunit" }
 androidx-test-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "androidxTestEspressoCore" }
 
 [plugins]
+detekt = { id = "dev.detekt", version.ref = "detekt" }
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
 android-library = { id = "com.android.library", version.ref = "androidGradlePlugin" }
 android-test = { id = "com.android.test", version.ref = "androidGradlePlugin" }

@@ -15,7 +15,11 @@ jobs:
           java-version: 21
           distribution: temurin
       - name: Execute unit tests
-        run: ./gradlew app:testDebugUnitTest --stacktrace
+        run: ./gradlew testDebugUnitTest --stacktrace
+      - name: Run detekt
+        run: ./gradlew detekt --stacktrace
+      - name: Run Android Lint
+        run: ./gradlew lintDebug --stacktrace
   ANDROID_BUILD_APK:
     name: Build APK
     runs-on: ubuntu-latest
