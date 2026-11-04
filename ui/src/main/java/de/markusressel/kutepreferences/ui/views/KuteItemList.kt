@@ -8,13 +8,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import de.markusressel.kutepreferences.core.DefaultKuteNavigator
 import de.markusressel.kutepreferences.core.preference.KutePreferenceListItem
 import de.markusressel.kutepreferences.core.preference.text.KuteTextPreference
 import de.markusressel.kutepreferences.ui.theme.KutePreferencesTheme
 import de.markusressel.kutepreferences.ui.util.CombinedPreview
-import de.markusressel.kutepreferences.ui.views.search.Composable
-import de.markusressel.kutepreferences.ui.views.search.dummy
+import de.markusressel.kutepreferences.ui.views.Composable
+import de.markusressel.kutepreferences.ui.util.dummy
 
 
 @Composable
@@ -35,26 +34,22 @@ fun KuteItemList(
 @CombinedPreview
 @Composable
 private fun KuteItemListPreview() {
-    remember {
-        val nav = DefaultKuteNavigator()
-        KuteStyleManager.registerDefaultStyles(nav)
-        false
-    }
+    KuteRegistryForPreview {
+        val icon =
+            AppCompatResources.getDrawable(LocalContext.current, android.R.drawable.ic_media_next)
 
-    val icon =
-        AppCompatResources.getDrawable(LocalContext.current, android.R.drawable.ic_media_next)
-
-    KutePreferencesTheme {
-        KuteItemList(
-            items = listOf(
-                KuteTextPreference(
-                    key = "1",
-                    icon = icon,
-                    title = "Some Text Preference",
-                    defaultValue = "Default",
-                    dataProvider = dummy
+        KutePreferencesTheme {
+            KuteItemList(
+                items = listOf(
+                    KuteTextPreference(
+                        key = "1",
+                        icon = icon,
+                        title = "Some Text Preference",
+                        defaultValue = "Default",
+                        dataProvider = dummy
+                    )
                 )
             )
-        )
+        }
     }
 }

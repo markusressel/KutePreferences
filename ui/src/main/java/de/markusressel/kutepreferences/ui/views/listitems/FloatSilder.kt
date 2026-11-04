@@ -22,10 +22,9 @@ import de.markusressel.kutepreferences.ui.theme.KutePreferencesTheme
 import de.markusressel.kutepreferences.ui.util.CombinedPreview
 import de.markusressel.kutepreferences.ui.util.clickAction
 import de.markusressel.kutepreferences.ui.util.highlightingShimmer
-import de.markusressel.kutepreferences.ui.util.modifyIf
 import de.markusressel.kutepreferences.ui.views.common.InlineExpandablePreferenceView
 import de.markusressel.kutepreferences.ui.views.common.Marker
-import de.markusressel.kutepreferences.ui.views.search.dummy
+import de.markusressel.kutepreferences.ui.util.dummy
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.drop
 
@@ -39,9 +38,7 @@ fun DecimalSliderPreference(
     var collapsed by remember { mutableStateOf(true) }
 
     InlineExpandablePreferenceView(
-        modifier = Modifier.modifyIf(uiState.shimmering) {
-            highlightingShimmer()
-        },
+        modifier = Modifier.highlightingShimmer(uiState.shimmering, behavior::clearHighlight),
         icon = behavior.preferenceItem.icon,
         title = behavior.preferenceItem.title,
         subtitle = behavior.preferenceItem.createDescription(persistedValue),

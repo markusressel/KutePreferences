@@ -16,7 +16,6 @@ import de.markusressel.kutepreferences.ui.theme.KutePreferencesTheme
 import de.markusressel.kutepreferences.ui.theme.listItemMinHeight
 import de.markusressel.kutepreferences.ui.util.CombinedPreview
 import de.markusressel.kutepreferences.ui.util.highlightingShimmer
-import de.markusressel.kutepreferences.ui.util.modifyIf
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -29,9 +28,7 @@ fun ActionPreference(
         modifier = Modifier
             .fillMaxWidth()
             .defaultMinSize(minHeight = listItemMinHeight)
-            .modifyIf(uiState.shimmering) {
-                highlightingShimmer()
-            }
+            .highlightingShimmer(uiState.shimmering, behavior::clearHighlight)
             .combinedClickable(
                 onClick = { behavior.onClick() },
                 onLongClick = behavior.preferenceItem.onLongClick,

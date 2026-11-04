@@ -19,11 +19,10 @@ import de.markusressel.kutepreferences.ui.theme.KutePreferencesTheme
 import de.markusressel.kutepreferences.ui.util.CombinedPreview
 import de.markusressel.kutepreferences.ui.util.clickAction
 import de.markusressel.kutepreferences.ui.util.highlightingShimmer
-import de.markusressel.kutepreferences.ui.util.modifyIf
 import de.markusressel.kutepreferences.ui.views.common.CancelDefaultSaveDialog
 import de.markusressel.kutepreferences.ui.views.common.CancelDefaultSaveDialogState
 import de.markusressel.kutepreferences.ui.views.common.rememberCancelDefaultSaveDialogState
-import de.markusressel.kutepreferences.ui.views.search.dummy
+import de.markusressel.kutepreferences.ui.util.dummy
 import kotlinx.coroutines.delay
 import java.time.Instant
 import java.time.LocalDate
@@ -43,9 +42,7 @@ fun DatePreference(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .modifyIf(uiState.shimmering) {
-                highlightingShimmer()
-            },
+            .highlightingShimmer(uiState.shimmering, behavior::clearHighlight),
         verticalAlignment = Alignment.CenterVertically
     ) {
         DefaultPreferenceListItem(

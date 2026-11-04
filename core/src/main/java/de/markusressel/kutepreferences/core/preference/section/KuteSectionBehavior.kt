@@ -1,24 +1,22 @@
 package de.markusressel.kutepreferences.core.preference.section
 
+import de.markusressel.kutepreferences.core.preference.KuteExpandable
 import de.markusressel.kutepreferences.core.preference.KuteItemBehavior
-import de.markusressel.kutepreferences.core.preference.category.shimmerLengthMillis
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 
 open class KuteSectionBehavior(
     val preferenceItem: KuteSection
-) : KuteItemBehavior {
+) : KuteItemBehavior, KuteExpandable {
     private val _uiState = MutableStateFlow(UiState())
-    val uiState = _uiState
+    val uiState = _uiState.asStateFlow()
 
     fun collapse() {
         _uiState.update { old -> old.copy(isCollapsed = true) }
     }
 
-    fun expand() {
+    override fun expand() {
         _uiState.update { old -> old.copy(isCollapsed = false) }
     }
 
@@ -27,11 +25,11 @@ open class KuteSectionBehavior(
     }
 
     override fun highlight() {
-        GlobalScope.launch {
-            _uiState.value = _uiState.value.copy(isShimmering = true)
-            delay(shimmerLengthMillis.toLong())
-            _uiState.value = _uiState.value.copy(isShimmering = false)
-        }
+        _uiState.update { old -> old.copy(isShimmering = true) }
+    }
+
+    override fun clearHighlight() {
+        _uiState.update { old -> old.copy(isShimmering = false) }
     }
 
     data class UiState(

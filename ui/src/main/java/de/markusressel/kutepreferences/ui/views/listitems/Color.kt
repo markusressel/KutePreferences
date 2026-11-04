@@ -22,9 +22,8 @@ import de.markusressel.kutepreferences.ui.theme.KutePreferencesTheme
 import de.markusressel.kutepreferences.ui.util.CombinedPreview
 import de.markusressel.kutepreferences.ui.util.clickAction
 import de.markusressel.kutepreferences.ui.util.highlightingShimmer
-import de.markusressel.kutepreferences.ui.util.modifyIf
 import de.markusressel.kutepreferences.ui.views.common.InlineExpandablePreferenceView
-import de.markusressel.kutepreferences.ui.views.search.dummy
+import de.markusressel.kutepreferences.ui.util.dummy
 
 @Composable
 fun ColorPreferenceView(
@@ -43,9 +42,7 @@ fun ColorPreferenceView(
         header = {
             Row(
                 modifier = Modifier
-                    .modifyIf(uiState.shimmering) {
-                        highlightingShimmer()
-                    }
+                    .highlightingShimmer(uiState.shimmering, behavior::clearHighlight)
                     .padding(end = 4.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {

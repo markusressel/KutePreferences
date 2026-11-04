@@ -23,7 +23,6 @@ import de.markusressel.kutepreferences.core.preference.category.KuteCategoryBeha
 import de.markusressel.kutepreferences.ui.theme.*
 import de.markusressel.kutepreferences.ui.util.CombinedPreview
 import de.markusressel.kutepreferences.ui.util.highlightingShimmer
-import de.markusressel.kutepreferences.ui.util.modifyIf
 
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -38,9 +37,7 @@ fun KuteCategoryView(
         modifier = Modifier
             .fillMaxWidth()
             .defaultMinSize(minHeight = listItemMinHeight)
-            .modifyIf(uiState.shimmering) {
-                highlightingShimmer()
-            }
+            .highlightingShimmer(uiState.shimmering, behavior::clearHighlight)
             .padding(horizontal = 8.dp)
             .then(modifier),
         elevation = CardDefaults.cardElevation(LocalKuteColors.current.category.elevation),

@@ -17,9 +17,8 @@ import de.markusressel.kutepreferences.ui.theme.SectionTheme
 import de.markusressel.kutepreferences.ui.util.CombinedPreview
 import de.markusressel.kutepreferences.ui.util.clickAction
 import de.markusressel.kutepreferences.ui.util.highlightingShimmer
-import de.markusressel.kutepreferences.ui.util.modifyIf
 import de.markusressel.kutepreferences.ui.views.common.CollapsibleCard
-import de.markusressel.kutepreferences.ui.views.search.Composable
+import de.markusressel.kutepreferences.ui.views.Composable
 
 @Composable
 fun KuteSectionView(
@@ -30,9 +29,7 @@ fun KuteSectionView(
 
     CollapsibleCard(
         modifier = Modifier
-            .modifyIf(uiState.isShimmering) {
-                highlightingShimmer()
-            }
+            .highlightingShimmer(uiState.isShimmering, behavior::clearHighlight)
             .padding(horizontal = 8.dp)
             .then(modifier),
         title = {

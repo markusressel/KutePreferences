@@ -12,7 +12,6 @@ import de.markusressel.kutepreferences.core.preference.section.KuteSection
 import de.markusressel.kutepreferences.core.preference.text.KuteTextPreference
 import de.markusressel.kutepreferences.demo.R
 import de.markusressel.kutepreferences.demo.domain.*
-import de.markusressel.kutepreferences.ui.views.KuteStyleManager
 import de.markusressel.kutepreferences.ui.vm.KutePreferencesViewModel
 import javax.inject.Inject
 
@@ -27,26 +26,14 @@ class MainViewModel @Inject constructor(
 
     init {
         /**
-         * To make custom preference types show up, you have to register the with the
-         * [KuteStyleManager]. You can also use this to manipulate the UI of existing
-         * types.
+         * To make custom preference types show up, you have to register them with the
+         * [registry]. You can also use this to replace the UI of existing types.
          */
-        KuteStyleManager.registerTypeHook { listItem ->
-            when (listItem) {
-                is CustomPreference -> {
-                    CustomPreferenceView(listItem)
-                    true
-                }
-
-                is CustomBooleanPreference -> {
-                    val behavior = CustomBooleanPreferenceBehavior(listItem)
-                    CustomBooleanPreferenceView(behavior)
-                    true
-                }
-
-                else -> false
-            }
-        }
+        registry.register<CustomPreference> { CustomPreferenceView(it) }
+        registry.register<CustomBooleanPreference, CustomBooleanPreferenceBehavior>(
+            behavior = ::CustomBooleanPreferenceBehavior,
+            content = { CustomBooleanPreferenceView(it) },
+        )
 
         val preferenceTree = createPreferenceTree()
         initPreferencesTree(preferenceTree)

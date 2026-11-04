@@ -15,11 +15,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import de.markusressel.kutepreferences.core.DefaultKuteNavigator
 import de.markusressel.kutepreferences.core.preference.date.KuteDatePreference
 import de.markusressel.kutepreferences.ui.theme.KutePreferencesTheme
 import de.markusressel.kutepreferences.ui.util.CombinedPreview
-import de.markusressel.kutepreferences.ui.views.KuteStyleManager
+import de.markusressel.kutepreferences.ui.util.dummy
+import de.markusressel.kutepreferences.ui.views.Composable
+import de.markusressel.kutepreferences.ui.views.KuteRegistryForPreview
 import de.markusressel.kutepreferences.ui.vm.SearchItemsUseCase
 import java.time.LocalDateTime
 import java.time.ZoneOffset
@@ -78,30 +79,26 @@ fun KuteSearchResultItemList(
 @CombinedPreview
 @Composable
 private fun KuteSearchResultItemListPreview() {
-    remember {
-        val nav = DefaultKuteNavigator()
-        KuteStyleManager.registerDefaultStyles(nav)
-        false
-    }
-
-    val preferenceItem2 = KuteDatePreference(
-        key = "0",
-        icon = null,
-        title = "Date Preference",
-        dataProvider = dummy,
-        defaultValue = LocalDateTime.now().toEpochSecond(ZoneOffset.UTC)
-    )
-
-    KutePreferencesTheme {
-        KuteSearchResultItemList(
-            items = listOf(
-                SearchItemsUseCase.KuteSearchResultItem(
-                    key = "0",
-                    item = preferenceItem2,
-                    searchTerm = "search term",
-                ),
-            ),
-            onSearchResultSelected = {},
+    KuteRegistryForPreview {
+        val preferenceItem2 = KuteDatePreference(
+            key = "0",
+            icon = null,
+            title = "Date Preference",
+            dataProvider = dummy,
+            defaultValue = LocalDateTime.now().toEpochSecond(ZoneOffset.UTC)
         )
+
+        KutePreferencesTheme {
+            KuteSearchResultItemList(
+                items = listOf(
+                    SearchItemsUseCase.KuteSearchResultItem(
+                        key = "0",
+                        item = preferenceItem2,
+                        searchTerm = "search term",
+                    ),
+                ),
+                onSearchResultSelected = {},
+            )
+        }
     }
 }
