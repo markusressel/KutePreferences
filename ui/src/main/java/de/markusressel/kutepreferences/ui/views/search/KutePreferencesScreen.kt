@@ -1,7 +1,9 @@
 package de.markusressel.kutepreferences.ui.views.search
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.*
@@ -35,6 +37,10 @@ fun KutePreferencesScreen(
                 searchFocusRequester.freeFocus()
                 kuteViewModel.onUiEvent(KuteUiEvent.BackPressed)
             }
+
+            // NOTE: a window gives initial focus to its first focusable, which must not be the
+            // search bar, because that would open the search and the keyboard on launch
+            Spacer(modifier = Modifier.focusable())
 
             KuteSearch(
                 modifier = Modifier
