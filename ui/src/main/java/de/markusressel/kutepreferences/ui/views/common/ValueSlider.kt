@@ -119,6 +119,7 @@ internal fun ValueSlider(
             SliderRangeIndicator(
                 modifier = Modifier.padding(horizontal = 4.dp),
                 valueRange = valueRange,
+                text = markerText,
             )
 
             val density = LocalDensity.current
@@ -181,11 +182,12 @@ internal fun ValueSlider(
 @Composable
 private fun SliderRangeIndicator(
     valueRange: ClosedFloatingPointRange<Float>,
+    text: (Float) -> String,
     modifier: Modifier = Modifier,
 ) {
     Row(modifier = modifier) {
-        Text(text = "${valueRange.start.toInt()}")
+        Text(text = text(valueRange.start))
         Spacer(modifier = Modifier.weight(1f))
-        Text(text = "${valueRange.endInclusive.toInt()}")
+        Text(text = text(valueRange.endInclusive))
     }
 }

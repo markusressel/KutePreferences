@@ -143,8 +143,8 @@ Do not copy these patterns into new code. Fix them only when that is the task.
 
 ## Security
 
-- `KutePasswordPreference` only masks the displayed value. Both data providers store it in plaintext, and the mask reveals
-  its length. Do not describe it as secure storage, and do not log preference values.
+- `KutePasswordPreference` only masks the displayed value. Both data providers store it in plaintext, and the edit dialog
+  reveals its length. Do not describe it as secure storage, and do not log preference values.
 - `.ci/debug.keystore` is a debug-only key for CI builds. Never commit a release keystore or real credentials.
 - CI notification credentials live in GitHub Actions secrets. Never print them or add them to `.ci/` scripts.
 
