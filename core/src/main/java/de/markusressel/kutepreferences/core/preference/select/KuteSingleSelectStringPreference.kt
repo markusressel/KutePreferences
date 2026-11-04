@@ -31,6 +31,9 @@ open class KuteSingleSelectStringPreference(
         it.key to context.getString(it.value)
     }
 
+    override val options: Map<String, String>
+        get() = this.possibleValues.entries.associate { context.getString(it.key) to it.value }
+
     override fun getDefaultValue(): String = context.getString(defaultValue)
 
     override fun createDescription(currentValue: String): String {

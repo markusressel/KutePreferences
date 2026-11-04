@@ -12,7 +12,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import de.markusressel.kutepreferences.core.preference.Validator
 import de.markusressel.kutepreferences.core.preference.select.KuteSingleSelectStringPreference
@@ -80,13 +79,12 @@ private fun SingleSelectionPreferenceEditDialog(
             text = label
         )
 
-        behavior.preferenceItem.possibleValues.forEach { (key, title) ->
-            val stringValue = stringResource(key)
+        behavior.preferenceItem.options.forEach { (optionValue, optionTitle) ->
             SelectionOption(
-                title = title,
-                selected = value == stringValue,
+                title = optionTitle,
+                selected = value == optionValue,
                 onClick = {
-                    behavior.currentValue.value = stringValue
+                    behavior.currentValue.value = optionValue
                 }
             )
         }

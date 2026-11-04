@@ -12,7 +12,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import de.markusressel.kutepreferences.core.preference.Validator
 import de.markusressel.kutepreferences.core.preference.select.KuteMultiSelectStringPreference
@@ -82,17 +81,15 @@ private fun MultiSelectionPreferenceEditDialog(
             text = label
         )
 
-        behavior.preferenceItem.possibleValues.forEach { (keyRes, titleRes) ->
-            val titleText = stringResource(titleRes)
-            val stringValue = stringResource(keyRes)
+        behavior.preferenceItem.options.forEach { (optionValue, optionTitle) ->
             SelectionOption(
-                title = titleText,
-                selected = value.contains(stringValue),
+                title = optionTitle,
+                selected = value.contains(optionValue),
                 onClick = {
-                    if (behavior.currentValue.value.contains(stringValue)) {
-                        behavior.currentValue.value = behavior.currentValue.value.minus(stringValue)
+                    if (behavior.currentValue.value.contains(optionValue)) {
+                        behavior.currentValue.value = behavior.currentValue.value.minus(optionValue)
                     } else {
-                        behavior.currentValue.value = behavior.currentValue.value.plus(stringValue)
+                        behavior.currentValue.value = behavior.currentValue.value.plus(optionValue)
                     }
                 }
             )
