@@ -45,7 +45,9 @@ import org.robolectric.annotation.GraphicsMode
 @OptIn(ExperimentalRoborazziApi::class)
 @RunWith(RobolectricTestRunner::class)
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
-@Config(qualifiers = "w400dp-h700dp-xhdpi")
+// NOTE: native graphics require API 26, and without a target SDK Robolectric uses the minimum SDK. On an
+// older API the content is not drawn at all, and the screenshots are blank without any test failing.
+@Config(sdk = [34], qualifiers = "w400dp-h700dp-xhdpi")
 class PreferenceViewsScreenshotTest {
 
     @get:Rule
