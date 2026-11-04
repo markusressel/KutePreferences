@@ -1,13 +1,9 @@
 package de.markusressel.kutepreferences.core.preference.action
 
 import de.markusressel.kutepreferences.core.preference.KuteItemBehavior
-import de.markusressel.kutepreferences.core.preference.category.shimmerLengthMillis
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 
 open class ActionPreferenceBehavior(
     val preferenceItem: KuteAction
@@ -24,12 +20,11 @@ open class ActionPreferenceBehavior(
     }
 
     override fun highlight() {
-        // TODO: figure out how to use the correct coroutine scope
-        GlobalScope.launch {
-            _uiState.update { old -> old.copy(shimmering = true) }
-            delay(shimmerLengthMillis.toLong())
-            _uiState.update { old -> old.copy(shimmering = false) }
-        }
+        _uiState.update { old -> old.copy(shimmering = true) }
+    }
+
+    override fun clearHighlight() {
+        _uiState.update { old -> old.copy(shimmering = false) }
     }
 
     data class UiState(

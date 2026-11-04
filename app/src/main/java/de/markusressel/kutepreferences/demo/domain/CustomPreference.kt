@@ -22,10 +22,10 @@ import de.markusressel.kutepreferences.core.preference.KutePreferenceItem
 import de.markusressel.kutepreferences.core.preference.KutePreferenceListItem
 import de.markusressel.kutepreferences.core.search.SearchUtils.containsAnyWord
 import de.markusressel.kutepreferences.ui.util.CombinedPreview
-import de.markusressel.kutepreferences.ui.views.search.dummy
+import de.markusressel.kutepreferences.ui.util.dummy
 
 class CustomPreference(
-    override val key: Int,
+    override val key: String,
     override val onClick: (() -> Unit)?,
     override val onLongClick: (() -> Unit)?,
     override val icon: Drawable? = null,
@@ -62,7 +62,7 @@ class CustomPreference(
 private fun CustomPreferencePreview() {
     CustomPreferenceView(
         preferenceItem = CustomPreference(
-            key = 0,
+            key = "0",
             onClick = {},
             onLongClick = {},
             dataProvider = dummy,

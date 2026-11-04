@@ -8,7 +8,7 @@ import de.markusressel.kutepreferences.core.search.SearchUtils.containsAnyWord
  * Implementation of an action preference
  */
 open class KuteAction(
-    override val key: Int,
+    override val key: String,
     val icon: Drawable? = null,
     val title: String,
     val description: String = "",

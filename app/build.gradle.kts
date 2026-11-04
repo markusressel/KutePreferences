@@ -55,7 +55,6 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
     // required because of this: https://stackoverflow.com/questions/70894168/targeting-s-version-31-and-above-requires-that-one-of-flag-immutable-or-flag
-    implementation(libs.androidx.work.runtime.ktx)
 
     // Hilt (Dagger wrapper)
     implementation(libs.hilt.android)
@@ -68,8 +67,6 @@ dependencies {
     kspTest(libs.hilt.compiler)
 
     // Hilt Jetpack integration
-    implementation(libs.hilt.ext.work)
-    ksp(libs.hilt.ext.compiler)
 
     //the core iconcis library (without any widgets)
     implementation(libs.iconics.core)
@@ -98,7 +95,6 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.compose)
 
     // When using a MDC theme
-    implementation(libs.android.material.compose.theme.adapter)
 
     debugImplementation(libs.androidx.compose.ui.tooling)
     implementation(libs.androidx.compose.ui.tooling.preview)

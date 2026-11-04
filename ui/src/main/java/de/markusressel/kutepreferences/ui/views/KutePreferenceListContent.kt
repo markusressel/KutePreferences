@@ -5,12 +5,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import de.markusressel.kutepreferences.core.DefaultKuteNavigator
 import de.markusressel.kutepreferences.core.preference.KutePreferenceListItem
 import de.markusressel.kutepreferences.core.preference.text.KuteTextPreference
 import de.markusressel.kutepreferences.ui.theme.KutePreferencesTheme
 import de.markusressel.kutepreferences.ui.util.CombinedPreview
-import de.markusressel.kutepreferences.ui.views.search.dummy
+import de.markusressel.kutepreferences.ui.util.dummy
 
 
 @Composable
@@ -34,22 +33,18 @@ fun KutePreferenceListContent(
 @Composable
 private fun KutePreferenceListContentPreview() {
     KutePreferencesTheme {
-        remember {
-            val nav = DefaultKuteNavigator()
-            KuteStyleManager.registerDefaultStyles(nav)
-            false
+    KuteRegistryForPreview {
+            KutePreferenceListContent(
+                items = listOf(
+                    KuteTextPreference(
+                        key = "0",
+                        icon = null,
+                        title = "Hello World!",
+                        defaultValue = "Hey there!",
+                        dataProvider = dummy
+                    )
+                ),
+            )
         }
-
-        KutePreferenceListContent(
-            items = listOf(
-                KuteTextPreference(
-                    key = 0,
-                    icon = null,
-                    title = "Hello World!",
-                    defaultValue = "Hey there!",
-                    dataProvider = dummy
-                )
-            ),
-        )
     }
 }

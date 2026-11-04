@@ -1,76 +1,106 @@
-@file:Suppress("UNCHECKED_CAST")
-
 package de.markusressel.kutepreferences.core.persistence
 
 import android.content.Context
+import android.content.SharedPreferences
 import de.markusressel.kutepreferences.core.preference.KutePreferenceItem
-import de.markusressel.typedpreferences.PreferenceItem
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.withContext
+import java.util.concurrent.ConcurrentHashMap
 
 /**
  * Default implementation of a KutePreferenceDataProvider using a SharedPreferences backed store
  */
 class DefaultKutePreferenceDataProvider(context: Context) : KutePreferenceDataProvider {
 
-    private val preferenceHandler = PreferenceHandler(context)
+    private val appContext = context.applicationContext
 
-    // map of "preference key" -> stateflow
-    private val listeners = mutableMapOf<Int, MutableStateFlow<*>>()
+    // loading the file blocks, so it is deferred until the first access, which is done by load() if possible
+    private val preferences: SharedPreferences by lazy {
+        appContext.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE).also {
+            it.registerOnSharedPreferenceChangeListener(changeListener)
+        }
+    }
+
+    private class ValueFlow<T : Any>(val defaultValue: T, val flow: MutableStateFlow<T>)
+
+    private val valueFlows = ConcurrentHashMap<String, ValueFlow<*>>()
+
+    // SharedPreferences only keeps a weak reference to its listeners, so this has to be a field
+    private val changeListener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
+        when (key) {
+            // all values have been removed
+            null -> valueFlows.keys.forEach(::refreshFlow)
+            else -> refreshFlow(key)
+        }
+    }
+
+    override suspend fun load() {
+        withContext(Dispatchers.IO) {
+            preferences
+        }
+    }
 
     override fun <DataType : Any> storeValue(
         kutePreference: KutePreferenceItem<DataType>,
         newValue: DataType
-    ) {
-        val preferenceItem: PreferenceItem<DataType> = preferenceHandler
-            .createPreferenceItem(kutePreference.key, kutePreference.getDefaultValue())
-        preferenceHandler.setValue(preferenceItem, newValue)
-        notifyListeners(kutePreference, newValue)
+    ) = storeValueUnsafe(kutePreference.key, newValue)
+
+    override fun <DataType : Any> storeValueUnsafe(key: String, newValue: DataType) {
+        preferences.edit().apply {
+            when (newValue) {
+                is Boolean -> putBoolean(key, newValue)
+                is String -> putString(key, newValue)
+                is Int -> putInt(key, newValue)
+                is Float -> putFloat(key, newValue)
+                is Long -> putLong(key, newValue)
+                else -> putString(key, PreferenceValueCodec.encode(newValue))
+            }
+        }.apply()
+        refreshFlow(key)
     }
 
-    override fun <DataType : Any> storeValueUnsafe(key: Int, newValue: DataType) {
-        val preferenceItem: PreferenceItem<DataType> = preferenceHandler
-            .createPreferenceItem(key, newValue)
-
-        preferenceHandler.setValue(preferenceItem, newValue)
-        notifyListeners(key, newValue)
-    }
-
+    @Suppress("UNCHECKED_CAST")
     override fun <DataType : Any> getValueFlow(kutePreference: KutePreferenceItem<DataType>): StateFlow<DataType> {
-        val preferenceItem: PreferenceItem<DataType> = preferenceHandler
-            .createPreferenceItem(kutePreference.key, kutePreference.getDefaultValue())
-
-        val stateFlow = listeners.getOrPut(kutePreference.key) {
-            MutableStateFlow(preferenceHandler.getValue(preferenceItem))
-        } as MutableStateFlow<DataType>
-
-        return stateFlow
+        val valueFlow = valueFlows.getOrPut(kutePreference.key) {
+            val defaultValue = kutePreference.getDefaultValue()
+            ValueFlow(defaultValue, MutableStateFlow(read(kutePreference.key, defaultValue)))
+        } as ValueFlow<DataType>
+        return valueFlow.flow.asStateFlow()
     }
 
     override fun <DataType : Any> getValue(kutePreference: KutePreferenceItem<DataType>): DataType {
-        val preferenceItem: PreferenceItem<DataType> = preferenceHandler
-            .createPreferenceItem(kutePreference.key, kutePreference.getDefaultValue())
-        return preferenceHandler.getValue(preferenceItem)
+        return read(kutePreference.key, kutePreference.getDefaultValue())
     }
 
-    override fun <DataType : Any> getValueUnsafe(key: Int, defaultValue: DataType): DataType {
-        val preferenceItem: PreferenceItem<DataType> = preferenceHandler
-            .createPreferenceItem(key, defaultValue)
-        return preferenceHandler.getValue(preferenceItem)
+    override fun <DataType : Any> getValueUnsafe(key: String, defaultValue: DataType): DataType {
+        return read(key, defaultValue)
     }
 
-    private fun <DataType : Any> notifyListeners(
-        kutePreference: KutePreferenceItem<DataType>,
-        newValue: DataType
-    ) = notifyListeners(kutePreference.key, newValue)
+    private fun refreshFlow(key: String) {
+        valueFlows[key]?.let { refresh(key, it) }
+    }
 
-    private fun <DataType : Any> notifyListeners(
-        kutePreferenceKey: Int,
-        newValue: DataType
-    ) {
-        (listeners[kutePreferenceKey] as? MutableStateFlow<DataType>)?.let {
-            it.value = newValue
+    private fun <T : Any> refresh(key: String, valueFlow: ValueFlow<T>) {
+        valueFlow.flow.value = read(key, valueFlow.defaultValue)
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    private fun <T : Any> read(key: String, defaultValue: T): T {
+        val stored = preferences.all[key] ?: return defaultValue
+        return when {
+            defaultValue.isNativeType() -> if (stored.javaClass == defaultValue.javaClass) stored as T else defaultValue
+            stored is String -> PreferenceValueCodec.decodeOrDefault(key, stored, defaultValue)
+            else -> defaultValue
         }
+    }
+
+    private fun Any.isNativeType() = this is Boolean || this is String || this is Int || this is Float || this is Long
+
+    private companion object {
+        const val PREFERENCES_NAME = "kute_preferences"
     }
 
 }

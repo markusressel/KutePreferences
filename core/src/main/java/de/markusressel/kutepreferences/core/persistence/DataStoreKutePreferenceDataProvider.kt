@@ -1,146 +1,178 @@
-@file:Suppress("UNCHECKED_CAST")
-
 package de.markusressel.kutepreferences.core.persistence
 
 import android.content.Context
+import android.util.Log
 import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.*
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
+import androidx.datastore.preferences.core.doublePreferencesKey
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.emptyPreferences
+import androidx.datastore.preferences.core.floatPreferencesKey
+import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.core.longPreferencesKey
+import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
-import com.google.gson.Gson
 import de.markusressel.kutepreferences.core.preference.KutePreferenceItem
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.retryWhen
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import java.io.IOException
+import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.atomic.AtomicBoolean
+
+// DataStore only allows a single active instance per file, so this has to be a top level property
+private val Context.kuteDataStore: DataStore<Preferences> by preferencesDataStore(name = "kute_preferences")
 
 /**
- * Default implementation of a KutePreferenceDataProvider using Jetpack Datastore as a backend
+ * Implementation of a KutePreferenceDataProvider using Jetpack Datastore as a backend
+ *
+ * @param dataStore the store to use
+ * @param scope the scope of all reads and writes. Cancelling it stops this provider.
  */
-@OptIn(DelicateCoroutinesApi::class)
-class DataStoreKutePreferenceDataProvider(val context: Context) : KutePreferenceDataProvider {
+class DataStoreKutePreferenceDataProvider(
+    private val dataStore: DataStore<Preferences>,
+    private val scope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.IO),
+) : KutePreferenceDataProvider {
 
-    private val dataStoreAdapter = DataStoreAdapter(context)
+    constructor(
+        context: Context,
+        scope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.IO),
+    ) : this(context.applicationContext.kuteDataStore, scope)
 
-    override fun <DataType : Any> storeValue(
-        kutePreference: KutePreferenceItem<DataType>,
-        newValue: DataType
-    ) {
-        GlobalScope.launch {
-            dataStoreAdapter.storeValue(context.getString(kutePreference.key), newValue)
-        }
-    }
+    private val hasFailedToLoad = AtomicBoolean(false)
 
-    override fun <DataType : Any> storeValueUnsafe(key: Int, newValue: DataType) {
-        GlobalScope.launch {
-            dataStoreAdapter.storeValue(context.getString(key), newValue)
-        }
-    }
-
-    override fun <DataType : Any> getValueFlow(kutePreference: KutePreferenceItem<DataType>): StateFlow<DataType> {
-        return runBlocking {
-            dataStoreAdapter.getValueFlow(
-                key = context.getString(kutePreference.key),
-                defaultValue = kutePreference.getDefaultValue()
-            ).stateIn(GlobalScope)
-        }
-    }
-
-    override fun <DataType : Any> getValue(kutePreference: KutePreferenceItem<DataType>): DataType {
-        return runBlocking {
-            dataStoreAdapter.getValue(context.getString(kutePreference.key), kutePreference.getDefaultValue())
-        }
-    }
-
-    override fun <DataType : Any> getValueUnsafe(key: Int, defaultValue: DataType): DataType {
-        return runBlocking {
-            dataStoreAdapter.getValue(context.getString(key), defaultValue)
-        }
-    }
-
-}
-
-class DataStoreAdapter(val context: Context) {
-
-    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "kute_preferences")
-
-    private var gson: Gson = Gson()
-
-
-    suspend fun <T : Any> storeValue(key: String, value: T) {
-        try {
-            val keyTyped = createKeyFor(key, value::class.java)
-            context.dataStore.edit { settings ->
-                settings[keyTyped as Preferences.Key<T>] = value
+    /**
+     * The latest content of the store, null until it has been loaded
+     */
+    private val snapshot: StateFlow<Preferences?> = dataStore.data
+        .retryWhen { cause, _ ->
+            Log.e(TAG, "Could not read preferences", cause)
+            // never leave readers waiting: fall back to defaults, until the store can be read again
+            if (hasFailedToLoad.compareAndSet(false, true)) {
+                emit(emptyPreferences())
             }
-        } catch (e: IllegalArgumentException) {
-            val keyTyped = stringPreferencesKey(key)
-            val json = gson.toJson(value, value::class.java)
-            context.dataStore.edit { settings ->
-                settings[keyTyped] = json
-            }
+            delay(READ_RETRY_DELAY_MILLIS)
+            true
         }
-    }
+        .stateIn(scope, SharingStarted.Eagerly, null)
 
-    suspend fun <T : Any> getValue(key: String, defaultValue: T): T {
-        return try {
-            val keyTyped = createKeyFor(key, defaultValue::class.java)
-            context.dataStore.data.first()[keyTyped] ?: defaultValue
-        } catch (e: IllegalArgumentException) {
-            val keyTyped = stringPreferencesKey(key)
-            @Suppress("UNCHECKED_CAST")
-            gson.fromJson<Any>(context.dataStore.data.first()[keyTyped] as String, defaultValue::class.java) as T
-        }
+    private val valueFlows = ConcurrentHashMap<String, StateFlow<*>>()
 
-    }
+    // writes are processed one at a time, in the order they were requested
+    private val pendingWrites = Channel<suspend () -> Unit>(Channel.UNLIMITED)
 
-    fun <T : Any> getValueFlow(key: String, defaultValue: T): Flow<T> {
-        return try {
-            val keyTyped = createKeyFor(key, defaultValue::class.java)
-            context.dataStore.data.map { settings ->
-                settings[keyTyped] ?: defaultValue
-            }
-        } catch (e: IllegalArgumentException) {
-            val keyTyped = stringPreferencesKey(key)
-            @Suppress("UNCHECKED_CAST")
-            context.dataStore.data.map { settings ->
-                settings[keyTyped]
-            }.map {
-                if (it == null) {
-                    return@map defaultValue
-                } else {
-                    @Suppress("UNCHECKED_CAST")
-                    gson.fromJson<Any>(it, defaultValue::class.java) as T
+    init {
+        scope.launch {
+            // a write that races with the initial read of the store can be missed by the snapshot
+            load()
+
+            for (write in pendingWrites) {
+                // a failed write must not prevent later writes
+                @Suppress("TooGenericExceptionCaught")
+                try {
+                    write()
+                } catch (ex: CancellationException) {
+                    throw ex
+                } catch (ex: IOException) {
+                    Log.e(TAG, "Could not write preference", ex)
+                } catch (ex: RuntimeException) {
+                    Log.e(TAG, "Could not write preference", ex)
                 }
             }
         }
     }
 
-    private fun <T> createKeyFor(
-        key: String,
-        clazz: Class<T>
-    ): Preferences.Key<T> {
-        return when (clazz) {
-            Boolean::class.javaPrimitiveType,
-            Boolean::class.javaObjectType -> booleanPreferencesKey(key)
+    override suspend fun load() {
+        snapshot.filterNotNull().first()
+    }
 
-            Int::class.javaPrimitiveType,
-            Int::class.javaObjectType -> intPreferencesKey(key)
+    override fun <DataType : Any> storeValue(
+        kutePreference: KutePreferenceItem<DataType>,
+        newValue: DataType
+    ) = storeValueUnsafe(kutePreference.key, newValue)
 
-            Float::class.javaPrimitiveType,
-            Float::class.javaObjectType -> floatPreferencesKey(key)
+    override fun <DataType : Any> storeValueUnsafe(key: String, newValue: DataType) {
+        pendingWrites.trySend {
+            dataStore.edit { preferences ->
+                when (newValue) {
+                    is Boolean -> preferences[booleanPreferencesKey(key)] = newValue
+                    is Int -> preferences[intPreferencesKey(key)] = newValue
+                    is Float -> preferences[floatPreferencesKey(key)] = newValue
+                    is Long -> preferences[longPreferencesKey(key)] = newValue
+                    is Double -> preferences[doublePreferencesKey(key)] = newValue
+                    is String -> preferences[stringPreferencesKey(key)] = newValue
+                    else -> preferences[stringPreferencesKey(key)] = PreferenceValueCodec.encode(newValue)
+                }
+            }
+        }
+    }
 
-            Long::class.javaPrimitiveType,
-            Long::class.javaObjectType -> longPreferencesKey(key)
+    @Suppress("UNCHECKED_CAST")
+    override fun <DataType : Any> getValueFlow(kutePreference: KutePreferenceItem<DataType>): StateFlow<DataType> {
+        return valueFlows.getOrPut(kutePreference.key) {
+            val key = kutePreference.key
+            val defaultValue = kutePreference.getDefaultValue()
+            snapshot.filterNotNull()
+                .map { read(it, key, defaultValue) }
+                .stateIn(scope, SharingStarted.Eagerly, read(loadedSnapshot(), key, defaultValue))
+        } as StateFlow<DataType>
+    }
 
-            Double::class.javaPrimitiveType,
-            Double::class.javaObjectType -> doublePreferencesKey(key)
+    override fun <DataType : Any> getValue(kutePreference: KutePreferenceItem<DataType>): DataType {
+        return getValueUnsafe(kutePreference.key, kutePreference.getDefaultValue())
+    }
 
-            String::class.javaPrimitiveType,
-            String::class.javaObjectType -> stringPreferencesKey(key)
+    override fun <DataType : Any> getValueUnsafe(key: String, defaultValue: DataType): DataType {
+        return read(loadedSnapshot(), key, defaultValue)
+    }
 
-            else -> throw IllegalArgumentException("Type is not supported: $clazz")
-        } as Preferences.Key<T>
+    /**
+     * Only blocks if the value is requested before [load] has completed.
+     */
+    private fun loadedSnapshot(): Preferences {
+        return snapshot.value ?: runBlocking { snapshot.filterNotNull().first() }
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    private fun <T : Any> read(preferences: Preferences, key: String, defaultValue: T): T {
+        return when (defaultValue) {
+            is Boolean -> readNative(preferences, booleanPreferencesKey(key), defaultValue)
+            is Int -> readNative(preferences, intPreferencesKey(key), defaultValue)
+            is Float -> readNative(preferences, floatPreferencesKey(key), defaultValue)
+            is Long -> readNative(preferences, longPreferencesKey(key), defaultValue)
+            is Double -> readNative(preferences, doublePreferencesKey(key), defaultValue)
+            is String -> readNative(preferences, stringPreferencesKey(key), defaultValue)
+            else -> when (val stored = (preferences.asMap()[stringPreferencesKey(key)])) {
+                is String -> PreferenceValueCodec.decodeOrDefault(key, stored, defaultValue)
+                else -> defaultValue
+            }
+        } as T
+    }
+
+    /**
+     * The key of a store entry only consists of its name, so the stored value can be of a different type.
+     */
+    private fun readNative(preferences: Preferences, key: Preferences.Key<*>, defaultValue: Any): Any {
+        val stored = preferences.asMap()[key] ?: return defaultValue
+        return if (stored.javaClass == defaultValue.javaClass) stored else defaultValue
+    }
+
+    private companion object {
+        const val TAG = "KutePreferences"
+        const val READ_RETRY_DELAY_MILLIS = 1_000L
     }
 
 }

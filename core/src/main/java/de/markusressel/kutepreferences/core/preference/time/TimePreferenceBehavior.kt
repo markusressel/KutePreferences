@@ -1,22 +1,9 @@
 package de.markusressel.kutepreferences.core.preference.time
 
-import de.markusressel.kutepreferences.core.preference.PersistedPreferenceBehavior
+import de.markusressel.kutepreferences.core.preference.EditablePreferenceBehavior
 
 open class TimePreferenceBehavior(
     preferenceItem: KuteTimePreference
-) : PersistedPreferenceBehavior<KuteTimePreference, TimePersistenceModel>(
+) : EditablePreferenceBehavior<KuteTimePreference, TimePersistenceModel>(
     preferenceItem
-) {
-
-    fun onCancelClicked() {
-        currentValue.value = preferenceItem.persistedValue.value
-    }
-
-    fun onDefaultClicked() = restoreDefaultValue()
-
-    fun isValid(): Boolean {
-        // TODO: implement validation
-        return true
-    }
-
-}
+)

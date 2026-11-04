@@ -1,16 +1,18 @@
 package de.markusressel.kutepreferences.core.preference.text
 
+import de.markusressel.kutepreferences.core.preference.EditablePreferenceBehavior
 import de.markusressel.kutepreferences.core.preference.KutePreferenceItem
-import de.markusressel.kutepreferences.core.preference.PersistedPreferenceBehavior
 
 open class TextPreferenceBehaviorBase<T : KutePreferenceItem<String>>(
     preferenceItem: T
-) : PersistedPreferenceBehavior<T, String>(
+) : EditablePreferenceBehavior<T, String>(
     preferenceItem
 ) {
 
-    fun onCancelClicked() = reset()
-
-    fun onDefaultClicked() = restoreDefaultValue()
+    override fun isValid(): Boolean {
+        val regex = (preferenceItem as? KuteTextPreference)?.regex
+        val patternIsMatching = regex?.toRegex()?.matches(currentValue.value) ?: true
+        return patternIsMatching && super.isValid()
+    }
 
 }

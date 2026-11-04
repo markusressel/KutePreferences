@@ -5,7 +5,7 @@ import de.markusressel.kutepreferences.core.persistence.KutePreferenceDataProvid
 import kotlin.math.floor
 
 open class KuteFloatRangePreference(
-    key: Int,
+    key: String,
     icon: Drawable? = null,
     title: String,
     minimum: Float,

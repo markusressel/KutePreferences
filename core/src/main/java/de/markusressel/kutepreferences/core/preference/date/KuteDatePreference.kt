@@ -4,12 +4,13 @@ import android.graphics.drawable.Drawable
 import de.markusressel.kutepreferences.core.persistence.KutePreferenceDataProvider
 import de.markusressel.kutepreferences.core.preference.KutePreferenceItem
 import de.markusressel.kutepreferences.core.preference.KutePreferenceListItem
+import de.markusressel.kutepreferences.core.preference.Validator
 import de.markusressel.kutepreferences.core.search.SearchUtils.containsAnyWord
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 open class KuteDatePreference(
-    override val key: Int,
+    override val key: String,
     override val icon: Drawable? = null,
     override val title: String,
     val minimum: Long? = null,
@@ -19,6 +20,7 @@ open class KuteDatePreference(
     override val onPreferenceChangedListener: ((oldValue: Long, newValue: Long) -> Unit)? = null,
     override val onClick: (() -> Unit)? = null,
     override val onLongClick: (() -> Unit)? = null,
+    override val validator: Validator<Long>? = null,
 ) : KutePreferenceItem<Long>, KutePreferenceListItem {
 
     override val persistedValue by lazy { getPersistedValueFlow() }

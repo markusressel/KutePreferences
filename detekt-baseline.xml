@@ -1,0 +1,88 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>CyclomaticComplexMethod:ValueSlider.kt:@Composable internal fun ValueSlider</ID>
+    <ID>EmptyClassBlock:KuteIntSliderPreference.kt:KuteIntSliderPreference${ }</ID>
+    <ID>LongMethod:MainViewModel.kt:MainViewModel$private fun createPreferenceTree: List&lt;KutePreferenceListItem&gt;</ID>
+    <ID>MatchingDeclarationName:CancelDefaultSaveDialog.kt:CancelDefaultSaveDialogState</ID>
+    <ID>MaxLineLength:CustomPreference.kt:text = "This preference will change color every time you touch it! ${preferenceItem.createDescription(color.toArgb())}"</ID>
+    <ID>MaxLineLength:Date.kt:initialSelectedDateMillis = LocalDate.ofEpochDay(currentValue).atStartOfDay().toInstant(ZoneOffset.UTC).toEpochMilli()</ID>
+    <ID>MaxLineLength:DummyDataProvider.kt:DummyDataProvider$return valueFlows.getOrPut(key) { MutableStateFlow(getValueUnsafe(key, defaultValue)) } as MutableStateFlow&lt;DataType&gt;</ID>
+    <ID>MaxLineLength:FindItemStackUseCase.kt:FindItemStackUseCase$operator</ID>
+    <ID>MaxLineLength:KuteFloatRangePreference.kt:KuteFloatRangePreference$onPreferenceChangedListener: ((oldValue: RangePersistenceModel&lt;Float&gt;, newValue: RangePersistenceModel&lt;Float&gt;) -&gt; Unit)? = null</ID>
+    <ID>MaxLineLength:KuteRangePreference.kt:KuteRangePreference$override val onPreferenceChangedListener: ((oldValue: RangePersistenceModel&lt;T&gt;, newValue: RangePersistenceModel&lt;T&gt;) -&gt; Unit)? = null</ID>
+    <ID>MaxLineLength:KuteTimePreference.kt:KuteTimePreference$override val onPreferenceChangedListener: ((oldValue: TimePersistenceModel, newValue: TimePersistenceModel) -&gt; Unit)? = null</ID>
+    <ID>NewLineAtEndOfFile:App.kt:de.markusressel.kutepreferences.demo.application.App.kt</ID>
+    <ID>NewLineAtEndOfFile:AppModule.kt:de.markusressel.kutepreferences.demo.di.AppModule.kt</ID>
+    <ID>NewLineAtEndOfFile:BooleanPreferenceBehavior.kt:de.markusressel.kutepreferences.core.preference.bool.BooleanPreferenceBehavior.kt</ID>
+    <ID>NewLineAtEndOfFile:CancelDefaultSaveDialog.kt:de.markusressel.kutepreferences.ui.views.common.CancelDefaultSaveDialog.kt</ID>
+    <ID>NewLineAtEndOfFile:Color.kt:de.markusressel.kutepreferences.demo.ui.theme.Color.kt</ID>
+    <ID>NewLineAtEndOfFile:Colors.kt:de.markusressel.kutepreferences.ui.theme.Colors.kt</ID>
+    <ID>NewLineAtEndOfFile:CombinedPreview.kt:de.markusressel.kutepreferences.ui.util.CombinedPreview.kt</ID>
+    <ID>NewLineAtEndOfFile:ComposeExtensions.kt:de.markusressel.kutepreferences.ui.util.ComposeExtensions.kt</ID>
+    <ID>NewLineAtEndOfFile:CustomBooleanPreference.kt:de.markusressel.kutepreferences.demo.domain.CustomBooleanPreference.kt</ID>
+    <ID>NewLineAtEndOfFile:CustomBooleanPreferenceBehavior.kt:de.markusressel.kutepreferences.demo.domain.CustomBooleanPreferenceBehavior.kt</ID>
+    <ID>NewLineAtEndOfFile:CustomPreference.kt:de.markusressel.kutepreferences.demo.domain.CustomPreference.kt</ID>
+    <ID>NewLineAtEndOfFile:Date.kt:de.markusressel.kutepreferences.ui.views.listitems.Date.kt</ID>
+    <ID>NewLineAtEndOfFile:FloatRangeSliderPreferenceBehavior.kt:de.markusressel.kutepreferences.core.preference.number.range.FloatRangeSliderPreferenceBehavior.kt</ID>
+    <ID>NewLineAtEndOfFile:FloatSliderPreferenceBehavior.kt:de.markusressel.kutepreferences.core.preference.number.slider.FloatSliderPreferenceBehavior.kt</ID>
+    <ID>NewLineAtEndOfFile:IconHelper.kt:de.markusressel.kutepreferences.demo.ui.IconHelper.kt</ID>
+    <ID>NewLineAtEndOfFile:InlineExpandablePreferenceView.kt:de.markusressel.kutepreferences.ui.views.common.InlineExpandablePreferenceView.kt</ID>
+    <ID>NewLineAtEndOfFile:KuteAction.kt:de.markusressel.kutepreferences.core.preference.action.KuteAction.kt</ID>
+    <ID>NewLineAtEndOfFile:KuteBooleanPreference.kt:de.markusressel.kutepreferences.core.preference.bool.KuteBooleanPreference.kt</ID>
+    <ID>NewLineAtEndOfFile:KuteDatePreference.kt:de.markusressel.kutepreferences.core.preference.date.KuteDatePreference.kt</ID>
+    <ID>NewLineAtEndOfFile:KuteFloatRangePreference.kt:de.markusressel.kutepreferences.core.preference.number.range.KuteFloatRangePreference.kt</ID>
+    <ID>NewLineAtEndOfFile:KuteItemList.kt:de.markusressel.kutepreferences.ui.views.KuteItemList.kt</ID>
+    <ID>NewLineAtEndOfFile:KuteMultiSelectStringPreference.kt:de.markusressel.kutepreferences.core.preference.select.KuteMultiSelectStringPreference.kt</ID>
+    <ID>NewLineAtEndOfFile:KuteNumberPreference.kt:de.markusressel.kutepreferences.core.preference.number.KuteNumberPreference.kt</ID>
+    <ID>NewLineAtEndOfFile:KuteParent.kt:de.markusressel.kutepreferences.core.preference.category.KuteParent.kt</ID>
+    <ID>NewLineAtEndOfFile:KutePasswordPreference.kt:de.markusressel.kutepreferences.core.preference.text.KutePasswordPreference.kt</ID>
+    <ID>NewLineAtEndOfFile:KutePreferenceCategory.kt:de.markusressel.kutepreferences.core.preference.category.KutePreferenceCategory.kt</ID>
+    <ID>NewLineAtEndOfFile:KutePreferenceItem.kt:de.markusressel.kutepreferences.core.preference.KutePreferenceItem.kt</ID>
+    <ID>NewLineAtEndOfFile:KutePreferenceListContent.kt:de.markusressel.kutepreferences.ui.views.KutePreferenceListContent.kt</ID>
+    <ID>NewLineAtEndOfFile:KutePreferenceSearchResultContent.kt:de.markusressel.kutepreferences.ui.views.search.KutePreferenceSearchResultContent.kt</ID>
+    <ID>NewLineAtEndOfFile:KutePreferenceSection.kt:de.markusressel.kutepreferences.core.preference.section.KutePreferenceSection.kt</ID>
+    <ID>NewLineAtEndOfFile:KutePreferencesDialogDefaults.kt:de.markusressel.kutepreferences.ui.theme.KutePreferencesDialogDefaults.kt</ID>
+    <ID>NewLineAtEndOfFile:KutePreferencesHolder.kt:de.markusressel.kutepreferences.demo.domain.KutePreferencesHolder.kt</ID>
+    <ID>NewLineAtEndOfFile:KutePreferencesSearchBarDefaults.kt:de.markusressel.kutepreferences.ui.theme.KutePreferencesSearchBarDefaults.kt</ID>
+    <ID>NewLineAtEndOfFile:KutePreferencesSearchDefaults.kt:de.markusressel.kutepreferences.ui.theme.KutePreferencesSearchDefaults.kt</ID>
+    <ID>NewLineAtEndOfFile:KutePreferencesTheme.kt:de.markusressel.kutepreferences.ui.theme.KutePreferencesTheme.kt</ID>
+    <ID>NewLineAtEndOfFile:KutePreferencesThemeDefaults.kt:de.markusressel.kutepreferences.ui.theme.KutePreferencesThemeDefaults.kt</ID>
+    <ID>NewLineAtEndOfFile:KutePreferencesViewModel.kt:de.markusressel.kutepreferences.ui.vm.KutePreferencesViewModel.kt</ID>
+    <ID>NewLineAtEndOfFile:KuteRangePreference.kt:de.markusressel.kutepreferences.core.preference.number.range.KuteRangePreference.kt</ID>
+    <ID>NewLineAtEndOfFile:KuteSearch.kt:de.markusressel.kutepreferences.ui.views.search.KuteSearch.kt</ID>
+    <ID>NewLineAtEndOfFile:KuteSearchResultItemList.kt:de.markusressel.kutepreferences.ui.views.search.KuteSearchResultItemList.kt</ID>
+    <ID>NewLineAtEndOfFile:KuteSection.kt:de.markusressel.kutepreferences.core.preference.section.KuteSection.kt</ID>
+    <ID>NewLineAtEndOfFile:KuteSectionBehavior.kt:de.markusressel.kutepreferences.core.preference.section.KuteSectionBehavior.kt</ID>
+    <ID>NewLineAtEndOfFile:KuteSingleSelectPreference.kt:de.markusressel.kutepreferences.core.preference.select.KuteSingleSelectPreference.kt</ID>
+    <ID>NewLineAtEndOfFile:KuteTextPreference.kt:de.markusressel.kutepreferences.core.preference.text.KuteTextPreference.kt</ID>
+    <ID>NewLineAtEndOfFile:KuteTimePreference.kt:de.markusressel.kutepreferences.core.preference.time.KuteTimePreference.kt</ID>
+    <ID>NewLineAtEndOfFile:KuteUiEvent.kt:de.markusressel.kutepreferences.ui.vm.KuteUiEvent.kt</ID>
+    <ID>NewLineAtEndOfFile:KuteUrlPreference.kt:de.markusressel.kutepreferences.core.preference.text.KuteUrlPreference.kt</ID>
+    <ID>NewLineAtEndOfFile:MainActivity.kt:de.markusressel.kutepreferences.demo.ui.MainActivity.kt</ID>
+    <ID>NewLineAtEndOfFile:MainViewModel.kt:de.markusressel.kutepreferences.demo.ui.MainViewModel.kt</ID>
+    <ID>NewLineAtEndOfFile:PersistedPreferenceBehavior.kt:de.markusressel.kutepreferences.core.preference.PersistedPreferenceBehavior.kt</ID>
+    <ID>NewLineAtEndOfFile:SearchUtils.kt:de.markusressel.kutepreferences.core.search.SearchUtils.kt</ID>
+    <ID>NewLineAtEndOfFile:Shape.kt:de.markusressel.kutepreferences.demo.ui.theme.Shape.kt</ID>
+    <ID>NewLineAtEndOfFile:TextEditDialog.kt:de.markusressel.kutepreferences.ui.views.common.TextEditDialog.kt</ID>
+    <ID>NewLineAtEndOfFile:Theme.kt:de.markusressel.kutepreferences.demo.ui.theme.Theme.kt</ID>
+    <ID>NewLineAtEndOfFile:Time.kt:de.markusressel.kutepreferences.ui.views.listitems.Time.kt</ID>
+    <ID>NewLineAtEndOfFile:TimePersistenceModel.kt:de.markusressel.kutepreferences.core.preference.time.TimePersistenceModel.kt</ID>
+    <ID>NewLineAtEndOfFile:TranslationManager.kt:de.markusressel.kutepreferences.demo.domain.TranslationManager.kt</ID>
+    <ID>NewLineAtEndOfFile:Type.kt:de.markusressel.kutepreferences.demo.ui.theme.Type.kt</ID>
+    <ID>SwallowedException:Date.kt:ex: Exception</ID>
+    <ID>SwallowedException:MultiSelection.kt:ex: Exception</ID>
+    <ID>SwallowedException:SingleSelection.kt:ex: Exception</ID>
+    <ID>SwallowedException:TextEditDialog.kt:ex: Exception</ID>
+    <ID>SwallowedException:Time.kt:ex: Exception</ID>
+    <ID>TooGenericExceptionCaught:Date.kt:ex: Exception</ID>
+    <ID>TooGenericExceptionCaught:MultiSelection.kt:ex: Exception</ID>
+    <ID>TooGenericExceptionCaught:SingleSelection.kt:ex: Exception</ID>
+    <ID>TooGenericExceptionCaught:TextEditDialog.kt:ex: Exception</ID>
+    <ID>TooGenericExceptionCaught:Time.kt:ex: Exception</ID>
+    <ID>UnusedParameter:Date.kt:hint: String = "${behavior.preferenceItem.getDefaultValue()}"</ID>
+    <ID>UnusedParameter:Time.kt:hint: String = "${behavior.preferenceItem.getDefaultValue()}"</ID>
+    <ID>VariableNaming:PersistedPreferenceBehavior.kt:PersistedPreferenceBehavior$protected val _uiState = MutableStateFlow(UiState())</ID>
+  </CurrentIssues>
+</SmellBaseline>

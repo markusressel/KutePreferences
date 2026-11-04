@@ -2,17 +2,9 @@ package de.markusressel.kutepreferences.core.preference.category
 
 import de.markusressel.kutepreferences.core.KuteNavigator
 import de.markusressel.kutepreferences.core.preference.KuteItemBehavior
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
-
-
-const val durationMillis = 800
-const val delayMillis = 300
-const val iterations = 2
-const val shimmerLengthMillis = (durationMillis * iterations) + (delayMillis * (iterations))
+import kotlinx.coroutines.flow.update
 
 
 open class KuteCategoryBehavior(
@@ -28,11 +20,11 @@ open class KuteCategoryBehavior(
     }
 
     override fun highlight() {
-        GlobalScope.launch {
-            _uiState.emit(uiState.value.copy(shimmering = true))
-            delay(shimmerLengthMillis.toLong())
-            _uiState.emit(uiState.value.copy(shimmering = false))
-        }
+        _uiState.update { old -> old.copy(shimmering = true) }
+    }
+
+    override fun clearHighlight() {
+        _uiState.update { old -> old.copy(shimmering = false) }
     }
 
     data class UiState(

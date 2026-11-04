@@ -21,7 +21,7 @@ run: install open
 runRelease: installRelease openRelease
 
 open:
-	adb shell am start -n "de.markusressel.kutepreferences.debug/de.markusressel.kutepreferences.demo.ui.MainActivity" -a android.intent.action.MAIN -c android.intent.category.LAUNCHER
+	adb shell am start -n "de.markusressel.kutepreferences.demo/de.markusressel.kutepreferences.demo.ui.MainActivity" -a android.intent.action.MAIN -c android.intent.category.LAUNCHER
 
 openRelease:
-	adb shell am start -n "de.markusressel.kutepreferences/de.markusressel.kutepreferences.demo.ui.MainActivity" -a android.intent.action.MAIN -c android.intent.category.LAUNCHER
+	adb shell am start -n "de.markusressel.kutepreferences.demo/de.markusressel.kutepreferences.demo.ui.MainActivity" -a android.intent.action.MAIN -c android.intent.category.LAUNCHER

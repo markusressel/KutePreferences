@@ -31,19 +31,24 @@ internal fun Project.configureKotlinAndroid(commonExtension: CommonExtension) {
         }
 
         compileOptions.apply {
-            // Up to Java 11 APIs are available through desugaring
-            // https://developer.android.com/studio/write/java11-minimal-support-table
-            sourceCompatibility = JavaVersion.VERSION_21
-            targetCompatibility = JavaVersion.VERSION_21
+            // Java 8+ APIs like java.time are available on older devices through desugaring
+            // https://developer.android.com/studio/write/java-8-support-table
+            // NOTE: consumers cannot inline code from a newer JVM target than their own, so keep this one low
+            sourceCompatibility = JavaVersion.VERSION_17
+            targetCompatibility = JavaVersion.VERSION_17
             isCoreLibraryDesugaringEnabled = true
+        }
+
+        testOptions.apply {
+            unitTests.isIncludeAndroidResources = true
+            unitTests.isReturnDefaultValues = true
         }
     }
 
     // Use withType to workaround https://youtrack.jetbrains.com/issue/KT-55947
     tasks.withType<KotlinCompile>().configureEach {
         compilerOptions {
-            // Set JVM target to 21
-            jvmTarget.set(JvmTarget.JVM_21)
+            jvmTarget.set(JvmTarget.JVM_17)
             // Treat all Kotlin warnings as errors (disabled by default)
             // Override by setting warningsAsErrors=true in your ~/.gradle/gradle.properties
             val warningsAsErrors: String? by project

@@ -5,7 +5,7 @@ import de.markusressel.kutepreferences.core.persistence.KutePreferenceDataProvid
 import de.markusressel.kutepreferences.core.preference.KutePreferenceListItem
 
 open class KuteIntSliderPreference(
-    key: Int,
+    key: String,
     icon: Drawable? = null,
     title: String,
     minimum: Long,

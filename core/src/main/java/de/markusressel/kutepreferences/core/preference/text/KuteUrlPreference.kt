@@ -3,9 +3,10 @@ package de.markusressel.kutepreferences.core.preference.text
 import android.graphics.drawable.Drawable
 import de.markusressel.kutepreferences.core.persistence.KutePreferenceDataProvider
 import de.markusressel.kutepreferences.core.preference.KutePreferenceListItem
+import de.markusressel.kutepreferences.core.preference.Validator
 
 open class KuteUrlPreference(
-    override val key: Int,
+    override val key: String,
     override val icon: Drawable? = null,
     override val title: String,
     regex: String? = null,
@@ -14,6 +15,7 @@ open class KuteUrlPreference(
     override val onPreferenceChangedListener: ((oldValue: String, newValue: String) -> Unit)? = null,
     override val onClick: (() -> Unit)? = null,
     override val onLongClick: (() -> Unit)? = null,
+    override val validator: Validator<String>? = null,
 ) : KuteTextPreference(
     key = key,
     icon = icon,
@@ -24,4 +26,5 @@ open class KuteUrlPreference(
     onPreferenceChangedListener = onPreferenceChangedListener,
     onClick = onClick,
     onLongClick = onLongClick,
+    validator = validator,
 ), KutePreferenceListItem

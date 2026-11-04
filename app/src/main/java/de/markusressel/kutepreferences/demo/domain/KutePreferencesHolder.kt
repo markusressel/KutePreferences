@@ -41,7 +41,7 @@ class KutePreferencesHolder @Inject constructor(
 
     val textPreference by lazy {
         KuteTextPreference(
-            key = R.string.key_demo_text_pref,
+            key = translationManager.getTranslation(R.string.key_demo_text_pref),
             icon = iconHelper.getIcon(MaterialDesignIconic.Icon.gmi_text_format),
             title = translationManager.getTranslation(R.string.title_demo_text_pref),
             defaultValue = translationManager.getTranslation(R.string.default_value_demo_text_pref),
@@ -51,7 +51,7 @@ class KutePreferencesHolder @Inject constructor(
 
     val textPreference2 by lazy {
         KuteTextPreference(
-            key = R.string.key_demo_text_pref_2,
+            key = translationManager.getTranslation(R.string.key_demo_text_pref_2),
             icon = iconHelper.getIcon(MaterialDesignIconic.Icon.gmi_text_format),
             title = translationManager.getTranslation(R.string.title_demo_text_pref_2),
             defaultValue = TEXT_PREFERENCE_2_DEFAULT_VALUE,
@@ -61,7 +61,7 @@ class KutePreferencesHolder @Inject constructor(
 
     val urlPreference by lazy {
         KuteUrlPreference(
-            key = R.string.key_demo_url_pref,
+            key = translationManager.getTranslation(R.string.key_demo_url_pref),
             title = translationManager.getTranslation(R.string.title_demo_url_pref),
             icon = iconHelper.getIcon(MaterialDesignIconic.Icon.gmi_open_in_browser),
             defaultValue = "https://www.markusressel.de",
@@ -71,7 +71,7 @@ class KutePreferencesHolder @Inject constructor(
 
     val passwordPreference by lazy {
         KutePasswordPreference(
-            key = R.string.key_demo_text_pref_password,
+            key = translationManager.getTranslation(R.string.key_demo_text_pref_password),
             icon = iconHelper.getIcon(MaterialDesignIconic.Icon.gmi_lock),
             title = translationManager.getTranslation(R.string.title_demo_text_pref_password),
             regex = "^.{8,}\$|^\$",
@@ -82,7 +82,7 @@ class KutePreferencesHolder @Inject constructor(
 
     val togglePreference by lazy {
         KuteBooleanPreference(
-            key = R.string.key_demo_toggle_pref,
+            key = translationManager.getTranslation(R.string.key_demo_toggle_pref),
             icon = iconHelper.getIcon(MaterialDesignIconic.Icon.gmi_airplane),
             title = translationManager.getTranslation(R.string.title_demo_toggle_pref),
             descriptionFunction = {
@@ -102,7 +102,7 @@ class KutePreferencesHolder @Inject constructor(
 
     val numberPreference by lazy {
         KuteNumberPreference(
-            key = R.string.key_demo_number_pref,
+            key = translationManager.getTranslation(R.string.key_demo_number_pref),
             icon = iconHelper.getIcon(MaterialDesignIconic.Icon.gmi_time_countdown),
             title = translationManager.getTranslation(R.string.title_demo_number_pref),
             unit = "ms",
@@ -113,7 +113,7 @@ class KutePreferencesHolder @Inject constructor(
 
     val intSliderPreference by lazy {
         KuteIntSliderPreference(
-            key = R.string.key_demo_int_slider_pref,
+            key = translationManager.getTranslation(R.string.key_demo_int_slider_pref),
             icon = iconHelper.getIcon(MaterialDesignIconic.Icon.gmi_volume_up),
             title = translationManager.getTranslation(R.string.title_demo_int_slider_pref),
             minimum = 0,
@@ -125,7 +125,7 @@ class KutePreferencesHolder @Inject constructor(
 
     val floatSliderPreference by lazy {
         KuteFloatSliderPreference(
-            key = R.string.key_demo_float_slider_pref,
+            key = translationManager.getTranslation(R.string.key_demo_float_slider_pref),
             icon = iconHelper.getIcon(MaterialDesignIconic.Icon.gmi_volume_up),
             title = translationManager.getTranslation(R.string.title_demo_float_slider_pref),
             minimum = -1f,
@@ -137,7 +137,7 @@ class KutePreferencesHolder @Inject constructor(
 
     val intRangePreference by lazy {
         KuteFloatRangePreference(
-            key = R.string.key_demo_int_range_pref,
+            key = translationManager.getTranslation(R.string.key_demo_int_range_pref),
             icon = iconHelper.getIcon(MaterialDesignIconic.Icon.gmi_arrows),
             title = translationManager.getTranslation(R.string.title_demo_int_range_pref),
             decimalPlaces = 0,
@@ -150,7 +150,7 @@ class KutePreferencesHolder @Inject constructor(
 
     val floatRangePreference by lazy {
         KuteFloatRangePreference(
-            key = R.string.key_demo_float_range_pref,
+            key = translationManager.getTranslation(R.string.key_demo_float_range_pref),
             icon = iconHelper.getIcon(MaterialDesignIconic.Icon.gmi_arrows),
             title = translationManager.getTranslation(R.string.title_demo_float_range_pref),
             decimalPlaces = 2,
@@ -163,17 +163,20 @@ class KutePreferencesHolder @Inject constructor(
 
     val colorPreference by lazy {
         KuteColorPreference(
-            key = R.string.key_demo_color_pref,
+            key = translationManager.getTranslation(R.string.key_demo_color_pref),
             icon = iconHelper.getIcon(MaterialDesignIconic.Icon.gmi_colorize),
             title = translationManager.getTranslation(R.string.title_demo_color_pref),
-            defaultValue = ContextCompat.getColor(context, R.color.design_default_color_primary),
+            defaultValue = ContextCompat.getColor(
+                context,
+                com.google.android.material.R.color.design_default_color_primary,
+            ),
             dataProvider = dataProvider
         )
     }
 
     val datePreference by lazy {
         KuteDatePreference(
-            key = R.string.key_demo_date_pref,
+            key = translationManager.getTranslation(R.string.key_demo_date_pref),
             icon = iconHelper.getIcon(MaterialDesignIconic.Icon.gmi_calendar),
             title = translationManager.getTranslation(R.string.title_demo_date_pref),
             defaultValue = LocalDate.now().toEpochDay(),
@@ -183,7 +186,7 @@ class KutePreferencesHolder @Inject constructor(
 
     val timePreference by lazy {
         KuteTimePreference(
-            key = R.string.key_demo_time_pref,
+            key = translationManager.getTranslation(R.string.key_demo_time_pref),
             icon = iconHelper.getIcon(MaterialDesignIconic.Icon.gmi_time),
             title = translationManager.getTranslation(R.string.title_demo_time_pref),
             defaultValue = TimePersistenceModel(hourOfDay = 12, minute = 30),
@@ -194,7 +197,7 @@ class KutePreferencesHolder @Inject constructor(
     val singleSelectPreference by lazy {
         KuteSingleSelectStringPreference(
             context = context,
-            key = R.string.key_demo_single_select,
+            key = translationManager.getTranslation(R.string.key_demo_single_select),
             icon = iconHelper.getIcon(MaterialDesignIconic.Icon.gmi_select_all),
             title = translationManager.getTranslation(R.string.title_demo_single_select),
             defaultValue = R.string.key_single_select_1,
@@ -210,7 +213,7 @@ class KutePreferencesHolder @Inject constructor(
     val multiSelectPreference by lazy {
         KuteMultiSelectStringPreference(
             context = context,
-            key = R.string.key_demo_multi_select,
+            key = translationManager.getTranslation(R.string.key_demo_multi_select),
             icon = iconHelper.getIcon(MaterialDesignIconic.Icon.gmi_select_all),
             title = translationManager.getTranslation(R.string.title_demo_multi_select),
             defaultValue = setOf(R.string.key_multi_select_1, R.string.key_multi_select_2),
@@ -225,7 +228,7 @@ class KutePreferencesHolder @Inject constructor(
 
     val kuteAction by lazy {
         KuteAction(
-            key = R.string.key_demo_action,
+            key = translationManager.getTranslation(R.string.key_demo_action),
             icon = iconHelper.getIcon(MaterialDesignIconic.Icon.gmi_info),
             title = translationManager.getTranslation(R.string.title_demo_action),
             description = "Additional info about this app.",

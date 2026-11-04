@@ -13,7 +13,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import com.vanpra.composematerialdialogs.MaterialDialogState
 import de.markusressel.kutepreferences.ui.R
 import de.markusressel.kutepreferences.ui.theme.KutePreferencesTheme
 import de.markusressel.kutepreferences.ui.theme.LocalKuteColors
@@ -44,7 +43,7 @@ class CancelDefaultSaveDialogState(
 
     companion object {
         /**
-         * The default [Saver] implementation for [MaterialDialogState].
+         * The default [Saver] implementation for [CancelDefaultSaveDialogState].
          */
         fun Saver(): Saver<CancelDefaultSaveDialogState, *> = Saver(
             save = { state -> state.isVisible },

@@ -19,12 +19,12 @@ import de.markusressel.kutepreferences.core.preference.select.KuteSingleSelectSt
 import de.markusressel.kutepreferences.core.preference.select.SingleSelectionPreferenceBehavior
 import de.markusressel.kutepreferences.ui.theme.KutePreferencesTheme
 import de.markusressel.kutepreferences.ui.util.CombinedPreview
+import de.markusressel.kutepreferences.ui.util.clickAction
 import de.markusressel.kutepreferences.ui.util.highlightingShimmer
-import de.markusressel.kutepreferences.ui.util.modifyIf
 import de.markusressel.kutepreferences.ui.views.common.CancelDefaultSaveDialog
 import de.markusressel.kutepreferences.ui.views.common.CancelDefaultSaveDialogState
 import de.markusressel.kutepreferences.ui.views.common.rememberCancelDefaultSaveDialogState
-import de.markusressel.kutepreferences.ui.views.search.dummy
+import de.markusressel.kutepreferences.ui.util.dummy
 
 @Composable
 fun SingleSelectionPreference(
@@ -34,28 +34,7 @@ fun SingleSelectionPreference(
         SingleSelectionPreferenceEditDialog(dialogState, behavior)
     }
 ) {
-    val uiState by behavior.uiState.collectAsState()
-    val subtitle by behavior.persistedValue.collectAsState()
-
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .modifyIf(uiState.shimmering) {
-                highlightingShimmer()
-            },
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        DefaultPreferenceListItem(
-            icon = behavior.preferenceItem.icon,
-            title = behavior.preferenceItem.title,
-            subtitle = behavior.preferenceItem.createDescription(subtitle),
-            onClick = {
-                dialogState.show()
-            }
-        )
-    }
-
-    editDialog()
+    DialogPreferenceListItem(behavior, dialogState, editDialog)
 }
 
 @Composable
@@ -124,7 +103,7 @@ private fun SingleSelectionPreferencePreview() {
 
     val preferenceItem = KuteSingleSelectStringPreference(
         context = context,
-        key = 0,
+        key = "0",
         icon = icon,
         title = "Single Selection Preference",
         dataProvider = dummy,

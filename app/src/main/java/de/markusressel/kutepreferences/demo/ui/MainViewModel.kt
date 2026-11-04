@@ -12,7 +12,6 @@ import de.markusressel.kutepreferences.core.preference.section.KuteSection
 import de.markusressel.kutepreferences.core.preference.text.KuteTextPreference
 import de.markusressel.kutepreferences.demo.R
 import de.markusressel.kutepreferences.demo.domain.*
-import de.markusressel.kutepreferences.ui.views.KuteStyleManager
 import de.markusressel.kutepreferences.ui.vm.KutePreferencesViewModel
 import javax.inject.Inject
 
@@ -27,26 +26,11 @@ class MainViewModel @Inject constructor(
 
     init {
         /**
-         * To make custom preference types show up, you have to register the with the
-         * [KuteStyleManager]. You can also use this to manipulate the UI of existing
-         * types.
+         * To make custom preference types show up, you have to register them with the
+         * [registry]. You can also use this to replace the UI of existing types.
          */
-        KuteStyleManager.registerTypeHook { listItem ->
-            when (listItem) {
-                is CustomPreference -> {
-                    CustomPreferenceView(listItem)
-                    true
-                }
-
-                is CustomBooleanPreference -> {
-                    val behavior = CustomBooleanPreferenceBehavior(listItem)
-                    CustomBooleanPreferenceView(behavior)
-                    true
-                }
-
-                else -> false
-            }
-        }
+        registry.register<CustomPreference> { CustomPreferenceView(it) }
+        registry.register(::CustomBooleanPreferenceBehavior) { CustomBooleanPreferenceView(it) }
 
         val preferenceTree = createPreferenceTree()
         initPreferencesTree(preferenceTree)
@@ -54,13 +38,13 @@ class MainViewModel @Inject constructor(
 
     private fun createPreferenceTree(): List<KutePreferenceListItem> {
         val categoryBattery = KuteCategory(
-            key = R.string.key_category_battery,
+            key = translationManager.getTranslation(R.string.key_category_battery),
             icon = iconHelper.getIcon(MaterialDesignIconic.Icon.gmi_battery),
             title = translationManager.getTranslation(R.string.title_category_battery),
             description = translationManager.getTranslation(R.string.description_category_battery),
             children = listOf(
                 KuteSection(
-                    key = R.string.key_section_test,
+                    key = translationManager.getTranslation(R.string.key_section_test),
                     title = "Test Divider",
                     children = listOf(
                         kutePreferencesHolder.textPreference
@@ -70,7 +54,7 @@ class MainViewModel @Inject constructor(
         )
 
         val categoryNetwork = KuteCategory(
-            key = R.string.key_category_network,
+            key = translationManager.getTranslation(R.string.key_category_network),
             icon = iconHelper.getIcon(MaterialDesignIconic.Icon.gmi_wifi),
             title = translationManager.getTranslation(R.string.title_category_network),
             description = translationManager.getTranslation(R.string.description_category_network),
@@ -91,13 +75,13 @@ class MainViewModel @Inject constructor(
         )
 
         val categoryUser = KuteCategory(
-            key = R.string.key_category_user,
+            key = translationManager.getTranslation(R.string.key_category_user),
             icon = iconHelper.getIcon(MaterialDesignIconic.Icon.gmi_nature_people),
             title = translationManager.getTranslation(R.string.title_category_user),
             description = translationManager.getTranslation(R.string.description_category_user),
             children = listOf(
                 KuteSection(
-                    key = R.string.key_section_person,
+                    key = translationManager.getTranslation(R.string.key_section_person),
                     title = translationManager.getTranslation(R.string.title_section_person),
                     children = listOf(
                         kutePreferencesHolder.textPreference2,
@@ -107,14 +91,14 @@ class MainViewModel @Inject constructor(
                     )
                 ),
                 KuteSection(
-                    key = R.string.key_section_taste,
+                    key = translationManager.getTranslation(R.string.key_section_taste),
                     title = translationManager.getTranslation(R.string.title_section_taste),
                     children = listOf(
                         kutePreferencesHolder.colorPreference
                     )
                 ),
                 KuteSection(
-                    key = R.string.key_section_security,
+                    key = translationManager.getTranslation(R.string.key_section_security),
                     title = translationManager.getTranslation(R.string.title_section_security),
                     children = listOf(
                         kutePreferencesHolder.passwordPreference
@@ -125,28 +109,28 @@ class MainViewModel @Inject constructor(
 
         return listOf(
             KuteSection(
-                key = R.string.sec_first,
+                key = translationManager.getTranslation(R.string.sec_first),
                 title = "Base Types",
                 children = typeSectionContent,
             ),
             KuteSection(
-                key = R.string.custom_items,
+                key = translationManager.getTranslation(R.string.custom_items),
                 title = "Custom Types",
                 children = createCustomTypeSectionItems()
             ),
             KuteCategory(
-                key = R.string.cat_hello,
+                key = translationManager.getTranslation(R.string.cat_hello),
                 icon = iconHelper.getIcon(MaterialDesignIconic.Icon.gmi_developer_board),
                 title = "Example Category",
                 description = "This category contains example preferences that might be realistic in a real app.",
                 children = listOf(
                     KuteSection(
-                        key = R.string.key_section_system_hardware,
+                        key = translationManager.getTranslation(R.string.key_section_system_hardware),
                         title = translationManager.getTranslation(R.string.title_section_system_hardware),
                         children = systemHardwareSectionContent
                     ),
                     KuteSection(
-                        key = R.string.key_section_device_owner,
+                        key = translationManager.getTranslation(R.string.key_section_device_owner),
                         title = translationManager.getTranslation(R.string.title_section_device_owner),
                         children = listOf(
                             categoryUser,
@@ -161,13 +145,13 @@ class MainViewModel @Inject constructor(
 
     private fun createCustomTypeSectionItems(): List<KutePreferenceListItem> = listOf(
         CustomBooleanPreference(
-            key = R.string.pref_boolean,
+            key = translationManager.getTranslation(R.string.pref_boolean),
             title = "Custom Boolean Preference",
             dataProvider = dataProvider,
             defaultValue = true,
         ),
         CustomBooleanPreference(
-            key = R.string.pref_boolean,
+            key = translationManager.getTranslation(R.string.pref_boolean),
             title = "Second Custom Boolean Preference",
             descriptionFunction = {
                 "This uses the same key as the entry above, which results in both entries updating together."
@@ -176,7 +160,7 @@ class MainViewModel @Inject constructor(
             defaultValue = true,
         ),
         CustomPreference(
-            key = R.string.pref_custom_item,
+            key = translationManager.getTranslation(R.string.pref_custom_item),
             onClick = {},
             onLongClick = {},
             dataProvider = dataProvider,
@@ -186,14 +170,14 @@ class MainViewModel @Inject constructor(
 
     private fun createTypeSectionContent(): List<KutePreferenceListItem> = listOf(
         KuteBooleanPreference(
-            key = R.string.pref_boolean,
+            key = translationManager.getTranslation(R.string.pref_boolean),
             icon = iconHelper.getIcon(MaterialDesignIconic.Icon.gmi_check),
             title = "Boolean",
             dataProvider = dataProvider,
             defaultValue = true,
         ),
         KuteTextPreference(
-            key = R.string.pref_string,
+            key = translationManager.getTranslation(R.string.pref_string),
             icon = iconHelper.getIcon(MaterialDesignIconic.Icon.gmi_text_format),
             title = "Text",
             dataProvider = dataProvider,
@@ -202,7 +186,7 @@ class MainViewModel @Inject constructor(
         kutePreferencesHolder.urlPreference,
         kutePreferencesHolder.passwordPreference,
         KuteNumberPreference(
-            key = R.string.pref_number_float,
+            key = translationManager.getTranslation(R.string.pref_number_float),
             icon = iconHelper.getIcon(MaterialDesignIconic.Icon.gmi_confirmation_number),
             title = translationManager.getTranslation(R.string.title_demo_number_pref),
             dataProvider = dataProvider,

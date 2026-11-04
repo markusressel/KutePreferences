@@ -2,37 +2,28 @@ package de.markusressel.kutepreferences.ui.vm
 
 import de.markusressel.kutepreferences.core.preference.KutePreferenceListItem
 import de.markusressel.kutepreferences.core.preference.category.KuteParent
-import java.util.*
 
 class FindItemStackUseCase {
 
+    /**
+     * @return the path to the given [item] (ordered from the root to the [item]) in the given tree
+     * @throws NoSuchElementException if the [item] is not part of the tree
+     */
     operator fun invoke(allItems: List<KutePreferenceListItem>, item: KutePreferenceListItem): List<KutePreferenceListItem> {
-        val (stack, found) = allItems.findItemStackByItem(item)
-        if (!found) {
-            throw NoSuchElementException("No element matching ${item.key} found")
-        } else {
-            return stack.reversed()
-        }
+        return findPath(allItems, item) ?: throw NoSuchElementException("No element matching ${item.key} found")
     }
 
-    private fun List<KutePreferenceListItem>.findItemStackByItem(target: KutePreferenceListItem, stack: Stack<KutePreferenceListItem> = Stack()): Pair<Stack<KutePreferenceListItem>, Boolean> {
-        forEach {
-            val currentStack = Stack<KutePreferenceListItem>()
-
-            if (it.key == target.key) {
-                currentStack.push(it)
-                stack.addAll(currentStack)
-                return stack to true
-            } else if (it is KuteParent) {
-                currentStack.push(it)
-                val (subStack, found) = (it as KuteParent).children.findItemStackByItem(target)
-                if (found) {
-                    stack.addAll(subStack)
-                    stack.addAll(currentStack)
-                    return stack to found
-                }
+    private fun findPath(
+        items: List<KutePreferenceListItem>,
+        target: KutePreferenceListItem,
+    ): List<KutePreferenceListItem>? {
+        return items.firstNotNullOfOrNull { item ->
+            when {
+                // multiple items can share a key to display the same value, so it does not identify an item
+                item === target -> listOf(item)
+                item is KuteParent -> findPath(item.children, target)?.let { listOf(item) + it }
+                else -> null
             }
         }
-        return stack to false
     }
 }

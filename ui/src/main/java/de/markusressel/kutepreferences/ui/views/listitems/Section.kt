@@ -8,6 +8,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.markusressel.kutepreferences.core.preference.section.KuteSection
 import de.markusressel.kutepreferences.core.preference.section.KuteSectionBehavior
 import de.markusressel.kutepreferences.ui.theme.KuteColors
@@ -15,23 +16,21 @@ import de.markusressel.kutepreferences.ui.theme.KutePreferencesTheme
 import de.markusressel.kutepreferences.ui.theme.LocalKuteColors
 import de.markusressel.kutepreferences.ui.theme.SectionTheme
 import de.markusressel.kutepreferences.ui.util.CombinedPreview
+import de.markusressel.kutepreferences.ui.util.clickAction
 import de.markusressel.kutepreferences.ui.util.highlightingShimmer
-import de.markusressel.kutepreferences.ui.util.modifyIf
+import de.markusressel.kutepreferences.ui.views.Composable
 import de.markusressel.kutepreferences.ui.views.common.CollapsibleCard
-import de.markusressel.kutepreferences.ui.views.search.Composable
 
 @Composable
 fun KuteSectionView(
     behavior: KuteSectionBehavior,
     modifier: Modifier = Modifier,
 ) {
-    val uiState by behavior.uiState.collectAsState()
+    val uiState by behavior.uiState.collectAsStateWithLifecycle()
 
     CollapsibleCard(
         modifier = Modifier
-            .modifyIf(uiState.isShimmering) {
-                highlightingShimmer()
-            }
+            .highlightingShimmer(uiState.isShimmering, behavior::clearHighlight)
             .padding(horizontal = 8.dp)
             .then(modifier),
         title = {
@@ -68,7 +67,8 @@ fun KuteSectionView(
             }
         },
         collapsed = uiState.isCollapsed,
-        onToggleCollapsedState = { behavior.toggleCollapsed() },
+        onToggleCollapsedState = behavior.preferenceItem.clickAction { behavior.toggleCollapsed() },
+        onLongClick = behavior.preferenceItem.onLongClick,
     )
 }
 
@@ -76,7 +76,7 @@ fun KuteSectionView(
 @Composable
 private fun KuteSectionPreview() {
     val preferenceItem = KuteSection(
-        key = 0,
+        key = "0",
         title = "Section Title",
         children = emptyList(),
     )

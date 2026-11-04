@@ -3,9 +3,10 @@ package de.markusressel.kutepreferences.core.preference.text
 import android.graphics.drawable.Drawable
 import androidx.annotation.CheckResult
 import de.markusressel.kutepreferences.core.persistence.KutePreferenceDataProvider
+import de.markusressel.kutepreferences.core.preference.Validator
 
 class KutePasswordPreference(
-    override val key: Int,
+    override val key: String,
     override val icon: Drawable? = null,
     override val title: String,
     regex: String? = "^.{8,}\$|^\$",
@@ -14,6 +15,7 @@ class KutePasswordPreference(
     override val onPreferenceChangedListener: ((oldValue: String, newValue: String) -> Unit)? = null,
     override val onClick: (() -> Unit)? = null,
     override val onLongClick: (() -> Unit)? = null,
+    override val validator: Validator<String>? = null,
 ) : KuteTextPreference(
     key = key,
     icon = icon,
@@ -24,6 +26,7 @@ class KutePasswordPreference(
     onPreferenceChangedListener = onPreferenceChangedListener,
     onClick = onClick,
     onLongClick = onLongClick,
+    validator = validator,
 ) {
 
     @CheckResult

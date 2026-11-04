@@ -18,10 +18,10 @@ import de.markusressel.kutepreferences.core.persistence.KutePreferenceDataProvid
 import de.markusressel.kutepreferences.core.preference.bool.KuteBooleanPreference
 import de.markusressel.kutepreferences.ui.theme.itemShape
 import de.markusressel.kutepreferences.ui.util.CombinedPreview
-import de.markusressel.kutepreferences.ui.views.search.dummy
+import de.markusressel.kutepreferences.ui.util.dummy
 
 class CustomBooleanPreference(
-    override val key: Int,
+    override val key: String,
     override val onClick: (() -> Unit)? = null,
     override val onLongClick: (() -> Unit)? = null,
     override val icon: Drawable? = null,
@@ -48,7 +48,7 @@ private fun CustomBooleanPreferencePreview() {
     CustomBooleanPreferenceView(
         behavior = CustomBooleanPreferenceBehavior(
             preferenceItem = CustomBooleanPreference(
-                key = 0,
+                key = "0",
                 onClick = {},
                 onLongClick = {},
                 dataProvider = dummy,

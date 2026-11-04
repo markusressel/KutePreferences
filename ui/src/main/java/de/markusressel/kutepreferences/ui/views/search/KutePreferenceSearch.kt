@@ -12,11 +12,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.stringResource
-import de.markusressel.kutepreferences.core.DefaultKuteNavigator
 import de.markusressel.kutepreferences.ui.R
 import de.markusressel.kutepreferences.ui.theme.KutePreferencesTheme
 import de.markusressel.kutepreferences.ui.util.CombinedPreview
-import de.markusressel.kutepreferences.ui.views.KuteStyleManager
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -88,12 +86,6 @@ fun KutePreferenceSearch(
 private fun KutePreferenceSearchPreview() {
     var searchTerm by remember { mutableStateOf("") }
 
-    remember {
-        val nav = DefaultKuteNavigator()
-        KuteStyleManager.registerDefaultStyles(nav)
-        false
-    }
-
     KutePreferencesTheme {
         KutePreferenceSearch(
             searchTerm = searchTerm,
@@ -110,12 +102,6 @@ private fun KutePreferenceSearchPreview() {
 @Composable
 private fun KutePreferenceSearchWithInputPreview() {
     var searchTerm by remember { mutableStateOf("") }
-
-    remember {
-        val nav = DefaultKuteNavigator()
-        KuteStyleManager.registerDefaultStyles(nav)
-        false
-    }
 
     KutePreferencesTheme {
         KutePreferenceSearch(

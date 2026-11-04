@@ -4,7 +4,6 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,19 +11,18 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.markusressel.kutepreferences.core.DefaultKuteNavigator
 import de.markusressel.kutepreferences.core.preference.category.KuteCategory
 import de.markusressel.kutepreferences.core.preference.category.KuteCategoryBehavior
 import de.markusressel.kutepreferences.ui.theme.*
 import de.markusressel.kutepreferences.ui.util.CombinedPreview
 import de.markusressel.kutepreferences.ui.util.highlightingShimmer
-import de.markusressel.kutepreferences.ui.util.modifyIf
 
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -33,21 +31,19 @@ fun KuteCategoryView(
     behavior: KuteCategoryBehavior,
     modifier: Modifier = Modifier,
 ) {
-    val uiState by behavior.uiState.collectAsState()
+    val uiState by behavior.uiState.collectAsStateWithLifecycle()
 
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .defaultMinSize(minHeight = listItemMinHeight)
-            .modifyIf(uiState.shimmering) {
-                highlightingShimmer()
-            }
+            .highlightingShimmer(uiState.shimmering, behavior::clearHighlight)
             .padding(horizontal = 8.dp)
             .then(modifier),
         elevation = CardDefaults.cardElevation(LocalKuteColors.current.category.elevation),
         shape = itemShape,
         colors = CardDefaults.cardColors(
-            containerColor = if (isSystemInDarkTheme()) Color.Black else Color.White
+            containerColor = LocalKuteColors.current.category.cardBackgroundColor
         ),
         onClick = { behavior.onClick() },
     ) {
@@ -57,7 +53,7 @@ fun KuteCategoryView(
                 .background(LocalKuteColors.current.category.cardBackgroundColor)
                 .combinedClickable(
                     onClick = { behavior.onClick() },
-                    onLongClick = { }
+                    onLongClick = behavior.preferenceItem.onLongClick,
                 )
         ) {
             val icon = behavior.preferenceItem.icon
@@ -95,7 +91,7 @@ private fun KuteCategoryPreview() {
         KuteCategoryView(
             behavior = KuteCategoryBehavior(
                 KuteCategory(
-                    key = 0,
+                    key = "0",
                     icon = icon,
                     title = "Category Title",
                     description = "This is a long description of this category.",

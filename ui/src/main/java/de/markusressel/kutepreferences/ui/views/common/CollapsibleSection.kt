@@ -3,8 +3,8 @@ package de.markusressel.kutepreferences.ui.views.common
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -22,8 +22,9 @@ fun CollapsibleCard(
     content: @Composable () -> Unit,
     collapsed: Boolean,
     onToggleCollapsedState: () -> Unit,
+    onLongClick: (() -> Unit)? = null,
     modifier: Modifier = Modifier,
-    backgroundColor: Color = if (isSystemInDarkTheme()) Color.Black else Color.White,
+    backgroundColor: Color = LocalKuteColors.current.section.contentBackgroundColor,
 ) {
     Card(
         modifier = modifier,
@@ -38,25 +39,29 @@ fun CollapsibleCard(
             content = content,
             collapsed = collapsed,
             onToggleCollapsedState = onToggleCollapsedState,
+            onLongClick = onLongClick,
         )
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun CollapsibleSection(
     header: @Composable () -> Unit,
     content: @Composable () -> Unit,
     collapsed: Boolean,
     onToggleCollapsedState: () -> Unit,
+    onLongClick: (() -> Unit)? = null,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable {
-                    onToggleCollapsedState()
-                }
+                .combinedClickable(
+                    onClick = onToggleCollapsedState,
+                    onLongClick = onLongClick,
+                )
         ) {
             header()
         }

@@ -3,24 +3,31 @@ package de.markusressel.kutepreferences.ui.vm
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import de.markusressel.kutepreferences.core.DefaultKuteNavigator
 import de.markusressel.kutepreferences.core.KuteNavigator
+import de.markusressel.kutepreferences.core.preference.KuteExpandable
+import de.markusressel.kutepreferences.core.preference.KutePreferenceItem
 import de.markusressel.kutepreferences.core.preference.KutePreferenceListItem
 import de.markusressel.kutepreferences.core.preference.category.KuteCategory
-import de.markusressel.kutepreferences.core.preference.section.KuteSectionBehavior
-import de.markusressel.kutepreferences.ui.views.BehaviorStore
-import de.markusressel.kutepreferences.ui.views.KuteStyleManager
+import de.markusressel.kutepreferences.core.preference.category.KuteParent
+import de.markusressel.kutepreferences.ui.views.KuteRegistry
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 open class KutePreferencesViewModel(
-    val navigator: KuteNavigator,
+    val navigator: KuteNavigator = DefaultKuteNavigator(),
+    /**
+     * Defines how items are rendered. Use this to add custom item types or to replace the UI of existing ones.
+     */
+    val registry: KuteRegistry = KuteRegistry(navigator),
 ) : ViewModel() {
 
     private val findCategoryByKeyUseCase: FindCategoryByKeyUseCase = FindCategoryByKeyUseCase()
     private val findItemStackUseCase: FindItemStackUseCase = FindItemStackUseCase()
     private val searchItemsUseCase: SearchItemsUseCase = SearchItemsUseCase()
+    private val checkPreferenceKeysUseCase: CheckPreferenceKeysUseCase = CheckPreferenceKeysUseCase()
 
     val preferencesUiState = MutableStateFlow(UiState())
 
@@ -28,10 +35,9 @@ open class KutePreferencesViewModel(
     val uiActions = uiActionChannel.receiveAsFlow()
 
     private val preferenceItems = MutableStateFlow<List<KutePreferenceListItem>>(emptyList())
+    private val loading = MutableStateFlow(false)
 
     init {
-        KuteStyleManager.registerDefaultStyles(navigator)
-
         viewModelScope.launch {
             navigator.currentCategory.collectLatest {
                 uiActionChannel.send(UiAction.ScrollToTop(false))
@@ -42,15 +48,16 @@ open class KutePreferencesViewModel(
             combine(
                 navigator.currentCategory,
                 preferenceItems,
-            ) { category, allItems ->
-                computeOverviewState(category, allItems)
+                loading,
+            ) { category, allItems, loading ->
+                computeOverviewState(category, allItems).copy(loading = loading)
             }.collectLatest { newState ->
                 preferencesUiState.update { newState }
             }
         }
     }
 
-    private fun computeOverviewState(category: Int?, allItems: List<KutePreferenceListItem>): UiState {
+    private fun computeOverviewState(category: String?, allItems: List<KutePreferenceListItem>): UiState {
         val items = when {
             category != null -> findCategoryByKeyUseCase(allItems, category)?.children ?: emptyList()
             else -> allItems
@@ -67,47 +74,65 @@ open class KutePreferencesViewModel(
 
 
     /**
-     * Set the full tree of [KutePreferenceListItem] entries
+     * Set the full tree of [KutePreferenceListItem] entries.
+     *
+     * The items are shown once the persisted values of all items have been loaded,
+     * so that rendering them does not block the main thread.
+     *
+     * @throws IllegalArgumentException if items conflict, see [CheckPreferenceKeysUseCase]
      */
     open fun initPreferencesTree(items: List<KutePreferenceListItem>) {
-        preferenceItems.value = items
+        val persistedItems = items.flatten().filterIsInstance<KutePreferenceItem<*>>()
+        checkPreferenceKeysUseCase(persistedItems)
+
+        loading.value = true
+        viewModelScope.launch {
+            persistedItems
+                .map { it.dataProvider }
+                .distinct()
+                .forEach { it.load() }
+
+            preferenceItems.value = items
+            loading.value = false
+        }
+    }
+
+    private fun List<KutePreferenceListItem>.flatten(): List<KutePreferenceListItem> = flatMap {
+        when (it) {
+            is KuteParent -> listOf(it) + it.children.flatten()
+            else -> listOf(it)
+        }
     }
 
     /**
      * Navigates through the [preferenceItems] tree to the given [KutePreferenceListItem].
      *
-     * The navigator will navigate to the items parent category (if any),
-     * the view will scroll to the target item and the item will be highlighted temporarily.
+     * The navigator will navigate to the items parent category (if any), all sections on the way are expanded,
+     * and the item will scroll into view and be highlighted temporarily.
      */
     private suspend fun navigateTo(item: KutePreferenceListItem) {
         val itemStack = try {
             findItemStackUseCase(preferenceItems.value, item)
-        } catch (ex: Exception) {
+        } catch (_: NoSuchElementException) {
             Log.w(
                 "KutePreferences",
-                "Could not find category with key ${item.key} in preference tree"
+                "Could not find item with key ${item.key} in preference tree"
             )
             return
         }
 
-        val parentItem = itemStack.getOrNull(itemStack.size - 2)
-        val lastItem = itemStack.last()
+        val target = itemStack.last()
 
-        val categoryStack = itemStack.filterIsInstance<KuteCategory>()
-        navigator.backToTop()
-        navigator.setCategories(categoryStack.map { it.key })
+        navigator.setCategories(itemStack.filterIsInstance<KuteCategory>().map { it.key })
+        itemStack.forEach { (registry.behaviorFor(it) as? KuteExpandable)?.expand() }
 
-        delay(300)
+        // give the UI some time to show the category and to expand its sections
+        delay(NAVIGATION_SETTLE_MILLIS)
 
-        // TODO: this should expand the whole stack, not just the immediate parent.
-        //  generally speaking it seemslike an architectural flaw, that there has to be 1. a global store involved
-        //  and 2. casting to a specific behavior type is necessary in order to let the section expand itself.
-        parentItem?.let {
-            (BehaviorStore.get(it) as? KuteSectionBehavior)?.expand()
+        // entering a category already shows the result of navigating to it
+        if (target !is KuteCategory) {
+            registry.behaviorFor(target)?.highlight()
         }
-
-        val behavior = BehaviorStore.get(lastItem)
-        behavior?.highlight()
     }
 
     open fun onUiEvent(event: KuteUiEvent) {
@@ -146,9 +171,7 @@ open class KutePreferencesViewModel(
                     if (preferencesUiState.value.isSearchActive) {
                         closeSearch()
                     } else {
-                        if (navigator.goBack().not()) {
-
-                        }
+                        navigator.goBack()
                     }
                 }
             }
@@ -162,6 +185,8 @@ open class KutePreferencesViewModel(
     }
 }
 
+private const val NAVIGATION_SETTLE_MILLIS = 300L
+
 sealed class UiAction {
     data class ScrollToTop(val animate: Boolean) : UiAction()
 }
@@ -173,6 +198,6 @@ data class UiState(
     val searchTerm: String = "",
     val searchResults: List<SearchItemsUseCase.KuteSearchResultItem> = emptyList(),
 
-    val currentCategory: Int? = null,
+    val currentCategory: String? = null,
     val preferenceItems: List<KutePreferenceListItem> = emptyList(),
 )

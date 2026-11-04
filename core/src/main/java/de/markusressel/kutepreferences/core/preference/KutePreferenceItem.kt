@@ -14,7 +14,7 @@ interface KutePreferenceItem<DataType : Any> {
     /**
      * A unique identifier for this preference item
      */
-    val key: Int
+    val key: String
 
     /**
      * Optional icon of this KutePreference
@@ -79,6 +79,12 @@ interface KutePreferenceItem<DataType : Any> {
     fun reset() {
         persistValue(getDefaultValue())
     }
+
+    /**
+     * An optional check of user input. Input that does not pass this check cannot be saved.
+     */
+    val validator: Validator<DataType>?
+        get() = null
 
     /**
      * An optional listener for value changes

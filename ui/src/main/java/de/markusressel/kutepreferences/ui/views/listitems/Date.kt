@@ -12,17 +12,18 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.markusressel.kutepreferences.core.preference.Validator
 import de.markusressel.kutepreferences.core.preference.date.DatePreferenceBehavior
 import de.markusressel.kutepreferences.core.preference.date.KuteDatePreference
 import de.markusressel.kutepreferences.ui.theme.KutePreferencesTheme
 import de.markusressel.kutepreferences.ui.util.CombinedPreview
+import de.markusressel.kutepreferences.ui.util.clickAction
+import de.markusressel.kutepreferences.ui.util.dummy
 import de.markusressel.kutepreferences.ui.util.highlightingShimmer
-import de.markusressel.kutepreferences.ui.util.modifyIf
 import de.markusressel.kutepreferences.ui.views.common.CancelDefaultSaveDialog
 import de.markusressel.kutepreferences.ui.views.common.CancelDefaultSaveDialogState
 import de.markusressel.kutepreferences.ui.views.common.rememberCancelDefaultSaveDialogState
-import de.markusressel.kutepreferences.ui.views.search.dummy
 import kotlinx.coroutines.delay
 import java.time.Instant
 import java.time.LocalDate
@@ -35,27 +36,7 @@ fun DatePreference(
     dialogState: CancelDefaultSaveDialogState = rememberCancelDefaultSaveDialogState(),
     editDialog: @Composable () -> Unit = { DatePreferenceEditDialog(behavior, dialogState) }
 ) {
-    val uiState by behavior.uiState.collectAsState()
-
-    val persistedValue by behavior.persistedValue.collectAsState()
-
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .modifyIf(uiState.shimmering) {
-                highlightingShimmer()
-            },
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        DefaultPreferenceListItem(
-            icon = behavior.preferenceItem.icon,
-            title = behavior.preferenceItem.title,
-            subtitle = behavior.preferenceItem.createDescription(persistedValue),
-            onClick = { dialogState.show() },
-        )
-    }
-
-    editDialog()
+    DialogPreferenceListItem(behavior, dialogState, editDialog)
 }
 
 @Composable
@@ -69,7 +50,7 @@ private fun DatePreferenceEditDialog(
     onSaveClicked: () -> Unit = { behavior.persistCurrentValue() },
     validator: Validator<Long> = { behavior.isValid() },
 ) {
-    val currentValue by behavior.currentValue.collectAsState()
+    val currentValue by behavior.currentValue.collectAsStateWithLifecycle()
 
     val isError = remember(currentValue) {
         try {
@@ -146,7 +127,7 @@ private fun DatePreferencePreview() {
         DatePreference(
             behavior = DatePreferenceBehavior(
                 preferenceItem = KuteDatePreference(
-                    key = 0,
+                    key = "0",
                     title = "Date Preference",
                     defaultValue = 0L,
                     dataProvider = dummy,
@@ -163,7 +144,7 @@ private fun CancelDefaultSaveDialog() {
         DatePreferenceEditDialog(
             behavior = DatePreferenceBehavior(
                 preferenceItem = KuteDatePreference(
-                    key = 0,
+                    key = "0",
                     title = "Date Preference",
                     defaultValue = 0L,
                     dataProvider = dummy,

@@ -26,6 +26,7 @@ fun InlineExpandablePreferenceView(
     content: @Composable () -> Unit,
     collapsed: Boolean,
     onToggleCollapsedState: () -> Unit,
+    onLongClick: (() -> Unit)? = null,
 ) {
     Box(
         modifier = Modifier
@@ -37,6 +38,7 @@ fun InlineExpandablePreferenceView(
             content = content,
             collapsed = collapsed,
             onToggleCollapsedState = onToggleCollapsedState,
+            onLongClick = onLongClick,
         )
     }
 }

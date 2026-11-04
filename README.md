@@ -18,93 +18,153 @@ A Material Design 3 **GUI** library for easy to use, fast and beautiful **prefer
 
 # How to use
 
-Have a look at the demo app (```app```  module) for a complete sample. The sample app uses **Dagger 2** (Hilt) for
-Dependency Injection but this is not a requirement.
+Have a look at the demo app (`app` module) for a complete sample. The demo uses Hilt for dependency injection, but
+KutePreferences does not require it.
 
 ## Gradle
 
-To use this library just include it in your dependencies using
-
-```groovy
-repositories {
-    ...
-    maven { url "https://jitpack.io" }
-}
-```
-
-in your project build.gradle file and
-
-```groovy
-dependencies {
-    ...
-
-    def kutePreferencesVersion = "v3.0.0"
-    // choose the ones you need
-    implementation("com.github.markusressel.KutePreferences:core:${kutePreferencesVersion}")
-    implementation("com.github.markusressel.KutePreferences:ui:${kutePreferencesVersion}")
-}
-```
-
-in your desired module `build.gradle` file.
-
-## Create a KutePreferences ViewModel
-
-Since **KutePreferences** provides navigation between categories, search and other things, you have to create a
-ViewModel for your preferences and extend the provided `KutePreferencesViewModel`. Make sure to call the
-`initPreferenceTree()` to setup the items that should be shown:
+Add JitPack to your repositories:
 
 ```kotlin
-class YourPreferencesViewModel(
-    navigator: KuteNavigator,
-) : KutePreferencesViewModel(navigator) {
-
-    private val dataProvider by lazy {
-        DefaultKutePreferenceDataProvider(context)
+dependencyResolutionManagement {
+    repositories {
+        google()
+        mavenCentral()
+        maven(url = "https://jitpack.io")
     }
+}
+```
+
+Then add the `ui` module, which includes `core`, to your app module. Replace `<version>` with the
+[latest release](https://github.com/markusressel/KutePreferences/releases):
+
+```kotlin
+android {
+    compileOptions {
+        // required because KutePreferences uses java.time, which is not available on older Android versions
+        isCoreLibraryDesugaringEnabled = true
+    }
+}
+
+dependencies {
+    implementation("com.github.markusressel.KutePreferences:ui:<version>")
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.5")
+}
+```
+
+Use the `core` module on its own if you only need the items and their persistence, without the Compose UI.
+
+## Create a ViewModel
+
+Extend `KutePreferencesViewModel` and pass the items that should be shown to `initPreferencesTree`:
+
+```kotlin
+class SettingsViewModel(context: Context) : KutePreferencesViewModel() {
+
+    private val dataProvider = DefaultKutePreferenceDataProvider(context)
+
+    val username = KuteTextPreference(
+        key = "username",
+        title = context.getString(R.string.title_username),
+        defaultValue = "",
+        dataProvider = dataProvider,
+    )
 
     init {
-        val preferenceTree = createPreferenceTree()
-        initPreferencesTree(preferenceTree)
+        initPreferencesTree(listOf(username))
     }
 
-    private fun createPreferenceTree(): List<KutePreferenceListItem> {
-        return listOf(
-            KuteTextPreference(
-                key = R.string.key_demo_text_pref,
-                title = R.string.title_demo_text_pref,
-                defaultValue = "",
-                dataProvider = dataProvider
-            )
+}
+```
+
+Keys and titles are plain strings, so you can use string resources or build keys at runtime. Do not change a key after
+a release: the saved value is stored under it.
+
+To let the compiler catch typos, define your keys in one place instead of repeating them as literals:
+
+```kotlin
+object Keys {
+    const val USERNAME = "username"
+    fun accountSync(id: Long) = "account_${id}_sync"
+}
+```
+
+Items of one data provider can share a key to show the same value. `initPreferencesTree` throws an
+`IllegalArgumentException` if such items have a different value type or default value, because that usually is a copy
+and paste mistake. It cannot detect a pasted item whose key, type and default value are all unchanged.
+
+Read the current value anywhere through `username.getCurrentPersistedValue()`, or observe it with
+`username.getPersistedValueFlow()`.
+
+## Render the UI
+
+```kotlin
+@Composable
+fun SettingsScreen() {
+    val context = LocalContext.current.applicationContext
+    val viewModel = viewModel { SettingsViewModel(context) }
+
+    KutePreferencesTheme {
+        KutePreferencesScreen(
+            modifier = Modifier.fillMaxSize(),
+            kuteViewModel = viewModel,
         )
     }
 }
 ```
 
+The screen handles the back button itself: it closes the search and then leaves the current category.
+
 ## Structure
 
-The items that you return in the `initPreferenceTree()` method are a direct representation of the categories, sections
-preferences and custom items that will be visible in your app. Items that need persistence require a `KuteDataProvider`
-parameter that defines how the current state of the preference item is persisted.
+The items that you pass to `initPreferencesTree` are a direct representation of the categories, sections, preferences
+and custom items that will be visible in your app. Items that need persistence require a `KutePreferenceDataProvider`
+parameter that defines how their value is saved:
+
+| Name                                  | Description                                                              |
+|---------------------------------------|--------------------------------------------------------------------------|
+| `DefaultKutePreferenceDataProvider`   | Stores values in the `SharedPreferences` of your app.                    |
+| `DataStoreKutePreferenceDataProvider` | Stores values in a Jetpack DataStore. Values load before the items show. |
+| `DummyDataProvider`                   | Keeps values in memory, for previews and tests.                          |
 
 ### Preference Types
 
-KutePreferences includes implementation for most of the commonly needed preference items that you might encounter when
-building an app.
+KutePreferences includes implementations for most of the commonly needed preference items.
 
-| Name                         | Item Type              | Description                                                                                                       |
-|------------------------------|------------------------|-------------------------------------------------------------------------------------------------------------------|
-| `KuteBooleanPreference`      | `Boolean`              | A simple on/off preference.                                                                                       |
-| `KuteTextPreference`         | `String`               | A simple text preference.                                                                                         |
-| `KuteUrlPreference`          | `String`               | A url preference.                                                                                                 |
-| `KutePasswordPreference`     | `String`               | A password text preference. This type works exactly like `KuteTextPreference` but includes obscuring typed input. |
-| `KuteNumberPreference`       | `Integer`              | A preference for number values.                                                                                   |
-| `KuteSliderPreference`       | `Integer`              | Like `KuteNumberPreference` but with a slider GUI instead of a direct input field.                                |
-| `KuteFloatRangePreference`   | `Integer`              | A preference for a number range.                                                                                  |
-| `KuteDatePreference`         | `Date`                 | Let's the user select and store a date.                                                                           |
-| `KuteTimePreference`         | `TimePersistenceModel` | Let's the user select and store a time of the day.                                                                |
-| `KuteColorPreference`        | `Color`                | Let's the user select and store an ARGB color.                                                                    |
-| `KuteSingleSelectPreference` | `List<T>`              | Allows a single selection from a specified list of items.                                                         |
-| `KuteMultiSelectPreference`  | `List<T>`              | Allows to select multiple items from a specified list of items.                                                   |
+| Name                               | Value type                     | Description                                                     |
+|------------------------------------|--------------------------------|-----------------------------------------------------------------|
+| `KuteBooleanPreference`            | `Boolean`                      | A simple on/off preference.                                     |
+| `KuteTextPreference`               | `String`                       | A simple text preference.                                       |
+| `KuteUrlPreference`                | `String`                       | A text preference that only accepts http and https URLs.        |
+| `KutePasswordPreference`           | `String`                       | A text preference that masks the input. See the warning below.  |
+| `KuteNumberPreference`             | `Long`                         | A preference for number values.                                 |
+| `KuteIntSliderPreference`          | `Long`                         | A whole number that is selected with a slider.                  |
+| `KuteFloatSliderPreference`        | `Float`                        | A decimal number that is selected with a slider.                |
+| `KuteFloatRangePreference`         | `RangePersistenceModel<Float>` | A range of numbers.                                             |
+| `KuteDatePreference`               | `Long`                         | A date, stored as epoch milliseconds.                           |
+| `KuteTimePreference`               | `TimePersistenceModel`         | A time of the day.                                              |
+| `KuteColorPreference`              | `Int`                          | An ARGB color.                                                  |
+| `KuteSingleSelectStringPreference` | `String`                       | A single selection from a list of items.                        |
+| `KuteMultiSelectStringPreference`  | `Set<String>`                  | Multiple selections from a list of items.                       |
+
+> **Warning:** `KutePasswordPreference` only masks the value on screen. It is stored in plaintext, so do not use it for
+> secrets that need protection.
+
+### Validating input
+
+Items that are edited in a dialog accept a `validator`. The save button stays disabled while it returns `false`:
+
+```kotlin
+KuteTextPreference(
+    key = "username",
+    title = "Username",
+    defaultValue = "",
+    dataProvider = dataProvider,
+    validator = { it.length <= 20 },
+)
+```
+
+The validator runs in addition to built-in rules, such as the `minimum` and `maximum` of `KuteNumberPreference`.
 
 ### Other Types
 
@@ -124,37 +184,21 @@ one of these classes:
 | `KuteCategory` | A category groups sections, preference items and/or other category items. |
 | `KuteSection`  | A group of preference items inside a single preference category.          |
 
-## Render the UI
-
-At the location of choice use the `KutePreferencesTheme` together with the `KuteOverview` and pass the preferences tree
-to it:
-
-```kotlin
-KutePreferencesTheme {
-    val currentItems by vm.currentPreferenceItems.collectAsState(initial = emptyList())
-
-    KutePreferencesScreen(
-        modifier = Modifier.fillMaxSize(),
-        items = currentItems
-    )
-}
-```
-
 ### Theming
 
 KutePreferences is based on Material Design 3 by default, and will automatically inherit the styling of your app (if you
-use MD3 in you app). You can override the styling by passing colors to the `KutePreferencesTheme`:
+use MD3 in your app). You can override the styling by passing colors to the `KutePreferencesTheme`:
 
 ```kotlin
-val defaultColors = defaultColors()
+val defaultColors = KutePreferencesThemeDefaults.defaultColors
 KutePreferencesTheme(
     colors = defaultColors.copy(
         category = defaultColors.category.copy(
-            titleColor = Color.Red
-        )
-    )
+            titleColor = Color.Red,
+        ),
+    ),
 ) {
-    ...
+    // ...
 }
 ```
 
@@ -177,35 +221,38 @@ Important things to keep in mind if you implement your own preference item:
 
 ### Register Custom Types
 
-KutePreferences already has built-in types for most of the commonly required preferences. If you need change/override an
-existing type, or create a completely custom one, you can register your own like this:
+Register a view for your item in the `registry` of the ViewModel. A registration also replaces the view of an existing
+type, and it applies to subclasses of the type too:
 
 ```kotlin
-class YourPreferencesViewModel(...) : KutePreferencesViewModel(navigator) {
+class SettingsViewModel : KutePreferencesViewModel() {
 
     init {
-        KuteStyleManager.registerTypeHook { listItem ->
-            when (listItem) {
-                is YourCustomPreference -> {
-                    YourCustomPreferenceView(listItem)
-                    true
-                }
-                else -> false
-            }
-        }
+        // a view for an item without a behavior
+        registry.register<YourCustomPreference> { item -> YourCustomPreferenceView(item) }
 
-        ...
+        // a view for an item whose state is held by a behavior
+        registry.register(::YourCustomBehavior) { behavior -> YourCustomView(behavior) }
     }
+
 }
 ```
 
-# Troubleshooting
+In previews, provide a registry through `LocalKuteRegistry`, or use `KuteRegistryForPreview`.
 
-## Navigation
+# Migrating from v3
 
-* The back button doesn't work
-    * ensure that you are calling the `kuteNavigator.goBack()` method when a back press is registered
-      by the activity that is hosting it (like seen in the example app)
+Source-breaking changes, and what to do about each one:
+
+* **Keys are strings.** Replace `key = R.string.key_x` with `key = context.getString(R.string.key_x)`. The
+  resolved string is the same as before, so saved values are kept. The navigator uses string keys too.
+* **`KuteStyleManager` and `BehaviorStore` are gone.** Replace `KuteStyleManager.registerTypeHook` with
+  `registry.register`, as shown above. Each ViewModel now has its own registry.
+* **`core` no longer exposes Compose, AppCompat or TypedPreferences.** Add them to your own module if you used them
+  through KutePreferences.
+* **The JVM target is 17**, which lowers the requirement for apps that inline library code.
+
+The stored data of both data providers stays compatible, so users keep their settings when they update your app.
 
 # Contributing
 

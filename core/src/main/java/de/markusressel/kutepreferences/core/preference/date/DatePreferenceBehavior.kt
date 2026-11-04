@@ -1,22 +1,18 @@
 package de.markusressel.kutepreferences.core.preference.date
 
-import de.markusressel.kutepreferences.core.preference.PersistedPreferenceBehavior
+import de.markusressel.kutepreferences.core.preference.EditablePreferenceBehavior
 
 open class DatePreferenceBehavior(
     preferenceItem: KuteDatePreference
-) : PersistedPreferenceBehavior<KuteDatePreference, Long>(
+) : EditablePreferenceBehavior<KuteDatePreference, Long>(
     preferenceItem
 ) {
 
-    fun onCancelClicked() {
-        currentValue.value = preferenceItem.persistedValue.value
-    }
-
-    fun onDefaultClicked() = restoreDefaultValue()
-
-    fun isValid(): Boolean {
-        // TODO: implement validation
-        return true
+    override fun isValid(): Boolean {
+        val value = currentValue.value
+        val aboveMinimum = preferenceItem.minimum?.let { value >= it } ?: true
+        val belowMaximum = preferenceItem.maximum?.let { value <= it } ?: true
+        return aboveMinimum && belowMaximum && super.isValid()
     }
 
 }

@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.godaddy.android.colorpicker.ClassicColorPicker
 import com.godaddy.android.colorpicker.HsvColor
 import com.godaddy.android.colorpicker.toColorInt
@@ -20,20 +21,20 @@ import de.markusressel.kutepreferences.core.preference.color.ColorPreferenceBeha
 import de.markusressel.kutepreferences.core.preference.color.KuteColorPreference
 import de.markusressel.kutepreferences.ui.theme.KutePreferencesTheme
 import de.markusressel.kutepreferences.ui.util.CombinedPreview
+import de.markusressel.kutepreferences.ui.util.clickAction
+import de.markusressel.kutepreferences.ui.util.dummy
 import de.markusressel.kutepreferences.ui.util.highlightingShimmer
-import de.markusressel.kutepreferences.ui.util.modifyIf
 import de.markusressel.kutepreferences.ui.views.common.InlineExpandablePreferenceView
-import de.markusressel.kutepreferences.ui.views.search.dummy
 
 @Composable
 fun ColorPreferenceView(
     behavior: ColorPreferenceBehavior,
 ) {
-    val uiState by behavior.uiState.collectAsState()
+    val uiState by behavior.uiState.collectAsStateWithLifecycle()
 
     var collapsed by remember { mutableStateOf(true) }
 
-    val persistedValue by behavior.persistedValue.collectAsState()
+    val persistedValue by behavior.persistedValue.collectAsStateWithLifecycle()
 
     InlineExpandablePreferenceView(
         icon = behavior.preferenceItem.icon,
@@ -42,9 +43,7 @@ fun ColorPreferenceView(
         header = {
             Row(
                 modifier = Modifier
-                    .modifyIf(uiState.shimmering) {
-                        highlightingShimmer()
-                    }
+                    .highlightingShimmer(uiState.shimmering, behavior::clearHighlight)
                     .padding(end = 4.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
@@ -63,13 +62,14 @@ fun ColorPreferenceView(
                         .padding(4.dp),
                     fillColor = Color(persistedValue),
                     outlineColor = MaterialTheme.colorScheme.secondary,
-                    onClick = { collapsed = collapsed.not() }
+                    onClick = behavior.preferenceItem.clickAction { collapsed = collapsed.not() }
                 )
             }
         },
         content = { ColorPreferenceEditView(behavior) },
         collapsed = collapsed,
-        onToggleCollapsedState = { collapsed = collapsed.not() }
+        onToggleCollapsedState = behavior.preferenceItem.clickAction { collapsed = collapsed.not() },
+        onLongClick = behavior.preferenceItem.onLongClick,
     )
 }
 
@@ -80,7 +80,7 @@ private fun ColorPreferenceEditViewPreview() {
         ColorPreferenceEditView(
             behavior = ColorPreferenceBehavior(
                 preferenceItem = KuteColorPreference(
-                    key = 0,
+                    key = "0",
                     title = "Color Preference",
                     defaultValue = Color.Red.copy(alpha = 0.5f).toArgb(),
                     dataProvider = dummy,
@@ -116,7 +116,7 @@ private fun ColorPreferencePreview() {
         ColorPreferenceView(
             behavior = ColorPreferenceBehavior(
                 preferenceItem = KuteColorPreference(
-                    key = 0,
+                    key = "0",
                     title = "Color Preference",
                     defaultValue = Color.Red.copy(alpha = 0.5f).toArgb(),
                     dataProvider = dummy,
