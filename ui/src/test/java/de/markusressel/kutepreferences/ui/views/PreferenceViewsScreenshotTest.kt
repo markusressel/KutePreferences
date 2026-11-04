@@ -3,10 +3,14 @@ package de.markusressel.kutepreferences.ui.views
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.semantics.SemanticsActions
+import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performTouchInput
 import com.github.takahirom.roborazzi.ExperimentalRoborazziApi
 import com.github.takahirom.roborazzi.captureScreenRoboImage
 import de.markusressel.kutepreferences.core.persistence.DummyDataProvider
@@ -120,6 +124,33 @@ class PreferenceViewsScreenshotTest {
 
     @Test
     fun rangeSlider() = screenshot("range_slider", expand = "Range slider") {
+        NumberRangeSliderPreference(
+            FloatRangeSliderPreferenceBehavior(
+                KuteFloatRangePreference(
+                    key = "range",
+                    title = "Range slider",
+                    minimum = 0f,
+                    maximum = 10f,
+                    defaultValue = RangePersistenceModel(2f, 5f),
+                    dataProvider = dataProvider,
+                )
+            )
+        )
+    }
+
+    @Test
+    fun rangeSliderDragged() = screenshot(
+        name = "range_slider_dragged",
+        expand = "Range slider",
+        action = {
+            composeRule.onAllNodes(SemanticsMatcher.keyIsDefined(SemanticsActions.SetProgress))[1]
+                .performTouchInput {
+                    down(center)
+                    moveBy(Offset(x = 100f, y = 0f))
+                    moveBy(Offset(x = 100f, y = 0f))
+                }
+        },
+    ) {
         NumberRangeSliderPreference(
             FloatRangeSliderPreferenceBehavior(
                 KuteFloatRangePreference(

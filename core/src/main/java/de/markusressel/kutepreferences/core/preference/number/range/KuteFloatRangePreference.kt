@@ -35,11 +35,16 @@ open class KuteFloatRangePreference(
     enabledWhen = enabledWhen,
 ) {
     override fun createDescription(currentValue: RangePersistenceModel<Float>): String {
-        val start = formatNumberForDescription(currentValue.min, decimalPlaces)
-        val end = formatNumberForDescription(currentValue.max, decimalPlaces)
+        val start = formatValue(currentValue.min)
+        val end = formatValue(currentValue.max)
 
         return "$start .. $end"
     }
+
+    /**
+     * @return the text for a single end of the range, which is also shown on the handles of the slider
+     */
+    open fun formatValue(value: Float): String = formatNumberForDescription(value, decimalPlaces)
 
     private fun formatNumberForDescription(
         number: Float,

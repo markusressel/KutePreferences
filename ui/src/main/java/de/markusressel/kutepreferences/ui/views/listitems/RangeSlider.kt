@@ -1,13 +1,18 @@
 package de.markusressel.kutepreferences.ui.views.listitems
 
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsDraggedAsState
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.RangeSlider
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.markusressel.kutepreferences.core.preference.number.range.FloatRangeSliderPreferenceBehavior
@@ -19,6 +24,9 @@ import de.markusressel.kutepreferences.ui.util.clickAction
 import de.markusressel.kutepreferences.ui.util.dummy
 import de.markusressel.kutepreferences.ui.util.highlightingShimmer
 import de.markusressel.kutepreferences.ui.views.common.InlineExpandablePreferenceView
+import de.markusressel.kutepreferences.ui.views.common.KuteSliderTrack
+import de.markusressel.kutepreferences.ui.views.common.RangeThumbMarker
+import de.markusressel.kutepreferences.ui.views.common.SliderRangeIndicator
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.drop
 
@@ -45,6 +53,7 @@ fun NumberRangeSliderPreference(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RangeSliderEditView(
     behavior: FloatRangeSliderPreferenceBehavior,
@@ -53,8 +62,7 @@ fun RangeSliderEditView(
         modifier = Modifier
             .fillMaxWidth()
             .wrapContentHeight()
-            .padding(horizontal = 8.dp)
-            .padding(bottom = 8.dp)
+            .padding(8.dp)
     ) {
         var touchedByUser by remember { mutableStateOf(false) }
         var animating by remember { mutableStateOf(false) }
@@ -107,13 +115,34 @@ fun RangeSliderEditView(
             }
         })
 
+        val valueRange = behavior.preferenceItem.minimum..behavior.preferenceItem.maximum
+        val sliderValue = when {
+            animating -> sliderStartAnimation..sliderEndAnimation
+            else -> sliderPosition
+        }
+
+        val startInteractionSource = remember { MutableInteractionSource() }
+        val endInteractionSource = remember { MutableInteractionSource() }
+        val startIsDragged by startInteractionSource.collectIsDraggedAsState()
+        val startIsPressed by startInteractionSource.collectIsPressedAsState()
+        val endIsDragged by endInteractionSource.collectIsDraggedAsState()
+        val endIsPressed by endInteractionSource.collectIsPressedAsState()
+
+        var sliderWidthPx by remember { mutableIntStateOf(0) }
+
+        SliderRangeIndicator(
+            modifier = Modifier.padding(horizontal = 4.dp),
+            valueRange = valueRange,
+            text = behavior.preferenceItem::formatValue,
+        )
+
         RangeSlider(
-            value = when {
-                animating -> sliderStartAnimation..sliderEndAnimation
-                else -> sliderPosition
-            },
+            modifier = Modifier
+                .padding(top = 14.dp)
+                .onSizeChanged { sliderWidthPx = it.width },
+            value = sliderValue,
             enabled = animating.not(),
-            valueRange = (behavior.preferenceItem.minimum..(behavior.preferenceItem.maximum)),
+            valueRange = valueRange,
             onValueChange = {
                 if (animating.not()) {
                     sliderPosition = it
@@ -129,7 +158,25 @@ fun RangeSliderEditView(
                     )
                 )
                 behavior.persistCurrentValue()
-            }
+            },
+            startInteractionSource = startInteractionSource,
+            endInteractionSource = endInteractionSource,
+            track = { KuteSliderTrack(it) },
+        )
+
+        RangeThumbMarker(
+            value = sliderValue.start,
+            valueRange = valueRange,
+            text = behavior.preferenceItem::formatValue,
+            sliderWidthPx = sliderWidthPx,
+            isVisible = animating || startIsDragged || startIsPressed,
+        )
+        RangeThumbMarker(
+            value = sliderValue.endInclusive,
+            valueRange = valueRange,
+            text = behavior.preferenceItem::formatValue,
+            sliderWidthPx = sliderWidthPx,
+            isVisible = animating || endIsDragged || endIsPressed,
         )
     }
 }
