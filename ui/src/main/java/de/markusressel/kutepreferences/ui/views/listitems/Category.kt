@@ -4,7 +4,6 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -47,7 +46,7 @@ fun KuteCategoryView(
         elevation = CardDefaults.cardElevation(LocalKuteColors.current.category.elevation),
         shape = itemShape,
         colors = CardDefaults.cardColors(
-            containerColor = if (isSystemInDarkTheme()) Color.Black else Color.White
+            containerColor = LocalKuteColors.current.category.cardBackgroundColor
         ),
         onClick = { behavior.onClick() },
     ) {
