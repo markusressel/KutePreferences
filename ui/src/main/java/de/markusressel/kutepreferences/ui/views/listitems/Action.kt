@@ -34,7 +34,7 @@ fun ActionPreference(
             }
             .combinedClickable(
                 onClick = { behavior.onClick() },
-                onLongClick = { },
+                onLongClick = behavior.preferenceItem.onLongClick,
             ),
         verticalAlignment = Alignment.CenterVertically
     ) {

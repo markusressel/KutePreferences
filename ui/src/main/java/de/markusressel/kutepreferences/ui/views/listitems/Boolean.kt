@@ -17,6 +17,7 @@ import de.markusressel.kutepreferences.core.preference.bool.KuteBooleanPreferenc
 import de.markusressel.kutepreferences.ui.theme.KutePreferencesTheme
 import de.markusressel.kutepreferences.ui.theme.listItemMinHeight
 import de.markusressel.kutepreferences.ui.util.CombinedPreview
+import de.markusressel.kutepreferences.ui.util.clickAction
 import de.markusressel.kutepreferences.ui.util.highlightingShimmer
 import de.markusressel.kutepreferences.ui.util.modifyIf
 import de.markusressel.kutepreferences.ui.views.search.dummy
@@ -37,8 +38,10 @@ fun BooleanPreference(
                 highlightingShimmer()
             }
             .combinedClickable(
-                onClick = { behavior.onInputChanged(behavior.persistedValue.value.not()) },
-                onLongClick = { }
+                onClick = behavior.preferenceItem.clickAction {
+                    behavior.onInputChanged(behavior.persistedValue.value.not())
+                },
+                onLongClick = behavior.preferenceItem.onLongClick,
             ),
         verticalAlignment = Alignment.CenterVertically
     ) {

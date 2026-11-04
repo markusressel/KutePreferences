@@ -9,7 +9,8 @@ android {
 }
 
 dependencies {
-    implementation(project(":core"))
+    // types of core are part of the public API of ui
+    api(project(":core"))
 
     implementation(libs.kotlin.stdlib.jdk8)
 

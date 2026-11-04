@@ -49,6 +49,13 @@ class UseCasesTest {
     }
 
     @Test
+    fun `search finds parents as well as their children`() {
+        val results = SearchItemsUseCase()(tree, "section leaf").map { it.item }
+
+        assertEquals(listOf<KutePreferenceListItem>(section, leaf), results)
+    }
+
+    @Test
     fun `search results have unique keys`() {
         val results = SearchItemsUseCase()(tree, "leaf")
 

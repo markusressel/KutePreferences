@@ -15,6 +15,7 @@ import de.markusressel.kutepreferences.ui.theme.KutePreferencesTheme
 import de.markusressel.kutepreferences.ui.theme.LocalKuteColors
 import de.markusressel.kutepreferences.ui.theme.SectionTheme
 import de.markusressel.kutepreferences.ui.util.CombinedPreview
+import de.markusressel.kutepreferences.ui.util.clickAction
 import de.markusressel.kutepreferences.ui.util.highlightingShimmer
 import de.markusressel.kutepreferences.ui.util.modifyIf
 import de.markusressel.kutepreferences.ui.views.common.CollapsibleCard
@@ -68,7 +69,8 @@ fun KuteSectionView(
             }
         },
         collapsed = uiState.isCollapsed,
-        onToggleCollapsedState = { behavior.toggleCollapsed() },
+        onToggleCollapsedState = behavior.preferenceItem.clickAction { behavior.toggleCollapsed() },
+        onLongClick = behavior.preferenceItem.onLongClick,
     )
 }
 

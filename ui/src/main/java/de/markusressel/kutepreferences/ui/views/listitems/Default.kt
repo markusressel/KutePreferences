@@ -37,7 +37,7 @@ internal fun DefaultPreferenceListItem(
     title: String = "Some Preference Label",
     subtitle: String = "some-value",
     onClick: () -> Unit = {},
-    onLongClick: () -> Unit = {},
+    onLongClick: (() -> Unit)? = null,
 ) {
     DefaultPreferenceListItemCardContent(
         modifier = modifier,

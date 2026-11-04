@@ -57,7 +57,7 @@ fun KuteCategoryView(
                 .background(LocalKuteColors.current.category.cardBackgroundColor)
                 .combinedClickable(
                     onClick = { behavior.onClick() },
-                    onLongClick = { }
+                    onLongClick = behavior.preferenceItem.onLongClick,
                 )
         ) {
             val icon = behavior.preferenceItem.icon

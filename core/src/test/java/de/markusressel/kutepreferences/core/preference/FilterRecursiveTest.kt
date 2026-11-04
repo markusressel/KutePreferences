@@ -4,7 +4,6 @@ import de.markusressel.kutepreferences.core.preference.action.KuteAction
 import de.markusressel.kutepreferences.core.preference.category.KuteCategory
 import de.markusressel.kutepreferences.core.preference.section.KuteSection
 import org.junit.Assert.assertEquals
-import org.junit.Ignore
 import org.junit.Test
 
 class FilterRecursiveTest {
@@ -19,7 +18,6 @@ class FilterRecursiveTest {
         assertEquals(listOf<KutePreferenceListItem>(nested), listOf(category).filterRecursive("wifi"))
     }
 
-    @Ignore("bug: parents are replaced by their children, so they can never be found")
     @Test
     fun `finds matching categories and sections`() {
         assertEquals(listOf<KutePreferenceListItem>(category), listOf(category).filterRecursive("hardware"))

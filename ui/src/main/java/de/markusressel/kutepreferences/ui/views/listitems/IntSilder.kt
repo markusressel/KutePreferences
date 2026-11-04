@@ -20,6 +20,7 @@ import de.markusressel.kutepreferences.core.preference.number.slider.IntSliderPr
 import de.markusressel.kutepreferences.core.preference.number.slider.KuteIntSliderPreference
 import de.markusressel.kutepreferences.ui.theme.KutePreferencesTheme
 import de.markusressel.kutepreferences.ui.util.CombinedPreview
+import de.markusressel.kutepreferences.ui.util.clickAction
 import de.markusressel.kutepreferences.ui.util.highlightingShimmer
 import de.markusressel.kutepreferences.ui.util.modifyIf
 import de.markusressel.kutepreferences.ui.views.common.InlineExpandablePreferenceView
@@ -52,7 +53,8 @@ fun NumberSliderPreference(
             )
         },
         collapsed = collapsed,
-        onToggleCollapsedState = { collapsed = collapsed.not() }
+        onToggleCollapsedState = behavior.preferenceItem.clickAction { collapsed = collapsed.not() },
+        onLongClick = behavior.preferenceItem.onLongClick,
     )
 }
 
@@ -64,8 +66,6 @@ private fun NumberSliderPreferencePreview() {
             behavior = IntSliderPreferenceBehavior(
                 KuteIntSliderPreference(
                     key = 0,
-                    onClick = {},
-                    onLongClick = {},
                     dataProvider = dummy,
                     title = "Number Slider Preference",
                     defaultValue = 5,
@@ -238,8 +238,6 @@ private fun NumberSliderEditInputViewPreview() {
         behavior = IntSliderPreferenceBehavior(
             KuteIntSliderPreference(
                 key = 0,
-                onClick = {},
-                onLongClick = {},
                 dataProvider = dummy,
                 title = "Number Slider Preference",
                 defaultValue = 5,

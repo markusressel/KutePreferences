@@ -29,11 +29,10 @@ open class KuteSingleSelectStringPreference(
     override fun getDefaultValue(): String = context.getString(defaultValue)
 
     override fun createDescription(currentValue: String): String {
-        return possibleValues.filter {
+        // the persisted value might not be part of the possible values anymore, f.ex. after an app update
+        return possibleValues.entries.firstOrNull {
             context.getString(it.key) == currentValue
-        }.map {
-            it.value
-        }.first()
+        }?.value ?: currentValue
     }
 
 }

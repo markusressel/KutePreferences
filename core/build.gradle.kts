@@ -9,6 +9,10 @@ android {
 
 dependencies {
     implementation(libs.kotlin.stdlib.jdk8)
+
+    // StateFlow is part of the public API of core
+    api(libs.kotlinx.coroutines.core)
+
     implementation(libs.androidx.compose.ui.text)
 
     implementation(libs.androidx.core.ktx)

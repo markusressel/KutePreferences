@@ -17,6 +17,7 @@ import de.markusressel.kutepreferences.core.preference.date.DatePreferenceBehavi
 import de.markusressel.kutepreferences.core.preference.date.KuteDatePreference
 import de.markusressel.kutepreferences.ui.theme.KutePreferencesTheme
 import de.markusressel.kutepreferences.ui.util.CombinedPreview
+import de.markusressel.kutepreferences.ui.util.clickAction
 import de.markusressel.kutepreferences.ui.util.highlightingShimmer
 import de.markusressel.kutepreferences.ui.util.modifyIf
 import de.markusressel.kutepreferences.ui.views.common.CancelDefaultSaveDialog
@@ -51,7 +52,8 @@ fun DatePreference(
             icon = behavior.preferenceItem.icon,
             title = behavior.preferenceItem.title,
             subtitle = behavior.preferenceItem.createDescription(persistedValue),
-            onClick = { dialogState.show() },
+            onClick = behavior.preferenceItem.clickAction { dialogState.show() },
+            onLongClick = behavior.preferenceItem.onLongClick,
         )
     }
 

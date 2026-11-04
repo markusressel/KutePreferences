@@ -20,6 +20,7 @@ import de.markusressel.kutepreferences.core.preference.color.ColorPreferenceBeha
 import de.markusressel.kutepreferences.core.preference.color.KuteColorPreference
 import de.markusressel.kutepreferences.ui.theme.KutePreferencesTheme
 import de.markusressel.kutepreferences.ui.util.CombinedPreview
+import de.markusressel.kutepreferences.ui.util.clickAction
 import de.markusressel.kutepreferences.ui.util.highlightingShimmer
 import de.markusressel.kutepreferences.ui.util.modifyIf
 import de.markusressel.kutepreferences.ui.views.common.InlineExpandablePreferenceView
@@ -63,13 +64,14 @@ fun ColorPreferenceView(
                         .padding(4.dp),
                     fillColor = Color(persistedValue),
                     outlineColor = MaterialTheme.colorScheme.secondary,
-                    onClick = { collapsed = collapsed.not() }
+                    onClick = behavior.preferenceItem.clickAction { collapsed = collapsed.not() }
                 )
             }
         },
         content = { ColorPreferenceEditView(behavior) },
         collapsed = collapsed,
-        onToggleCollapsedState = { collapsed = collapsed.not() }
+        onToggleCollapsedState = behavior.preferenceItem.clickAction { collapsed = collapsed.not() },
+        onLongClick = behavior.preferenceItem.onLongClick,
     )
 }
 

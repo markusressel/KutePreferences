@@ -12,6 +12,7 @@ import de.markusressel.kutepreferences.core.preference.number.KuteNumberPreferen
 import de.markusressel.kutepreferences.core.preference.number.NumberPreferenceBehavior
 import de.markusressel.kutepreferences.ui.theme.KutePreferencesTheme
 import de.markusressel.kutepreferences.ui.util.CombinedPreview
+import de.markusressel.kutepreferences.ui.util.clickAction
 import de.markusressel.kutepreferences.ui.util.highlightingShimmer
 import de.markusressel.kutepreferences.ui.util.modifyIf
 import de.markusressel.kutepreferences.ui.views.common.CancelDefaultSaveDialogState
@@ -40,7 +41,8 @@ fun NumberPreference(
             icon = behavior.preferenceItem.icon,
             title = behavior.preferenceItem.title,
             subtitle = behavior.preferenceItem.createDescription(persistedValue),
-            onClick = { dialogState.show() },
+            onClick = behavior.preferenceItem.clickAction { dialogState.show() },
+            onLongClick = behavior.preferenceItem.onLongClick,
         )
     }
 
@@ -100,8 +102,6 @@ private fun NumberRangeSliderPreferencePreview() {
             behavior = NumberPreferenceBehavior(
                 KuteNumberPreference(
                     key = 0,
-                    onClick = {},
-                    onLongClick = {},
                     dataProvider = dummy,
                     title = "Number Slider Preference",
                     defaultValue = 1000,

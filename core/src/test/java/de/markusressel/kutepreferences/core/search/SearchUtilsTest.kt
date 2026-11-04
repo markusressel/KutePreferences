@@ -3,7 +3,6 @@ package de.markusressel.kutepreferences.core.search
 import de.markusressel.kutepreferences.core.search.SearchUtils.containsAnyWord
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
-import org.junit.Ignore
 import org.junit.Test
 
 class SearchUtilsTest {
@@ -23,7 +22,6 @@ class SearchUtilsTest {
         assertFalse(listOf("Wifi settings").containsAnyWord("battery"))
     }
 
-    @Ignore("bug: surrounding whitespace produces an empty word, which matches everything")
     @Test
     fun `surrounding whitespace does not match everything`() {
         assertFalse(listOf("Wifi settings").containsAnyWord("battery "))

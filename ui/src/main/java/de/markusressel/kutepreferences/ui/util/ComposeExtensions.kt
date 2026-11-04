@@ -15,10 +15,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.valentinilk.shimmer.*
+import de.markusressel.kutepreferences.core.preference.KutePreferenceListItem
 import de.markusressel.kutepreferences.core.preference.category.delayMillis
 import de.markusressel.kutepreferences.core.preference.category.durationMillis
 import de.markusressel.kutepreferences.ui.theme.KutePreferencesTheme
 import de.markusressel.kutepreferences.ui.theme.LocalKuteColors
+
+/**
+ * @return the [KutePreferenceListItem.onClick] override of this item if it has one, otherwise [default]
+ */
+internal fun KutePreferenceListItem.clickAction(default: () -> Unit): () -> Unit = onClick ?: default
 
 fun Modifier.modifyIf(condition: Boolean, modifier: Modifier.() -> Modifier): Modifier {
     return when {

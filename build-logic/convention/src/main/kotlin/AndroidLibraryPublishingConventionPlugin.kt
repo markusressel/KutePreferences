@@ -5,31 +5,40 @@ import org.gradle.api.publish.PublishingExtension
 import org.gradle.api.publish.maven.MavenPublication
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.create
+import org.gradle.kotlin.dsl.get
 
 class AndroidLibraryPublishingConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             pluginManager.apply("maven-publish")
 
-            extensions.apply {
-                configure<LibraryExtension> {
-                    publishing {
-                        singleVariant("release") {
-                            group = "com.github.markusressel.KutePreferences"
-                            withJavadocJar()
-                            withSourcesJar()
-                        }
+            group = PUBLICATION_GROUP
+
+            extensions.configure<LibraryExtension> {
+                publishing {
+                    singleVariant("release") {
+                        withJavadocJar()
+                        withSourcesJar()
                     }
                 }
-                configure<PublishingExtension> {
+            }
+
+            // the "release" software component is only available after evaluation
+            afterEvaluate {
+                extensions.configure<PublishingExtension> {
                     publications {
                         create("maven", MavenPublication::class) {
-                            groupId = "com.github.markusressel.KutePreferences"
+                            groupId = PUBLICATION_GROUP
                             artifactId = target.name
                             version = "${target.version}"
 
-                            artifact("$buildDir/outputs/aar/${target.name}-release.aar") {
-                                builtBy(tasks.getByName("assemble"))
+                            // includes the dependencies of the module in the published POM
+                            from(components["release"])
+
+                            versionMapping {
+                                allVariants {
+                                    fromResolutionResult()
+                                }
                             }
                         }
                     }
@@ -39,5 +48,9 @@ class AndroidLibraryPublishingConventionPlugin : Plugin<Project> {
                 }
             }
         }
+    }
+
+    private companion object {
+        const val PUBLICATION_GROUP = "com.github.markusressel.KutePreferences"
     }
 }
