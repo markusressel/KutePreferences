@@ -152,7 +152,7 @@ KutePreferences includes implementations for most of the commonly needed prefere
 | `KuteBooleanPreference`            | `Boolean`                      | A simple on/off preference.                                     |
 | `KuteTextPreference`               | `String`                       | A simple text preference.                                       |
 | `KuteUrlPreference`                | `String`                       | A text preference that only accepts http and https URLs.        |
-| `KutePasswordPreference`           | `String`                       | A text preference that masks the input. See the warning below.  |
+| `KutePasswordPreference`           | `String`                       | Masked input with a reveal button. See the warning below.       |
 | `KuteNumberPreference`             | `Long`                         | A preference for number values.                                 |
 | `KuteIntSliderPreference`          | `Long`                         | A whole number that is selected with a slider.                  |
 | `KuteFloatSliderPreference`        | `Float`                        | A decimal number that is selected with a slider.                |

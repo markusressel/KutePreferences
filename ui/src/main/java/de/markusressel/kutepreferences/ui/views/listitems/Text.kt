@@ -57,6 +57,7 @@ internal fun TextPreferenceEditDialog(
     behavior: TextPreferenceBehaviorBase<*>,
     keyboardOptions: KeyboardOptions = KeyboardOptions(),
     visualTransformation: VisualTransformation = VisualTransformation.None,
+    revealable: Boolean = false,
 ) {
     var value by remember {
         mutableStateOf(behavior.currentValue.value)
@@ -75,6 +76,7 @@ internal fun TextPreferenceEditDialog(
         value = value,
         keyboardOptions = keyboardOptions,
         visualTransformation = visualTransformation,
+        revealable = revealable,
         onInputChanged = { input ->
             value = input
             behavior.onInputChanged(input)

@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import com.github.takahirom.roborazzi.ExperimentalRoborazziApi
@@ -67,13 +68,19 @@ class PreferenceViewsScreenshotTest {
 
     private val dataProvider = DummyDataProvider()
 
-    private fun screenshot(name: String, expand: String? = null, content: @Composable () -> Unit) {
+    private fun screenshot(
+        name: String,
+        expand: String? = null,
+        action: () -> Unit = {},
+        content: @Composable () -> Unit,
+    ) {
         composeRule.setContent {
             KutePreferencesTheme {
                 Surface { Column { content() } }
             }
         }
         expand?.let { composeRule.onNodeWithText(it).performClick() }
+        action()
         composeRule.waitForIdle()
         // includes dialogs, which are separate windows
         captureScreenRoboImage("src/test/snapshots/$name.png")
@@ -147,6 +154,19 @@ class PreferenceViewsScreenshotTest {
 
     @Test
     fun passwordDialog() = screenshot("password_dialog", expand = "Password") {
+        PasswordPreference(
+            PasswordPreferenceBehavior(
+                KutePasswordPreference(key = "p", title = "Password", defaultValue = "secret123", dataProvider = dataProvider)
+            )
+        )
+    }
+
+    @Test
+    fun passwordDialogRevealed() = screenshot(
+        name = "password_dialog_revealed",
+        expand = "Password",
+        action = { composeRule.onNodeWithContentDescription("Show password").performClick() },
+    ) {
         PasswordPreference(
             PasswordPreferenceBehavior(
                 KutePasswordPreference(key = "p", title = "Password", defaultValue = "secret123", dataProvider = dataProvider)

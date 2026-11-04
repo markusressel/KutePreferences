@@ -1,8 +1,10 @@
 package de.markusressel.kutepreferences.ui.views.listitems
 
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.*
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import de.markusressel.kutepreferences.core.preference.text.KutePasswordPreference
 import de.markusressel.kutepreferences.core.preference.text.PasswordPreferenceBehavior
@@ -20,7 +22,9 @@ fun PasswordPreference(
         TextPreferenceEditDialog(
             dialogState = dialogState,
             behavior = behavior,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             visualTransformation = PasswordVisualTransformation(),
+            revealable = true,
         )
     }
 ) {
