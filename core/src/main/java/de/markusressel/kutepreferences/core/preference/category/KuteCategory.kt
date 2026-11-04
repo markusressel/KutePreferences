@@ -1,6 +1,7 @@
 package de.markusressel.kutepreferences.core.preference.category
 
 import android.graphics.drawable.Drawable
+import de.markusressel.kutepreferences.core.preference.KuteCondition
 import de.markusressel.kutepreferences.core.preference.KutePreferenceListItem
 import de.markusressel.kutepreferences.core.search.SearchUtils.containsAnyWord
 
@@ -15,6 +16,8 @@ open class KuteCategory(
     override val children: List<KutePreferenceListItem> = emptyList(),
     override val onClick: (() -> Unit)? = null,
     override val onLongClick: (() -> Unit)? = null,
+    override val visibleWhen: KuteCondition? = null,
+    override val enabledWhen: KuteCondition? = null,
 ) : KutePreferenceCategory {
 
     override fun search(searchTerm: String): Boolean {

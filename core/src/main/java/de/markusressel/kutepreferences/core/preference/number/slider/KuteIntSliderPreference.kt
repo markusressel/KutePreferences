@@ -2,6 +2,7 @@ package de.markusressel.kutepreferences.core.preference.number.slider
 
 import android.graphics.drawable.Drawable
 import de.markusressel.kutepreferences.core.persistence.KutePreferenceDataProvider
+import de.markusressel.kutepreferences.core.preference.KuteCondition
 import de.markusressel.kutepreferences.core.preference.KutePreferenceListItem
 
 open class KuteIntSliderPreference(
@@ -14,7 +15,9 @@ open class KuteIntSliderPreference(
     dataProvider: KutePreferenceDataProvider,
     onPreferenceChangedListener: ((oldValue: Long, newValue: Long) -> Unit)? = null,
     onClick: (() -> Unit)? = null,
-    onLongClick: (() -> Unit)? = null
+    onLongClick: (() -> Unit)? = null,
+    visibleWhen: KuteCondition? = null,
+    enabledWhen: KuteCondition? = null,
 ) : KuteSliderPreference<Long>(
     key = key,
     icon = icon,
@@ -26,6 +29,8 @@ open class KuteIntSliderPreference(
     onPreferenceChangedListener = onPreferenceChangedListener,
     onClick = onClick,
     onLongClick = onLongClick,
+    visibleWhen = visibleWhen,
+    enabledWhen = enabledWhen,
 ), KutePreferenceListItem {
 
 }

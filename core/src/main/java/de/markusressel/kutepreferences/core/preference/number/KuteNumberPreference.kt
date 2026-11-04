@@ -2,6 +2,7 @@ package de.markusressel.kutepreferences.core.preference.number
 
 import android.graphics.drawable.Drawable
 import de.markusressel.kutepreferences.core.persistence.KutePreferenceDataProvider
+import de.markusressel.kutepreferences.core.preference.KuteCondition
 import de.markusressel.kutepreferences.core.preference.KutePreferenceItem
 import de.markusressel.kutepreferences.core.preference.KutePreferenceListItem
 import de.markusressel.kutepreferences.core.preference.Validator
@@ -23,6 +24,8 @@ open class KuteNumberPreference(
     override val onClick: (() -> Unit)? = null,
     override val onLongClick: (() -> Unit)? = null,
     override val validator: Validator<Long>? = null,
+    override val visibleWhen: KuteCondition? = null,
+    override val enabledWhen: KuteCondition? = null,
 ) : KutePreferenceItem<Long>, KutePreferenceListItem {
 
     override val persistedValue by lazy { getPersistedValueFlow() }

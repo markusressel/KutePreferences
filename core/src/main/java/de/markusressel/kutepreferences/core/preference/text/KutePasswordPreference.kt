@@ -3,6 +3,7 @@ package de.markusressel.kutepreferences.core.preference.text
 import android.graphics.drawable.Drawable
 import androidx.annotation.CheckResult
 import de.markusressel.kutepreferences.core.persistence.KutePreferenceDataProvider
+import de.markusressel.kutepreferences.core.preference.KuteCondition
 import de.markusressel.kutepreferences.core.preference.Validator
 
 class KutePasswordPreference(
@@ -16,6 +17,8 @@ class KutePasswordPreference(
     override val onClick: (() -> Unit)? = null,
     override val onLongClick: (() -> Unit)? = null,
     override val validator: Validator<String>? = null,
+    override val visibleWhen: KuteCondition? = null,
+    override val enabledWhen: KuteCondition? = null,
 ) : KuteTextPreference(
     key = key,
     icon = icon,
@@ -27,6 +30,8 @@ class KutePasswordPreference(
     onClick = onClick,
     onLongClick = onLongClick,
     validator = validator,
+    visibleWhen = visibleWhen,
+    enabledWhen = enabledWhen,
 ) {
 
     @CheckResult
