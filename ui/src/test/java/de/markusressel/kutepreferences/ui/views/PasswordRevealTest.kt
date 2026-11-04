@@ -1,5 +1,10 @@
 package de.markusressel.kutepreferences.ui.views
 
+import android.text.InputType
+import android.view.inputmethod.EditorInfo
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.platform.InterceptPlatformTextInput
 import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasSetTextAction
@@ -16,6 +21,7 @@ import de.markusressel.kutepreferences.core.preference.text.TextPreferenceBehavi
 import de.markusressel.kutepreferences.ui.theme.KutePreferencesTheme
 import de.markusressel.kutepreferences.ui.views.listitems.PasswordPreference
 import de.markusressel.kutepreferences.ui.views.listitems.TextPreference
+import kotlinx.coroutines.awaitCancellation
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotEquals
 import org.junit.Rule
@@ -23,6 +29,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 
+@OptIn(ExperimentalComposeUiApi::class)
 @RunWith(RobolectricTestRunner::class)
 class PasswordRevealTest {
 
@@ -30,6 +37,26 @@ class PasswordRevealTest {
     val composeRule = createComposeRule()
 
     private val password = "secret123"
+
+    /**
+     * The variation of the input type that the text field requests from the keyboard
+     */
+    private var keyboardVariation: Int? = null
+
+    private fun setContent(content: @Composable () -> Unit) {
+        composeRule.setContent {
+            InterceptPlatformTextInput(
+                interceptor = { request, _ ->
+                    val editorInfo = EditorInfo()
+                    request.createInputConnection(editorInfo)
+                    keyboardVariation = editorInfo.inputType and InputType.TYPE_MASK_VARIATION
+                    awaitCancellation()
+                },
+            ) {
+                KutePreferencesTheme { content() }
+            }
+        }
+    }
 
     private fun openDialog() {
         val behavior = PasswordPreferenceBehavior(
@@ -40,7 +67,7 @@ class PasswordRevealTest {
                 dataProvider = DummyDataProvider(),
             )
         )
-        composeRule.setContent { KutePreferencesTheme { PasswordPreference(behavior) } }
+        setContent { PasswordPreference(behavior) }
         composeRule.onNodeWithText("Password").performClick()
     }
 
@@ -98,6 +125,15 @@ class PasswordRevealTest {
     }
 
     @Test
+    fun `the keyboard treats the field as a password`() {
+        openDialog()
+
+        composeRule.onNode(hasSetTextAction()).performClick()
+
+        composeRule.runOnIdle { assertEquals(InputType.TYPE_TEXT_VARIATION_PASSWORD, keyboardVariation) }
+    }
+
+    @Test
     fun `a text preference has no button`() {
         val behavior = TextPreferenceBehavior(
             KuteTextPreference(
@@ -107,10 +143,14 @@ class PasswordRevealTest {
                 dataProvider = DummyDataProvider(),
             )
         )
-        composeRule.setContent { KutePreferencesTheme { TextPreference(behavior) } }
+        setContent { TextPreference(behavior) }
         composeRule.onNodeWithText("Text").performClick()
 
         show().assertDoesNotExist()
+
+        composeRule.onNode(hasSetTextAction()).performClick()
+
+        composeRule.runOnIdle { assertEquals(InputType.TYPE_TEXT_VARIATION_NORMAL, keyboardVariation) }
     }
 
 }
