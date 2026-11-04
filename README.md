@@ -250,6 +250,7 @@ Source-breaking changes, and what to do about each one:
   `registry.register`, as shown above. Each ViewModel now has its own registry.
 * **`core` no longer exposes Compose, AppCompat or TypedPreferences.** Add them to your own module if you used them
   through KutePreferences.
+* **The minimum SDK is 24** (Android 7.0). Support for Android 6 was dropped for `datastore` 1.3.0.
 * **The JVM target is 17**, which lowers the requirement for apps that inline library code.
 
 The stored data of both data providers stays compatible, so users keep their settings when they update your app.

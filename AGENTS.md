@@ -26,7 +26,7 @@ How the pieces fit together:
 
 ## Setup and commands
 
-Requires JDK 21 and the Android SDK (compile and target SDK 36, min SDK 23). Always use the Gradle wrapper.
+Requires JDK 21 and the Android SDK (compile and target SDK 36, min SDK 24). Always use the Gradle wrapper.
 
 ```bash
 ./gradlew assembleDebug                  # build all modules and the demo APK
