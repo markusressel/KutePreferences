@@ -10,10 +10,13 @@ import de.markusressel.kutepreferences.core.preference.KutePreferenceItem
 import de.markusressel.kutepreferences.core.preference.KutePreferenceListItem
 import de.markusressel.kutepreferences.core.preference.category.KuteCategory
 import de.markusressel.kutepreferences.core.preference.category.KuteParent
+import de.markusressel.kutepreferences.core.preference.category.KutePreferenceCategory
 import de.markusressel.kutepreferences.ui.views.KuteRegistry
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 open class KutePreferencesViewModel(
@@ -31,19 +34,14 @@ open class KutePreferencesViewModel(
 
     val preferencesUiState = MutableStateFlow(UiState())
 
-    private val uiActionChannel = Channel<UiAction>(Channel.BUFFERED)
-    val uiActions = uiActionChannel.receiveAsFlow()
+    @Suppress("DEPRECATION")
+    @Deprecated("KutePreferencesScreen keeps the scroll position of each category itself, so this never emits")
+    val uiActions: Flow<UiAction> = emptyFlow()
 
     private val preferenceItems = MutableStateFlow<List<KutePreferenceListItem>>(emptyList())
     private val loading = MutableStateFlow(false)
 
     init {
-        viewModelScope.launch {
-            navigator.currentCategory.collectLatest {
-                uiActionChannel.send(UiAction.ScrollToTop(false))
-            }
-        }
-
         viewModelScope.launch {
             combine(
                 navigator.currentCategory,
@@ -67,6 +65,7 @@ open class KutePreferencesViewModel(
             isSearchActive = false,
             searchTerm = "",
             currentCategory = category,
+            categoryPath = navigator.categoryStack.mapNotNull { findCategoryByKeyUseCase(allItems, it) },
             preferenceItems = items,
             searchResults = emptyList(),
         )
@@ -94,6 +93,18 @@ open class KutePreferencesViewModel(
 
             preferenceItems.value = items
             loading.value = false
+        }
+    }
+
+    /**
+     * Reopens the given categories once the tree is loaded, unless something else has been opened in the meantime.
+     * Only the part of the path that still exists is opened, because the tree may have changed.
+     */
+    internal suspend fun restoreCategories(keys: List<String>) {
+        loading.first { it.not() }
+
+        if (navigator.categoryStack.isEmpty()) {
+            navigator.setCategories(keys.takeWhile { findCategoryByKeyUseCase(preferenceItems.value, it) != null })
         }
     }
 
@@ -187,6 +198,7 @@ open class KutePreferencesViewModel(
 
 private const val NAVIGATION_SETTLE_MILLIS = 300L
 
+@Deprecated("KutePreferencesScreen keeps the scroll position of each category itself")
 sealed class UiAction {
     data class ScrollToTop(val animate: Boolean) : UiAction()
 }
@@ -200,4 +212,9 @@ data class UiState(
 
     val currentCategory: String? = null,
     val preferenceItems: List<KutePreferenceListItem> = emptyList(),
+
+    /**
+     * The open categories, ordered from root to leaf
+     */
+    val categoryPath: List<KutePreferenceCategory> = emptyList(),
 )

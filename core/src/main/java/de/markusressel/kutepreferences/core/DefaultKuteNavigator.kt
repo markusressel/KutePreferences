@@ -6,20 +6,23 @@ import kotlinx.coroutines.flow.asStateFlow
 
 class DefaultKuteNavigator : KuteNavigator {
 
-    private val categoryStack = ArrayDeque<String>()
+    private val openCategories = ArrayDeque<String>()
 
     private val _currentCategory = MutableStateFlow<String?>(null)
     override val currentCategory: StateFlow<String?> = _currentCategory.asStateFlow()
 
+    override val categoryStack: List<String>
+        get() = openCategories.toList()
+
     override fun enterCategory(key: String) {
-        categoryStack.addLast(key)
+        openCategories.addLast(key)
         _currentCategory.value = key
     }
 
     override fun setCategories(keys: List<String>) {
-        categoryStack.clear()
-        categoryStack.addAll(keys)
-        _currentCategory.value = categoryStack.lastOrNull()
+        openCategories.clear()
+        openCategories.addAll(keys)
+        _currentCategory.value = openCategories.lastOrNull()
     }
 
     override fun backToTop() {
@@ -27,12 +30,12 @@ class DefaultKuteNavigator : KuteNavigator {
     }
 
     override fun goBack(): Boolean {
-        if (categoryStack.isEmpty()) {
+        if (openCategories.isEmpty()) {
             return false
         }
 
-        categoryStack.removeLast()
-        _currentCategory.value = categoryStack.lastOrNull()
+        openCategories.removeLast()
+        _currentCategory.value = openCategories.lastOrNull()
         return true
     }
 
