@@ -166,7 +166,7 @@ class KutePreferencesHolder @Inject constructor(
             key = translationManager.getTranslation(R.string.key_demo_color_pref),
             icon = iconHelper.getIcon(MaterialDesignIconic.Icon.gmi_colorize),
             title = translationManager.getTranslation(R.string.title_demo_color_pref),
-            defaultValue = ContextCompat.getColor(context, R.color.design_default_color_primary),
+            defaultValue = ContextCompat.getColor(context, com.google.android.material.R.color.design_default_color_primary),
             dataProvider = dataProvider
         )
     }
