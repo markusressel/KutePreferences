@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.drawable.Drawable
 import androidx.annotation.StringRes
 import de.markusressel.kutepreferences.core.persistence.KutePreferenceDataProvider
+import de.markusressel.kutepreferences.core.preference.Validator
 
 /**
  * Implementation of a single selection preference for selecting simple string objects
@@ -20,6 +21,7 @@ open class KuteSingleSelectStringPreference(
     override val onPreferenceChangedListener: ((oldValue: String, newValue: String) -> Unit)? = null,
     override val onClick: (() -> Unit)? = null,
     override val onLongClick: (() -> Unit)? = null,
+    override val validator: Validator<String>? = null,
 ) : KuteSingleSelectPreference<String>() {
 
     override val possibleValues = possibleValues.entries.associate {

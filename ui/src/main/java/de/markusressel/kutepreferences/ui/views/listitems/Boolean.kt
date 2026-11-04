@@ -7,27 +7,27 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.markusressel.kutepreferences.core.preference.bool.BooleanPreferenceBehavior
 import de.markusressel.kutepreferences.core.preference.bool.KuteBooleanPreference
 import de.markusressel.kutepreferences.ui.theme.KutePreferencesTheme
 import de.markusressel.kutepreferences.ui.theme.listItemMinHeight
 import de.markusressel.kutepreferences.ui.util.CombinedPreview
 import de.markusressel.kutepreferences.ui.util.clickAction
-import de.markusressel.kutepreferences.ui.util.highlightingShimmer
 import de.markusressel.kutepreferences.ui.util.dummy
+import de.markusressel.kutepreferences.ui.util.highlightingShimmer
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun BooleanPreference(
     behavior: BooleanPreferenceBehavior
 ) {
-    val uiState by behavior.uiState.collectAsState()
-    val persistedValue by behavior.persistedValue.collectAsState()
+    val uiState by behavior.uiState.collectAsStateWithLifecycle()
+    val persistedValue by behavior.persistedValue.collectAsStateWithLifecycle()
 
     Row(
         modifier = Modifier

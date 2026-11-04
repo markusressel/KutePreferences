@@ -17,15 +17,13 @@ class FindItemStackUseCase {
         items: List<KutePreferenceListItem>,
         target: KutePreferenceListItem,
     ): List<KutePreferenceListItem>? {
-        items.forEach { item ->
-            // multiple items can share a key to display the same value, so it does not identify an item
-            if (item === target) {
-                return listOf(item)
-            }
-            if (item is KuteParent) {
-                findPath(item.children, target)?.let { return listOf(item) + it }
+        return items.firstNotNullOfOrNull { item ->
+            when {
+                // multiple items can share a key to display the same value, so it does not identify an item
+                item === target -> listOf(item)
+                item is KuteParent -> findPath(item.children, target)?.let { listOf(item) + it }
+                else -> null
             }
         }
-        return null
     }
 }

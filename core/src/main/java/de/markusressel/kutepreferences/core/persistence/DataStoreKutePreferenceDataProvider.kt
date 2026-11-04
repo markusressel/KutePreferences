@@ -81,6 +81,7 @@ class DataStoreKutePreferenceDataProvider(
 
             for (write in pendingWrites) {
                 // a failed write must not prevent later writes
+                @Suppress("TooGenericExceptionCaught")
                 try {
                     write()
                 } catch (ex: CancellationException) {

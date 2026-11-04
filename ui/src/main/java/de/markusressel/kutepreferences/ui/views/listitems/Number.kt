@@ -25,25 +25,7 @@ fun NumberPreference(
     dialogState: CancelDefaultSaveDialogState = rememberCancelDefaultSaveDialogState(),
     editDialog: @Composable () -> Unit = { NumberPreferenceEditDialog(behavior, dialogState) }
 ) {
-    val uiState by behavior.uiState.collectAsState()
-    val persistedValue by behavior.persistedValue.collectAsState()
-
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .highlightingShimmer(uiState.shimmering, behavior::clearHighlight),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        DefaultPreferenceListItem(
-            icon = behavior.preferenceItem.icon,
-            title = behavior.preferenceItem.title,
-            subtitle = behavior.preferenceItem.createDescription(persistedValue),
-            onClick = behavior.preferenceItem.clickAction { dialogState.show() },
-            onLongClick = behavior.preferenceItem.onLongClick,
-        )
-    }
-
-    editDialog()
+    DialogPreferenceListItem(behavior, dialogState, editDialog)
 }
 
 
@@ -76,17 +58,13 @@ private fun NumberPreferenceEditDialog(
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
         onInputChanged = { input ->
             value = input
-            try {
-                behavior.onInputChanged(input.toLong())
-            } catch (Exception: Exception) {
-                // ignore
-            }
+            input.toLongOrNull()?.let(behavior::onInputChanged)
         },
         onCancelClicked = onCancelClicked,
         onDefaultClicked = onDefaultClicked,
         onSaveClicked = onSaveClicked,
-        validator = {
-            validator(it.toLong())
+        validator = { input ->
+            input.toLongOrNull()?.let(validator) ?: false
         }
     )
 }

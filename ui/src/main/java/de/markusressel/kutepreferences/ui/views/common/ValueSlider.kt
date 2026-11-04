@@ -1,4 +1,4 @@
-package de.markusressel.kutepreferences.ui.views.listitems
+package de.markusressel.kutepreferences.ui.views.common
 
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
@@ -6,78 +6,52 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsDraggedAsState
 import androidx.compose.foundation.interaction.collectIsPressedAsState
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
-import de.markusressel.kutepreferences.core.preference.number.slider.IntSliderPreferenceBehavior
-import de.markusressel.kutepreferences.core.preference.number.slider.KuteIntSliderPreference
-import de.markusressel.kutepreferences.ui.theme.KutePreferencesTheme
-import de.markusressel.kutepreferences.ui.util.CombinedPreview
-import de.markusressel.kutepreferences.ui.util.clickAction
-import de.markusressel.kutepreferences.ui.util.highlightingShimmer
-import de.markusressel.kutepreferences.ui.views.common.InlineExpandablePreferenceView
-import de.markusressel.kutepreferences.ui.views.common.Marker
-import de.markusressel.kutepreferences.ui.util.dummy
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.drop
-import kotlin.math.round
 
+/**
+ * A slider with a range indicator and a marker for the current value, which saves the value when it is released
+ * and animates to the new position when the value is changed by something else.
+ *
+ * @param persistedValue the currently saved value
+ * @param persistedValues emits the saved value, starting with the current one
+ * @param snap converts the raw position of the slider to a value that can be saved
+ * @param markerText the text of the marker for a slider position
+ * @param onValueChangeFinished called with a new value when the user has released the slider
+ */
 @Composable
-fun NumberSliderPreference(
-    behavior: IntSliderPreferenceBehavior,
-) {
-    val uiState by behavior.uiState.collectAsState()
-    val persistedValue by behavior.persistedValue.collectAsState()
-
-    var collapsed by remember { mutableStateOf(true) }
-
-    InlineExpandablePreferenceView(
-        modifier = Modifier.highlightingShimmer(uiState.shimmering, behavior::clearHighlight),
-        icon = behavior.preferenceItem.icon,
-        title = behavior.preferenceItem.title,
-        subtitle = behavior.preferenceItem.createDescription(persistedValue),
-        content = {
-            NumberSliderEditInputView(
-                persistedValue = persistedValue,
-                behavior = behavior,
-            )
-        },
-        collapsed = collapsed,
-        onToggleCollapsedState = behavior.preferenceItem.clickAction { collapsed = collapsed.not() },
-        onLongClick = behavior.preferenceItem.onLongClick,
-    )
-}
-
-@CombinedPreview
-@Composable
-private fun NumberSliderPreferencePreview() {
-    KutePreferencesTheme {
-        NumberSliderPreference(
-            behavior = IntSliderPreferenceBehavior(
-                KuteIntSliderPreference(
-                    key = "0",
-                    dataProvider = dummy,
-                    title = "Number Slider Preference",
-                    defaultValue = 5,
-                    minimum = -100,
-                    maximum = 100,
-                )
-            )
-        )
-    }
-}
-
-@Composable
-private fun NumberSliderEditInputView(
-    persistedValue: Long,
-    behavior: IntSliderPreferenceBehavior
+internal fun ValueSlider(
+    persistedValue: Float,
+    persistedValues: Flow<Float>,
+    valueRange: ClosedFloatingPointRange<Float>,
+    steps: Int = 0,
+    snap: (Float) -> Float = { it },
+    markerText: (Float) -> String,
+    onValueChangeFinished: (Float) -> Unit,
 ) {
     Box(
         modifier = Modifier
@@ -88,13 +62,9 @@ private fun NumberSliderEditInputView(
         var touchedByUser by remember { mutableStateOf(false) }
         var isSliderAnimating by remember { mutableStateOf(false) }
 
-        var sliderPosition by remember {
-            mutableFloatStateOf(persistedValue.toFloat())
-        }
+        var sliderPosition by remember { mutableFloatStateOf(persistedValue) }
 
-        var animatedSliderPosition by remember {
-            mutableFloatStateOf(sliderPosition)
-        }
+        var animatedSliderPosition by remember { mutableFloatStateOf(sliderPosition) }
         val sliderAnimation by animateFloatAsState(
             targetValue = animatedSliderPosition,
             finishedListener = {
@@ -104,22 +74,15 @@ private fun NumberSliderEditInputView(
             label = "Slider Animation",
         )
 
-        LaunchedEffect(key1 = true, block = {
-            behavior.persistedValue.drop(1).distinctUntilChanged().collect {
+        LaunchedEffect(persistedValues) {
+            persistedValues.drop(1).distinctUntilChanged().collect {
                 // animate to new position if change was triggered from external source
                 if (touchedByUser.not() || isSliderAnimating) {
-                    // Animating because user triggered
                     isSliderAnimating = true
-                    sliderPosition = it.toFloat()
-                } else {
-                    // NOT animating because user triggered
+                    sliderPosition = it
                 }
-                animatedSliderPosition = it.toFloat()
+                animatedSliderPosition = it
             }
-        })
-
-        val valueRange by remember {
-            mutableStateOf((behavior.preferenceItem.minimum.toFloat()..(behavior.preferenceItem.maximum).toFloat()))
         }
 
         val sliderValue = when {
@@ -131,15 +94,7 @@ private fun NumberSliderEditInputView(
         val sliderIsDragged by interactionSource.collectIsDraggedAsState()
         val sliderIsPressed by interactionSource.collectIsPressedAsState()
 
-        var markerIsVisible by remember { mutableStateOf(false) }
-
-        // hide marker after delay
-        LaunchedEffect(touchedByUser, isSliderAnimating, sliderIsDragged, sliderIsPressed) {
-            markerIsVisible = when {
-                touchedByUser || isSliderAnimating || sliderIsDragged || sliderIsPressed -> true
-                else -> false
-            }
-        }
+        val markerIsVisible = touchedByUser || isSliderAnimating || sliderIsDragged || sliderIsPressed
         var markerWidthPx by remember { mutableIntStateOf(0) }
 
         var markerPosition by remember { mutableStateOf(Offset.Zero) }
@@ -152,6 +107,7 @@ private fun NumberSliderEditInputView(
                 durationMillis = 300,
                 delayMillis = when {
                     markerIsVisible -> 0
+                    // hide marker after delay
                     else -> 2000
                 },
                 easing = LinearOutSlowInEasing
@@ -187,27 +143,22 @@ private fun NumberSliderEditInputView(
                 value = sliderValue,
                 enabled = isSliderAnimating.not(),
                 valueRange = valueRange,
-                steps = ((behavior.preferenceItem.maximum - behavior.preferenceItem.minimum) - 1).toInt(),
+                steps = steps,
                 onValueChange = {
                     if (isSliderAnimating.not()) {
                         sliderPosition = it
 
-                        val snappedTargetPosition = round(sliderPosition)
-                        if (behavior.persistedValue.value.toFloat() != snappedTargetPosition) {
+                        if (persistedValue != snap(it)) {
                             touchedByUser = true
                         }
                     }
                 },
                 onValueChangeFinished = {
-                    val snappedTargetPosition = round(sliderPosition)
+                    val snappedPosition = snap(sliderPosition)
+                    sliderPosition = snappedPosition
 
-                    if (sliderPosition != snappedTargetPosition) {
-                        sliderPosition = snappedTargetPosition
-                    }
-
-                    if (behavior.persistedValue.value.toFloat() != snappedTargetPosition) {
-                        behavior.onInputChanged(snappedTargetPosition.toLong())
-                        behavior.persistCurrentValue()
+                    if (persistedValue != snappedPosition) {
+                        onValueChangeFinished(snappedPosition)
                     }
                 },
                 interactionSource = interactionSource
@@ -221,28 +172,10 @@ private fun NumberSliderEditInputView(
                     }
                     .offset(markerPosition.x.dp, markerPosition.y.dp)
                     .alpha(animatedMarkerAlpha),
-                text = "${round(sliderValue).toInt()}",
+                text = markerText(sliderValue),
             )
         }
     }
-}
-
-@CombinedPreview
-@Composable
-private fun NumberSliderEditInputViewPreview() {
-    NumberSliderEditInputView(
-        persistedValue = 2,
-        behavior = IntSliderPreferenceBehavior(
-            KuteIntSliderPreference(
-                key = "0",
-                dataProvider = dummy,
-                title = "Number Slider Preference",
-                defaultValue = 5,
-                minimum = -100,
-                maximum = 100,
-            )
-        )
-    )
 }
 
 @Composable

@@ -7,15 +7,13 @@ import de.markusressel.kutepreferences.core.preference.category.KutePreferenceCa
 class FindCategoryByKeyUseCase {
 
     operator fun invoke(allItems: List<KutePreferenceListItem>, categoryKey: String): KutePreferenceCategory? {
-        allItems.forEach { item ->
-            if (item is KutePreferenceCategory && item.key == categoryKey) {
-                return item
-            }
-            if (item is KuteParent) {
-                invoke(item.children, categoryKey)?.let { return it }
+        return allItems.firstNotNullOfOrNull { item ->
+            when {
+                item is KutePreferenceCategory && item.key == categoryKey -> item
+                item is KuteParent -> invoke(item.children, categoryKey)
+                else -> null
             }
         }
-        return null
     }
 
 }

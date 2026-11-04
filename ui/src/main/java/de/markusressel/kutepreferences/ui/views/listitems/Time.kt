@@ -9,6 +9,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.markusressel.kutepreferences.core.preference.Validator
 import de.markusressel.kutepreferences.core.preference.time.KuteTimePreference
 import de.markusressel.kutepreferences.core.preference.time.TimePersistenceModel
@@ -16,11 +17,11 @@ import de.markusressel.kutepreferences.core.preference.time.TimePreferenceBehavi
 import de.markusressel.kutepreferences.ui.theme.KutePreferencesTheme
 import de.markusressel.kutepreferences.ui.util.CombinedPreview
 import de.markusressel.kutepreferences.ui.util.clickAction
+import de.markusressel.kutepreferences.ui.util.dummy
 import de.markusressel.kutepreferences.ui.util.highlightingShimmer
 import de.markusressel.kutepreferences.ui.views.common.CancelDefaultSaveDialog
 import de.markusressel.kutepreferences.ui.views.common.CancelDefaultSaveDialogState
 import de.markusressel.kutepreferences.ui.views.common.rememberCancelDefaultSaveDialogState
-import de.markusressel.kutepreferences.ui.util.dummy
 import kotlinx.coroutines.delay
 import java.util.*
 
@@ -30,25 +31,7 @@ fun TimePreference(
     dialogState: CancelDefaultSaveDialogState = rememberCancelDefaultSaveDialogState(),
     editDialog: @Composable () -> Unit = { TimePreferenceEditDialog(behavior, dialogState) }
 ) {
-    val uiState by behavior.uiState.collectAsState()
-    val persistedValue by behavior.persistedValue.collectAsState()
-
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .highlightingShimmer(uiState.shimmering, behavior::clearHighlight),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        DefaultPreferenceListItem(
-            icon = behavior.preferenceItem.icon,
-            title = behavior.preferenceItem.title,
-            subtitle = behavior.preferenceItem.createDescription(persistedValue),
-            onClick = behavior.preferenceItem.clickAction { dialogState.show() },
-            onLongClick = behavior.preferenceItem.onLongClick,
-        )
-    }
-
-    editDialog()
+    DialogPreferenceListItem(behavior, dialogState, editDialog)
 }
 
 @CombinedPreview
@@ -79,7 +62,7 @@ private fun TimePreferenceEditDialog(
     onSaveClicked: () -> Unit = { behavior.persistCurrentValue() },
     validator: Validator<TimePersistenceModel> = { behavior.isValid() },
 ) {
-    val currentValue by behavior.currentValue.collectAsState()
+    val currentValue by behavior.currentValue.collectAsStateWithLifecycle()
     val isError = remember(currentValue) {
         try {
             validator(currentValue).not()

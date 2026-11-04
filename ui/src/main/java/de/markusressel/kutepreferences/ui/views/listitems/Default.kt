@@ -12,6 +12,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -20,9 +21,16 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.drawable.toBitmap
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import de.markusressel.kutepreferences.core.preference.KutePreferenceItem
+import de.markusressel.kutepreferences.core.preference.KutePreferenceListItem
+import de.markusressel.kutepreferences.core.preference.PersistedPreferenceBehavior
 import de.markusressel.kutepreferences.ui.theme.*
 import de.markusressel.kutepreferences.ui.util.CombinedPreview
+import de.markusressel.kutepreferences.ui.util.clickAction
+import de.markusressel.kutepreferences.ui.util.highlightingShimmer
 import de.markusressel.kutepreferences.ui.util.modifyIf
+import de.markusressel.kutepreferences.ui.views.common.CancelDefaultSaveDialogState
 
 /**
  * Simple default UI to present a preference item
@@ -134,6 +142,38 @@ internal fun DefaultPreferenceListItemCardContent(
             subtitleColor = subtitleColor,
         )
     }
+}
+
+/**
+ * The default list item of a preference that is edited in a dialog
+ *
+ * @param editDialog the edit dialog, which is only visible while the given [dialogState] is
+ */
+@Composable
+internal fun <I, K : Any> DialogPreferenceListItem(
+    behavior: PersistedPreferenceBehavior<I, K>,
+    dialogState: CancelDefaultSaveDialogState,
+    editDialog: @Composable () -> Unit,
+) where I : KutePreferenceItem<K>, I : KutePreferenceListItem {
+    val uiState by behavior.uiState.collectAsStateWithLifecycle()
+    val persistedValue by behavior.persistedValue.collectAsStateWithLifecycle()
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .highlightingShimmer(uiState.shimmering, behavior::clearHighlight),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        DefaultPreferenceListItem(
+            icon = behavior.preferenceItem.icon,
+            title = behavior.preferenceItem.title,
+            subtitle = behavior.preferenceItem.createDescription(persistedValue),
+            onClick = behavior.preferenceItem.clickAction { dialogState.show() },
+            onLongClick = behavior.preferenceItem.onLongClick,
+        )
+    }
+
+    editDialog()
 }
 
 /**

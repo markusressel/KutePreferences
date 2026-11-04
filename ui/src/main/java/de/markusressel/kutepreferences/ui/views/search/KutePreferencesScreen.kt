@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.markusressel.kutepreferences.core.persistence.DummyDataProvider
 import de.markusressel.kutepreferences.core.preference.KutePreferenceListItem
 import de.markusressel.kutepreferences.ui.views.KuteOverview
@@ -24,7 +25,7 @@ fun KutePreferencesScreen(
     kuteViewModel: KutePreferencesViewModel,
     contentPadding: PaddingValues = PaddingValues(),
 ) {
-    val uiState by kuteViewModel.preferencesUiState.collectAsState()
+    val uiState by kuteViewModel.preferencesUiState.collectAsStateWithLifecycle()
 
     val searchFocusRequester = remember { FocusRequester() }
 

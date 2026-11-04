@@ -8,13 +8,11 @@ open class UrlPreferenceBehavior(
 ) : TextPreferenceBehaviorBase<KuteUrlPreference>(
     preferenceItem
 ) {
-    fun isValid(): Boolean {
+
+    override fun isValid(): Boolean {
         val value = currentValue.value
+        val urlValidator = UrlValidator(arrayOf("http", "https"))
 
-        val patternIsMatching = preferenceItem.regex?.toRegex()?.matches(value) ?: true
-        val schemes = arrayOf("http", "https")
-        val urlValidator = UrlValidator(schemes)
-
-        return patternIsMatching && URLUtil.isValidUrl(value) && urlValidator.isValid(value)
+        return super.isValid() && URLUtil.isValidUrl(value) && urlValidator.isValid(value)
     }
 }

@@ -36,25 +36,7 @@ fun MultiSelectionPreference(
         )
     }
 ) {
-    val uiState by behavior.uiState.collectAsState()
-    val subtitle by behavior.persistedValue.collectAsState()
-
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .highlightingShimmer(uiState.shimmering, behavior::clearHighlight),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        DefaultPreferenceListItem(
-            icon = behavior.preferenceItem.icon,
-            title = behavior.preferenceItem.title,
-            subtitle = behavior.preferenceItem.createDescription(subtitle),
-            onClick = behavior.preferenceItem.clickAction { dialogState.show() },
-            onLongClick = behavior.preferenceItem.onLongClick,
-        )
-    }
-
-    editDialog()
+    DialogPreferenceListItem(behavior, dialogState, editDialog)
 }
 
 @Composable

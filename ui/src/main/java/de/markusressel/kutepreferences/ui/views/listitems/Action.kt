@@ -6,10 +6,10 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.markusressel.kutepreferences.core.preference.action.ActionPreferenceBehavior
 import de.markusressel.kutepreferences.core.preference.action.KuteAction
 import de.markusressel.kutepreferences.ui.theme.KutePreferencesTheme
@@ -22,7 +22,7 @@ import de.markusressel.kutepreferences.ui.util.highlightingShimmer
 fun ActionPreference(
     behavior: ActionPreferenceBehavior
 ) {
-    val uiState by behavior.uiState.collectAsState()
+    val uiState by behavior.uiState.collectAsStateWithLifecycle()
 
     Row(
         modifier = Modifier

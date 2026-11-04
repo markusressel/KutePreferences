@@ -11,12 +11,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.markusressel.kutepreferences.core.DefaultKuteNavigator
 import de.markusressel.kutepreferences.core.preference.category.KuteCategory
 import de.markusressel.kutepreferences.core.preference.category.KuteCategoryBehavior
@@ -31,7 +31,7 @@ fun KuteCategoryView(
     behavior: KuteCategoryBehavior,
     modifier: Modifier = Modifier,
 ) {
-    val uiState by behavior.uiState.collectAsState()
+    val uiState by behavior.uiState.collectAsStateWithLifecycle()
 
     Card(
         modifier = Modifier

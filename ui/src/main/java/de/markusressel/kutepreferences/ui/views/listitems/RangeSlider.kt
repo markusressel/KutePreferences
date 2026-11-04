@@ -9,15 +9,16 @@ import androidx.compose.material3.RangeSlider
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.markusressel.kutepreferences.core.preference.number.range.FloatRangeSliderPreferenceBehavior
 import de.markusressel.kutepreferences.core.preference.number.range.KuteFloatRangePreference
 import de.markusressel.kutepreferences.core.preference.number.range.RangePersistenceModel
 import de.markusressel.kutepreferences.ui.theme.KutePreferencesTheme
 import de.markusressel.kutepreferences.ui.util.CombinedPreview
 import de.markusressel.kutepreferences.ui.util.clickAction
+import de.markusressel.kutepreferences.ui.util.dummy
 import de.markusressel.kutepreferences.ui.util.highlightingShimmer
 import de.markusressel.kutepreferences.ui.views.common.InlineExpandablePreferenceView
-import de.markusressel.kutepreferences.ui.util.dummy
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.drop
 
@@ -25,10 +26,10 @@ import kotlinx.coroutines.flow.drop
 fun NumberRangeSliderPreference(
     behavior: FloatRangeSliderPreferenceBehavior,
 ) {
-    val uiState by behavior.uiState.collectAsState()
+    val uiState by behavior.uiState.collectAsStateWithLifecycle()
     var collapsed by remember { mutableStateOf(true) }
 
-    val persistedValue by behavior.persistedValue.collectAsState()
+    val persistedValue by behavior.persistedValue.collectAsStateWithLifecycle()
 
     InlineExpandablePreferenceView(
         modifier = Modifier.highlightingShimmer(uiState.shimmering, behavior::clearHighlight),

@@ -4,6 +4,7 @@ import android.graphics.drawable.Drawable
 import de.markusressel.kutepreferences.core.persistence.KutePreferenceDataProvider
 import de.markusressel.kutepreferences.core.preference.KutePreferenceItem
 import de.markusressel.kutepreferences.core.preference.KutePreferenceListItem
+import de.markusressel.kutepreferences.core.preference.Validator
 import de.markusressel.kutepreferences.core.search.SearchUtils.containsAnyWord
 
 open class KuteTextPreference(
@@ -16,6 +17,7 @@ open class KuteTextPreference(
     override val onPreferenceChangedListener: ((oldValue: String, newValue: String) -> Unit)? = null,
     override val onClick: (() -> Unit)? = null,
     override val onLongClick: (() -> Unit)? = null,
+    override val validator: Validator<String>? = null,
 ) : KutePreferenceItem<String>, KutePreferenceListItem {
 
     override val persistedValue by lazy { getPersistedValueFlow() }

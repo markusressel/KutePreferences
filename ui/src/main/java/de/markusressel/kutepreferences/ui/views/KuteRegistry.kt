@@ -164,10 +164,16 @@ class KuteRegistry(navigator: KuteNavigator) {
         register<KuteAction, ActionPreferenceBehavior>(::ActionPreferenceBehavior) { ActionPreference(it) }
         register<KuteSection, KuteSectionBehavior>(::KuteSectionBehavior) { KuteSectionView(it) }
         register<KuteCategory, KuteCategoryBehavior>({ KuteCategoryBehavior(it, navigator) }) { KuteCategoryView(it) }
-        register<KuteBooleanPreference, BooleanPreferenceBehavior>(::BooleanPreferenceBehavior) { BooleanPreference(it) }
-        register<KuteColorPreference, ColorPreferenceBehavior>(::ColorPreferenceBehavior) { ColorPreferenceView(it) }
+        register<KuteBooleanPreference, BooleanPreferenceBehavior>(::BooleanPreferenceBehavior) {
+            BooleanPreference(it)
+        }
+        register<KuteColorPreference, ColorPreferenceBehavior>(::ColorPreferenceBehavior) {
+            ColorPreferenceView(it)
+        }
         register<KuteUrlPreference, UrlPreferenceBehavior>(::UrlPreferenceBehavior) { UrlPreference(it) }
-        register<KutePasswordPreference, PasswordPreferenceBehavior>(::PasswordPreferenceBehavior) { PasswordPreference(it) }
+        register<KutePasswordPreference, PasswordPreferenceBehavior>(::PasswordPreferenceBehavior) {
+            PasswordPreference(it)
+        }
         register<KuteTextPreference, TextPreferenceBehavior>(::TextPreferenceBehavior) { TextPreference(it) }
         register<KuteNumberPreference, NumberPreferenceBehavior>(::NumberPreferenceBehavior) { NumberPreference(it) }
         register<KuteFloatRangePreference, FloatRangeSliderPreferenceBehavior>(::FloatRangeSliderPreferenceBehavior) {
@@ -181,10 +187,14 @@ class KuteRegistry(navigator: KuteNavigator) {
         }
         register<KuteDatePreference, DatePreferenceBehavior>(::DatePreferenceBehavior) { DatePreference(it) }
         register<KuteTimePreference, TimePreferenceBehavior>(::TimePreferenceBehavior) { TimePreference(it) }
-        register<KuteSingleSelectStringPreference, SingleSelectionPreferenceBehavior>(::SingleSelectionPreferenceBehavior) {
+        register<KuteSingleSelectStringPreference, SingleSelectionPreferenceBehavior>(
+            ::SingleSelectionPreferenceBehavior
+        ) {
             SingleSelectionPreference(it)
         }
-        register<KuteMultiSelectStringPreference, MultiSelectionPreferenceBehavior>(::MultiSelectionPreferenceBehavior) {
+        register<KuteMultiSelectStringPreference, MultiSelectionPreferenceBehavior>(
+            ::MultiSelectionPreferenceBehavior
+        ) {
             MultiSelectionPreference(it)
         }
     }

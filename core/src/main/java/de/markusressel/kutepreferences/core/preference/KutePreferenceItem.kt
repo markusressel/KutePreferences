@@ -81,6 +81,12 @@ interface KutePreferenceItem<DataType : Any> {
     }
 
     /**
+     * An optional check of user input. Input that does not pass this check cannot be saved.
+     */
+    val validator: Validator<DataType>?
+        get() = null
+
+    /**
      * An optional listener for value changes
      */
     val onPreferenceChangedListener: ((oldValue: DataType, newValue: DataType) -> Unit)?
