@@ -1,18 +1,33 @@
 package de.markusressel.kutepreferences.ui.views
 
 import android.util.Log
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.MutableTransitionState
+import androidx.compose.foundation.focusGroup
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.focus.focusProperties
+import androidx.compose.ui.input.pointer.PointerEventPass
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.disabled
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.markusressel.kutepreferences.core.DefaultKuteNavigator
 import de.markusressel.kutepreferences.core.KuteNavigator
+import de.markusressel.kutepreferences.core.preference.KuteCondition
 import de.markusressel.kutepreferences.core.preference.KuteItemBehavior
+import de.markusressel.kutepreferences.core.preference.KutePreferenceItem
 import de.markusressel.kutepreferences.core.preference.KutePreferenceListItem
 import de.markusressel.kutepreferences.core.preference.action.ActionPreferenceBehavior
 import de.markusressel.kutepreferences.core.preference.action.KuteAction
@@ -20,6 +35,7 @@ import de.markusressel.kutepreferences.core.preference.bool.BooleanPreferenceBeh
 import de.markusressel.kutepreferences.core.preference.bool.KuteBooleanPreference
 import de.markusressel.kutepreferences.core.preference.category.KuteCategory
 import de.markusressel.kutepreferences.core.preference.category.KuteCategoryBehavior
+import de.markusressel.kutepreferences.core.preference.category.KutePreferenceCategory
 import de.markusressel.kutepreferences.core.preference.color.ColorPreferenceBehavior
 import de.markusressel.kutepreferences.core.preference.color.KuteColorPreference
 import de.markusressel.kutepreferences.core.preference.date.DatePreferenceBehavior
@@ -32,6 +48,7 @@ import de.markusressel.kutepreferences.core.preference.number.slider.FloatSlider
 import de.markusressel.kutepreferences.core.preference.number.slider.IntSliderPreferenceBehavior
 import de.markusressel.kutepreferences.core.preference.number.slider.KuteFloatSliderPreference
 import de.markusressel.kutepreferences.core.preference.number.slider.KuteIntSliderPreference
+import de.markusressel.kutepreferences.core.preference.section.KutePreferenceSection
 import de.markusressel.kutepreferences.core.preference.section.KuteSection
 import de.markusressel.kutepreferences.core.preference.section.KuteSectionBehavior
 import de.markusressel.kutepreferences.core.preference.select.KuteMultiSelectStringPreference
@@ -144,9 +161,12 @@ class KuteRegistry(navigator: KuteNavigator) {
     fun Content(item: KutePreferenceListItem) {
         @Suppress("UNCHECKED_CAST")
         val registration = findRegistration(item.javaClass) as Registration<KutePreferenceListItem, KuteItemBehavior>?
-        when (registration) {
-            null -> UnsupportedItem(item)
-            else -> registration.content(item, behaviorFor(item))
+
+        ConditionalItem(item) {
+            when (registration) {
+                null -> UnsupportedItem(item)
+                else -> registration.content(item, behaviorFor(item))
+            }
         }
     }
 
@@ -209,6 +229,72 @@ private fun UnsupportedItem(item: KutePreferenceListItem) {
         Text(text = "Did you forget to register it on the KuteRegistry?")
     }
 }
+
+/**
+ * Applies [KutePreferenceListItem.visibleWhen] and [KutePreferenceListItem.enabledWhen] to the given [content]
+ */
+@Composable
+private fun ConditionalItem(
+    item: KutePreferenceListItem,
+    content: @Composable () -> Unit,
+) {
+    val isVisible = item.visibleWhen.collectIsMet()
+    val isEnabled = item.enabledWhen.collectIsMet()
+
+    // starts in the current state, so that an item is not animated when it first appears
+    val visibility = remember { MutableTransitionState(isVisible) }
+    visibility.targetState = isVisible
+
+    AnimatedVisibility(visibleState = visibility) {
+        Box(
+            modifier = when {
+                isEnabled -> Modifier
+                else -> Modifier.disabledItem(item)
+            },
+        ) {
+            content()
+        }
+    }
+}
+
+@Composable
+private fun KuteCondition?.collectIsMet(): Boolean {
+    if (this == null) {
+        return true
+    }
+    val isMet by changes.collectAsStateWithLifecycle(initialValue = isMet)
+    return isMet
+}
+
+/**
+ * Blocks touch input, keyboard focus and accessibility actions of the content, which can be any custom view.
+ */
+private fun Modifier.disabledItem(item: KutePreferenceListItem): Modifier = this
+    .alpha(DISABLED_ITEM_ALPHA)
+    .focusProperties { onEnter = { cancelFocusChange() } }
+    .focusGroup()
+    .clearAndSetSemantics {
+        disabled()
+        item.label?.let { contentDescription = it }
+    }
+    .pointerInput(Unit) {
+        awaitPointerEventScope {
+            while (true) {
+                awaitPointerEvent(PointerEventPass.Initial).changes.forEach { it.consume() }
+            }
+        }
+    }
+
+private val KutePreferenceListItem.label: String?
+    get() = when (this) {
+        is KutePreferenceItem<*> -> title
+        is KutePreferenceCategory -> title
+        is KutePreferenceSection -> title
+        is KuteAction -> title
+        else -> null
+    }
+
+private const val DISABLED_ITEM_ALPHA = 0.38f
 
 /**
  * The [KuteRegistry] used to render items. `KutePreferencesScreen` provides the one of its ViewModel.

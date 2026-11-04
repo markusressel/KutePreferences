@@ -2,6 +2,7 @@ package de.markusressel.kutepreferences.core.preference.number.range
 
 import android.graphics.drawable.Drawable
 import de.markusressel.kutepreferences.core.persistence.KutePreferenceDataProvider
+import de.markusressel.kutepreferences.core.preference.KuteCondition
 import kotlin.math.floor
 
 open class KuteFloatRangePreference(
@@ -15,7 +16,9 @@ open class KuteFloatRangePreference(
     dataProvider: KutePreferenceDataProvider,
     onPreferenceChangedListener: ((oldValue: RangePersistenceModel<Float>, newValue: RangePersistenceModel<Float>) -> Unit)? = null,
     onClick: (() -> Unit)? = null,
-    onLongClick: (() -> Unit)? = null
+    onLongClick: (() -> Unit)? = null,
+    visibleWhen: KuteCondition? = null,
+    enabledWhen: KuteCondition? = null,
 ) : KuteRangePreference<Float>(
     key = key,
     icon = icon,
@@ -28,6 +31,8 @@ open class KuteFloatRangePreference(
     onPreferenceChangedListener = onPreferenceChangedListener,
     onClick = onClick,
     onLongClick = onLongClick,
+    visibleWhen = visibleWhen,
+    enabledWhen = enabledWhen,
 ) {
     override fun createDescription(currentValue: RangePersistenceModel<Float>): String {
         val start = formatNumberForDescription(currentValue.min, decimalPlaces)

@@ -182,6 +182,35 @@ KuteTextPreference(
 
 The validator runs in addition to built-in rules, such as the `minimum` and `maximum` of `KuteNumberPreference`.
 
+### Conditional preferences
+
+Every item can be hidden or disabled depending on the value of another preference, or on anything else:
+
+```kotlin
+val useProxy = KuteBooleanPreference(
+    key = "use_proxy",
+    title = "Use a proxy",
+    defaultValue = false,
+    dataProvider = dataProvider,
+)
+
+val proxyHost = KuteTextPreference(
+    key = "proxy_host",
+    title = "Proxy host",
+    defaultValue = "",
+    dataProvider = dataProvider,
+    visibleWhen = useProxy.matches { it },
+    enabledWhen = isPremium.asCondition() and !isOffline.asCondition(),
+)
+```
+
+`matches` depends on the saved value of a preference, and `asCondition` turns a `StateFlow<Boolean>` into a condition.
+This also works for your custom item types, by overriding `visibleWhen` and `enabledWhen`. Sections and categories accept
+them too, and an empty section is not hidden automatically.
+
+A hidden item keeps its saved value, and neither it nor its children can be found through the search. A disabled item can
+still be found.
+
 ### Other Types
 
 If you want to implement other list items that don't need any persistence you can use one of these implementations:

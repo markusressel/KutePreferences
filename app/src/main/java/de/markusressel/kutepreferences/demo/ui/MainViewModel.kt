@@ -7,6 +7,7 @@ import de.markusressel.kutepreferences.core.persistence.KutePreferenceDataProvid
 import de.markusressel.kutepreferences.core.preference.KutePreferenceListItem
 import de.markusressel.kutepreferences.core.preference.bool.KuteBooleanPreference
 import de.markusressel.kutepreferences.core.preference.category.KuteCategory
+import de.markusressel.kutepreferences.core.preference.matches
 import de.markusressel.kutepreferences.core.preference.number.KuteNumberPreference
 import de.markusressel.kutepreferences.core.preference.section.KuteSection
 import de.markusressel.kutepreferences.core.preference.text.KuteTextPreference
@@ -118,6 +119,11 @@ class MainViewModel @Inject constructor(
                 title = "Custom Types",
                 children = createCustomTypeSectionItems()
             ),
+            KuteSection(
+                key = "section_conditional",
+                title = "Conditional Preferences",
+                children = createConditionalSectionItems(),
+            ),
             KuteCategory(
                 key = translationManager.getTranslation(R.string.cat_hello),
                 icon = iconHelper.getIcon(MaterialDesignIconic.Icon.gmi_developer_board),
@@ -141,6 +147,32 @@ class MainViewModel @Inject constructor(
                 )
             ),
         )
+    }
+
+    private fun createConditionalSectionItems(): List<KutePreferenceListItem> {
+        val useProxy = KuteBooleanPreference(
+            key = "demo_use_proxy",
+            title = "Use a proxy",
+            dataProvider = dataProvider,
+            defaultValue = false,
+        )
+        val authenticate = KuteBooleanPreference(
+            key = "demo_proxy_authenticate",
+            title = "Authenticate at the proxy",
+            dataProvider = dataProvider,
+            defaultValue = false,
+            visibleWhen = useProxy.matches { it },
+        )
+        val proxyUser = KuteTextPreference(
+            key = "demo_proxy_user",
+            title = "Proxy user",
+            dataProvider = dataProvider,
+            defaultValue = "",
+            visibleWhen = useProxy.matches { it },
+            enabledWhen = authenticate.matches { it },
+        )
+
+        return listOf(useProxy, authenticate, proxyUser)
     }
 
     private fun createCustomTypeSectionItems(): List<KutePreferenceListItem> = listOf(

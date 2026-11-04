@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.drawable.Drawable
 import androidx.annotation.StringRes
 import de.markusressel.kutepreferences.core.persistence.KutePreferenceDataProvider
+import de.markusressel.kutepreferences.core.preference.KuteCondition
 import de.markusressel.kutepreferences.core.preference.Validator
 
 /**
@@ -22,6 +23,8 @@ open class KuteMultiSelectStringPreference(
     override val onClick: (() -> Unit)? = null,
     override val onLongClick: (() -> Unit)? = null,
     override val validator: Validator<Set<String>>? = null,
+    override val visibleWhen: KuteCondition? = null,
+    override val enabledWhen: KuteCondition? = null,
 ) : KuteMultiSelectPreference<Int, String>() {
 
     override fun getDefaultValue(): Set<String> = defaultValue.asSequence().map { context.getString(it) }.toSet()

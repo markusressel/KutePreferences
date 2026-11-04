@@ -9,6 +9,7 @@ import androidx.compose.ui.test.performClick
 import com.github.takahirom.roborazzi.ExperimentalRoborazziApi
 import com.github.takahirom.roborazzi.captureScreenRoboImage
 import de.markusressel.kutepreferences.core.persistence.DummyDataProvider
+import de.markusressel.kutepreferences.core.preference.asCondition
 import de.markusressel.kutepreferences.core.preference.bool.KuteBooleanPreference
 import de.markusressel.kutepreferences.core.preference.category.KuteCategory
 import de.markusressel.kutepreferences.core.preference.number.KuteNumberPreference
@@ -36,6 +37,7 @@ import de.markusressel.kutepreferences.ui.views.listitems.TextPreference
 import de.markusressel.kutepreferences.ui.views.listitems.UrlPreference
 import de.markusressel.kutepreferences.ui.views.search.KutePreferencesScreen
 import de.markusressel.kutepreferences.ui.vm.KutePreferencesViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -181,6 +183,27 @@ class PreferenceViewsScreenshotTest {
 
         screenshot("category_screen") {
             KutePreferencesScreen(kuteViewModel = viewModel)
+        }
+    }
+
+    @Test
+    fun `disabled item`() = screenshot("disabled_item") {
+        KuteRegistryForPreview {
+        val disabled = MutableStateFlow(false).asCondition()
+        TextPreference(
+            TextPreferenceBehavior(
+                KuteTextPreference(key = "e", title = "Enabled", defaultValue = "value", dataProvider = dataProvider)
+            )
+        )
+        LocalKuteRegistry.current.Content(
+            KuteTextPreference(
+                key = "d",
+                title = "Disabled",
+                defaultValue = "value",
+                dataProvider = dataProvider,
+                enabledWhen = disabled,
+            )
+        )
         }
     }
 
