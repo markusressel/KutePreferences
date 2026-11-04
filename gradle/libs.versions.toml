@@ -22,7 +22,6 @@ kotlin = "2.3.10"
 kotlinCoroutinesCore = "1.10.2"
 kotlinCoroutinesAndroid = "1.10.2"
 ksp = "2.3.2"
-materialDialogs = "0.9.0"
 robolectric = "4.17"
 detekt = "2.0.0-alpha.6"
 androidxTestCore = "1.7.0"
@@ -92,8 +91,6 @@ kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-
 
 ksp-gradle-plugin = { group = "com.google.devtools.ksp", name = "com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
 
-vanpra-compose-material-dialogs = { group = "io.github.vanpra.compose-material-dialogs", name = "core", version.ref = "materialDialogs" }
-vanpra-compose-material-dialogs-datetime = { group = "io.github.vanpra.compose-material-dialogs", name = "datetime", version.ref = "materialDialogs" }
 
 junit4 = { group = "junit", name = "junit", version.ref = "junit4" }
 kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinCoroutinesCore" }

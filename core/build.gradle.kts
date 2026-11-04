@@ -17,22 +17,13 @@ dependencies {
     // StateFlow is part of the public API of core
     api(libs.kotlinx.coroutines.core)
 
-    implementation(libs.androidx.compose.ui.text)
-
     implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-
-    implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.activity.compose)
 
     implementation(libs.commons.validator)
 
     implementation(libs.gson)
 
     implementation(libs.androidx.datastore.preferences)
-
-    debugImplementation(libs.androidx.compose.ui.tooling)
-    implementation(libs.androidx.compose.ui.tooling.preview)
 
     testImplementation(libs.junit4)
     testImplementation(libs.kotlinx.coroutines.test)

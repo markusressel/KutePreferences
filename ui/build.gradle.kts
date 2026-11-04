@@ -33,9 +33,6 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
 
-    // dialogs
-    implementation(libs.vanpra.compose.material.dialogs)
-    implementation(libs.vanpra.compose.material.dialogs.datetime)
 
     // color picker
     implementation(libs.godaddy.colorpicker)
