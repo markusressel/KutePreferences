@@ -101,7 +101,7 @@ private fun NumberRangeSliderPreferencePreview() {
         NumberPreference(
             behavior = NumberPreferenceBehavior(
                 KuteNumberPreference(
-                    key = 0,
+                    key = "0",
                     dataProvider = dummy,
                     title = "Number Slider Preference",
                     defaultValue = 1000,

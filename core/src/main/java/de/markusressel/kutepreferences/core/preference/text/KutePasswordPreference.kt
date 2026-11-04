@@ -5,7 +5,7 @@ import androidx.annotation.CheckResult
 import de.markusressel.kutepreferences.core.persistence.KutePreferenceDataProvider
 
 class KutePasswordPreference(
-    override val key: Int,
+    override val key: String,
     override val icon: Drawable? = null,
     override val title: String,
     regex: String? = "^.{8,}\$|^\$",

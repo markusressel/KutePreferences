@@ -45,6 +45,16 @@ class DefaultKuteNavigatorTest {
     }
 
     @Test
+    fun `setCategories replaces the current stack`() {
+        navigator.enterCategory(CATEGORY_A)
+
+        navigator.setCategories(listOf(CATEGORY_B))
+
+        navigator.goBack()
+        assertNull(navigator.currentCategory.value)
+    }
+
+    @Test
     fun `backToTop clears the stack`() {
         navigator.setCategories(listOf(CATEGORY_A, CATEGORY_B))
 
@@ -55,7 +65,7 @@ class DefaultKuteNavigatorTest {
     }
 
     private companion object {
-        const val CATEGORY_A = 1
-        const val CATEGORY_B = 2
+        const val CATEGORY_A = "a"
+        const val CATEGORY_B = "b"
     }
 }

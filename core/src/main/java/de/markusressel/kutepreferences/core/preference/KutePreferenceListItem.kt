@@ -1,14 +1,13 @@
 package de.markusressel.kutepreferences.core.preference
 
-import androidx.annotation.StringRes
-
 interface KutePreferenceListItem {
 
     /**
-     * A unique identifier for this [KutePreferenceListItem]
+     * A unique identifier for this [KutePreferenceListItem].
+     *
+     * Persisted items use this as the name of their stored value, so changing it loses the stored value.
      */
-    @get:StringRes
-    val key: Int
+    val key: String
 
     /**
      * OnClick action for this [KutePreferenceListItem]

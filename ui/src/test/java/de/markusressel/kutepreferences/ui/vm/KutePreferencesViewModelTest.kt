@@ -23,9 +23,9 @@ class KutePreferencesViewModelTest {
     private val dispatcher = StandardTestDispatcher()
     private val navigator = DefaultKuteNavigator()
 
-    private val leaf = KuteAction(key = 1, title = "Nested leaf")
-    private val category = KuteCategory(key = 2, title = "Category", children = listOf(leaf))
-    private val topLevel = KuteAction(key = 3, title = "Top level")
+    private val leaf = KuteAction(key = "1", title = "Nested leaf")
+    private val category = KuteCategory(key = "2", title = "Category", children = listOf(leaf))
+    private val topLevel = KuteAction(key = "3", title = "Top level")
     private val tree = listOf<KutePreferenceListItem>(category, topLevel)
 
     private lateinit var viewModel: KutePreferencesViewModel

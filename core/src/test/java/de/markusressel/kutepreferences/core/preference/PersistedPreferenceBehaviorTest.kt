@@ -15,7 +15,7 @@ class PersistedPreferenceBehaviorTest {
     private val dataProvider = DummyDataProvider()
 
     private fun textBehavior(regex: String? = null) = TextPreferenceBehavior(
-        KuteTextPreference(key = 1, title = "Text", regex = regex, defaultValue = "default", dataProvider = dataProvider)
+        KuteTextPreference(key = "1", title = "Text", regex = regex, defaultValue = "default", dataProvider = dataProvider)
     )
 
     @Test
@@ -57,7 +57,7 @@ class PersistedPreferenceBehaviorTest {
         val changes = mutableListOf<Pair<String, String>>()
         val behavior = TextPreferenceBehavior(
             KuteTextPreference(
-                key = 1,
+                key = "1",
                 title = "Text",
                 defaultValue = "default",
                 dataProvider = dataProvider,
@@ -87,7 +87,7 @@ class PersistedPreferenceBehaviorTest {
     fun `number validity follows the bounds`() {
         val behavior = NumberPreferenceBehavior(
             KuteNumberPreference(
-                key = 1,
+                key = "1",
                 title = "Number",
                 minimum = 0,
                 maximum = 10,

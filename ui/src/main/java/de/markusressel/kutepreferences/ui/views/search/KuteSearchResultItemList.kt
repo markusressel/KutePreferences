@@ -85,7 +85,7 @@ private fun KuteSearchResultItemListPreview() {
     }
 
     val preferenceItem2 = KuteDatePreference(
-        key = 0,
+        key = "0",
         icon = null,
         title = "Date Preference",
         dataProvider = dummy,

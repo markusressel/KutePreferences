@@ -8,7 +8,7 @@ import de.markusressel.kutepreferences.core.search.SearchUtils.containsAnyWord
  * The default implementation of a KutePreference Category
  */
 open class KuteCategory(
-    override val key: Int,
+    override val key: String,
     val icon: Drawable? = null,
     override val title: String,
     override val description: String = "",

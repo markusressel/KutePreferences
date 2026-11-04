@@ -8,7 +8,7 @@ import de.markusressel.kutepreferences.core.search.SearchUtils.containsAnyWord
  * The default implementation of a KutePreference Section
  */
 open class KuteSection(
-    override val key: Int,
+    override val key: String,
     override val title: String,
     override val children: List<KutePreferenceListItem>,
     override val onClick: (() -> Unit)? = null,

@@ -1,6 +1,5 @@
 package de.markusressel.kutepreferences.core.persistence
 
-import androidx.annotation.StringRes
 import de.markusressel.kutepreferences.core.preference.KutePreferenceItem
 import kotlinx.coroutines.flow.StateFlow
 
@@ -9,6 +8,14 @@ import kotlinx.coroutines.flow.StateFlow
  * preference values from some kind of (hopefully) persisted storage.
  */
 interface KutePreferenceDataProvider {
+
+    /**
+     * Loads the persisted values into memory, so that reading them afterwards does not block.
+     *
+     * Reading a value before this has completed blocks the calling thread until the data is available.
+     * `KutePreferencesViewModel` calls this before it shows the preference items.
+     */
+    suspend fun load() {}
 
     /**
      * Stores a new value
@@ -32,7 +39,7 @@ interface KutePreferenceDataProvider {
      * @param key the preference key
      * @param newValue the new value to store
      */
-    fun <DataType : Any> storeValueUnsafe(@StringRes key: Int, newValue: DataType)
+    fun <DataType : Any> storeValueUnsafe(key: String, newValue: DataType)
 
     /**
      * @return a flow containing the currently persisted value
@@ -55,6 +62,6 @@ interface KutePreferenceDataProvider {
      * @param defaultValue the default value of the preference
      * @return the currently persisted value
      */
-    fun <DataType : Any> getValueUnsafe(@StringRes key: Int, defaultValue: DataType): DataType
+    fun <DataType : Any> getValueUnsafe(key: String, defaultValue: DataType): DataType
 
 }

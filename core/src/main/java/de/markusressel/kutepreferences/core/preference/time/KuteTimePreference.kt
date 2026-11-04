@@ -8,7 +8,7 @@ import de.markusressel.kutepreferences.core.search.SearchUtils.containsAnyWord
 import java.text.DecimalFormat
 
 open class KuteTimePreference(
-    override val key: Int,
+    override val key: String,
     override val icon: Drawable? = null,
     override val title: String,
     private val defaultValue: TimePersistenceModel,

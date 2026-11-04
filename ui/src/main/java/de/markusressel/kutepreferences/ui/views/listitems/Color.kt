@@ -82,7 +82,7 @@ private fun ColorPreferenceEditViewPreview() {
         ColorPreferenceEditView(
             behavior = ColorPreferenceBehavior(
                 preferenceItem = KuteColorPreference(
-                    key = 0,
+                    key = "0",
                     title = "Color Preference",
                     defaultValue = Color.Red.copy(alpha = 0.5f).toArgb(),
                     dataProvider = dummy,
@@ -118,7 +118,7 @@ private fun ColorPreferencePreview() {
         ColorPreferenceView(
             behavior = ColorPreferenceBehavior(
                 preferenceItem = KuteColorPreference(
-                    key = 0,
+                    key = "0",
                     title = "Color Preference",
                     defaultValue = Color.Red.copy(alpha = 0.5f).toArgb(),
                     dataProvider = dummy,

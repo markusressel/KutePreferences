@@ -94,7 +94,7 @@ private fun KuteCategoryPreview() {
         KuteCategoryView(
             behavior = KuteCategoryBehavior(
                 KuteCategory(
-                    key = 0,
+                    key = "0",
                     icon = icon,
                     title = "Category Title",
                     description = "This is a long description of this category.",

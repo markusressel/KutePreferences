@@ -124,7 +124,7 @@ private fun SingleSelectionPreferencePreview() {
 
     val preferenceItem = KuteSingleSelectStringPreference(
         context = context,
-        key = 0,
+        key = "0",
         icon = icon,
         title = "Single Selection Preference",
         dataProvider = dummy,

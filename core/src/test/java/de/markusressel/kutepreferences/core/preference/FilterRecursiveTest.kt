@@ -8,10 +8,10 @@ import org.junit.Test
 
 class FilterRecursiveTest {
 
-    private val nested = KuteAction(key = 1, title = "Nested wifi action")
-    private val other = KuteAction(key = 2, title = "Something else")
-    private val section = KuteSection(key = 3, title = "Network section", children = listOf(nested, other))
-    private val category = KuteCategory(key = 4, title = "Hardware category", children = listOf(section))
+    private val nested = KuteAction(key = "1", title = "Nested wifi action")
+    private val other = KuteAction(key = "2", title = "Something else")
+    private val section = KuteSection(key = "3", title = "Network section", children = listOf(nested, other))
+    private val category = KuteCategory(key = "4", title = "Hardware category", children = listOf(section))
 
     @Test
     fun `finds leaf items at any depth`() {

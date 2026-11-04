@@ -65,7 +65,7 @@ private fun NumberSliderPreferencePreview() {
         NumberSliderPreference(
             behavior = IntSliderPreferenceBehavior(
                 KuteIntSliderPreference(
-                    key = 0,
+                    key = "0",
                     dataProvider = dummy,
                     title = "Number Slider Preference",
                     defaultValue = 5,
@@ -237,7 +237,7 @@ private fun NumberSliderEditInputViewPreview() {
         persistedValue = 2,
         behavior = IntSliderPreferenceBehavior(
             KuteIntSliderPreference(
-                key = 0,
+                key = "0",
                 dataProvider = dummy,
                 title = "Number Slider Preference",
                 defaultValue = 5,

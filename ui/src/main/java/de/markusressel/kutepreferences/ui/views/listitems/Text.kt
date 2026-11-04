@@ -61,7 +61,7 @@ private fun TextPreferencePreview() {
         AppCompatResources.getDrawable(LocalContext.current, android.R.drawable.ic_media_next)
 
     val preferenceItem = KuteTextPreference(
-        key = 0,
+        key = "0",
         icon = icon,
         title = "Text Preference",
         dataProvider = dummy,

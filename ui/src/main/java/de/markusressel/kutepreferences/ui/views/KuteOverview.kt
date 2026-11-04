@@ -61,25 +61,25 @@ private fun KuteOverviewPreview() {
                 .fillMaxWidth(),
             items = listOf(
                 KuteSection(
-                    key = 0,
+                    key = "0",
                     title = "Section",
                     children = listOf(
                         KuteBooleanPreference(
-                            key = 1,
+                            key = "1",
                             icon = icon,
                             title = "A KuteBooleanPreference",
                             defaultValue = true,
                             dataProvider = dummy
                         ),
                         KuteTextPreference(
-                            key = 1,
+                            key = "1",
                             icon = icon,
                             title = "A KuteTextPreference",
                             defaultValue = "Default",
                             dataProvider = dummy
                         ),
                         KuteNumberPreference(
-                            key = 1,
+                            key = "1",
                             icon = icon,
                             title = "A KuteNumberPreference",
                             defaultValue = 1337,
@@ -89,12 +89,12 @@ private fun KuteOverviewPreview() {
 
                     ),
                 KuteCategory(
-                    key = 1,
+                    key = "1",
                     title = "Category Title",
                     description = "This is a description of a category.",
                     children = listOf(
                         KuteTextPreference(
-                            key = 1,
+                            key = "1",
                             icon = icon,
                             title = "Some Text Preference",
                             defaultValue = "Default",

@@ -11,7 +11,7 @@ import de.markusressel.kutepreferences.core.search.SearchUtils.containsAnyWord
  * Base class for preferences defining some kind of range
  */
 abstract class KuteRangePreference<T : Number>(
-    override val key: Int,
+    override val key: String,
     override val icon: Drawable? = null,
     override val title: String,
     val minimum: T,

@@ -4,8 +4,10 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import de.markusressel.kutepreferences.core.KuteNavigator
+import de.markusressel.kutepreferences.core.preference.KutePreferenceItem
 import de.markusressel.kutepreferences.core.preference.KutePreferenceListItem
 import de.markusressel.kutepreferences.core.preference.category.KuteCategory
+import de.markusressel.kutepreferences.core.preference.category.KuteParent
 import de.markusressel.kutepreferences.core.preference.section.KuteSectionBehavior
 import de.markusressel.kutepreferences.ui.views.BehaviorStore
 import de.markusressel.kutepreferences.ui.views.KuteStyleManager
@@ -28,6 +30,7 @@ open class KutePreferencesViewModel(
     val uiActions = uiActionChannel.receiveAsFlow()
 
     private val preferenceItems = MutableStateFlow<List<KutePreferenceListItem>>(emptyList())
+    private val loading = MutableStateFlow(false)
 
     init {
         KuteStyleManager.registerDefaultStyles(navigator)
@@ -42,15 +45,16 @@ open class KutePreferencesViewModel(
             combine(
                 navigator.currentCategory,
                 preferenceItems,
-            ) { category, allItems ->
-                computeOverviewState(category, allItems)
+                loading,
+            ) { category, allItems, loading ->
+                computeOverviewState(category, allItems).copy(loading = loading)
             }.collectLatest { newState ->
                 preferencesUiState.update { newState }
             }
         }
     }
 
-    private fun computeOverviewState(category: Int?, allItems: List<KutePreferenceListItem>): UiState {
+    private fun computeOverviewState(category: String?, allItems: List<KutePreferenceListItem>): UiState {
         val items = when {
             category != null -> findCategoryByKeyUseCase(allItems, category)?.children ?: emptyList()
             else -> allItems
@@ -67,10 +71,30 @@ open class KutePreferencesViewModel(
 
 
     /**
-     * Set the full tree of [KutePreferenceListItem] entries
+     * Set the full tree of [KutePreferenceListItem] entries.
+     *
+     * The items are shown once the persisted values of all items have been loaded,
+     * so that rendering them does not block the main thread.
      */
     open fun initPreferencesTree(items: List<KutePreferenceListItem>) {
-        preferenceItems.value = items
+        loading.value = true
+        viewModelScope.launch {
+            items.flatten()
+                .filterIsInstance<KutePreferenceItem<*>>()
+                .map { it.dataProvider }
+                .distinct()
+                .forEach { it.load() }
+
+            preferenceItems.value = items
+            loading.value = false
+        }
+    }
+
+    private fun List<KutePreferenceListItem>.flatten(): List<KutePreferenceListItem> = flatMap {
+        when (it) {
+            is KuteParent -> listOf(it) + it.children.flatten()
+            else -> listOf(it)
+        }
     }
 
     /**
@@ -94,7 +118,6 @@ open class KutePreferencesViewModel(
         val lastItem = itemStack.last()
 
         val categoryStack = itemStack.filterIsInstance<KuteCategory>()
-        navigator.backToTop()
         navigator.setCategories(categoryStack.map { it.key })
 
         delay(300)
@@ -146,9 +169,7 @@ open class KutePreferencesViewModel(
                     if (preferencesUiState.value.isSearchActive) {
                         closeSearch()
                     } else {
-                        if (navigator.goBack().not()) {
-
-                        }
+                        navigator.goBack()
                     }
                 }
             }
@@ -173,6 +194,6 @@ data class UiState(
     val searchTerm: String = "",
     val searchResults: List<SearchItemsUseCase.KuteSearchResultItem> = emptyList(),
 
-    val currentCategory: Int? = null,
+    val currentCategory: String? = null,
     val preferenceItems: List<KutePreferenceListItem> = emptyList(),
 )

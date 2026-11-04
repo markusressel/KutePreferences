@@ -43,7 +43,7 @@ private fun KutePreferenceListContentPreview() {
         KutePreferenceListContent(
             items = listOf(
                 KuteTextPreference(
-                    key = 0,
+                    key = "0",
                     icon = null,
                     title = "Hello World!",
                     defaultValue = "Hey there!",

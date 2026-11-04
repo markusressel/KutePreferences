@@ -12,10 +12,10 @@ import org.junit.Test
 
 class UseCasesTest {
 
-    private val leaf = KuteAction(key = 1, title = "Leaf")
-    private val section = KuteSection(key = 2, title = "Section", children = listOf(leaf))
-    private val innerCategory = KuteCategory(key = 3, title = "Inner", children = listOf(section))
-    private val outerCategory = KuteCategory(key = 4, title = "Outer", children = listOf(innerCategory))
+    private val leaf = KuteAction(key = "1", title = "Leaf")
+    private val section = KuteSection(key = "2", title = "Section", children = listOf(leaf))
+    private val innerCategory = KuteCategory(key = "3", title = "Inner", children = listOf(section))
+    private val outerCategory = KuteCategory(key = "4", title = "Outer", children = listOf(innerCategory))
     private val tree = listOf<KutePreferenceListItem>(outerCategory)
 
     @Test
@@ -25,7 +25,7 @@ class UseCasesTest {
 
     @Test
     fun `unknown category key returns null`() {
-        assertNull(FindCategoryByKeyUseCase()(tree, 99))
+        assertNull(FindCategoryByKeyUseCase()(tree, "99"))
     }
 
     @Test
@@ -37,9 +37,24 @@ class UseCasesTest {
     }
 
     @Test
+    fun `item stack finds the given instance when keys are shared`() {
+        val shared = KuteAction(key = leaf.key, title = "Shares its key with leaf")
+        val tree = tree + KuteSection(key = "5", title = "Other", children = listOf(shared))
+
+        assertEquals("5", FindItemStackUseCase()(tree, shared).first().key)
+    }
+
+    @Test
+    fun `category lookup ignores other items with the same key`() {
+        val tree = listOf(KuteAction(key = innerCategory.key, title = "Same key"), outerCategory)
+
+        assertEquals(innerCategory, FindCategoryByKeyUseCase()(tree, innerCategory.key))
+    }
+
+    @Test
     fun `item stack throws for an unknown item`() {
         assertThrows(NoSuchElementException::class.java) {
-            FindItemStackUseCase()(tree, KuteAction(key = 99, title = "Unknown"))
+            FindItemStackUseCase()(tree, KuteAction(key = "99", title = "Unknown"))
         }
     }
 

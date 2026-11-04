@@ -48,7 +48,7 @@ private fun KuteItemListPreview() {
         KuteItemList(
             items = listOf(
                 KuteTextPreference(
-                    key = 1,
+                    key = "1",
                     icon = icon,
                     title = "Some Text Preference",
                     defaultValue = "Default",

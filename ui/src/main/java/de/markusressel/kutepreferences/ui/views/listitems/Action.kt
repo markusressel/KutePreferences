@@ -50,7 +50,7 @@ fun ActionPreference(
 @Composable
 private fun ActionPreferencePreview() {
     val preferenceItem = KuteAction(
-        key = 0,
+        key = "0",
         title = "Action Preference",
         description = "This is an action Preference.",
         onClick = {}

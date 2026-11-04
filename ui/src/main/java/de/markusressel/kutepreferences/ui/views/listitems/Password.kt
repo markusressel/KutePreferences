@@ -100,7 +100,7 @@ private fun PasswordPreferencePreview() {
         AppCompatResources.getDrawable(LocalContext.current, android.R.drawable.ic_media_next)
 
     val preferenceItem = KutePasswordPreference(
-        key = 0,
+        key = "0",
         icon = icon,
         title = "Password Preference",
         dataProvider = dummy,

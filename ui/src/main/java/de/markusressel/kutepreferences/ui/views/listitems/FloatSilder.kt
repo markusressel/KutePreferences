@@ -64,7 +64,7 @@ private fun DecimalSliderPreferencePreview() {
         DecimalSliderPreference(
             behavior = FloatSliderPreferenceBehavior(
                 KuteFloatSliderPreference(
-                    key = 0,
+                    key = "0",
                     dataProvider = dummy,
                     title = "Decimal Slider Preference",
                     defaultValue = 1.23f,
@@ -232,7 +232,7 @@ private fun DecimalSliderEditInputViewPreview() {
         persistedValue = 2.0f,
         behavior = FloatSliderPreferenceBehavior(
             KuteFloatSliderPreference(
-                key = 0,
+                key = "0",
                 dataProvider = dummy,
                 title = "Decimal Slider Preference",
                 defaultValue = 1.23f,

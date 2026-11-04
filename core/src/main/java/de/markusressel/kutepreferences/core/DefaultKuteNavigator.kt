@@ -1,51 +1,39 @@
 package de.markusressel.kutepreferences.core
 
 import kotlinx.coroutines.flow.MutableStateFlow
-import java.util.*
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 class DefaultKuteNavigator : KuteNavigator {
 
-    override val currentCategory = MutableStateFlow<Int?>(null)
-    private val categoryStack = Stack<Int>()
+    private val categoryStack = ArrayDeque<String>()
 
-    override fun enterCategory(key: Int) {
-        categoryStack.push(key)
-        currentCategory.value = key
+    private val _currentCategory = MutableStateFlow<String?>(null)
+    override val currentCategory: StateFlow<String?> = _currentCategory.asStateFlow()
+
+    override fun enterCategory(key: String) {
+        categoryStack.addLast(key)
+        _currentCategory.value = key
     }
 
-    override fun setCategories(keys: List<Int>) {
-        for (key in keys) {
-            categoryStack.push(key)
-            currentCategory.value = key
-        }
+    override fun setCategories(keys: List<String>) {
+        categoryStack.clear()
+        categoryStack.addAll(keys)
+        _currentCategory.value = categoryStack.lastOrNull()
     }
-
 
     override fun backToTop() {
-        do {
-            val result = goBack()
-        } while (result)
+        setCategories(emptyList())
     }
 
     override fun goBack(): Boolean {
-        try {
-            categoryStack.pop()
-        } catch (_: EmptyStackException) {
+        if (categoryStack.isEmpty()) {
+            return false
         }
 
-        val category = try {
-            categoryStack.peek()
-        } catch (ex: EmptyStackException) {
-            null
-        }
-
-        return when {
-            category == null && currentCategory.value == null -> false
-            else -> {
-                currentCategory.value = category
-                true
-            }
-        }
+        categoryStack.removeLast()
+        _currentCategory.value = categoryStack.lastOrNull()
+        return true
     }
 
 }

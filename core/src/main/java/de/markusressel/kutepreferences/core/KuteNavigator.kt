@@ -1,24 +1,26 @@
 package de.markusressel.kutepreferences.core
 
-import androidx.annotation.StringRes
 import de.markusressel.kutepreferences.core.preference.KutePreferenceListItem
 import kotlinx.coroutines.flow.StateFlow
 
 interface KuteNavigator {
 
-    val currentCategory: StateFlow<Int?>
+    /**
+     * The key of the category that is currently shown, or null for the top level
+     */
+    val currentCategory: StateFlow<String?>
 
     /**
      * Navigates to the given [KutePreferenceListItem].
      *
      * @param key the key of a [KutePreferenceListItem]
      */
-    fun enterCategory(@StringRes key: Int)
+    fun enterCategory(key: String)
 
     /**
-     * Set a specific set of categories.
+     * Replaces the current category stack with the given categories, ordered from root to leaf.
      */
-    fun setCategories(keys: List<Int>)
+    fun setCategories(keys: List<String>)
 
     /**
      * Navigates back to the previous category, or overview screen, or the previous backstack entry.

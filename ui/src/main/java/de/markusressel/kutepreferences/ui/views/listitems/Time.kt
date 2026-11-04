@@ -61,7 +61,7 @@ private fun TimePreferencePreview() {
         TimePreference(
             behavior = TimePreferenceBehavior(
                 preferenceItem = KuteTimePreference(
-                    key = 0,
+                    key = "0",
                     title = "Time Preference",
                     defaultValue = TimePersistenceModel(hourOfDay = 13, minute = 37),
                     dataProvider = dummy,
@@ -174,7 +174,7 @@ private fun TimePreferenceEditDialogPreview() {
         TimePreferenceEditDialog(
             behavior = TimePreferenceBehavior(
                 preferenceItem = KuteTimePreference(
-                    key = 0,
+                    key = "0",
                     title = "Time Preference",
                     defaultValue = TimePersistenceModel(hourOfDay = 13, minute = 37),
                     dataProvider = dummy,

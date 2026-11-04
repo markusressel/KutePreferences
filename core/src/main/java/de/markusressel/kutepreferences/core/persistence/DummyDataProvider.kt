@@ -1,10 +1,10 @@
 package de.markusressel.kutepreferences.core.persistence
 
-import androidx.compose.runtime.mutableStateMapOf
 import de.markusressel.kutepreferences.core.preference.KutePreferenceItem
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import java.util.concurrent.ConcurrentHashMap
 
 /**
  * A [KutePreferenceDataProvider] that stores all data in memory.
@@ -12,8 +12,8 @@ import kotlinx.coroutines.flow.asStateFlow
  */
 class DummyDataProvider : KutePreferenceDataProvider {
 
-    private val memoryStorage = mutableStateMapOf<Any, Any>()
-    private val valueFlows = mutableMapOf<Any, MutableStateFlow<Any>>()
+    private val memoryStorage = ConcurrentHashMap<String, Any>()
+    private val valueFlows = ConcurrentHashMap<String, MutableStateFlow<Any>>()
 
     override fun <DataType : Any> storeValue(
         kutePreference: KutePreferenceItem<DataType>,
@@ -22,7 +22,7 @@ class DummyDataProvider : KutePreferenceDataProvider {
         storeValueUnsafe(kutePreference.key, newValue)
     }
 
-    override fun <DataType : Any> storeValueUnsafe(key: Int, newValue: DataType) {
+    override fun <DataType : Any> storeValueUnsafe(key: String, newValue: DataType) {
         memoryStorage[key] = newValue
         getStateFlow(key, newValue).value = newValue
     }
@@ -35,12 +35,12 @@ class DummyDataProvider : KutePreferenceDataProvider {
         return getValueUnsafe(kutePreference.key, kutePreference.getDefaultValue())
     }
 
-    override fun <DataType : Any> getValueUnsafe(key: Int, defaultValue: DataType): DataType {
+    override fun <DataType : Any> getValueUnsafe(key: String, defaultValue: DataType): DataType {
         @Suppress("UNCHECKED_CAST")
-        return memoryStorage.getOrDefault(key, defaultValue) as DataType
+        return (memoryStorage[key] ?: defaultValue) as DataType
     }
 
-    private fun <DataType : Any> getStateFlow(key: Int, defaultValue: DataType): MutableStateFlow<DataType> {
+    private fun <DataType : Any> getStateFlow(key: String, defaultValue: DataType): MutableStateFlow<DataType> {
         @Suppress("UNCHECKED_CAST")
         return valueFlows.getOrPut(key) { MutableStateFlow(getValueUnsafe(key, defaultValue)) } as MutableStateFlow<DataType>
     }

@@ -31,7 +31,7 @@ class ClickOverrideTest {
     private fun booleanBehavior(onClick: (() -> Unit)? = null, onLongClick: (() -> Unit)? = null) =
         BooleanPreferenceBehavior(
             KuteBooleanPreference(
-                key = 1,
+                key = "1",
                 title = "Toggle",
                 defaultValue = true,
                 dataProvider = dataProvider,
@@ -80,7 +80,7 @@ class ClickOverrideTest {
         var clicks = 0
         val behavior = TextPreferenceBehavior(
             KuteTextPreference(
-                key = 2,
+                key = "2",
                 title = "Text",
                 defaultValue = "value",
                 dataProvider = dataProvider,

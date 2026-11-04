@@ -10,7 +10,7 @@ import de.markusressel.kutepreferences.core.search.SearchUtils.containsAnyWord
  * Implementation of a boolean preference
  */
 open class KuteBooleanPreference(
-    override val key: Int,
+    override val key: String,
     override val icon: Drawable? = null,
     override val title: String,
     open val descriptionFunction: ((Boolean) -> String)? = null,

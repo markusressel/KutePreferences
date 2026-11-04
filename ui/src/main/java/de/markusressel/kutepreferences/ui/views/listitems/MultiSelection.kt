@@ -131,7 +131,7 @@ private fun MultiSelectionPreferencePreview() {
 
     val preferenceItem = KuteMultiSelectStringPreference(
         context = context,
-        key = 0,
+        key = "0",
         icon = icon,
         title = "Multiple Selection Preference",
         dataProvider = dummy,

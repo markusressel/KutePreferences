@@ -6,38 +6,16 @@ import de.markusressel.kutepreferences.core.preference.category.KutePreferenceCa
 
 class FindCategoryByKeyUseCase {
 
-    operator fun invoke(allItems: List<KutePreferenceListItem>, categoryKey: Int): KutePreferenceCategory? {
-        return allItems.findRecursive { it.key == categoryKey } as KutePreferenceCategory?
-    }
-
-
-    private fun List<KutePreferenceListItem>.findRecursive(
-        predicate: (KutePreferenceListItem) -> Boolean
-    ): KutePreferenceListItem? {
-        val topLevelResult = firstOrNull(predicate)
-        if (topLevelResult != null) {
-            return topLevelResult
-        }
-
-        forEach {
-            val itemResult = it.findRecursive(predicate)
-            if (itemResult != null) {
-                return itemResult
+    operator fun invoke(allItems: List<KutePreferenceListItem>, categoryKey: String): KutePreferenceCategory? {
+        allItems.forEach { item ->
+            if (item is KutePreferenceCategory && item.key == categoryKey) {
+                return item
+            }
+            if (item is KuteParent) {
+                invoke(item.children, categoryKey)?.let { return it }
             }
         }
-
         return null
     }
-
-    private fun KutePreferenceListItem.findRecursive(
-        predicate: (KutePreferenceListItem) -> Boolean
-    ): KutePreferenceListItem? {
-        return when (this) {
-            predicate -> this
-            is KuteParent -> children.findRecursive(predicate)
-            else -> null
-        }
-    }
-
 
 }

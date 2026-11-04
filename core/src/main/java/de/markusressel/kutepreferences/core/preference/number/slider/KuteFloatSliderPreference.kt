@@ -6,7 +6,7 @@ import de.markusressel.kutepreferences.core.preference.KutePreferenceListItem
 import kotlin.math.floor
 
 open class KuteFloatSliderPreference(
-    key: Int,
+    key: String,
     icon: Drawable? = null,
     title: String,
     minimum: Float,

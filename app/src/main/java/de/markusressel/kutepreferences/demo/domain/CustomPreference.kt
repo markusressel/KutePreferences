@@ -25,7 +25,7 @@ import de.markusressel.kutepreferences.ui.util.CombinedPreview
 import de.markusressel.kutepreferences.ui.views.search.dummy
 
 class CustomPreference(
-    override val key: Int,
+    override val key: String,
     override val onClick: (() -> Unit)?,
     override val onLongClick: (() -> Unit)?,
     override val icon: Drawable? = null,
@@ -62,7 +62,7 @@ class CustomPreference(
 private fun CustomPreferencePreview() {
     CustomPreferenceView(
         preferenceItem = CustomPreference(
-            key = 0,
+            key = "0",
             onClick = {},
             onLongClick = {},
             dataProvider = dummy,

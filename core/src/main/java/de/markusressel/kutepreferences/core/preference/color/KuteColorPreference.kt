@@ -13,7 +13,7 @@ import de.markusressel.kutepreferences.core.search.SearchUtils.containsAnyWord
  * The color is stored as an integer.
  */
 open class KuteColorPreference(
-    override val key: Int,
+    override val key: String,
     override val icon: Drawable? = null,
     override val title: String,
     @field:ColorInt

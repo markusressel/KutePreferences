@@ -5,6 +5,10 @@ plugins {
 
 android {
     namespace = "de.markusressel.kutepreferences.core"
+
+    defaultConfig {
+        consumerProguardFiles("consumer-rules.pro")
+    }
 }
 
 dependencies {
@@ -24,7 +28,6 @@ dependencies {
     implementation(libs.commons.validator)
 
     implementation(libs.gson)
-    implementation(libs.markusressel.typedpreferences)
 
     implementation(libs.androidx.datastore.preferences)
 

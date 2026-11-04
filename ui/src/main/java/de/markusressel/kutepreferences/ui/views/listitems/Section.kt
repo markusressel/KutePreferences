@@ -78,7 +78,7 @@ fun KuteSectionView(
 @Composable
 private fun KuteSectionPreview() {
     val preferenceItem = KuteSection(
-        key = 0,
+        key = "0",
         title = "Section Title",
         children = emptyList(),
     )

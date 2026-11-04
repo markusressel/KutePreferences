@@ -7,7 +7,7 @@ import de.markusressel.kutepreferences.core.preference.KutePreferenceListItem
 import de.markusressel.kutepreferences.core.search.SearchUtils.containsAnyWord
 
 open class KuteTextPreference(
-    override val key: Int,
+    override val key: String,
     override val icon: Drawable? = null,
     override val title: String,
     val regex: String? = null,

@@ -143,7 +143,7 @@ private fun NumberRangeSliderPreferencePreview() {
         NumberRangeSliderPreference(
             behavior = FloatRangeSliderPreferenceBehavior(
                 KuteFloatRangePreference(
-                    key = 0,
+                    key = "0",
                     dataProvider = dummy,
                     title = "Number Slider Preference",
                     defaultValue = RangePersistenceModel(min = 2f, max = 5f),

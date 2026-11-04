@@ -10,7 +10,7 @@ import de.markusressel.kutepreferences.core.persistence.KutePreferenceDataProvid
  */
 open class KuteMultiSelectStringPreference(
     val context: Context,
-    override val key: Int,
+    override val key: String,
     override val icon: Drawable? = null,
     override val title: String,
     @field:StringRes

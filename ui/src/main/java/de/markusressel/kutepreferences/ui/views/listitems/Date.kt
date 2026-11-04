@@ -148,7 +148,7 @@ private fun DatePreferencePreview() {
         DatePreference(
             behavior = DatePreferenceBehavior(
                 preferenceItem = KuteDatePreference(
-                    key = 0,
+                    key = "0",
                     title = "Date Preference",
                     defaultValue = 0L,
                     dataProvider = dummy,
@@ -165,7 +165,7 @@ private fun CancelDefaultSaveDialog() {
         DatePreferenceEditDialog(
             behavior = DatePreferenceBehavior(
                 preferenceItem = KuteDatePreference(
-                    key = 0,
+                    key = "0",
                     title = "Date Preference",
                     defaultValue = 0L,
                     dataProvider = dummy,

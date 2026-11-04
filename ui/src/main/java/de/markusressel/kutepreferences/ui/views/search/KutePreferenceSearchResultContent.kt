@@ -43,7 +43,7 @@ private fun KutePreferenceSearchingContentPreview() {
         AppCompatResources.getDrawable(LocalContext.current, android.R.drawable.ic_media_next)
 
     val preferenceItem = KuteTextPreference(
-        key = 0,
+        key = "0",
         icon = icon,
         title = "Text Preference",
         dataProvider = dummy,
@@ -60,7 +60,7 @@ private fun KutePreferenceSearchingContentPreview() {
             SearchItemsUseCase.KuteSearchResultItem(
                 key = "1",
                 item = KuteTextPreference(
-                    key = 0,
+                    key = "0",
                     icon = null,
                     title = "Hello World!",
                     defaultValue = "Hey there!",

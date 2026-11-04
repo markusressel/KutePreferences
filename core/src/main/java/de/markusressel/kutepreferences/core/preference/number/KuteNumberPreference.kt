@@ -10,7 +10,7 @@ import de.markusressel.kutepreferences.core.search.SearchUtils.containsAnyWord
  * Implementation of a Long preference for selecting a number
  */
 open class KuteNumberPreference(
-    override val key: Int,
+    override val key: String,
     override val icon: Drawable? = null,
     override val title: String,
     val minimum: Int? = null,

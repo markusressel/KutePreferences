@@ -75,7 +75,7 @@ fun BooleanPreference(
 @Composable
 private fun BooleanPreferencePreview() {
     val preferenceItem = KuteBooleanPreference(
-        key = 0,
+        key = "0",
         title = "Boolean Preference",
         descriptionFunction = {
             "The value of this Preference item is: $it"

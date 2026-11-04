@@ -85,7 +85,7 @@ private fun DefaultPreview() {
                 initPreferencesTree(
                     listOf(
                         KuteCategory(
-                            key = 1,
+                            key = "1",
                             title = "hello",
                             description = "test",
                         ),

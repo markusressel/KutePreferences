@@ -14,7 +14,7 @@ interface KutePreferenceItem<DataType : Any> {
     /**
      * A unique identifier for this preference item
      */
-    val key: Int
+    val key: String
 
     /**
      * Optional icon of this KutePreference
