@@ -30,10 +30,7 @@ class MainViewModel @Inject constructor(
          * [registry]. You can also use this to replace the UI of existing types.
          */
         registry.register<CustomPreference> { CustomPreferenceView(it) }
-        registry.register<CustomBooleanPreference, CustomBooleanPreferenceBehavior>(
-            behavior = ::CustomBooleanPreferenceBehavior,
-            content = { CustomBooleanPreferenceView(it) },
-        )
+        registry.register(::CustomBooleanPreferenceBehavior) { CustomBooleanPreferenceView(it) }
 
         val preferenceTree = createPreferenceTree()
         initPreferencesTree(preferenceTree)

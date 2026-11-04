@@ -22,7 +22,7 @@ import de.markusressel.kutepreferences.ui.vm.UiAction
 fun KutePreferencesScreen(
     modifier: Modifier = Modifier,
     kuteViewModel: KutePreferencesViewModel,
-    contentPadding: PaddingValues
+    contentPadding: PaddingValues = PaddingValues(),
 ) {
     val uiState by kuteViewModel.preferencesUiState.collectAsState()
 

@@ -26,7 +26,7 @@ class DataProviderRoundTripTest(private val providerName: String) {
 
     private val dataStore: DataStore<Preferences> by lazy {
         PreferenceDataStoreFactory.create(scope = scope) {
-            File(context.filesDir, "round_trip_test.preferences_pb")
+            File.createTempFile("round_trip_test", ".preferences_pb", context.cacheDir).apply { delete() }
         }
     }
 

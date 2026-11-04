@@ -3,6 +3,7 @@ package de.markusressel.kutepreferences.ui.vm
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import de.markusressel.kutepreferences.core.DefaultKuteNavigator
 import de.markusressel.kutepreferences.core.KuteNavigator
 import de.markusressel.kutepreferences.core.preference.KuteExpandable
 import de.markusressel.kutepreferences.core.preference.KutePreferenceItem
@@ -16,7 +17,7 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 open class KutePreferencesViewModel(
-    val navigator: KuteNavigator,
+    val navigator: KuteNavigator = DefaultKuteNavigator(),
     /**
      * Defines how items are rendered. Use this to add custom item types or to replace the UI of existing ones.
      */

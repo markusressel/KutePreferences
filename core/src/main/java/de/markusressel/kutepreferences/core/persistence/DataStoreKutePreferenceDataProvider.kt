@@ -14,21 +14,24 @@ import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import de.markusressel.kutepreferences.core.preference.KutePreferenceItem
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.retryWhen
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.io.IOException
 import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.atomic.AtomicBoolean
 
 // DataStore only allows a single active instance per file, so this has to be a top level property
 private val Context.kuteDataStore: DataStore<Preferences> by preferencesDataStore(name = "kute_preferences")
@@ -49,14 +52,20 @@ class DataStoreKutePreferenceDataProvider(
         scope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.IO),
     ) : this(context.applicationContext.kuteDataStore, scope)
 
+    private val hasFailedToLoad = AtomicBoolean(false)
+
     /**
      * The latest content of the store, null until it has been loaded
      */
     private val snapshot: StateFlow<Preferences?> = dataStore.data
-        .catch { ex ->
-            if (ex !is IOException) throw ex
-            Log.e(TAG, "Could not read preferences, using defaults", ex)
-            emit(emptyPreferences())
+        .retryWhen { cause, _ ->
+            Log.e(TAG, "Could not read preferences", cause)
+            // never leave readers waiting: fall back to defaults, until the store can be read again
+            if (hasFailedToLoad.compareAndSet(false, true)) {
+                emit(emptyPreferences())
+            }
+            delay(READ_RETRY_DELAY_MILLIS)
+            true
         }
         .stateIn(scope, SharingStarted.Eagerly, null)
 
@@ -67,10 +76,18 @@ class DataStoreKutePreferenceDataProvider(
 
     init {
         scope.launch {
+            // a write that races with the initial read of the store can be missed by the snapshot
+            load()
+
             for (write in pendingWrites) {
+                // a failed write must not prevent later writes
                 try {
                     write()
+                } catch (ex: CancellationException) {
+                    throw ex
                 } catch (ex: IOException) {
+                    Log.e(TAG, "Could not write preference", ex)
+                } catch (ex: RuntimeException) {
                     Log.e(TAG, "Could not write preference", ex)
                 }
             }
@@ -154,6 +171,7 @@ class DataStoreKutePreferenceDataProvider(
 
     private companion object {
         const val TAG = "KutePreferences"
+        const val READ_RETRY_DELAY_MILLIS = 1_000L
     }
 
 }

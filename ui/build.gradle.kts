@@ -2,6 +2,7 @@ plugins {
     id("kutepreferences.android.library")
     id("kutepreferences.android.library.compose")
     id("kutepreferences.android.library.publishing")
+    alias(libs.plugins.roborazzi)
 }
 
 android {
@@ -43,6 +44,8 @@ dependencies {
     testImplementation(libs.junit4)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.robolectric)
+    testImplementation(libs.roborazzi)
+    testImplementation(libs.roborazzi.compose)
     testImplementation(libs.androidx.test.core)
     testImplementation(libs.androidx.compose.ui.test.junit4)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
