@@ -11,6 +11,12 @@ interface KuteNavigator {
     val currentCategory: StateFlow<String?>
 
     /**
+     * The keys of all open categories, ordered from root to leaf
+     */
+    val categoryStack: List<String>
+        get() = listOfNotNull(currentCategory.value)
+
+    /**
      * Navigates to the given [KutePreferenceListItem].
      *
      * @param key the key of a [KutePreferenceListItem]

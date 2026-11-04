@@ -49,7 +49,7 @@ fun KutePreferenceSearch(
             ) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = null,
+                    contentDescription = stringResource(R.string.kute_preferences_back),
                     tint = MaterialTheme.colorScheme.onBackground,
                 )
             }

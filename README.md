@@ -113,7 +113,23 @@ fun SettingsScreen() {
 }
 ```
 
-The screen handles the back button itself: it closes the search and then leaves the current category.
+The screen handles the back button itself: it closes the search and then leaves the current category. It animates
+between categories, returns to the previous scroll position when going back, and reopens the same categories after your
+app was killed in the background. On Android 13 and 14, add `android:enableOnBackInvokedCallback="true"` to your manifest
+to get the predictive back gesture.
+
+Inside of a category, the screen shows a header with the title, the parent categories and a back button. If your app
+shows this in its own top bar, hide the header and read the open categories from the ViewModel:
+
+```kotlin
+val uiState by viewModel.preferencesUiState.collectAsStateWithLifecycle()
+val title = uiState.categoryPath.lastOrNull()?.title
+
+KutePreferencesScreen(
+    kuteViewModel = viewModel,
+    categoryHeader = {},
+)
+```
 
 ## Structure
 

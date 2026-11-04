@@ -9,6 +9,8 @@ import androidx.compose.ui.test.performClick
 import com.github.takahirom.roborazzi.ExperimentalRoborazziApi
 import com.github.takahirom.roborazzi.captureScreenRoboImage
 import de.markusressel.kutepreferences.core.persistence.DummyDataProvider
+import de.markusressel.kutepreferences.core.preference.bool.KuteBooleanPreference
+import de.markusressel.kutepreferences.core.preference.category.KuteCategory
 import de.markusressel.kutepreferences.core.preference.number.KuteNumberPreference
 import de.markusressel.kutepreferences.core.preference.number.NumberPreferenceBehavior
 import de.markusressel.kutepreferences.core.preference.number.range.FloatRangeSliderPreferenceBehavior
@@ -32,6 +34,8 @@ import de.markusressel.kutepreferences.ui.views.listitems.NumberSliderPreference
 import de.markusressel.kutepreferences.ui.views.listitems.PasswordPreference
 import de.markusressel.kutepreferences.ui.views.listitems.TextPreference
 import de.markusressel.kutepreferences.ui.views.listitems.UrlPreference
+import de.markusressel.kutepreferences.ui.views.search.KutePreferencesScreen
+import de.markusressel.kutepreferences.ui.vm.KutePreferencesViewModel
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -45,7 +49,9 @@ import org.robolectric.annotation.GraphicsMode
 @OptIn(ExperimentalRoborazziApi::class)
 @RunWith(RobolectricTestRunner::class)
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
-@Config(qualifiers = "w400dp-h700dp-xhdpi")
+// NOTE: native graphics require API 26, and without a target SDK Robolectric uses the minimum SDK. On an
+// older API the content is not drawn at all, and the screenshots are blank without any test failing.
+@Config(sdk = [34], qualifiers = "w400dp-h700dp-xhdpi")
 class PreferenceViewsScreenshotTest {
 
     @get:Rule
@@ -157,4 +163,25 @@ class PreferenceViewsScreenshotTest {
             )
         )
     }
+
+    @Test
+    fun `category screen`() {
+        val leaf = KuteCategory(
+            key = "leaf",
+            title = "Proxy",
+            children = listOf(
+                KuteBooleanPreference(key = "1", title = "Use a proxy", defaultValue = true, dataProvider = dataProvider),
+            ),
+        )
+        val parent = KuteCategory(key = "parent", title = "Network", children = listOf(leaf))
+        val viewModel = KutePreferencesViewModel().apply {
+            initPreferencesTree(listOf(parent))
+            navigator.setCategories(listOf("parent", "leaf"))
+        }
+
+        screenshot("category_screen") {
+            KutePreferencesScreen(kuteViewModel = viewModel)
+        }
+    }
+
 }

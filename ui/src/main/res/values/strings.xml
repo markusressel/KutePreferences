@@ -2,5 +2,6 @@
     <string name="save">Save</string>
     <string name="str_default">Default</string>
 
+    <string name="kute_preferences_back">Back</string>
     <string name="kute_preferences_search_label">Search…</string>
 </resources>

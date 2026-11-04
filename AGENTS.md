@@ -112,6 +112,8 @@ not reformat unrelated lines.
   in-memory provider for tests.
 - Before finishing a change, run `./gradlew assembleDebug testDebugUnitTest lintDebug detekt :ui:verifyRoborazziDebug`.
 - CI (`.github/workflows/build.yml`) does not verify the screenshots, so also run that task locally.
+- Look at new screenshots after recording them. Screenshot tests need `@Config(sdk = [34])`, because on the default SDK
+  they render blank without failing.
 
 ## Compatibility rules
 
