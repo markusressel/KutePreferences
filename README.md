@@ -77,8 +77,21 @@ class SettingsViewModel(context: Context) : KutePreferencesViewModel() {
 }
 ```
 
-Keys and titles are plain strings, so you can use string resources or build keys at runtime
-(`"account_${id}_sync"`). Do not change a key after a release: the saved value is stored under it.
+Keys and titles are plain strings, so you can use string resources or build keys at runtime. Do not change a key after
+a release: the saved value is stored under it.
+
+To let the compiler catch typos, define your keys in one place instead of repeating them as literals:
+
+```kotlin
+object Keys {
+    const val USERNAME = "username"
+    fun accountSync(id: Long) = "account_${id}_sync"
+}
+```
+
+Items of one data provider can share a key to show the same value. `initPreferencesTree` throws an
+`IllegalArgumentException` if such items have a different value type or default value, because that usually is a copy
+and paste mistake. It cannot detect a pasted item whose key, type and default value are all unchanged.
 
 Read the current value anywhere through `username.getCurrentPersistedValue()`, or observe it with
 `username.getPersistedValueFlow()`.

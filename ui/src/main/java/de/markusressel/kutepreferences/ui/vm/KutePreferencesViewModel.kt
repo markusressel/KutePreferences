@@ -27,6 +27,7 @@ open class KutePreferencesViewModel(
     private val findCategoryByKeyUseCase: FindCategoryByKeyUseCase = FindCategoryByKeyUseCase()
     private val findItemStackUseCase: FindItemStackUseCase = FindItemStackUseCase()
     private val searchItemsUseCase: SearchItemsUseCase = SearchItemsUseCase()
+    private val checkPreferenceKeysUseCase: CheckPreferenceKeysUseCase = CheckPreferenceKeysUseCase()
 
     val preferencesUiState = MutableStateFlow(UiState())
 
@@ -77,12 +78,16 @@ open class KutePreferencesViewModel(
      *
      * The items are shown once the persisted values of all items have been loaded,
      * so that rendering them does not block the main thread.
+     *
+     * @throws IllegalArgumentException if items conflict, see [CheckPreferenceKeysUseCase]
      */
     open fun initPreferencesTree(items: List<KutePreferenceListItem>) {
+        val persistedItems = items.flatten().filterIsInstance<KutePreferenceItem<*>>()
+        checkPreferenceKeysUseCase(persistedItems)
+
         loading.value = true
         viewModelScope.launch {
-            items.flatten()
-                .filterIsInstance<KutePreferenceItem<*>>()
+            persistedItems
                 .map { it.dataProvider }
                 .distinct()
                 .forEach { it.load() }

@@ -137,6 +137,7 @@ Do not copy these patterns into new code. Fix them only when that is the task.
 - `TextEditDialog` catches every exception from its validator and treats it as invalid input, which hides programming
   errors in a validator.
 - Preference keys identify saved data. Previews use arbitrary keys, which is only safe with `DummyDataProvider`.
+- Items that share a key and data provider must have equal default values, otherwise `initPreferencesTree` throws.
 
 ## Security
 

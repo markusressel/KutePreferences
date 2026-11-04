@@ -1,9 +1,12 @@
 package de.markusressel.kutepreferences.ui.vm
 
+import de.markusressel.kutepreferences.core.persistence.DummyDataProvider
 import de.markusressel.kutepreferences.core.preference.KutePreferenceListItem
 import de.markusressel.kutepreferences.core.preference.action.KuteAction
+import de.markusressel.kutepreferences.core.preference.bool.KuteBooleanPreference
 import de.markusressel.kutepreferences.core.preference.category.KuteCategory
 import de.markusressel.kutepreferences.core.preference.section.KuteSection
+import de.markusressel.kutepreferences.core.preference.text.KuteTextPreference
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertThrows
@@ -77,4 +80,48 @@ class UseCasesTest {
         assertEquals(listOf<KutePreferenceListItem>(leaf), results.map { it.item })
         assertEquals(results.size, results.map { it.key }.distinct().size)
     }
+
+    private val dataProvider = DummyDataProvider()
+
+    private fun text(key: String, defaultValue: String = "", provider: DummyDataProvider = dataProvider) =
+        KuteTextPreference(key = key, title = "Text", defaultValue = defaultValue, dataProvider = provider)
+
+    private fun bool(key: String) =
+        KuteBooleanPreference(key = key, title = "Bool", defaultValue = true, dataProvider = dataProvider)
+
+    @Test
+    fun `items can share a key when they agree on the value`() {
+        CheckPreferenceKeysUseCase()(listOf(text("1", "a"), text("1", "a"), text("2", "b")))
+    }
+
+    @Test
+    fun `sharing a key with a different default value is rejected`() {
+        val error = assertThrows(IllegalArgumentException::class.java) {
+            CheckPreferenceKeysUseCase()(listOf(text("1", "a"), text("1", "b")))
+        }
+
+        assertTrue(error.message!!.contains("\"1\""))
+    }
+
+    @Test
+    fun `sharing a key with a different value type is rejected`() {
+        assertThrows(IllegalArgumentException::class.java) {
+            CheckPreferenceKeysUseCase()(listOf(text("1"), bool("1")))
+        }
+    }
+
+    @Test
+    fun `different data providers do not conflict`() {
+        CheckPreferenceKeysUseCase()(listOf(text("1", "a"), text("1", "b", DummyDataProvider())))
+    }
+
+    @Test
+    fun `the view model checks nested items`() {
+        val tree = listOf(KuteSection(key = "9", title = "Section", children = listOf(text("1", "a"), text("1", "b"))))
+
+        assertThrows(IllegalArgumentException::class.java) {
+            KutePreferencesViewModel().initPreferencesTree(tree)
+        }
+    }
+
 }
