@@ -10,10 +10,11 @@ import de.markusressel.kutepreferences.core.preference.text.TextPreferenceBehavi
 import de.markusressel.kutepreferences.core.preference.text.TextPreferenceBehaviorBase
 import de.markusressel.kutepreferences.ui.theme.KutePreferencesTheme
 import de.markusressel.kutepreferences.ui.util.CombinedPreview
+import de.markusressel.kutepreferences.ui.util.dummy
 import de.markusressel.kutepreferences.ui.views.common.CancelDefaultSaveDialogState
 import de.markusressel.kutepreferences.ui.views.common.TextEditDialog
 import de.markusressel.kutepreferences.ui.views.common.rememberCancelDefaultSaveDialogState
-import de.markusressel.kutepreferences.ui.util.dummy
+import de.markusressel.kutepreferences.ui.views.common.validationErrorText
 
 @Composable
 fun TextPreference(
@@ -77,6 +78,7 @@ internal fun TextPreferenceEditDialog(
         keyboardOptions = keyboardOptions,
         visualTransformation = visualTransformation,
         revealable = revealable,
+        errorMessage = behavior.validationErrorText(),
         onInputChanged = { input ->
             value = input
             behavior.onInputChanged(input)

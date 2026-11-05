@@ -21,6 +21,7 @@ open class KuteTimePreference(
     override val validator: Validator<TimePersistenceModel>? = null,
     override val visibleWhen: KuteCondition? = null,
     override val enabledWhen: KuteCondition? = null,
+    override val validationMessage: ((TimePersistenceModel) -> String)? = null,
 ) : KutePreferenceItem<TimePersistenceModel>, KutePreferenceListItem {
 
     override val persistedValue by lazy { getPersistedValueFlow() }

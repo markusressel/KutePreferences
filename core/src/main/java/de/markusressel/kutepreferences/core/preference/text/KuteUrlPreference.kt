@@ -19,6 +19,7 @@ open class KuteUrlPreference(
     override val validator: Validator<String>? = null,
     override val visibleWhen: KuteCondition? = null,
     override val enabledWhen: KuteCondition? = null,
+    override val validationMessage: ((String) -> String)? = null,
 ) : KuteTextPreference(
     key = key,
     icon = icon,
@@ -32,4 +33,5 @@ open class KuteUrlPreference(
     validator = validator,
     visibleWhen = visibleWhen,
     enabledWhen = enabledWhen,
+    validationMessage = validationMessage,
 ), KutePreferenceListItem

@@ -22,6 +22,7 @@ import de.markusressel.kutepreferences.ui.util.highlightingShimmer
 import de.markusressel.kutepreferences.ui.views.common.CancelDefaultSaveDialog
 import de.markusressel.kutepreferences.ui.views.common.CancelDefaultSaveDialogState
 import de.markusressel.kutepreferences.ui.views.common.rememberCancelDefaultSaveDialogState
+import de.markusressel.kutepreferences.ui.views.common.validationErrorText
 import kotlinx.coroutines.delay
 import java.util.*
 
@@ -90,6 +91,7 @@ private fun TimePreferenceEditDialog(
         onCancelClicked = onCancelClicked,
         onSaveClicked = onSaveClicked,
         isSavable = isError.not(),
+        errorMessage = behavior.validationErrorText().takeIf { isError },
         onDefaultClicked = {
             defaultClicked = true
             onDefaultClicked()

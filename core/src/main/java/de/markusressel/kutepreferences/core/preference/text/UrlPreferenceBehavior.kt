@@ -1,6 +1,7 @@
 package de.markusressel.kutepreferences.core.preference.text
 
 import android.webkit.URLUtil
+import de.markusressel.kutepreferences.core.preference.KuteValidationError
 import org.apache.commons.validator.routines.UrlValidator
 
 open class UrlPreferenceBehavior(
@@ -9,10 +10,13 @@ open class UrlPreferenceBehavior(
     preferenceItem
 ) {
 
-    override fun isValid(): Boolean {
+    override fun checkCurrentValue(): KuteValidationError? {
         val value = currentValue.value
         val urlValidator = UrlValidator(arrayOf("http", "https"))
 
-        return super.isValid() && URLUtil.isValidUrl(value) && urlValidator.isValid(value)
+        return when {
+            URLUtil.isValidUrl(value) && urlValidator.isValid(value) -> super.checkCurrentValue()
+            else -> KuteValidationError.InvalidUrl
+        }
     }
 }

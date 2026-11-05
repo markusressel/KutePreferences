@@ -24,6 +24,7 @@ import de.markusressel.kutepreferences.ui.util.highlightingShimmer
 import de.markusressel.kutepreferences.ui.views.common.CancelDefaultSaveDialog
 import de.markusressel.kutepreferences.ui.views.common.CancelDefaultSaveDialogState
 import de.markusressel.kutepreferences.ui.views.common.rememberCancelDefaultSaveDialogState
+import de.markusressel.kutepreferences.ui.views.common.validationErrorText
 import kotlinx.coroutines.delay
 import java.time.Instant
 import java.time.LocalDate
@@ -77,6 +78,7 @@ private fun DatePreferenceEditDialog(
             },
             onSaveClicked = onSaveClicked,
             isSavable = isError.not(),
+            errorMessage = behavior.validationErrorText().takeIf { isError },
         ) {
             AnimatedContent(
                 targetState = defaultClicked,

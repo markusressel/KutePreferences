@@ -2,6 +2,7 @@ package de.markusressel.kutepreferences.ui.views.common
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -9,6 +10,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.liveRegion
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -72,6 +76,7 @@ fun CancelDefaultSaveDialog(
     onDefaultClicked: () -> Unit,
     onSaveClicked: () -> Unit,
     isSavable: Boolean = true,
+    errorMessage: String? = null,
     content: @Composable ColumnScope.() -> Unit,
 ) {
     if (dialogState.isVisible.not()) {
@@ -103,6 +108,7 @@ fun CancelDefaultSaveDialog(
                 dialogState.dismiss()
             },
             isSavable = isSavable,
+            errorMessage = errorMessage,
             content = content
         )
     }
@@ -115,6 +121,7 @@ private fun DialogContent(
     onDefaultClicked: () -> Unit,
     onSaveClicked: () -> Unit,
     isSavable: Boolean = true,
+    errorMessage: String? = null,
     content: @Composable ColumnScope.() -> Unit,
 ) {
     Card(
@@ -125,6 +132,17 @@ private fun DialogContent(
     ) {
         Column {
             content()
+
+            errorMessage?.let {
+                Text(
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp, vertical = 8.dp)
+                        .semantics { liveRegion = LiveRegionMode.Polite },
+                    text = it,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.error,
+                )
+            }
 
             HorizontalDivider()
             Row(
