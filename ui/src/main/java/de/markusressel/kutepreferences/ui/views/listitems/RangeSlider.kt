@@ -25,7 +25,9 @@ import de.markusressel.kutepreferences.ui.util.dummy
 import de.markusressel.kutepreferences.ui.util.highlightingShimmer
 import de.markusressel.kutepreferences.ui.views.common.InlineExpandablePreferenceView
 import de.markusressel.kutepreferences.ui.views.common.KuteSliderTrack
-import de.markusressel.kutepreferences.ui.views.common.RangeThumbMarker
+import de.markusressel.kutepreferences.ui.views.common.SliderTrackOverhang
+import de.markusressel.kutepreferences.ui.views.common.ThumbMarker
+import de.markusressel.kutepreferences.ui.views.common.sliderFraction
 import de.markusressel.kutepreferences.ui.views.common.SliderRangeIndicator
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.drop
@@ -139,7 +141,8 @@ fun RangeSliderEditView(
         RangeSlider(
             modifier = Modifier
                 .padding(top = 14.dp)
-                .onSizeChanged { sliderWidthPx = it.width },
+                .onSizeChanged { sliderWidthPx = it.width }
+                .padding(horizontal = SliderTrackOverhang),
             value = sliderValue,
             enabled = animating.not(),
             valueRange = valueRange,
@@ -161,20 +164,25 @@ fun RangeSliderEditView(
             },
             startInteractionSource = startInteractionSource,
             endInteractionSource = endInteractionSource,
-            track = { KuteSliderTrack(it) },
+            track = {
+                KuteSliderTrack(
+                    activeStart = sliderFraction(it.activeRangeStart, it.valueRange),
+                    activeEnd = sliderFraction(it.activeRangeEnd, it.valueRange),
+                    steps = it.steps,
+                    enabled = animating.not(),
+                )
+            },
         )
 
-        RangeThumbMarker(
-            value = sliderValue.start,
-            valueRange = valueRange,
-            text = behavior.preferenceItem::formatValue,
+        ThumbMarker(
+            text = behavior.preferenceItem.formatValue(sliderValue.start),
+            fraction = sliderFraction(sliderValue.start, valueRange),
             sliderWidthPx = sliderWidthPx,
             isVisible = animating || startIsDragged || startIsPressed,
         )
-        RangeThumbMarker(
-            value = sliderValue.endInclusive,
-            valueRange = valueRange,
-            text = behavior.preferenceItem::formatValue,
+        ThumbMarker(
+            text = behavior.preferenceItem.formatValue(sliderValue.endInclusive),
+            fraction = sliderFraction(sliderValue.endInclusive, valueRange),
             sliderWidthPx = sliderWidthPx,
             isVisible = animating || endIsDragged || endIsPressed,
         )

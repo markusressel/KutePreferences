@@ -107,6 +107,38 @@ class PreferenceViewsScreenshotTest {
     }
 
     @Test
+    fun intSliderAtMinimum() = screenshot("int_slider_minimum", expand = "Int slider") {
+        NumberSliderPreference(
+            IntSliderPreferenceBehavior(
+                KuteIntSliderPreference(
+                    key = "int",
+                    title = "Int slider",
+                    minimum = 0,
+                    maximum = 7,
+                    defaultValue = 0,
+                    dataProvider = dataProvider,
+                )
+            )
+        )
+    }
+
+    @Test
+    fun intSliderAtMaximum() = screenshot("int_slider_maximum", expand = "Int slider") {
+        NumberSliderPreference(
+            IntSliderPreferenceBehavior(
+                KuteIntSliderPreference(
+                    key = "int",
+                    title = "Int slider",
+                    minimum = 0,
+                    maximum = 7,
+                    defaultValue = 7,
+                    dataProvider = dataProvider,
+                )
+            )
+        )
+    }
+
+    @Test
     fun floatSlider() = screenshot("float_slider", expand = "Float slider") {
         DecimalSliderPreference(
             FloatSliderPreferenceBehavior(

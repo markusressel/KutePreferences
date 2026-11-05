@@ -108,17 +108,10 @@ class SliderMarkerTest {
     }
 
     @Test
-    fun `a slider without steps moves its thumb across the whole track`() {
-        assertEquals(2f, center(fraction = 0f, hasSteps = false), DELTA)
-        assertEquals(50f, center(fraction = 0.5f, hasSteps = false), DELTA)
-        assertEquals(98f, center(fraction = 1f, hasSteps = false), DELTA)
-    }
-
-    @Test
-    fun `a slider with steps insets its inner steps by the track corners`() {
-        assertEquals(2f, center(fraction = 0f, hasSteps = true), DELTA)
-        assertEquals(30f, center(fraction = 0.25f, hasSteps = true), DELTA)
-        assertEquals(98f, center(fraction = 1f, hasSteps = true), DELTA)
+    fun `the thumb stops at the dots at the ends of the track`() {
+        assertEquals(10f, center(fraction = 0f), DELTA)
+        assertEquals(50f, center(fraction = 0.5f), DELTA)
+        assertEquals(90f, center(fraction = 1f), DELTA)
     }
 
     @Test
@@ -128,12 +121,11 @@ class SliderMarkerTest {
         assertEquals(0f, sliderFraction(1f, 1f..1f), DELTA)
     }
 
-    private fun center(fraction: Float, hasSteps: Boolean) = sliderThumbCenter(
+    private fun center(fraction: Float) = sliderThumbCenter(
         fraction = fraction,
         sliderWidth = 100f,
         thumbWidth = 4f,
-        trackCornerSize = 8f,
-        hasSteps = hasSteps,
+        trackOverhang = 8f,
     )
 
     private companion object {
