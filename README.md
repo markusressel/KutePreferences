@@ -190,6 +190,21 @@ KuteFloatRangePreference(
 )
 ```
 
+For values that are not evenly spaced, use `stops` instead. Each stop is shown as a dot at its position on the slider, and
+the minimum and maximum always are stops too:
+
+```kotlin
+KuteFloatRangePreference(
+    key = "zoom",
+    title = "Zoom",
+    minimum = 0f,
+    maximum = 10f,
+    stops = listOf(0.5f, 1f, 2.5f, 5f),
+    defaultValue = RangePersistenceModel(1f, 5f),
+    dataProvider = dataProvider,
+)
+```
+
 ### Selecting from options
 
 Options map the value to save to the title to show, so they can come from anywhere, like an enum or a server response:
