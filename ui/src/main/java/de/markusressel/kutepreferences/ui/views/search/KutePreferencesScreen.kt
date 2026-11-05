@@ -22,10 +22,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.markusressel.kutepreferences.core.preference.category.KutePreferenceCategory
+import de.markusressel.kutepreferences.ui.theme.KutePreferencesScreenDefaults
 import de.markusressel.kutepreferences.ui.views.KuteCategoryHeader
 import de.markusressel.kutepreferences.ui.views.KuteOverview
 import de.markusressel.kutepreferences.ui.views.LocalKuteRegistry
@@ -38,12 +40,15 @@ import de.markusressel.kutepreferences.ui.vm.UiState
  *
  * @param categoryHeader shows the open categories, ordered from root to leaf. It is only shown inside of a category.
  * Pass an empty lambda if your app shows this in its own top bar, using `UiState.categoryPath`.
+ * @param maxContentWidth keeps the content readable on large screens by centering it at this width.
+ * Pass [Dp.Infinity] to always use the full width.
  */
 @Composable
 fun KutePreferencesScreen(
     modifier: Modifier = Modifier,
     kuteViewModel: KutePreferencesViewModel,
     contentPadding: PaddingValues = PaddingValues(),
+    maxContentWidth: Dp = KutePreferencesScreenDefaults.MaxContentWidth,
     categoryHeader: @Composable (path: List<KutePreferenceCategory>) -> Unit = { path ->
         KuteCategoryHeader(
             path = path,
@@ -61,7 +66,10 @@ fun KutePreferencesScreen(
     val animatedBackProgress by animateFloatAsState(targetValue = backProgress, label = "BackProgress")
 
     CompositionLocalProvider(LocalKuteRegistry provides kuteViewModel.registry) {
-        Column(modifier) {
+        Column(
+            modifier = modifier,
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
             PredictiveBackHandler(enabled = uiState.isSearchActive || uiState.currentCategory != null) { progress ->
                 try {
                     progress.collect { event ->
@@ -82,7 +90,11 @@ fun KutePreferencesScreen(
             Spacer(modifier = Modifier.focusable())
 
             KuteSearch(
-                modifier = Modifier
+                // NOTE: an active search covers the whole screen, and only centers its results
+                modifier = when {
+                    uiState.isSearchActive -> Modifier
+                    else -> Modifier.widthIn(max = maxContentWidth)
+                }
                     .fillMaxWidth()
                     .padding(horizontal = 8.dp),
                 active = uiState.isSearchActive,
@@ -100,9 +112,11 @@ fun KutePreferencesScreen(
                 searchFocusRequester = searchFocusRequester,
                 onCancelSearch = { kuteViewModel.onUiEvent(KuteUiEvent.CloseSearch) },
                 onSearchResultSelected = { kuteViewModel.onUiEvent(KuteUiEvent.SearchResultSelected(it)) },
+                maxContentWidth = maxContentWidth,
             )
 
             AnimatedContent(
+                modifier = Modifier.widthIn(max = maxContentWidth),
                 targetState = uiState.categoryPath,
                 contentKey = { path -> path.map { it.key } },
                 transitionSpec = {
@@ -126,6 +140,7 @@ fun KutePreferencesScreen(
                     },
                 uiState = uiState,
                 contentPadding = contentPadding,
+                maxContentWidth = maxContentWidth,
             )
         }
     }
@@ -163,6 +178,7 @@ private fun RestoreOpenCategories(viewModel: KutePreferencesViewModel) {
 private fun CategoryPages(
     uiState: UiState,
     contentPadding: PaddingValues,
+    maxContentWidth: Dp,
     modifier: Modifier = Modifier,
 ) {
     val pageStates = rememberSaveableStateHolder()
@@ -194,6 +210,7 @@ private fun CategoryPages(
                     .padding(top = 8.dp),
                 items = state.preferenceItems,
                 scrollState = rememberScrollState(),
+                maxContentWidth = maxContentWidth,
             )
         }
     }

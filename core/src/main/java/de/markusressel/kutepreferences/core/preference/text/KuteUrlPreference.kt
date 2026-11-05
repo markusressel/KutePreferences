@@ -20,6 +20,7 @@ open class KuteUrlPreference(
     override val visibleWhen: KuteCondition? = null,
     override val enabledWhen: KuteCondition? = null,
     override val validationMessage: ((String) -> String)? = null,
+    override val keywords: List<String> = emptyList(),
 ) : KuteTextPreference(
     key = key,
     icon = icon,
@@ -34,4 +35,5 @@ open class KuteUrlPreference(
     visibleWhen = visibleWhen,
     enabledWhen = enabledWhen,
     validationMessage = validationMessage,
+    keywords = keywords,
 ), KutePreferenceListItem

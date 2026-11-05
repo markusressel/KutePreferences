@@ -12,7 +12,9 @@ A Material Design 3 **GUI** library for easy to use, fast and beautiful **prefer
 * [x] Easy to use
 * [x] Many included preference types
 * [x] Expandable with custom styles and logic
-* [x] Integrated search
+* [x] Integrated search, with ranked results and keywords
+* [x] Main switches and conditional preferences
+* [x] Links to a single preference from anywhere in your app
 * [x] Persistence
 * [x] Written entirely in Kotlin & Compose
 
@@ -150,6 +152,7 @@ KutePreferences includes implementations for most of the commonly needed prefere
 | Name                               | Value type                     | Description                                                     |
 |------------------------------------|--------------------------------|-----------------------------------------------------------------|
 | `KuteBooleanPreference`            | `Boolean`                      | A simple on/off preference.                                     |
+| `KuteMainSwitchPreference`         | `Boolean`                      | A prominent switch that disables its siblings while it is off.  |
 | `KuteTextPreference`               | `String`                       | A simple text preference.                                       |
 | `KuteUrlPreference`                | `String`                       | A text preference that only accepts http and https URLs.        |
 | `KutePasswordPreference`           | `String`                       | Masked input with a reveal button. See the warning below.       |
@@ -254,6 +257,65 @@ them too, and an empty section is not hidden automatically.
 A hidden item keeps its saved value, and neither it nor its children can be found through the search. A disabled item can
 still be found.
 
+### Main switch
+
+To turn a whole feature on or off, put a `KuteMainSwitchPreference` at the top of its category or section. While it is
+off, all other items in that category or section are disabled, including their children, and they keep their saved values:
+
+```kotlin
+KuteCategory(
+    key = "notifications",
+    title = "Notifications",
+    children = listOf(
+        KuteMainSwitchPreference(
+            key = "notifications_enabled",
+            title = "Use notifications",
+            defaultValue = true,
+            dataProvider = dataProvider,
+        ),
+        soundPreference,
+        frequencyPreference,
+    ),
+)
+```
+
+### Search
+
+The search looks through the title and the description of each item, which for most preferences shows the saved value. A
+password is only found by its title, and a boolean is not found by its state.
+
+Each word of the search term has to match, in any order. A word may also match the title of a parent, so "network proxy"
+finds the item "Proxy" inside of the category "Network". The best matches are listed first, starting with the title.
+
+All items accept `keywords`, to be found by terms that are not shown:
+
+```kotlin
+KuteBooleanPreference(
+    key = "wifi_only",
+    title = "Wi-Fi only",
+    keywords = listOf("wifi", "wlan", "mobile data"),
+    defaultValue = false,
+    dataProvider = dataProvider,
+)
+```
+
+Custom items provide the texts to search by overriding `searchContent`. An item that only overrides `search` is still
+found, but is listed after the other results.
+
+### Opening a preference
+
+Call `navigateTo` to show an item from anywhere in your app, f.ex. when the user opens a notification about it. This opens
+its category, expands its sections, scrolls to the item and highlights it:
+
+```kotlin
+kuteViewModel.navigateTo("wifi_only")
+```
+
+### Large screens
+
+`KutePreferencesScreen` centers its content at a width of `KutePreferencesScreenDefaults.MaxContentWidth`. Use the
+`maxContentWidth` parameter to change that, or pass `Dp.Infinity` to always use the full width.
+
 ### Other Types
 
 If you want to implement other list items that don't need any persistence you can use one of these implementations:
@@ -338,6 +400,11 @@ Source-breaking changes, and what to do about each one:
   `registry.register`, as shown above. Each ViewModel now has its own registry.
 * **`core` no longer exposes Compose, AppCompat or TypedPreferences.** Add them to your own module if you used them
   through KutePreferences.
+* **`KutePreferenceListItem.search` requires all words.** A search term used to match if any of its words matched. An
+  item that only overrides `search` keeps its own logic, but is listed after the ranked results, so override
+  `searchContent` instead. `SearchUtils.containsAnyWord` is deprecated.
+* **`KutePreferencesScreen` has a new `maxContentWidth` parameter before `categoryHeader`.** Pass `categoryHeader` by name
+  or as a trailing lambda. Content on a screen wider than 720dp is now centered instead of stretched.
 * **The minimum SDK is 24** (Android 7.0). Support for Android 6 was dropped for `datastore` 1.3.0.
 * **The JVM target is 17**, which lowers the requirement for apps that inline library code.
 

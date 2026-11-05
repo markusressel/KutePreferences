@@ -2,7 +2,7 @@ package de.markusressel.kutepreferences.core.preference.select
 
 import de.markusressel.kutepreferences.core.preference.KutePreferenceItem
 import de.markusressel.kutepreferences.core.preference.KutePreferenceListItem
-import de.markusressel.kutepreferences.core.search.SearchUtils.containsAnyWord
+import de.markusressel.kutepreferences.core.search.KuteSearchContent
 
 /**
  * Base class for implementing a single selection preference
@@ -26,7 +26,7 @@ abstract class KuteSingleSelectPreference<T : Any> : KutePreferenceItem<T>, Kute
 
     override val persistedValue by lazy { getPersistedValueFlow() }
 
-    override fun search(searchTerm: String) =
-        listOf(title, description).containsAnyWord(searchTerm)
+    override val searchContent
+        get() = KuteSearchContent(title = title, keywords = keywords, description = description)
 
 }

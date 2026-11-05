@@ -25,6 +25,7 @@ open class KuteMultiChoicePreference(
     override val visibleWhen: KuteCondition? = null,
     override val enabledWhen: KuteCondition? = null,
     override val validationMessage: ((Set<String>) -> String)? = null,
+    override val keywords: List<String> = emptyList(),
 ) : KuteMultiSelectPreference<String, String>() {
 
     init {

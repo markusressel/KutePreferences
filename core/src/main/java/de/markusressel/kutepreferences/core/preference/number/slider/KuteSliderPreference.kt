@@ -5,7 +5,7 @@ import de.markusressel.kutepreferences.core.persistence.KutePreferenceDataProvid
 import de.markusressel.kutepreferences.core.preference.KuteCondition
 import de.markusressel.kutepreferences.core.preference.KutePreferenceItem
 import de.markusressel.kutepreferences.core.preference.KutePreferenceListItem
-import de.markusressel.kutepreferences.core.search.SearchUtils.containsAnyWord
+import de.markusressel.kutepreferences.core.search.KuteSearchContent
 
 abstract class KuteSliderPreference<T : Number>(
     override val key: String,
@@ -20,13 +20,14 @@ abstract class KuteSliderPreference<T : Number>(
     override val onLongClick: (() -> Unit)? = null,
     override val visibleWhen: KuteCondition? = null,
     override val enabledWhen: KuteCondition? = null,
+    override val keywords: List<String> = emptyList(),
 ) : KutePreferenceItem<T>, KutePreferenceListItem {
 
     override val persistedValue by lazy { getPersistedValueFlow() }
 
     override fun getDefaultValue(): T = defaultValue
 
-    override fun search(searchTerm: String) =
-        listOf(title, description).containsAnyWord(searchTerm)
+    override val searchContent
+        get() = KuteSearchContent(title = title, keywords = keywords, description = description)
 
 }

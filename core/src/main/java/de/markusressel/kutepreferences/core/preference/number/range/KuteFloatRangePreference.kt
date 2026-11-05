@@ -24,6 +24,7 @@ open class KuteFloatRangePreference(
      * Each of them is shown as a dot.
      */
     val steps: Int = 0,
+    keywords: List<String> = emptyList(),
 ) : KuteRangePreference<Float>(
     key = key,
     icon = icon,
@@ -38,6 +39,7 @@ open class KuteFloatRangePreference(
     onLongClick = onLongClick,
     visibleWhen = visibleWhen,
     enabledWhen = enabledWhen,
+    keywords = keywords,
 ) {
 
     init {

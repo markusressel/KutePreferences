@@ -5,12 +5,15 @@ import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import de.markusressel.kutepreferences.core.preference.KutePreferenceListItem
 import de.markusressel.kutepreferences.core.preference.bool.KuteBooleanPreference
@@ -27,14 +30,19 @@ fun KuteOverview(
     items: List<KutePreferenceListItem>,
     modifier: Modifier = Modifier,
     scrollState: ScrollState,
+    maxContentWidth: Dp = Dp.Infinity,
 ) {
+    // NOTE: the scrolling column fills the available width, so that the space next to the items can be scrolled too
     Column(
         modifier = Modifier
             .verticalScroll(scrollState)
             .then(modifier),
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         KutePreferenceListContent(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .widthIn(max = maxContentWidth)
+                .fillMaxWidth(),
             items = items,
         )
     }

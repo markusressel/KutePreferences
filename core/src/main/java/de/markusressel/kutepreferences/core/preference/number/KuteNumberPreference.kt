@@ -6,7 +6,7 @@ import de.markusressel.kutepreferences.core.preference.KuteCondition
 import de.markusressel.kutepreferences.core.preference.KutePreferenceItem
 import de.markusressel.kutepreferences.core.preference.KutePreferenceListItem
 import de.markusressel.kutepreferences.core.preference.Validator
-import de.markusressel.kutepreferences.core.search.SearchUtils.containsAnyWord
+import de.markusressel.kutepreferences.core.search.KuteSearchContent
 
 /**
  * Implementation of a Long preference for selecting a number
@@ -27,6 +27,7 @@ open class KuteNumberPreference(
     override val visibleWhen: KuteCondition? = null,
     override val enabledWhen: KuteCondition? = null,
     override val validationMessage: ((Long) -> String)? = null,
+    override val keywords: List<String> = emptyList(),
 ) : KutePreferenceItem<Long>, KutePreferenceListItem {
 
     override val persistedValue by lazy { getPersistedValueFlow() }
@@ -41,7 +42,7 @@ open class KuteNumberPreference(
         return "$currentValue"
     }
 
-    override fun search(searchTerm: String) =
-        listOf(title, description).containsAnyWord(searchTerm)
+    override val searchContent
+        get() = KuteSearchContent(title = title, keywords = keywords, description = description)
 
 }

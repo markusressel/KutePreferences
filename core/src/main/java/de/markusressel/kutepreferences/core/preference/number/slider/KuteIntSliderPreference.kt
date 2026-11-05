@@ -18,6 +18,7 @@ open class KuteIntSliderPreference(
     onLongClick: (() -> Unit)? = null,
     visibleWhen: KuteCondition? = null,
     enabledWhen: KuteCondition? = null,
+    keywords: List<String> = emptyList(),
 ) : KuteSliderPreference<Long>(
     key = key,
     icon = icon,
@@ -31,6 +32,7 @@ open class KuteIntSliderPreference(
     onLongClick = onLongClick,
     visibleWhen = visibleWhen,
     enabledWhen = enabledWhen,
+    keywords = keywords,
 ), KutePreferenceListItem {
 
 }

@@ -20,6 +20,7 @@ class KutePasswordPreference(
     override val visibleWhen: KuteCondition? = null,
     override val enabledWhen: KuteCondition? = null,
     override val validationMessage: ((String) -> String)? = null,
+    override val keywords: List<String> = emptyList(),
 ) : KuteTextPreference(
     key = key,
     icon = icon,
@@ -34,6 +35,7 @@ class KutePasswordPreference(
     visibleWhen = visibleWhen,
     enabledWhen = enabledWhen,
     validationMessage = validationMessage,
+    keywords = keywords,
 ) {
 
     @CheckResult

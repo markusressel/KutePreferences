@@ -6,7 +6,7 @@ import de.markusressel.kutepreferences.core.preference.KuteCondition
 import de.markusressel.kutepreferences.core.preference.KutePreferenceItem
 import de.markusressel.kutepreferences.core.preference.KutePreferenceListItem
 import de.markusressel.kutepreferences.core.preference.Validator
-import de.markusressel.kutepreferences.core.search.SearchUtils.containsAnyWord
+import de.markusressel.kutepreferences.core.search.KuteSearchContent
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -25,6 +25,7 @@ open class KuteDatePreference(
     override val visibleWhen: KuteCondition? = null,
     override val enabledWhen: KuteCondition? = null,
     override val validationMessage: ((Long) -> String)? = null,
+    override val keywords: List<String> = emptyList(),
 ) : KutePreferenceItem<Long>, KutePreferenceListItem {
 
     override val persistedValue by lazy { getPersistedValueFlow() }
@@ -35,8 +36,8 @@ open class KuteDatePreference(
         return dateFormatter.format(LocalDate.ofEpochDay(currentValue))
     }
 
-    override fun search(searchTerm: String) =
-        listOf(title, description).containsAnyWord(searchTerm)
+    override val searchContent
+        get() = KuteSearchContent(title = title, keywords = keywords, description = description)
 
     companion object {
         private val dateFormatter = DateTimeFormatter.ISO_LOCAL_DATE

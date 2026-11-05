@@ -2,7 +2,7 @@ package de.markusressel.kutepreferences.core.preference.section
 
 import de.markusressel.kutepreferences.core.preference.KuteCondition
 import de.markusressel.kutepreferences.core.preference.KutePreferenceListItem
-import de.markusressel.kutepreferences.core.search.SearchUtils.containsAnyWord
+import de.markusressel.kutepreferences.core.search.KuteSearchContent
 
 
 /**
@@ -16,11 +16,11 @@ open class KuteSection(
     override val onLongClick: (() -> Unit)? = null,
     override val visibleWhen: KuteCondition? = null,
     override val enabledWhen: KuteCondition? = null,
+    override val keywords: List<String> = emptyList(),
 ) : KutePreferenceSection {
 
-    override fun search(searchTerm: String): Boolean {
-        return listOf(title).containsAnyWord(searchTerm)
-    }
+    override val searchContent
+        get() = KuteSearchContent(title = title, keywords = keywords)
 
 
 }

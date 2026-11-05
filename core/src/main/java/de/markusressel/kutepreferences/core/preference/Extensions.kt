@@ -8,11 +8,21 @@ import de.markusressel.kutepreferences.core.preference.category.KuteParent
  */
 fun List<KutePreferenceListItem>.filterRecursive(
     searchTerm: String
+): List<KutePreferenceListItem> = filterRecursive(searchTerm, parentTitles = emptyList())
+
+private fun List<KutePreferenceListItem>.filterRecursive(
+    searchTerm: String,
+    parentTitles: List<String>,
 ): List<KutePreferenceListItem> = flatMap { item ->
-    val matches = listOf(item).filter { it.search(searchTerm) }
+    val isMatch = item.search(searchTerm) || item.searchContent?.matches(searchTerm, parentTitles) == true
+    val matches = listOfNotNull(item.takeIf { isMatch })
     when {
         item.visibleWhen?.isMet == false -> emptyList()
-        item is KuteParent -> matches + item.children.filterRecursive(searchTerm)
+        item is KuteParent -> matches + item.children.filterRecursive(
+            searchTerm = searchTerm,
+            parentTitles = parentTitles + listOfNotNull(item.searchContent?.title),
+        )
+
         else -> matches
     }
 }

@@ -5,7 +5,7 @@ import de.markusressel.kutepreferences.core.persistence.KutePreferenceDataProvid
 import de.markusressel.kutepreferences.core.preference.KuteCondition
 import de.markusressel.kutepreferences.core.preference.KutePreferenceItem
 import de.markusressel.kutepreferences.core.preference.KutePreferenceListItem
-import de.markusressel.kutepreferences.core.search.SearchUtils.containsAnyWord
+import de.markusressel.kutepreferences.core.search.KuteSearchContent
 
 /**
  * Implementation of a boolean preference
@@ -22,6 +22,7 @@ open class KuteBooleanPreference(
     override val onLongClick: (() -> Unit)? = null,
     override val visibleWhen: KuteCondition? = null,
     override val enabledWhen: KuteCondition? = null,
+    override val keywords: List<String> = emptyList(),
 ) : KutePreferenceItem<Boolean>, KutePreferenceListItem {
 
     override val persistedValue by lazy { getPersistedValueFlow() }
@@ -39,7 +40,12 @@ open class KuteBooleanPreference(
         return ""
     }
 
-    override fun search(searchTerm: String) =
-        listOf(title, description).containsAnyWord(searchTerm)
+    // NOTE: both states are searched, so that the results do not depend on whether the switch is on
+    override val searchContent
+        get() = KuteSearchContent(
+            title = title,
+            keywords = keywords,
+            description = "${createDescription(true)} ${createDescription(false)}",
+        )
 
 }
