@@ -5,6 +5,7 @@
     <string name="kute_preferences_back">Back</string>
     <string name="kute_preferences_search_label">Search…</string>
     <string name="kute_preferences_search_no_results">No results for \"%1$s\"</string>
+    <string name="kute_preferences_no_category_selected">Select a category</string>
     <string name="kute_preferences_show_password">Show password</string>
     <string name="kute_preferences_hide_password">Hide password</string>
 

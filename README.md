@@ -331,6 +331,10 @@ kuteViewModel.navigateTo("wifi_only")
 `KutePreferencesScreen` centers its content at a width of `KutePreferencesScreenDefaults.MaxContentWidth`. Use the
 `maxContentWidth` parameter to change that, or pass `Dp.Infinity` to always use the full width.
 
+From a width of `KutePreferencesScreenDefaults.TwoPaneMinWidth`, the top level is shown next to the open category. This
+covers tablets and unfolded foldables. A foldable that is half open also splits at its hinge, so that no content crosses
+it. Preferences without categories stay a single page, and `twoPaneMinWidth = Dp.Infinity` turns this off.
+
 ### Other Types
 
 If you want to implement other list items that don't need any persistence you can use one of these implementations:
