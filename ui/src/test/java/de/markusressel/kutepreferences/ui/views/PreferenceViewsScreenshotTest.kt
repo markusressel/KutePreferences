@@ -20,7 +20,9 @@ import de.markusressel.kutepreferences.core.preference.category.KuteCategory
 import de.markusressel.kutepreferences.core.preference.number.KuteNumberPreference
 import de.markusressel.kutepreferences.core.preference.number.NumberPreferenceBehavior
 import de.markusressel.kutepreferences.core.preference.number.range.FloatRangeSliderPreferenceBehavior
+import de.markusressel.kutepreferences.core.preference.number.range.IntRangeSliderPreferenceBehavior
 import de.markusressel.kutepreferences.core.preference.number.range.KuteFloatRangePreference
+import de.markusressel.kutepreferences.core.preference.number.range.KuteIntRangePreference
 import de.markusressel.kutepreferences.core.preference.number.range.RangePersistenceModel
 import de.markusressel.kutepreferences.core.preference.number.slider.FloatSliderPreferenceBehavior
 import de.markusressel.kutepreferences.core.preference.number.slider.IntSliderPreferenceBehavior
@@ -38,6 +40,7 @@ import de.markusressel.kutepreferences.core.preference.text.TextPreferenceBehavi
 import de.markusressel.kutepreferences.core.preference.text.UrlPreferenceBehavior
 import de.markusressel.kutepreferences.ui.theme.KutePreferencesTheme
 import de.markusressel.kutepreferences.ui.views.listitems.DecimalSliderPreference
+import de.markusressel.kutepreferences.ui.views.listitems.IntRangeSliderPreference
 import de.markusressel.kutepreferences.ui.views.listitems.MultiSelectionPreference
 import de.markusressel.kutepreferences.ui.views.listitems.NumberPreference
 import de.markusressel.kutepreferences.ui.views.listitems.NumberRangeSliderPreference
@@ -164,6 +167,40 @@ class PreferenceViewsScreenshotTest {
                     minimum = 0f,
                     maximum = 10f,
                     defaultValue = RangePersistenceModel(2f, 5f),
+                    dataProvider = dataProvider,
+                )
+            )
+        )
+    }
+
+    @Test
+    fun intRangeSlider() = screenshot("int_range_slider", expand = "Int range") {
+        IntRangeSliderPreference(
+            IntRangeSliderPreferenceBehavior(
+                KuteIntRangePreference(
+                    key = "int_range",
+                    title = "Int range",
+                    minimum = 0,
+                    maximum = 10,
+                    defaultValue = RangePersistenceModel(2, 5),
+                    dataProvider = dataProvider,
+                )
+            )
+        )
+    }
+
+    @Test
+    fun floatRangeSliderWithSteps() = screenshot("float_range_slider_steps", expand = "Float range") {
+        NumberRangeSliderPreference(
+            FloatRangeSliderPreferenceBehavior(
+                KuteFloatRangePreference(
+                    key = "float_range",
+                    title = "Float range",
+                    minimum = 0f,
+                    maximum = 1f,
+                    steps = 3,
+                    decimalPlaces = 2,
+                    defaultValue = RangePersistenceModel(0.25f, 0.75f),
                     dataProvider = dataProvider,
                 )
             )

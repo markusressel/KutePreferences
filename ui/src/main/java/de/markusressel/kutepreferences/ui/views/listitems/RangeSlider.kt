@@ -16,7 +16,9 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.markusressel.kutepreferences.core.preference.number.range.FloatRangeSliderPreferenceBehavior
+import de.markusressel.kutepreferences.core.preference.number.range.IntRangeSliderPreferenceBehavior
 import de.markusressel.kutepreferences.core.preference.number.range.KuteFloatRangePreference
+import de.markusressel.kutepreferences.core.preference.number.range.KuteIntRangePreference
 import de.markusressel.kutepreferences.core.preference.number.range.RangePersistenceModel
 import de.markusressel.kutepreferences.ui.theme.KutePreferencesTheme
 import de.markusressel.kutepreferences.ui.util.CombinedPreview
@@ -25,12 +27,15 @@ import de.markusressel.kutepreferences.ui.util.dummy
 import de.markusressel.kutepreferences.ui.util.highlightingShimmer
 import de.markusressel.kutepreferences.ui.views.common.InlineExpandablePreferenceView
 import de.markusressel.kutepreferences.ui.views.common.KuteSliderTrack
+import de.markusressel.kutepreferences.ui.views.common.SliderRangeIndicator
 import de.markusressel.kutepreferences.ui.views.common.SliderTrackOverhang
 import de.markusressel.kutepreferences.ui.views.common.ThumbMarker
 import de.markusressel.kutepreferences.ui.views.common.sliderFraction
-import de.markusressel.kutepreferences.ui.views.common.SliderRangeIndicator
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.flow.map
+import kotlin.math.round
 
 @Composable
 fun NumberRangeSliderPreference(
@@ -55,10 +60,92 @@ fun NumberRangeSliderPreference(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RangeSliderEditView(
     behavior: FloatRangeSliderPreferenceBehavior,
+) {
+    val persistedValues = remember(behavior) { behavior.persistedValue.map { it.min..it.max } }
+
+    RangeSliderContent(
+        persistedValues = persistedValues,
+        persistedValue = remember(behavior) { behavior.persistedValue.value.let { it.min..it.max } },
+        valueRange = behavior.preferenceItem.minimum..behavior.preferenceItem.maximum,
+        steps = behavior.preferenceItem.steps,
+        snap = { it },
+        text = behavior.preferenceItem::formatValue,
+        onValueChangeFinished = {
+            behavior.onInputChanged(RangePersistenceModel(min = it.start, max = it.endInclusive))
+            behavior.persistCurrentValue()
+        },
+    )
+}
+
+@Composable
+fun IntRangeSliderPreference(
+    behavior: IntRangeSliderPreferenceBehavior,
+) {
+    val uiState by behavior.uiState.collectAsStateWithLifecycle()
+    var collapsed by remember { mutableStateOf(true) }
+
+    val persistedValue by behavior.persistedValue.collectAsStateWithLifecycle()
+
+    InlineExpandablePreferenceView(
+        modifier = Modifier.highlightingShimmer(uiState.shimmering, behavior::clearHighlight),
+        icon = behavior.preferenceItem.icon,
+        title = behavior.preferenceItem.title,
+        subtitle = behavior.preferenceItem.createDescription(persistedValue),
+        content = {
+            IntRangeSliderEditView(behavior)
+        },
+        collapsed = collapsed,
+        onToggleCollapsedState = behavior.preferenceItem.clickAction { collapsed = collapsed.not() },
+        onLongClick = behavior.preferenceItem.onLongClick,
+    )
+}
+
+@Composable
+private fun IntRangeSliderEditView(
+    behavior: IntRangeSliderPreferenceBehavior,
+) {
+    val persistedValues = remember(behavior) {
+        behavior.persistedValue.map { it.min.toFloat()..it.max.toFloat() }
+    }
+    val minimum = behavior.preferenceItem.minimum
+    val maximum = behavior.preferenceItem.maximum
+
+    RangeSliderContent(
+        persistedValues = persistedValues,
+        persistedValue = remember(behavior) {
+            behavior.persistedValue.value.let { it.min.toFloat()..it.max.toFloat() }
+        },
+        valueRange = minimum.toFloat()..maximum.toFloat(),
+        steps = (maximum - minimum - 1).toInt().coerceAtLeast(0),
+        snap = { round(it) },
+        text = { "${round(it).toLong()}" },
+        onValueChangeFinished = {
+            behavior.onInputChanged(RangePersistenceModel(min = it.start.toLong(), max = it.endInclusive.toLong()))
+            behavior.persistCurrentValue()
+        },
+    )
+}
+
+/**
+ * @param persistedValues emits the saved value, starting with the current one
+ * @param persistedValue the currently saved value
+ * @param snap converts the raw position of a handle to a value that can be saved
+ * @param text the text for a value
+ * @param onValueChangeFinished called with the new value when the user has released a handle
+ */
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun RangeSliderContent(
+    persistedValues: Flow<ClosedFloatingPointRange<Float>>,
+    persistedValue: ClosedFloatingPointRange<Float>,
+    valueRange: ClosedFloatingPointRange<Float>,
+    steps: Int,
+    snap: (Float) -> Float,
+    text: (Float) -> String,
+    onValueChangeFinished: (ClosedFloatingPointRange<Float>) -> Unit,
 ) {
     Box(
         modifier = Modifier
@@ -70,9 +157,7 @@ fun RangeSliderEditView(
         var animating by remember { mutableStateOf(false) }
 
         var sliderPosition: ClosedFloatingPointRange<Float> by remember {
-            mutableStateOf(behavior.persistedValue.value.let {
-                it.min..it.max
-            })
+            mutableStateOf(persistedValue)
         }
 
         var animatedSliderPosition by remember {
@@ -80,7 +165,7 @@ fun RangeSliderEditView(
         }
 
         val visibilityThreshold by remember {
-            mutableStateOf((behavior.preferenceItem.maximum - behavior.preferenceItem.minimum) / 1000f)
+            mutableStateOf((valueRange.endInclusive - valueRange.start) / 1000f)
         }
 
         val sliderStartAnimation by animateFloatAsState(
@@ -104,20 +189,19 @@ fun RangeSliderEditView(
         )
 
         LaunchedEffect(key1 = true, block = {
-            behavior.persistedValue.drop(1).distinctUntilChanged().collect {
+            persistedValues.drop(1).distinctUntilChanged().collect {
                 // animate to new position if change was triggered from external source
                 if (touchedByUser.not() || animating) {
                     // Animating because user triggered
                     animating = true
-                    sliderPosition = it.min..it.max
+                    sliderPosition = it
                 } else {
                     // NOT animating because user triggered
                 }
-                animatedSliderPosition = it.min..it.max
+                animatedSliderPosition = it
             }
         })
 
-        val valueRange = behavior.preferenceItem.minimum..behavior.preferenceItem.maximum
         val sliderValue = when {
             animating -> sliderStartAnimation..sliderEndAnimation
             else -> sliderPosition
@@ -135,7 +219,7 @@ fun RangeSliderEditView(
         SliderRangeIndicator(
             modifier = Modifier.padding(horizontal = 4.dp),
             valueRange = valueRange,
-            text = behavior.preferenceItem::formatValue,
+            text = text,
         )
 
         RangeSlider(
@@ -148,22 +232,17 @@ fun RangeSliderEditView(
             valueRange = valueRange,
             onValueChange = {
                 if (animating.not()) {
-                    sliderPosition = it
+                    sliderPosition = snap(it.start)..snap(it.endInclusive)
                 }
             },
             onValueChangeFinished = {
                 touchedByUser = true
 
-                behavior.onInputChanged(
-                    RangePersistenceModel(
-                        min = sliderPosition.start,
-                        max = sliderPosition.endInclusive,
-                    )
-                )
-                behavior.persistCurrentValue()
+                onValueChangeFinished(sliderPosition)
             },
             startInteractionSource = startInteractionSource,
             endInteractionSource = endInteractionSource,
+            steps = steps,
             track = {
                 KuteSliderTrack(
                     activeStart = sliderFraction(it.activeRangeStart, it.valueRange),
@@ -175,13 +254,13 @@ fun RangeSliderEditView(
         )
 
         ThumbMarker(
-            text = behavior.preferenceItem.formatValue(sliderValue.start),
+            text = text(sliderValue.start),
             fraction = sliderFraction(sliderValue.start, valueRange),
             sliderWidthPx = sliderWidthPx,
             isVisible = animating || startIsDragged || startIsPressed,
         )
         ThumbMarker(
-            text = behavior.preferenceItem.formatValue(sliderValue.endInclusive),
+            text = text(sliderValue.endInclusive),
             fraction = sliderFraction(sliderValue.endInclusive, valueRange),
             sliderWidthPx = sliderWidthPx,
             isVisible = animating || endIsDragged || endIsPressed,
@@ -202,6 +281,25 @@ private fun NumberRangeSliderPreferencePreview() {
                     defaultValue = RangePersistenceModel(min = 2f, max = 5f),
                     minimum = 0f,
                     maximum = 10f,
+                )
+            )
+        )
+    }
+}
+
+@CombinedPreview
+@Composable
+private fun IntRangeSliderPreferencePreview() {
+    KutePreferencesTheme {
+        IntRangeSliderPreference(
+            behavior = IntRangeSliderPreferenceBehavior(
+                KuteIntRangePreference(
+                    key = "0",
+                    dataProvider = dummy,
+                    title = "Int Range Slider Preference",
+                    defaultValue = RangePersistenceModel(min = 2, max = 5),
+                    minimum = 0,
+                    maximum = 10,
                 )
             )
         )

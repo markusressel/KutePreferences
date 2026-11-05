@@ -11,6 +11,7 @@ import de.markusressel.kutepreferences.core.preference.color.KuteColorPreference
 import de.markusressel.kutepreferences.core.preference.date.KuteDatePreference
 import de.markusressel.kutepreferences.core.preference.number.KuteNumberPreference
 import de.markusressel.kutepreferences.core.preference.number.range.KuteFloatRangePreference
+import de.markusressel.kutepreferences.core.preference.number.range.KuteIntRangePreference
 import de.markusressel.kutepreferences.core.preference.number.range.RangePersistenceModel
 import de.markusressel.kutepreferences.core.preference.number.slider.KuteFloatSliderPreference
 import de.markusressel.kutepreferences.core.preference.number.slider.KuteIntSliderPreference
@@ -136,14 +137,13 @@ class KutePreferencesHolder @Inject constructor(
     }
 
     val intRangePreference by lazy {
-        KuteFloatRangePreference(
+        KuteIntRangePreference(
             key = translationManager.getTranslation(R.string.key_demo_int_range_pref),
             icon = iconHelper.getIcon(MaterialDesignIconic.Icon.gmi_arrows),
             title = translationManager.getTranslation(R.string.title_demo_int_range_pref),
-            decimalPlaces = 0,
-            minimum = 0f,
-            maximum = 10f,
-            defaultValue = RangePersistenceModel(0f, 5f),
+            minimum = 0,
+            maximum = 10,
+            defaultValue = RangePersistenceModel(0, 5),
             dataProvider = dataProvider
         )
     }

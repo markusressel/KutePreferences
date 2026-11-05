@@ -157,6 +157,7 @@ KutePreferences includes implementations for most of the commonly needed prefere
 | `KuteIntSliderPreference`          | `Long`                         | A whole number that is selected with a slider.                  |
 | `KuteFloatSliderPreference`        | `Float`                        | A decimal number that is selected with a slider.                |
 | `KuteFloatRangePreference`         | `RangePersistenceModel<Float>` | A range of numbers.                                             |
+| `KuteIntRangePreference`           | `RangePersistenceModel<Long>`  | A range of whole numbers, with a dot for each value.            |
 | `KuteDatePreference`               | `Long`                         | A date, stored as epoch milliseconds.                           |
 | `KuteTimePreference`               | `TimePersistenceModel`         | A time of the day.                                              |
 | `KuteColorPreference`              | `Int`                          | An ARGB color.                                                  |
@@ -167,6 +168,24 @@ KutePreferences includes implementations for most of the commonly needed prefere
 
 > **Warning:** `KutePasswordPreference` only masks the value on screen. It is stored in plaintext, so do not use it for
 > secrets that need protection.
+
+### Ranges with steps
+
+`KuteIntRangePreference` only has whole numbers. `KuteFloatRangePreference` can snap to evenly spaced values, where
+`steps` is the number of values in between the minimum and maximum:
+
+```kotlin
+KuteFloatRangePreference(
+    key = "volume",
+    title = "Volume",
+    minimum = 0f,
+    maximum = 1f,
+    steps = 3, // 0, 0.25, 0.5, 0.75 and 1
+    decimalPlaces = 2,
+    defaultValue = RangePersistenceModel(0.25f, 0.75f),
+    dataProvider = dataProvider,
+)
+```
 
 ### Selecting from options
 

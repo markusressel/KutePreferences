@@ -43,7 +43,9 @@ import de.markusressel.kutepreferences.core.preference.date.KuteDatePreference
 import de.markusressel.kutepreferences.core.preference.number.KuteNumberPreference
 import de.markusressel.kutepreferences.core.preference.number.NumberPreferenceBehavior
 import de.markusressel.kutepreferences.core.preference.number.range.FloatRangeSliderPreferenceBehavior
+import de.markusressel.kutepreferences.core.preference.number.range.IntRangeSliderPreferenceBehavior
 import de.markusressel.kutepreferences.core.preference.number.range.KuteFloatRangePreference
+import de.markusressel.kutepreferences.core.preference.number.range.KuteIntRangePreference
 import de.markusressel.kutepreferences.core.preference.number.slider.FloatSliderPreferenceBehavior
 import de.markusressel.kutepreferences.core.preference.number.slider.IntSliderPreferenceBehavior
 import de.markusressel.kutepreferences.core.preference.number.slider.KuteFloatSliderPreference
@@ -70,6 +72,7 @@ import de.markusressel.kutepreferences.ui.views.listitems.BooleanPreference
 import de.markusressel.kutepreferences.ui.views.listitems.ColorPreferenceView
 import de.markusressel.kutepreferences.ui.views.listitems.DatePreference
 import de.markusressel.kutepreferences.ui.views.listitems.DecimalSliderPreference
+import de.markusressel.kutepreferences.ui.views.listitems.IntRangeSliderPreference
 import de.markusressel.kutepreferences.ui.views.listitems.KuteCategoryView
 import de.markusressel.kutepreferences.ui.views.listitems.KuteSectionView
 import de.markusressel.kutepreferences.ui.views.listitems.MultiSelectionPreference
@@ -198,6 +201,9 @@ class KuteRegistry(navigator: KuteNavigator) {
         }
         register<KuteTextPreference, TextPreferenceBehavior>(::TextPreferenceBehavior) { TextPreference(it) }
         register<KuteNumberPreference, NumberPreferenceBehavior>(::NumberPreferenceBehavior) { NumberPreference(it) }
+        register<KuteIntRangePreference, IntRangeSliderPreferenceBehavior>(::IntRangeSliderPreferenceBehavior) {
+            IntRangeSliderPreference(it)
+        }
         register<KuteFloatRangePreference, FloatRangeSliderPreferenceBehavior>(::FloatRangeSliderPreferenceBehavior) {
             NumberRangeSliderPreference(it)
         }

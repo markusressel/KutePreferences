@@ -19,6 +19,11 @@ open class KuteFloatRangePreference(
     onLongClick: (() -> Unit)? = null,
     visibleWhen: KuteCondition? = null,
     enabledWhen: KuteCondition? = null,
+    /**
+     * The number of values in between [minimum] and [maximum] that the slider snaps to, or 0 for no snapping.
+     * Each of them is shown as a dot.
+     */
+    val steps: Int = 0,
 ) : KuteRangePreference<Float>(
     key = key,
     icon = icon,
@@ -34,6 +39,11 @@ open class KuteFloatRangePreference(
     visibleWhen = visibleWhen,
     enabledWhen = enabledWhen,
 ) {
+
+    init {
+        require(steps >= 0) { "The steps of \"$key\" must not be negative" }
+    }
+
     override fun createDescription(currentValue: RangePersistenceModel<Float>): String {
         val start = formatValue(currentValue.min)
         val end = formatValue(currentValue.max)

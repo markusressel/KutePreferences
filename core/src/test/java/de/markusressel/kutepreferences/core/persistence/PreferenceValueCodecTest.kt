@@ -40,6 +40,13 @@ class PreferenceValueCodecTest {
     }
 
     @Test
+    fun `an int range reads whole numbers and values that were saved as floats`() {
+        assertEquals("""{"min":1,"max":2}""", PreferenceValueCodec.encode(RangePersistenceModel(1L, 2L)))
+        assertEquals(RangePersistenceModel(1L, 2L), decode("""{"min":1,"max":2}""", RangePersistenceModel(0L, 1L)))
+        assertEquals(RangePersistenceModel(1L, 2L), decode("""{"min":1.0,"max":2.5}""", RangePersistenceModel(0L, 1L)))
+    }
+
+    @Test
     fun `invalid json falls back to the default`() {
         val default = TimePersistenceModel(1, 2)
 
