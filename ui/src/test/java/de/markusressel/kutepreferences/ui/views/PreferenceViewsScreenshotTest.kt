@@ -2,7 +2,9 @@ package de.markusressel.kutepreferences.ui.views
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -85,11 +87,18 @@ class PreferenceViewsScreenshotTest {
         name: String,
         expand: String? = null,
         action: () -> Unit = {},
+        darkTheme: Boolean = false,
         content: @Composable () -> Unit,
     ) {
         composeRule.setContent {
-            KutePreferencesTheme {
-                Surface { Column { content() } }
+            val page = @Composable {
+                KutePreferencesTheme {
+                    Surface { Column { content() } }
+                }
+            }
+            when {
+                darkTheme -> MaterialTheme(colorScheme = darkColorScheme(), content = page)
+                else -> page()
             }
         }
         expand?.let { composeRule.onNodeWithText(it).performClick() }
@@ -295,7 +304,13 @@ class PreferenceViewsScreenshotTest {
     @Test
     fun mainSwitchOff() = mainSwitchScreenshot(name = "main_switch_off", isOn = false)
 
-    private fun mainSwitchScreenshot(name: String, isOn: Boolean) {
+    @Test
+    fun mainSwitchOnDark() = mainSwitchScreenshot(name = "main_switch_on_dark", isOn = true, darkTheme = true)
+
+    @Test
+    fun mainSwitchOffDark() = mainSwitchScreenshot(name = "main_switch_off_dark", isOn = false, darkTheme = true)
+
+    private fun mainSwitchScreenshot(name: String, isOn: Boolean, darkTheme: Boolean = false) {
         val mainSwitch = KuteMainSwitchPreference(
             key = "main",
             title = "Use notifications",
@@ -309,7 +324,7 @@ class PreferenceViewsScreenshotTest {
         )
         viewModel.navigateTo("category")
 
-        screenshot(name) { KutePreferencesScreen(kuteViewModel = viewModel) }
+        screenshot(name, darkTheme = darkTheme) { KutePreferencesScreen(kuteViewModel = viewModel) }
     }
 
     @Test
@@ -327,6 +342,14 @@ class PreferenceViewsScreenshotTest {
 
     @Test
     fun searchWithoutResults() = screenshot("search_no_results") {
+        KuteNoSearchResults(
+            modifier = Modifier.fillMaxSize(),
+            searchTerm = "wifi",
+        )
+    }
+
+    @Test
+    fun searchWithoutResultsDark() = screenshot("search_no_results_dark", darkTheme = true) {
         KuteNoSearchResults(
             modifier = Modifier.fillMaxSize(),
             searchTerm = "wifi",
