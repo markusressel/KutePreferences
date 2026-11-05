@@ -223,6 +223,23 @@ class PreferenceViewsScreenshotTest {
     }
 
     @Test
+    fun floatRangeSliderWithStops() = screenshot("float_range_slider_stops", expand = "Float range") {
+        NumberRangeSliderPreference(
+            FloatRangeSliderPreferenceBehavior(
+                KuteFloatRangePreference(
+                    key = "float_range",
+                    title = "Float range",
+                    minimum = 0f,
+                    maximum = 10f,
+                    stops = listOf(0.5f, 1f, 2.5f, 5f),
+                    defaultValue = RangePersistenceModel(1f, 5f),
+                    dataProvider = dataProvider,
+                )
+            )
+        )
+    }
+
+    @Test
     fun rangeSliderDragged() = screenshot(
         name = "range_slider_dragged",
         expand = "Range slider",

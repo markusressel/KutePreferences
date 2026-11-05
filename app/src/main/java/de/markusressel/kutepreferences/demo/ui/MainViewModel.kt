@@ -10,6 +10,8 @@ import de.markusressel.kutepreferences.core.preference.bool.KuteMainSwitchPrefer
 import de.markusressel.kutepreferences.core.preference.category.KuteCategory
 import de.markusressel.kutepreferences.core.preference.matches
 import de.markusressel.kutepreferences.core.preference.number.KuteNumberPreference
+import de.markusressel.kutepreferences.core.preference.number.range.KuteFloatRangePreference
+import de.markusressel.kutepreferences.core.preference.number.range.RangePersistenceModel
 import de.markusressel.kutepreferences.core.preference.section.KuteSection
 import de.markusressel.kutepreferences.core.preference.select.KuteChoicePreference
 import de.markusressel.kutepreferences.core.preference.select.KuteMultiChoicePreference
@@ -279,6 +281,15 @@ class MainViewModel @Inject constructor(
         kutePreferencesHolder.floatSliderPreference,
         kutePreferencesHolder.intRangePreference,
         kutePreferencesHolder.floatRangePreference,
+        KuteFloatRangePreference(
+            key = "demo_float_range_stops",
+            title = "Float range with custom stops",
+            minimum = 0f,
+            maximum = 10f,
+            stops = listOf(0.5f, 1f, 2.5f, 5f),
+            defaultValue = RangePersistenceModel(1f, 5f),
+            dataProvider = dataProvider,
+        ),
         kutePreferencesHolder.datePreference,
         kutePreferencesHolder.timePreference,
         kutePreferencesHolder.colorPreference,

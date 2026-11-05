@@ -198,6 +198,24 @@ internal fun sliderFraction(value: Float, valueRange: ClosedFloatingPointRange<F
 }
 
 /**
+ * @return the value of the [stops] that is closest to [value]
+ */
+internal fun nearestStop(value: Float, stops: List<Float>): Float = stops.minBy { abs(it - value) }
+
+/**
+ * Moves one stop towards [target]. A screen reader or keyboard only asks for a small change, which
+ * would never get past the [current] value if it was rounded to the nearest stop.
+ *
+ * @param stops the possible values, in ascending order
+ * @return the next value of the [stops] in the direction of [target], or [current] if it did not change
+ */
+internal fun nextStop(current: Float, target: Float, stops: List<Float>): Float = when {
+    target > current -> stops.firstOrNull { it > current } ?: current
+    target < current -> stops.lastOrNull { it < current } ?: current
+    else -> current
+}
+
+/**
  * @return the horizontal center of the thumb of a slider that is inset by [trackOverhang], which moves linearly
  * in between the dots at the ends of the track
  */
@@ -275,6 +293,7 @@ internal fun ThumbMarker(
  *
  * @param activeStart the start of the active part, or `null` if it starts at the beginning of the track
  * @param activeEnd the end of the active part
+ * @param stopFractions the positions of the dots between 0 and 1, instead of the evenly spaced [steps]
  */
 @Composable
 internal fun KuteSliderTrack(
@@ -282,6 +301,7 @@ internal fun KuteSliderTrack(
     activeEnd: Float,
     steps: Int,
     enabled: Boolean,
+    stopFractions: List<Float>? = null,
 ) {
     val colors = trackColors(enabled)
 
@@ -305,8 +325,9 @@ internal fun KuteSliderTrack(
             drawTrackPart(activeTrack.start, activeTrack.endInclusive, colors.active, outerStart = startThumb == null)
             drawTrackPart(endThumb + gap, size.width + overhang, colors.inactive, outerEnd = true)
 
-            for (tick in 0..steps + 1) {
-                val x = size.width * tick / (steps + 1)
+            val fractions = stopFractions ?: (0..steps + 1).map { it.toFloat() / (steps + 1) }
+            for (fraction in fractions) {
+                val x = size.width * fraction
                 val isBelowThumb = abs(x - endThumb) < gap || (startThumb != null && abs(x - startThumb) < gap)
                 if (isBelowThumb.not()) {
                     drawCircle(

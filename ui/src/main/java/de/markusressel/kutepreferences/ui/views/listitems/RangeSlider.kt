@@ -12,6 +12,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.RangeSlider
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.PointerEventPass
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -30,6 +32,8 @@ import de.markusressel.kutepreferences.ui.views.common.KuteSliderTrack
 import de.markusressel.kutepreferences.ui.views.common.SliderRangeIndicator
 import de.markusressel.kutepreferences.ui.views.common.SliderTrackOverhang
 import de.markusressel.kutepreferences.ui.views.common.ThumbMarker
+import de.markusressel.kutepreferences.ui.views.common.nearestStop
+import de.markusressel.kutepreferences.ui.views.common.nextStop
 import de.markusressel.kutepreferences.ui.views.common.sliderFraction
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -65,12 +69,20 @@ fun RangeSliderEditView(
     behavior: FloatRangeSliderPreferenceBehavior,
 ) {
     val persistedValues = remember(behavior) { behavior.persistedValue.map { it.min..it.max } }
+    val item = behavior.preferenceItem
+    val stops = remember(item) {
+        when {
+            item.stops.isEmpty() -> emptyList()
+            else -> (item.stops + item.minimum + item.maximum).distinct().sorted()
+        }
+    }
 
     RangeSliderContent(
         persistedValues = persistedValues,
         persistedValue = remember(behavior) { behavior.persistedValue.value.let { it.min..it.max } },
         valueRange = behavior.preferenceItem.minimum..behavior.preferenceItem.maximum,
         steps = behavior.preferenceItem.steps,
+        stops = stops,
         snap = { it },
         text = behavior.preferenceItem::formatValue,
         onValueChangeFinished = {
@@ -132,6 +144,7 @@ private fun IntRangeSliderEditView(
 /**
  * @param persistedValues emits the saved value, starting with the current one
  * @param persistedValue the currently saved value
+ * @param stops the only values that can be selected in ascending order, or empty to use [steps] and [snap]
  * @param snap converts the raw position of a handle to a value that can be saved
  * @param text the text for a value
  * @param onValueChangeFinished called with the new value when the user has released a handle
@@ -143,6 +156,7 @@ private fun RangeSliderContent(
     persistedValue: ClosedFloatingPointRange<Float>,
     valueRange: ClosedFloatingPointRange<Float>,
     steps: Int,
+    stops: List<Float> = emptyList(),
     snap: (Float) -> Float,
     text: (Float) -> String,
     onValueChangeFinished: (ClosedFloatingPointRange<Float>) -> Unit,
@@ -215,6 +229,7 @@ private fun RangeSliderContent(
         val endIsPressed by endInteractionSource.collectIsPressedAsState()
 
         var sliderWidthPx by remember { mutableIntStateOf(0) }
+        var isTouched by remember { mutableStateOf(false) }
 
         SliderRangeIndicator(
             modifier = Modifier.padding(horizontal = 4.dp),
@@ -226,13 +241,21 @@ private fun RangeSliderContent(
             modifier = Modifier
                 .padding(top = 14.dp)
                 .onSizeChanged { sliderWidthPx = it.width }
+                .trackTouch { isTouched = it }
                 .padding(horizontal = SliderTrackOverhang),
             value = sliderValue,
             enabled = animating.not(),
             valueRange = valueRange,
             onValueChange = {
                 if (animating.not()) {
-                    sliderPosition = snap(it.start)..snap(it.endInclusive)
+                    sliderPosition = when {
+                        stops.isEmpty() -> snap(it.start)..snap(it.endInclusive)
+                        isTouched -> nearestStop(it.start, stops)..nearestStop(it.endInclusive, stops)
+                        else -> {
+                            val end = nextStop(sliderPosition.endInclusive, it.endInclusive, stops)
+                            nextStop(sliderPosition.start, it.start, stops).coerceAtMost(end)..end
+                        }
+                    }
                 }
             },
             onValueChangeFinished = {
@@ -249,6 +272,7 @@ private fun RangeSliderContent(
                     activeEnd = sliderFraction(it.activeRangeEnd, it.valueRange),
                     steps = it.steps,
                     enabled = animating.not(),
+                    stopFractions = stops.takeIf { it.isNotEmpty() }?.map { stop -> sliderFraction(stop, valueRange) },
                 )
             },
         )
@@ -265,6 +289,24 @@ private fun RangeSliderContent(
             sliderWidthPx = sliderWidthPx,
             isVisible = animating || endIsDragged || endIsPressed,
         )
+    }
+}
+
+/**
+ * Reports whether a pointer is down, which stays true until the content has handled the release of the pointer.
+ */
+private fun Modifier.trackTouch(onChange: (Boolean) -> Unit): Modifier = pointerInput(Unit) {
+    awaitPointerEventScope {
+        while (true) {
+            val event = awaitPointerEvent(PointerEventPass.Initial)
+            if (event.changes.any { it.pressed }) {
+                onChange(true)
+            }
+            awaitPointerEvent(PointerEventPass.Final)
+            if (event.changes.none { it.pressed }) {
+                onChange(false)
+            }
+        }
     }
 }
 

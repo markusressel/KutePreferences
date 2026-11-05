@@ -25,6 +25,12 @@ open class KuteFloatRangePreference(
      */
     val steps: Int = 0,
     keywords: List<String> = emptyList(),
+    /**
+     * The values in between [minimum] and [maximum] that the slider snaps to, which can be spaced unevenly.
+     * Each of them is shown as a dot, at its position on the slider. Use [steps] for evenly spaced values instead.
+     * Use enough [decimalPlaces] to show them, because a value is only rounded for showing it.
+     */
+    val stops: List<Float> = emptyList(),
 ) : KuteRangePreference<Float>(
     key = key,
     icon = icon,
@@ -44,6 +50,10 @@ open class KuteFloatRangePreference(
 
     init {
         require(steps >= 0) { "The steps of \"$key\" must not be negative" }
+        require(steps == 0 || stops.isEmpty()) { "\"$key\" can only use either steps or stops" }
+        require(stops.all { it in minimum..maximum }) {
+            "The stops of \"$key\" must be in between its minimum and maximum"
+        }
     }
 
     override fun createDescription(currentValue: RangePersistenceModel<Float>): String {
