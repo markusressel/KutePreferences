@@ -68,9 +68,53 @@ class UseCasesTest {
 
     @Test
     fun `search finds parents as well as their children`() {
-        val results = SearchItemsUseCase()(tree, "section leaf").map { it.item }
+        val results = SearchItemsUseCase()(tree, "e").map { it.item }
 
-        assertEquals(listOf<KutePreferenceListItem>(section, leaf), results)
+        assertEquals(listOf(outerCategory, innerCategory, section, leaf).toSet(), results.toSet())
+    }
+
+    @Test
+    fun `a word can match the title of a parent if another one matches the item`() {
+        assertEquals(listOf(leaf), SearchItemsUseCase()(tree, "section leaf").map { it.item })
+    }
+
+    @Test
+    fun `words that only match parents do not list all of their children`() {
+        assertEquals(listOf(section), SearchItemsUseCase()(tree, "inner section").map { it.item })
+        assertEquals(listOf(outerCategory), SearchItemsUseCase()(tree, "outer").map { it.item })
+    }
+
+    @Test
+    fun `results are ranked by where the words were found`() {
+        val inDescription = KuteCategory(key = "a", title = "Other", description = "wifi")
+        val inKeyword = KuteAction(key = "b", title = "Other", keywords = listOf("wifi"))
+        val insideTitleWord = KuteAction(key = "c", title = "Superwifi")
+        val atTitleWordStart = KuteAction(key = "d", title = "Use wifi")
+
+        val results = SearchItemsUseCase()(listOf(inDescription, inKeyword, insideTitleWord, atTitleWordStart), "wifi")
+
+        assertEquals(listOf(atTitleWordStart, insideTitleWord, inKeyword, inDescription), results.map { it.item })
+    }
+
+    @Test
+    fun `equally relevant results stay in the order of the tree`() {
+        val first = KuteAction(key = "a", title = "Wifi one")
+        val second = KuteAction(key = "b", title = "Wifi two")
+
+        assertEquals(listOf(first, second), SearchItemsUseCase()(listOf(first, second), "wifi").map { it.item })
+    }
+
+    @Test
+    fun `an item with its own search is found and listed after ranked items`() {
+        val custom = object : KutePreferenceListItem {
+            override val key = "custom"
+            override val onClick = null
+            override val onLongClick = null
+            override fun search(searchTerm: String) = searchTerm == "wifi"
+        }
+        val ranked = KuteAction(key = "a", title = "Wifi")
+
+        assertEquals(listOf(ranked, custom), SearchItemsUseCase()(listOf(custom, ranked), "wifi").map { it.item })
     }
 
     @Test

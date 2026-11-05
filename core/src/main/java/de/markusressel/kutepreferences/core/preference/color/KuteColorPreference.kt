@@ -6,7 +6,7 @@ import de.markusressel.kutepreferences.core.persistence.KutePreferenceDataProvid
 import de.markusressel.kutepreferences.core.preference.KuteCondition
 import de.markusressel.kutepreferences.core.preference.KutePreferenceItem
 import de.markusressel.kutepreferences.core.preference.KutePreferenceListItem
-import de.markusressel.kutepreferences.core.search.SearchUtils.containsAnyWord
+import de.markusressel.kutepreferences.core.search.KuteSearchContent
 
 /**
  * Preference item for a 4 channel color (rgba).
@@ -24,6 +24,7 @@ open class KuteColorPreference(
     override val onLongClick: (() -> Unit)? = null,
     override val visibleWhen: KuteCondition? = null,
     override val enabledWhen: KuteCondition? = null,
+    override val keywords: List<String> = emptyList(),
 ) : KutePreferenceItem<Int>, KutePreferenceListItem {
 
     override val persistedValue by lazy { getPersistedValueFlow() }
@@ -34,7 +35,7 @@ open class KuteColorPreference(
         return "#%08x".format(currentValue)
     }
 
-    override fun search(searchTerm: String) =
-        listOf(title, description).containsAnyWord(searchTerm)
+    override val searchContent
+        get() = KuteSearchContent(title = title, keywords = keywords, description = description)
 
 }

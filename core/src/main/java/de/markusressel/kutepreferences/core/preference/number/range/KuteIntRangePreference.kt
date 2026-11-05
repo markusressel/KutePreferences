@@ -22,6 +22,7 @@ open class KuteIntRangePreference(
     onLongClick: (() -> Unit)? = null,
     visibleWhen: KuteCondition? = null,
     enabledWhen: KuteCondition? = null,
+    keywords: List<String> = emptyList(),
 ) : KuteRangePreference<Long>(
     key = key,
     icon = icon,
@@ -36,6 +37,7 @@ open class KuteIntRangePreference(
     onLongClick = onLongClick,
     visibleWhen = visibleWhen,
     enabledWhen = enabledWhen,
+    keywords = keywords,
 ) {
 
     override fun createDescription(currentValue: RangePersistenceModel<Long>): String {

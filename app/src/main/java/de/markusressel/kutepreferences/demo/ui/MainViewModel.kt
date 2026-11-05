@@ -6,6 +6,7 @@ import de.markusressel.kutepreferences.core.KuteNavigator
 import de.markusressel.kutepreferences.core.persistence.KutePreferenceDataProvider
 import de.markusressel.kutepreferences.core.preference.KutePreferenceListItem
 import de.markusressel.kutepreferences.core.preference.bool.KuteBooleanPreference
+import de.markusressel.kutepreferences.core.preference.bool.KuteMainSwitchPreference
 import de.markusressel.kutepreferences.core.preference.category.KuteCategory
 import de.markusressel.kutepreferences.core.preference.matches
 import de.markusressel.kutepreferences.core.preference.number.KuteNumberPreference
@@ -126,6 +127,7 @@ class MainViewModel @Inject constructor(
                 title = "Conditional Preferences",
                 children = createConditionalSectionItems(),
             ),
+            createMainSwitchCategory(),
             KuteCategory(
                 key = translationManager.getTranslation(R.string.cat_hello),
                 icon = iconHelper.getIcon(MaterialDesignIconic.Icon.gmi_developer_board),
@@ -150,6 +152,35 @@ class MainViewModel @Inject constructor(
             ),
         )
     }
+
+    private fun createMainSwitchCategory() = KuteCategory(
+        key = "category_notifications",
+        icon = iconHelper.getIcon(MaterialDesignIconic.Icon.gmi_notifications),
+        title = "Notifications",
+        description = "A main switch that turns all settings of this category on or off.",
+        keywords = listOf("alerts", "messages"),
+        children = listOf(
+            KuteMainSwitchPreference(
+                key = "demo_notifications",
+                title = "Use notifications",
+                dataProvider = dataProvider,
+                defaultValue = true,
+            ),
+            KuteBooleanPreference(
+                key = "demo_notification_sound",
+                title = "Sound",
+                dataProvider = dataProvider,
+                defaultValue = true,
+            ),
+            KuteChoicePreference(
+                key = "demo_notification_frequency",
+                title = "Frequency",
+                defaultValue = "instant",
+                options = mapOf("instant" to "Right away", "daily" to "Once a day"),
+                dataProvider = dataProvider,
+            ),
+        ),
+    )
 
     private fun createConditionalSectionItems(): List<KutePreferenceListItem> {
         val useProxy = KuteBooleanPreference(

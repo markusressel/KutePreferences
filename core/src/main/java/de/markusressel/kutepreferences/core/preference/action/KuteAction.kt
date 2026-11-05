@@ -3,7 +3,7 @@ package de.markusressel.kutepreferences.core.preference.action
 import android.graphics.drawable.Drawable
 import de.markusressel.kutepreferences.core.preference.KuteCondition
 import de.markusressel.kutepreferences.core.preference.KutePreferenceListItem
-import de.markusressel.kutepreferences.core.search.SearchUtils.containsAnyWord
+import de.markusressel.kutepreferences.core.search.KuteSearchContent
 
 /**
  * Implementation of an action preference
@@ -17,9 +17,10 @@ open class KuteAction(
     override val onLongClick: (() -> Unit)? = null,
     override val visibleWhen: KuteCondition? = null,
     override val enabledWhen: KuteCondition? = null,
+    override val keywords: List<String> = emptyList(),
 ) : KutePreferenceListItem {
 
-    override fun search(searchTerm: String) =
-        listOf(title, description).containsAnyWord(searchTerm)
+    override val searchContent
+        get() = KuteSearchContent(title = title, keywords = keywords, description = description)
 
 }

@@ -6,7 +6,7 @@ import de.markusressel.kutepreferences.core.preference.KuteCondition
 import de.markusressel.kutepreferences.core.preference.KutePreferenceItem
 import de.markusressel.kutepreferences.core.preference.KutePreferenceListItem
 import de.markusressel.kutepreferences.core.preference.Validator
-import de.markusressel.kutepreferences.core.search.SearchUtils.containsAnyWord
+import de.markusressel.kutepreferences.core.search.KuteSearchContent
 import java.text.DecimalFormat
 
 open class KuteTimePreference(
@@ -22,6 +22,7 @@ open class KuteTimePreference(
     override val visibleWhen: KuteCondition? = null,
     override val enabledWhen: KuteCondition? = null,
     override val validationMessage: ((TimePersistenceModel) -> String)? = null,
+    override val keywords: List<String> = emptyList(),
 ) : KutePreferenceItem<TimePersistenceModel>, KutePreferenceListItem {
 
     override val persistedValue by lazy { getPersistedValueFlow() }
@@ -32,8 +33,8 @@ open class KuteTimePreference(
         return "${HOUR_FORMAT.format(currentValue.hourOfDay)}:${MINUTE_FORMAT.format(currentValue.minute)}"
     }
 
-    override fun search(searchTerm: String) =
-        listOf(title, description).containsAnyWord(searchTerm)
+    override val searchContent
+        get() = KuteSearchContent(title = title, keywords = keywords, description = description)
 
     private companion object {
         val HOUR_FORMAT = DecimalFormat("00")

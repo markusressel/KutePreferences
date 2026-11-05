@@ -6,7 +6,7 @@ import de.markusressel.kutepreferences.core.preference.KuteCondition
 import de.markusressel.kutepreferences.core.preference.KutePreferenceItem
 import de.markusressel.kutepreferences.core.preference.KutePreferenceListItem
 import de.markusressel.kutepreferences.core.preference.Validator
-import de.markusressel.kutepreferences.core.search.SearchUtils.containsAnyWord
+import de.markusressel.kutepreferences.core.search.KuteSearchContent
 
 open class KuteTextPreference(
     override val key: String,
@@ -22,13 +22,14 @@ open class KuteTextPreference(
     override val visibleWhen: KuteCondition? = null,
     override val enabledWhen: KuteCondition? = null,
     override val validationMessage: ((String) -> String)? = null,
+    override val keywords: List<String> = emptyList(),
 ) : KutePreferenceItem<String>, KutePreferenceListItem {
 
     override val persistedValue by lazy { getPersistedValueFlow() }
 
     override fun getDefaultValue() = defaultValue
 
-    override fun search(searchTerm: String) =
-        listOf(title, description).containsAnyWord(searchTerm)
+    override val searchContent
+        get() = KuteSearchContent(title = title, keywords = keywords, description = description)
 
 }

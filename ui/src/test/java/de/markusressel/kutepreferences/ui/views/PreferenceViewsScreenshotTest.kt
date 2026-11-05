@@ -1,8 +1,12 @@
 package de.markusressel.kutepreferences.ui.views
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.test.SemanticsMatcher
@@ -13,9 +17,11 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTouchInput
 import com.github.takahirom.roborazzi.ExperimentalRoborazziApi
 import com.github.takahirom.roborazzi.captureScreenRoboImage
+import de.markusressel.kutepreferences.core.DefaultKuteNavigator
 import de.markusressel.kutepreferences.core.persistence.DummyDataProvider
 import de.markusressel.kutepreferences.core.preference.asCondition
 import de.markusressel.kutepreferences.core.preference.bool.KuteBooleanPreference
+import de.markusressel.kutepreferences.core.preference.bool.KuteMainSwitchPreference
 import de.markusressel.kutepreferences.core.preference.category.KuteCategory
 import de.markusressel.kutepreferences.core.preference.number.KuteNumberPreference
 import de.markusressel.kutepreferences.core.preference.number.NumberPreferenceBehavior
@@ -49,8 +55,10 @@ import de.markusressel.kutepreferences.ui.views.listitems.PasswordPreference
 import de.markusressel.kutepreferences.ui.views.listitems.SingleSelectionPreference
 import de.markusressel.kutepreferences.ui.views.listitems.TextPreference
 import de.markusressel.kutepreferences.ui.views.listitems.UrlPreference
+import de.markusressel.kutepreferences.ui.views.search.KuteNoSearchResults
 import de.markusressel.kutepreferences.ui.views.search.KutePreferencesScreen
 import de.markusressel.kutepreferences.ui.vm.KutePreferencesViewModel
+import de.markusressel.kutepreferences.ui.views.search.KutePreferencesScreen
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.junit.Rule
 import org.junit.Test
@@ -79,11 +87,18 @@ class PreferenceViewsScreenshotTest {
         name: String,
         expand: String? = null,
         action: () -> Unit = {},
+        darkTheme: Boolean = false,
         content: @Composable () -> Unit,
     ) {
         composeRule.setContent {
-            KutePreferencesTheme {
-                Surface { Column { content() } }
+            val page = @Composable {
+                KutePreferencesTheme {
+                    Surface { Column { content() } }
+                }
+            }
+            when {
+                darkTheme -> MaterialTheme(colorScheme = darkColorScheme(), content = page)
+                else -> page()
             }
         }
         expand?.let { composeRule.onNodeWithText(it).performClick() }
@@ -280,6 +295,64 @@ class PreferenceViewsScreenshotTest {
             PasswordPreferenceBehavior(
                 KutePasswordPreference(key = "p", title = "Password", defaultValue = "short", dataProvider = dataProvider)
             )
+        )
+    }
+
+    @Test
+    fun mainSwitchOn() = mainSwitchScreenshot(name = "main_switch_on", isOn = true)
+
+    @Test
+    fun mainSwitchOff() = mainSwitchScreenshot(name = "main_switch_off", isOn = false)
+
+    @Test
+    fun mainSwitchOnDark() = mainSwitchScreenshot(name = "main_switch_on_dark", isOn = true, darkTheme = true)
+
+    @Test
+    fun mainSwitchOffDark() = mainSwitchScreenshot(name = "main_switch_off_dark", isOn = false, darkTheme = true)
+
+    private fun mainSwitchScreenshot(name: String, isOn: Boolean, darkTheme: Boolean = false) {
+        val mainSwitch = KuteMainSwitchPreference(
+            key = "main",
+            title = "Use notifications",
+            defaultValue = isOn,
+            dataProvider = dataProvider,
+        )
+        val sound = KuteBooleanPreference(key = "sound", title = "Sound", defaultValue = true, dataProvider = dataProvider)
+        val viewModel = KutePreferencesViewModel(DefaultKuteNavigator())
+        viewModel.initPreferencesTree(
+            listOf(KuteCategory(key = "category", title = "Notifications", children = listOf(mainSwitch, sound))),
+        )
+        viewModel.navigateTo("category")
+
+        screenshot(name, darkTheme = darkTheme) { KutePreferencesScreen(kuteViewModel = viewModel) }
+    }
+
+    @Test
+    @Config(sdk = [34], qualifiers = "w1000dp-h500dp-xhdpi")
+    fun largeScreen() {
+        val items = listOf(
+            KuteBooleanPreference(key = "wifi", title = "Wifi", defaultValue = true, dataProvider = dataProvider),
+            KuteTextPreference(key = "name", title = "Name", defaultValue = "Kute", dataProvider = dataProvider),
+        )
+        val viewModel = KutePreferencesViewModel(DefaultKuteNavigator())
+        viewModel.initPreferencesTree(items)
+
+        screenshot("large_screen") { KutePreferencesScreen(kuteViewModel = viewModel) }
+    }
+
+    @Test
+    fun searchWithoutResults() = screenshot("search_no_results") {
+        KuteNoSearchResults(
+            modifier = Modifier.fillMaxSize(),
+            searchTerm = "wifi",
+        )
+    }
+
+    @Test
+    fun searchWithoutResultsDark() = screenshot("search_no_results_dark", darkTheme = true) {
+        KuteNoSearchResults(
+            modifier = Modifier.fillMaxSize(),
+            searchTerm = "wifi",
         )
     }
 

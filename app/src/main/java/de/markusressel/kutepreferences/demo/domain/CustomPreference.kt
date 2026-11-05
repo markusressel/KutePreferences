@@ -20,7 +20,7 @@ import androidx.core.graphics.ColorUtils
 import de.markusressel.kutepreferences.core.persistence.KutePreferenceDataProvider
 import de.markusressel.kutepreferences.core.preference.KutePreferenceItem
 import de.markusressel.kutepreferences.core.preference.KutePreferenceListItem
-import de.markusressel.kutepreferences.core.search.SearchUtils.containsAnyWord
+import de.markusressel.kutepreferences.core.search.KuteSearchContent
 import de.markusressel.kutepreferences.ui.util.CombinedPreview
 import de.markusressel.kutepreferences.ui.util.dummy
 
@@ -40,8 +40,8 @@ class CustomPreference(
         return 0
     }
 
-    override fun search(searchTerm: String) =
-        listOf(title, description).containsAnyWord(searchTerm)
+    override val searchContent
+        get() = KuteSearchContent(title = title, description = description)
 
     override fun createDescription(currentValue: Int): String {
         return "The current color is: ${Color(currentValue).toHexString()}"

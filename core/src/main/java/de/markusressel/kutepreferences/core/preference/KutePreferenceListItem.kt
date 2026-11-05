@@ -1,5 +1,7 @@
 package de.markusressel.kutepreferences.core.preference
 
+import de.markusressel.kutepreferences.core.search.KuteSearchContent
+
 interface KutePreferenceListItem {
 
     /**
@@ -33,10 +35,23 @@ interface KutePreferenceListItem {
         get() = null
 
     /**
+     * Terms that also find this item in the search without being shown, f.ex. synonyms or related topics
+     */
+    val keywords: List<String>
+        get() = emptyList()
+
+    /**
+     * The texts of this item that the search looks through. It also ranks the results using these,
+     * so an item that only overrides [search] is listed after the items that provide this.
+     */
+    val searchContent: KuteSearchContent?
+        get() = null
+
+    /**
      * Search within this [KutePreferenceListItem] for the given [searchTerm]
      *
      * @return true if the item matches the [searchTerm], false otherwise
      */
-    fun search(searchTerm: String): Boolean
+    fun search(searchTerm: String): Boolean = searchContent?.matches(searchTerm) ?: false
 
 }

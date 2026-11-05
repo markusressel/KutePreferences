@@ -20,6 +20,7 @@ open class KuteFloatSliderPreference(
     onLongClick: (() -> Unit)? = null,
     visibleWhen: KuteCondition? = null,
     enabledWhen: KuteCondition? = null,
+    keywords: List<String> = emptyList(),
 ) : KuteSliderPreference<Float>(
     key = key,
     icon = icon,
@@ -33,6 +34,7 @@ open class KuteFloatSliderPreference(
     onLongClick = onLongClick,
     visibleWhen = visibleWhen,
     enabledWhen = enabledWhen,
+    keywords = keywords,
 ), KutePreferenceListItem {
 
     override fun createDescription(currentValue: Float): String {

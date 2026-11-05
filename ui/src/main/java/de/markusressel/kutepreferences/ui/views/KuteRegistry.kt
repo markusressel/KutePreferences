@@ -33,6 +33,7 @@ import de.markusressel.kutepreferences.core.preference.action.ActionPreferenceBe
 import de.markusressel.kutepreferences.core.preference.action.KuteAction
 import de.markusressel.kutepreferences.core.preference.bool.BooleanPreferenceBehavior
 import de.markusressel.kutepreferences.core.preference.bool.KuteBooleanPreference
+import de.markusressel.kutepreferences.core.preference.bool.KuteMainSwitchPreference
 import de.markusressel.kutepreferences.core.preference.category.KuteCategory
 import de.markusressel.kutepreferences.core.preference.category.KuteCategoryBehavior
 import de.markusressel.kutepreferences.core.preference.category.KutePreferenceCategory
@@ -75,6 +76,7 @@ import de.markusressel.kutepreferences.ui.views.listitems.DecimalSliderPreferenc
 import de.markusressel.kutepreferences.ui.views.listitems.IntRangeSliderPreference
 import de.markusressel.kutepreferences.ui.views.listitems.KuteCategoryView
 import de.markusressel.kutepreferences.ui.views.listitems.KuteSectionView
+import de.markusressel.kutepreferences.ui.views.listitems.MainSwitchPreference
 import de.markusressel.kutepreferences.ui.views.listitems.MultiSelectionPreference
 import de.markusressel.kutepreferences.ui.views.listitems.NumberPreference
 import de.markusressel.kutepreferences.ui.views.listitems.NumberRangeSliderPreference
@@ -104,6 +106,7 @@ class KuteRegistry(navigator: KuteNavigator) {
 
     private val registrations = mutableMapOf<Class<*>, Registration<*, *>>()
     private val behaviors = IdentityHashMap<KutePreferenceListItem, KuteItemBehavior>()
+    private val mainSwitchConditions = MainSwitchConditions()
 
     init {
         registerDefaults(navigator)
@@ -160,6 +163,13 @@ class KuteRegistry(navigator: KuteNavigator) {
     }
 
     /**
+     * Finds the items that are disabled by a main switch
+     */
+    internal fun setPreferenceTree(items: List<KutePreferenceListItem>) {
+        mainSwitchConditions.update(items)
+    }
+
+    /**
      * Renders the given [item]
      */
     @Composable
@@ -167,7 +177,7 @@ class KuteRegistry(navigator: KuteNavigator) {
         @Suppress("UNCHECKED_CAST")
         val registration = findRegistration(item.javaClass) as Registration<KutePreferenceListItem, KuteItemBehavior>?
 
-        ConditionalItem(item) {
+        ConditionalItem(item, mainSwitchConditions[item]) {
             when (registration) {
                 null -> UnsupportedItem(item)
                 else -> registration.content(item, behaviorFor(item))
@@ -191,6 +201,9 @@ class KuteRegistry(navigator: KuteNavigator) {
         register<KuteCategory, KuteCategoryBehavior>({ KuteCategoryBehavior(it, navigator) }) { KuteCategoryView(it) }
         register<KuteBooleanPreference, BooleanPreferenceBehavior>(::BooleanPreferenceBehavior) {
             BooleanPreference(it)
+        }
+        register<KuteMainSwitchPreference, BooleanPreferenceBehavior>({ BooleanPreferenceBehavior(it) }) {
+            MainSwitchPreference(it)
         }
         register<KuteColorPreference, ColorPreferenceBehavior>(::ColorPreferenceBehavior) {
             ColorPreferenceView(it)
@@ -245,15 +258,17 @@ private fun UnsupportedItem(item: KutePreferenceListItem) {
 }
 
 /**
- * Applies [KutePreferenceListItem.visibleWhen] and [KutePreferenceListItem.enabledWhen] to the given [content]
+ * Applies [KutePreferenceListItem.visibleWhen], [KutePreferenceListItem.enabledWhen] and the state
+ * of the main switch of the item, if any, to the given [content]
  */
 @Composable
 private fun ConditionalItem(
     item: KutePreferenceListItem,
+    mainSwitchCondition: KuteCondition?,
     content: @Composable () -> Unit,
 ) {
     val isVisible = item.visibleWhen.collectIsMet()
-    val isEnabled = item.enabledWhen.collectIsMet()
+    val isEnabled = item.enabledWhen.collectIsMet() && mainSwitchCondition.collectIsMet()
 
     // starts in the current state, so that an item is not animated when it first appears
     val visibility = remember { MutableTransitionState(isVisible) }

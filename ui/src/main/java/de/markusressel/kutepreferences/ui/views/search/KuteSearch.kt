@@ -1,14 +1,19 @@
 package de.markusressel.kutepreferences.ui.views.search
 
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import de.markusressel.kutepreferences.core.preference.bool.KuteBooleanPreference
 import de.markusressel.kutepreferences.core.preference.category.KuteCategory
@@ -32,6 +37,7 @@ fun KuteSearch(
     onActiveChange: (Boolean) -> Unit,
     onSearchResultSelected: (SearchItemsUseCase.KuteSearchResultItem) -> Unit,
     modifier: Modifier = Modifier,
+    maxContentWidth: Dp = Dp.Infinity,
 ) {
     KutePreferenceSearch(
         modifier = modifier,
@@ -44,13 +50,28 @@ fun KuteSearch(
         },
         focusRequester = searchFocusRequester,
         searchContent = {
-            KutePreferenceSearchingContent(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .imePadding(),
-                items = items,
-                onSearchResultSelected = onSearchResultSelected,
-            )
+            when {
+                items.isEmpty() && searchTerm.isNotBlank() -> KuteNoSearchResults(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .imePadding(),
+                    searchTerm = searchTerm,
+                )
+
+                else -> Box(
+                    modifier = Modifier.fillMaxWidth(),
+                    contentAlignment = Alignment.TopCenter,
+                ) {
+                    KutePreferenceSearchingContent(
+                        modifier = Modifier
+                            .widthIn(max = maxContentWidth)
+                            .fillMaxWidth()
+                            .imePadding(),
+                        items = items,
+                        onSearchResultSelected = onSearchResultSelected,
+                    )
+                }
+            }
         },
     )
 }

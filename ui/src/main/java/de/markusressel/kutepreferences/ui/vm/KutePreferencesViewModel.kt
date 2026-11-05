@@ -91,6 +91,7 @@ open class KutePreferencesViewModel(
                 .distinct()
                 .forEach { it.load() }
 
+            registry.setPreferenceTree(items)
             preferenceItems.value = items
             loading.value = false
         }
@@ -112,6 +113,30 @@ open class KutePreferencesViewModel(
         when (it) {
             is KuteParent -> listOf(it) + it.children.flatten()
             else -> listOf(it)
+        }
+    }
+
+    /**
+     * Shows the item with the given [key], f.ex. when the user opens a notification or an error message about it.
+     *
+     * Opens its category and expands all sections on the way. The item then scrolls into view and is highlighted
+     * temporarily. This also closes the search, and can be called right after [initPreferencesTree].
+     *
+     * If items share the key, the first one in the tree is shown. Nothing happens if no item has the key.
+     * A hidden item stays hidden, see [KutePreferenceListItem.visibleWhen].
+     */
+    open fun navigateTo(key: String) {
+        viewModelScope.launch {
+            loading.first { it.not() }
+
+            val item = preferenceItems.value.flatten().firstOrNull { it.key == key }
+            when (item) {
+                null -> Log.w("KutePreferences", "Could not find item with key $key in preference tree")
+                else -> {
+                    navigateTo(item)
+                    closeSearch()
+                }
+            }
         }
     }
 
