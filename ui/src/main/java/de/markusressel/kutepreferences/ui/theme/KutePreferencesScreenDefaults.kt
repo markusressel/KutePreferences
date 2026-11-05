@@ -10,4 +10,10 @@ object KutePreferencesScreenDefaults {
      */
     val MaxContentWidth: Dp = 720.dp
 
+    /**
+     * The width from which on the top level and the open category are shown next to each other,
+     * which is the start of the expanded window size class of Material 3
+     */
+    val TwoPaneMinWidth: Dp = 840.dp
+
 }

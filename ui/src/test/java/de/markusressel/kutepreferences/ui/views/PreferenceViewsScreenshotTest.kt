@@ -340,6 +340,42 @@ class PreferenceViewsScreenshotTest {
         screenshot("large_screen") { KutePreferencesScreen(kuteViewModel = viewModel) }
     }
 
+    private fun twoPanesScreenshot(name: String, darkTheme: Boolean = false, openCategory: Boolean = true) {
+        val viewModel = KutePreferencesViewModel(DefaultKuteNavigator())
+        viewModel.initPreferencesTree(
+            listOf(
+                KuteCategory(
+                    key = "network",
+                    title = "Network",
+                    description = "Wifi and mobile data",
+                    children = listOf(
+                        KuteBooleanPreference(key = "wifi", title = "Wifi", defaultValue = true, dataProvider = dataProvider),
+                        KuteTextPreference(key = "proxy", title = "Proxy", defaultValue = "None", dataProvider = dataProvider),
+                    ),
+                ),
+                KuteCategory(key = "display", title = "Display", description = "Theme and font size"),
+                KuteBooleanPreference(key = "sound", title = "Sound", defaultValue = true, dataProvider = dataProvider),
+            ),
+        )
+        if (openCategory) {
+            viewModel.navigateTo("network")
+        }
+
+        screenshot(name, darkTheme = darkTheme) { KutePreferencesScreen(kuteViewModel = viewModel) }
+    }
+
+    @Test
+    @Config(sdk = [34], qualifiers = "w1000dp-h500dp-xhdpi")
+    fun twoPanes() = twoPanesScreenshot("two_panes")
+
+    @Test
+    @Config(sdk = [34], qualifiers = "w1000dp-h500dp-xhdpi")
+    fun twoPanesDark() = twoPanesScreenshot("two_panes_dark", darkTheme = true)
+
+    @Test
+    @Config(sdk = [34], qualifiers = "w1000dp-h500dp-xhdpi")
+    fun twoPanesWithoutOpenCategory() = twoPanesScreenshot("two_panes_empty", openCategory = false)
+
     @Test
     fun searchWithoutResults() = screenshot("search_no_results") {
         KuteNoSearchResults(

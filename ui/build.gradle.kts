@@ -24,6 +24,7 @@ dependencies {
     api(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.material.icons.extended)
     api(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.material3.adaptive)
     api(libs.androidx.compose.runtime)
     api(libs.androidx.compose.foundation)
 

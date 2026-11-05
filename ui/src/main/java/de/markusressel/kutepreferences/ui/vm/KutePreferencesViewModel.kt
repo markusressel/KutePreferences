@@ -68,6 +68,7 @@ open class KutePreferencesViewModel(
             categoryPath = navigator.categoryStack.mapNotNull { findCategoryByKeyUseCase(allItems, it) },
             preferenceItems = items,
             searchResults = emptyList(),
+            rootItems = allItems,
         )
     }
 
@@ -242,4 +243,9 @@ data class UiState(
      * The open categories, ordered from root to leaf
      */
     val categoryPath: List<KutePreferenceCategory> = emptyList(),
+
+    /**
+     * The items at the top level, whichever category is open
+     */
+    val rootItems: List<KutePreferenceListItem> = emptyList(),
 )

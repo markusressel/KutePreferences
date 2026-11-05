@@ -10,11 +10,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.semantics.selected
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.markusressel.kutepreferences.core.DefaultKuteNavigator
@@ -33,6 +36,13 @@ fun KuteCategoryView(
 ) {
     val uiState by behavior.uiState.collectAsStateWithLifecycle()
 
+    val selection = LocalCategorySelection.current
+    val isSelected = selection?.selectedKey == behavior.preferenceItem.key
+    val containerColor = when {
+        isSelected -> MaterialTheme.colorScheme.secondaryContainer
+        else -> LocalKuteColors.current.category.cardBackgroundColor
+    }
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -43,16 +53,29 @@ fun KuteCategoryView(
         elevation = CardDefaults.cardElevation(LocalKuteColors.current.category.elevation),
         shape = itemShape,
         colors = CardDefaults.cardColors(
-            containerColor = LocalKuteColors.current.category.cardBackgroundColor
+            containerColor = containerColor
         ),
     ) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .defaultMinSize(minHeight = listItemMinHeight)
-                .background(LocalKuteColors.current.category.cardBackgroundColor)
+                .background(containerColor)
+                .then(
+                    when (selection) {
+                        null -> Modifier
+                        else -> Modifier.semantics { selected = isSelected }
+                    }
+                )
                 .combinedClickable(
-                    onClick = { behavior.onClick() },
+                    onClick = {
+                        when {
+                            selection != null && behavior.preferenceItem.onClick == null ->
+                                selection.onSelect(behavior.preferenceItem.key)
+
+                            else -> behavior.onClick()
+                        }
+                    },
                     onLongClick = behavior.preferenceItem.onLongClick,
                 )
         ) {
