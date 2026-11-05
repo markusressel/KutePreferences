@@ -3,6 +3,7 @@ package de.markusressel.kutepreferences.ui.views.common
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsDraggedAsState
 import androidx.compose.foundation.interaction.collectIsPressedAsState
@@ -10,10 +11,13 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Slider
+import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -25,13 +29,24 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.RoundRect
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.drawscope.DrawScope
+import androidx.compose.ui.graphics.drawscope.scale
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.drop
+import kotlin.math.abs
+import kotlin.math.roundToInt
 
 /**
  * A slider with a range indicator and a marker for the current value, which saves the value when it is released
@@ -43,6 +58,7 @@ import kotlinx.coroutines.flow.drop
  * @param markerText the text of the marker for a slider position
  * @param onValueChangeFinished called with a new value when the user has released the slider
  */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun ValueSlider(
     persistedValue: Float,
@@ -95,25 +111,7 @@ internal fun ValueSlider(
         val sliderIsPressed by interactionSource.collectIsPressedAsState()
 
         val markerIsVisible = touchedByUser || isSliderAnimating || sliderIsDragged || sliderIsPressed
-        var markerWidthPx by remember { mutableIntStateOf(0) }
-
-        var markerPosition by remember { mutableStateOf(Offset.Zero) }
-        val animatedMarkerAlpha by animateFloatAsState(
-            targetValue = when {
-                markerIsVisible -> 1f
-                else -> 0f
-            },
-            animationSpec = tween(
-                durationMillis = 300,
-                delayMillis = when {
-                    markerIsVisible -> 0
-                    // hide marker after delay
-                    else -> 2000
-                },
-                easing = LinearOutSlowInEasing
-            ),
-            label = "MarkerAlphaAnimation",
-        )
+        var sliderWidthPx by remember { mutableIntStateOf(0) }
 
         Box {
             SliderRangeIndicator(
@@ -122,32 +120,19 @@ internal fun ValueSlider(
                 text = markerText,
             )
 
-            val density = LocalDensity.current
-
             Slider(
                 modifier = Modifier
                     .padding(top = 14.dp)
-                    .onGloballyPositioned {
-                        val fraction = ((sliderValue - valueRange.start) / (valueRange.endInclusive - valueRange.start))
-
-                        val offsetInDp = with(density) {
-                            val sliderThumbDiameterPx = 20.dp.toPx()
-                            val sliderWidthMinusPadding = (it.size.width - sliderThumbDiameterPx)
-                            (
-                                (fraction * sliderWidthMinusPadding)
-                                    + ((sliderThumbDiameterPx - markerWidthPx) / 2f)
-                                ).toDp()
-                        }
-
-                        markerPosition = Offset(x = offsetInDp.value, y = 0f)
-                    },
+                    .onSizeChanged { sliderWidthPx = it.width }
+                    .padding(horizontal = SliderTrackOverhang),
                 value = sliderValue,
                 enabled = isSliderAnimating.not(),
                 valueRange = valueRange,
                 steps = steps,
                 onValueChange = {
                     if (isSliderAnimating.not()) {
-                        sliderPosition = it
+                        // NOTE: this also keeps a slider without steps in between its values on a valid value
+                        sliderPosition = snap(it)
 
                         if (persistedValue != snap(it)) {
                             touchedByUser = true
@@ -162,25 +147,251 @@ internal fun ValueSlider(
                         onValueChangeFinished(snappedPosition)
                     }
                 },
-                interactionSource = interactionSource
+                interactionSource = interactionSource,
+                track = {
+                    KuteSliderTrack(
+                        activeStart = null,
+                        activeEnd = sliderFraction(it.value, it.valueRange),
+                        steps = it.steps,
+                        enabled = isSliderAnimating.not(),
+                    )
+                },
             )
 
-            Marker(
-                modifier = Modifier
-                    .padding(bottom = 16.dp)
-                    .onGloballyPositioned { coordinates ->
-                        markerWidthPx = coordinates.size.width
-                    }
-                    .offset(markerPosition.x.dp, markerPosition.y.dp)
-                    .alpha(animatedMarkerAlpha),
+            ThumbMarker(
                 text = markerText(sliderValue),
+                fraction = sliderFraction(sliderValue, valueRange),
+                sliderWidthPx = sliderWidthPx,
+                isVisible = markerIsVisible,
             )
         }
     }
 }
 
+// NOTE: this is the width of the Material 3 slider thumb, which is not exposed
+private val SliderThumbWidth = 4.dp
+private val SliderThumbGap = 6.dp
+private val SliderTrackHeight = 16.dp
+private val SliderTrackInnerCornerSize = 2.dp
+private val SliderTrackMinPartWidth = 4.dp
+
+/**
+ * How far the track extends past the movement of the thumb on each side, so that the dots at the
+ * ends of the track are the end stops of the thumb. Sliders are inset by this.
+ */
+internal val SliderTrackOverhang = 8.dp
+
+/**
+ * How far the marker may extend past the slider, which is the padding around it, to not be cut off by the screen.
+ */
+private val MarkerOverhang = 8.dp
+
+/**
+ * @return the position of [value] in [valueRange], between 0 and 1
+ */
+internal fun sliderFraction(value: Float, valueRange: ClosedFloatingPointRange<Float>): Float {
+    val size = valueRange.endInclusive - valueRange.start
+    return when {
+        size > 0f -> ((value - valueRange.start) / size).coerceIn(0f, 1f)
+        else -> 0f
+    }
+}
+
+/**
+ * @return the horizontal center of the thumb of a slider that is inset by [trackOverhang], which moves linearly
+ * in between the dots at the ends of the track
+ */
+internal fun sliderThumbCenter(
+    fraction: Float,
+    sliderWidth: Float,
+    thumbWidth: Float,
+    trackOverhang: Float,
+): Float {
+    val movement = sliderWidth - trackOverhang * 2 - thumbWidth
+    return trackOverhang + thumbWidth / 2f + movement * fraction
+}
+
+/**
+ * A [Marker] above the thumb of a slider, which fades out with a delay after it is hidden.
+ */
 @Composable
-private fun SliderRangeIndicator(
+internal fun ThumbMarker(
+    text: String,
+    fraction: Float,
+    sliderWidthPx: Int,
+    isVisible: Boolean,
+) {
+    var markerWidthPx by remember { mutableIntStateOf(0) }
+    val alpha by animateFloatAsState(
+        targetValue = when {
+            isVisible -> 1f
+            else -> 0f
+        },
+        animationSpec = tween(
+            durationMillis = 300,
+            delayMillis = when {
+                isVisible -> 0
+                // hide marker after delay
+                else -> 2000
+            },
+            easing = LinearOutSlowInEasing
+        ),
+        label = "MarkerAlphaAnimation",
+    )
+
+    if (alpha > 0f) {
+        val overhangPx = with(LocalDensity.current) { MarkerOverhang.roundToPx() }
+        val thumbCenterPx = with(LocalDensity.current) {
+            sliderThumbCenter(
+                fraction = fraction,
+                sliderWidth = sliderWidthPx.toFloat(),
+                thumbWidth = SliderThumbWidth.toPx(),
+                trackOverhang = SliderTrackOverhang.toPx(),
+            )
+        }
+        Marker(
+            modifier = Modifier
+                .padding(bottom = 16.dp)
+                .onGloballyPositioned { coordinates ->
+                    markerWidthPx = coordinates.size.width
+                }
+                .offset {
+                    IntOffset(
+                        x = (thumbCenterPx - markerWidthPx / 2f).roundToInt()
+                            .coerceAtMost(sliderWidthPx - markerWidthPx + overhangPx)
+                            .coerceAtLeast(-overhangPx),
+                        y = 0,
+                    )
+                }
+                .alpha(alpha),
+            text = text,
+        )
+    }
+}
+
+/**
+ * The track of a slider, which extends past the thumb by [SliderTrackOverhang] on each side.
+ * It shows a dot at every step, including both ends, where the thumb stops.
+ *
+ * @param activeStart the start of the active part, or `null` if it starts at the beginning of the track
+ * @param activeEnd the end of the active part
+ */
+@Composable
+internal fun KuteSliderTrack(
+    activeStart: Float?,
+    activeEnd: Float,
+    steps: Int,
+    enabled: Boolean,
+) {
+    val colors = trackColors(enabled)
+
+    Canvas(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(SliderTrackHeight)
+    ) {
+        val direction = when (layoutDirection) {
+            LayoutDirection.Rtl -> -1f
+            else -> 1f
+        }
+        scale(scaleX = direction, scaleY = 1f) {
+            val overhang = SliderTrackOverhang.toPx()
+            val gap = SliderThumbGap.toPx()
+            val startThumb = activeStart?.let { size.width * it }
+            val endThumb = size.width * activeEnd
+            val activeTrack = (startThumb?.let { it + gap } ?: -overhang)..(endThumb - gap)
+
+            startThumb?.let { drawTrackPart(-overhang, it - gap, colors.inactive, outerStart = true) }
+            drawTrackPart(activeTrack.start, activeTrack.endInclusive, colors.active, outerStart = startThumb == null)
+            drawTrackPart(endThumb + gap, size.width + overhang, colors.inactive, outerEnd = true)
+
+            for (tick in 0..steps + 1) {
+                val x = size.width * tick / (steps + 1)
+                val isBelowThumb = abs(x - endThumb) < gap || (startThumb != null && abs(x - startThumb) < gap)
+                if (isBelowThumb.not()) {
+                    drawCircle(
+                        color = when {
+                            x in activeTrack -> colors.activeTick
+                            else -> colors.inactiveTick
+                        },
+                        radius = SliderDefaults.TickSize.toPx() / 2f,
+                        center = Offset(x, center.y),
+                    )
+                }
+            }
+        }
+    }
+}
+
+private data class SliderTrackColors(
+    val active: Color,
+    val inactive: Color,
+    val activeTick: Color,
+    val inactiveTick: Color,
+)
+
+@Composable
+private fun trackColors(enabled: Boolean): SliderTrackColors {
+    val colors = SliderDefaults.colors()
+    return when {
+        enabled -> SliderTrackColors(
+            active = colors.activeTrackColor,
+            inactive = colors.inactiveTrackColor,
+            activeTick = colors.activeTickColor,
+            inactiveTick = colors.inactiveTickColor,
+        )
+
+        else -> SliderTrackColors(
+            active = colors.disabledActiveTrackColor,
+            inactive = colors.disabledInactiveTrackColor,
+            activeTick = colors.disabledActiveTickColor,
+            inactiveTick = colors.disabledInactiveTickColor,
+        )
+    }
+}
+
+private fun DrawScope.drawTrackPart(
+    from: Float,
+    to: Float,
+    color: Color,
+    outerStart: Boolean = false,
+    outerEnd: Boolean = false,
+) {
+    // what is left of the track behind a thumb that is at its end stop isn't worth showing
+    if (to - from < SliderTrackMinPartWidth.toPx()) {
+        return
+    }
+    val outerRadius = CornerRadius(size.height / 2f)
+    val innerRadius = CornerRadius(SliderTrackInnerCornerSize.toPx())
+    val startRadius = when {
+        outerStart -> outerRadius
+        else -> innerRadius
+    }
+    val endRadius = when {
+        outerEnd -> outerRadius
+        else -> innerRadius
+    }
+    drawPath(
+        path = Path().apply {
+            addRoundRect(
+                RoundRect(
+                    left = from,
+                    top = 0f,
+                    right = to,
+                    bottom = size.height,
+                    topLeftCornerRadius = startRadius,
+                    topRightCornerRadius = endRadius,
+                    bottomRightCornerRadius = endRadius,
+                    bottomLeftCornerRadius = startRadius,
+                )
+            )
+        },
+        color = color,
+    )
+}
+
+@Composable
+internal fun SliderRangeIndicator(
     valueRange: ClosedFloatingPointRange<Float>,
     text: (Float) -> String,
     modifier: Modifier = Modifier,
