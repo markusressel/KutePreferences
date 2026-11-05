@@ -1,6 +1,7 @@
 package de.markusressel.kutepreferences.core.preference.date
 
 import de.markusressel.kutepreferences.core.preference.EditablePreferenceBehavior
+import de.markusressel.kutepreferences.core.preference.KuteValidationError
 
 open class DatePreferenceBehavior(
     preferenceItem: KuteDatePreference
@@ -8,11 +9,14 @@ open class DatePreferenceBehavior(
     preferenceItem
 ) {
 
-    override fun isValid(): Boolean {
+    override fun checkCurrentValue(): KuteValidationError? {
         val value = currentValue.value
         val aboveMinimum = preferenceItem.minimum?.let { value >= it } ?: true
         val belowMaximum = preferenceItem.maximum?.let { value <= it } ?: true
-        return aboveMinimum && belowMaximum && super.isValid()
+        return when {
+            aboveMinimum && belowMaximum -> super.checkCurrentValue()
+            else -> KuteValidationError.Invalid
+        }
     }
 
 }

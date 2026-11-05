@@ -87,6 +87,13 @@ interface KutePreferenceItem<DataType : Any> {
         get() = null
 
     /**
+     * The text to show while the current input cannot be saved, instead of a generic explanation.
+     * This also applies to built-in rules, such as the minimum of a number.
+     */
+    val validationMessage: ((DataType) -> String)?
+        get() = null
+
+    /**
      * An optional listener for value changes
      */
     val onPreferenceChangedListener: ((oldValue: DataType, newValue: DataType) -> Unit)?

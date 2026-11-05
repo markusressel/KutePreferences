@@ -275,6 +275,15 @@ class PreferenceViewsScreenshotTest {
     }
 
     @Test
+    fun passwordDialogWithError() = screenshot("password_dialog_error", expand = "Password") {
+        PasswordPreference(
+            PasswordPreferenceBehavior(
+                KutePasswordPreference(key = "p", title = "Password", defaultValue = "short", dataProvider = dataProvider)
+            )
+        )
+    }
+
+    @Test
     fun urlDialog() = screenshot("url_dialog", expand = "Url") {
         UrlPreference(
             UrlPreferenceBehavior(

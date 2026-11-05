@@ -26,6 +26,7 @@ open class KuteNumberPreference(
     override val validator: Validator<Long>? = null,
     override val visibleWhen: KuteCondition? = null,
     override val enabledWhen: KuteCondition? = null,
+    override val validationMessage: ((Long) -> String)? = null,
 ) : KutePreferenceItem<Long>, KutePreferenceListItem {
 
     override val persistedValue by lazy { getPersistedValueFlow() }

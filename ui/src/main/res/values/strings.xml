@@ -6,4 +6,15 @@
     <string name="kute_preferences_search_label">Search…</string>
     <string name="kute_preferences_show_password">Show password</string>
     <string name="kute_preferences_hide_password">Hide password</string>
+
+    <string name="kute_preferences_error_invalid">This value is not allowed</string>
+    <string name="kute_preferences_error_invalid_url">Enter a valid URL</string>
+    <string name="kute_preferences_error_not_a_number">Enter a number</string>
+    <string name="kute_preferences_error_between">Must be between %1$d and %2$d</string>
+    <string name="kute_preferences_error_at_least">Must be at least %1$d</string>
+    <string name="kute_preferences_error_at_most">Must be at most %1$d</string>
+    <plurals name="kute_preferences_error_too_short">
+        <item quantity="one">Must have at least %1$d character</item>
+        <item quantity="other">Must have at least %1$d characters</item>
+    </plurals>
 </resources>

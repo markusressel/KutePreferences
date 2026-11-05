@@ -19,11 +19,12 @@ import de.markusressel.kutepreferences.core.preference.select.MultiSelectionPref
 import de.markusressel.kutepreferences.ui.theme.KutePreferencesTheme
 import de.markusressel.kutepreferences.ui.util.CombinedPreview
 import de.markusressel.kutepreferences.ui.util.clickAction
+import de.markusressel.kutepreferences.ui.util.dummy
 import de.markusressel.kutepreferences.ui.util.highlightingShimmer
 import de.markusressel.kutepreferences.ui.views.common.CancelDefaultSaveDialog
 import de.markusressel.kutepreferences.ui.views.common.CancelDefaultSaveDialogState
 import de.markusressel.kutepreferences.ui.views.common.rememberCancelDefaultSaveDialogState
-import de.markusressel.kutepreferences.ui.util.dummy
+import de.markusressel.kutepreferences.ui.views.common.validationErrorText
 
 @Composable
 fun MultiSelectionPreference(
@@ -65,6 +66,7 @@ private fun MultiSelectionPreferenceEditDialog(
         onCancelClicked = onCancelClicked,
         onSaveClicked = onSaveClicked,
         isSavable = isError.not(),
+        errorMessage = behavior.validationErrorText().takeIf { isError },
         onDefaultClicked = onDefaultClicked,
     ) {
 

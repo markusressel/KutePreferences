@@ -205,7 +205,8 @@ Saved values stay valid when titles change or get translated, as long as the val
 
 ### Validating input
 
-Items that are edited in a dialog accept a `validator`. The save button stays disabled while it returns `false`:
+Items that are edited in a dialog accept a `validator`. The save button stays disabled while it returns `false`, and
+the dialog shows the `validationMessage`:
 
 ```kotlin
 KuteTextPreference(
@@ -214,10 +215,15 @@ KuteTextPreference(
     defaultValue = "",
     dataProvider = dataProvider,
     validator = { it.length <= 20 },
+    validationMessage = { "At most 20 characters, you have ${it.length}" },
 )
 ```
 
-The validator runs in addition to built-in rules, such as the `minimum` and `maximum` of `KuteNumberPreference`.
+The validator runs in addition to built-in rules, such as the `minimum` and `maximum` of `KuteNumberPreference`. These
+explain themselves, unless you set a `validationMessage`, which replaces their text. Without one, a rejected value shows
+a generic text.
+
+If you have your own behavior, override `checkCurrentValue` to add rules that show a message.
 
 ### Conditional preferences
 

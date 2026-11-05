@@ -168,6 +168,8 @@ class MainViewModel @Inject constructor(
         val proxyUser = KuteTextPreference(
             key = "demo_proxy_user",
             title = "Proxy user",
+            validator = { it.length <= 20 },
+            validationMessage = { "At most 20 characters, you have ${it.length}" },
             dataProvider = dataProvider,
             defaultValue = "",
             visibleWhen = useProxy.matches { it },

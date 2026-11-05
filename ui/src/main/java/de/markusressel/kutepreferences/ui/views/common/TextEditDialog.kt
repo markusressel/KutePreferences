@@ -45,6 +45,7 @@ fun TextEditDialog(
         keyboardOptions = keyboardOptions,
         visualTransformation = visualTransformation,
         revealable = false,
+        errorMessage = null,
         onInputChanged = onInputChanged,
         value = value,
         onCancelClicked = onCancelClicked,
@@ -57,6 +58,7 @@ fun TextEditDialog(
 /**
  * @param revealable shows a button in the text field that turns off the [visualTransformation].
  * The value is hidden again every time the dialog is opened.
+ * @param errorMessage explains why the value cannot be saved
  */
 @Composable
 internal fun TextEditDialog(
@@ -66,6 +68,7 @@ internal fun TextEditDialog(
     keyboardOptions: KeyboardOptions,
     visualTransformation: VisualTransformation,
     revealable: Boolean,
+    errorMessage: String?,
     onInputChanged: (String) -> Unit,
     value: String,
     onCancelClicked: () -> Unit,
@@ -86,6 +89,7 @@ internal fun TextEditDialog(
         onCancelClicked = onCancelClicked,
         onSaveClicked = onSaveClicked,
         isSavable = isError.not(),
+        errorMessage = errorMessage.takeIf { isError },
         onDefaultClicked = onDefaultClicked,
     ) {
         // NOTE: the content of the dialog only exists while it is open, so this does not outlive it

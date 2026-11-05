@@ -10,7 +10,7 @@ class KutePasswordPreference(
     override val key: String,
     override val icon: Drawable? = null,
     override val title: String,
-    regex: String? = "^.{8,}\$|^\$",
+    regex: String? = DEFAULT_REGEX,
     defaultValue: String,
     override val dataProvider: KutePreferenceDataProvider,
     override val onPreferenceChangedListener: ((oldValue: String, newValue: String) -> Unit)? = null,
@@ -19,6 +19,7 @@ class KutePasswordPreference(
     override val validator: Validator<String>? = null,
     override val visibleWhen: KuteCondition? = null,
     override val enabledWhen: KuteCondition? = null,
+    override val validationMessage: ((String) -> String)? = null,
 ) : KuteTextPreference(
     key = key,
     icon = icon,
@@ -32,6 +33,7 @@ class KutePasswordPreference(
     validator = validator,
     visibleWhen = visibleWhen,
     enabledWhen = enabledWhen,
+    validationMessage = validationMessage,
 ) {
 
     @CheckResult
@@ -43,8 +45,12 @@ class KutePasswordPreference(
         }
     }
 
-    private companion object {
-        const val MASK_LENGTH = 8
+    companion object {
+        private const val MASK_LENGTH = 8
+
+        // NOTE: the default rule for a password, which can be empty
+        internal const val DEFAULT_MINIMUM_LENGTH = 8
+        internal const val DEFAULT_REGEX = "^.{$DEFAULT_MINIMUM_LENGTH,}\$|^\$"
     }
 
 }
