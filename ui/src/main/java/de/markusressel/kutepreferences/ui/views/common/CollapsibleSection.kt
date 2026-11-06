@@ -14,7 +14,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import de.markusressel.kutepreferences.ui.theme.LocalKuteColors
-import de.markusressel.kutepreferences.ui.theme.itemShape
 
 @Composable
 fun CollapsibleCard(
@@ -28,7 +27,7 @@ fun CollapsibleCard(
 ) {
     Card(
         modifier = modifier,
-        shape = itemShape,
+        shape = LocalKuteColors.current.section.shape,
         colors = CardDefaults.cardColors(
             containerColor = backgroundColor
         ),

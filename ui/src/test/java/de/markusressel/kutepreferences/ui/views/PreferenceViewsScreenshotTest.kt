@@ -2,11 +2,14 @@ package de.markusressel.kutepreferences.ui.views
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.test.SemanticsMatcher
@@ -15,6 +18,7 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTouchInput
+import androidx.compose.ui.unit.dp
 import com.github.takahirom.roborazzi.ExperimentalRoborazziApi
 import com.github.takahirom.roborazzi.captureScreenRoboImage
 import de.markusressel.kutepreferences.core.DefaultKuteNavigator
@@ -37,6 +41,7 @@ import de.markusressel.kutepreferences.core.preference.number.slider.KuteIntSlid
 import de.markusressel.kutepreferences.core.preference.select.KuteChoicePreference
 import de.markusressel.kutepreferences.core.preference.select.KuteMultiChoicePreference
 import de.markusressel.kutepreferences.core.preference.select.MultiSelectionPreferenceBehavior
+import de.markusressel.kutepreferences.core.preference.section.KuteSection
 import de.markusressel.kutepreferences.core.preference.select.SingleSelectionPreferenceBehavior
 import de.markusressel.kutepreferences.core.preference.text.KutePasswordPreference
 import de.markusressel.kutepreferences.core.preference.text.KuteTextPreference
@@ -44,7 +49,9 @@ import de.markusressel.kutepreferences.core.preference.text.KuteUrlPreference
 import de.markusressel.kutepreferences.core.preference.text.PasswordPreferenceBehavior
 import de.markusressel.kutepreferences.core.preference.text.TextPreferenceBehavior
 import de.markusressel.kutepreferences.core.preference.text.UrlPreferenceBehavior
+import de.markusressel.kutepreferences.ui.theme.KuteColors
 import de.markusressel.kutepreferences.ui.theme.KutePreferencesTheme
+import de.markusressel.kutepreferences.ui.theme.KutePreferencesThemeDefaults
 import de.markusressel.kutepreferences.ui.views.listitems.DecimalSliderPreference
 import de.markusressel.kutepreferences.ui.views.listitems.IntRangeSliderPreference
 import de.markusressel.kutepreferences.ui.views.listitems.MultiSelectionPreference
@@ -88,11 +95,12 @@ class PreferenceViewsScreenshotTest {
         expand: String? = null,
         action: () -> Unit = {},
         darkTheme: Boolean = false,
+        colors: @Composable () -> KuteColors = { KutePreferencesThemeDefaults.defaultColors },
         content: @Composable () -> Unit,
     ) {
         composeRule.setContent {
             val page = @Composable {
-                KutePreferencesTheme {
+                KutePreferencesTheme(colors = colors()) {
                     Surface { Column { content() } }
                 }
             }
@@ -357,7 +365,12 @@ class PreferenceViewsScreenshotTest {
         screenshot("large_screen") { KutePreferencesScreen(kuteViewModel = viewModel) }
     }
 
-    private fun twoPanesScreenshot(name: String, darkTheme: Boolean = false, openCategory: Boolean = true) {
+    private fun twoPanesScreenshot(
+        name: String,
+        darkTheme: Boolean = false,
+        openCategory: Boolean = true,
+        colors: @Composable () -> KuteColors = { KutePreferencesThemeDefaults.defaultColors },
+    ) {
         val viewModel = KutePreferencesViewModel(DefaultKuteNavigator())
         viewModel.initPreferencesTree(
             listOf(
@@ -378,7 +391,7 @@ class PreferenceViewsScreenshotTest {
             viewModel.navigateTo("network")
         }
 
-        screenshot(name, darkTheme = darkTheme) { KutePreferencesScreen(kuteViewModel = viewModel) }
+        screenshot(name, darkTheme = darkTheme, colors = colors) { KutePreferencesScreen(kuteViewModel = viewModel) }
     }
 
     @Test
@@ -392,6 +405,54 @@ class PreferenceViewsScreenshotTest {
     @Test
     @Config(sdk = [34], qualifiers = "w1000dp-h500dp-xhdpi")
     fun twoPanesWithoutOpenCategory() = twoPanesScreenshot("two_panes_empty", openCategory = false)
+
+    @Test
+    @Config(sdk = [34], qualifiers = "w1000dp-h500dp-xhdpi")
+    fun `themed cards`() {
+        val viewModel = KutePreferencesViewModel(DefaultKuteNavigator())
+        viewModel.initPreferencesTree(
+            listOf(
+                KuteCategory(
+                    key = "network",
+                    title = "Network",
+                    description = "Wifi and mobile data",
+                    children = listOf(
+                        KuteSection(
+                            key = "connection",
+                            title = "Connection",
+                            children = listOf(
+                                KuteBooleanPreference(
+                                    key = "wifi",
+                                    title = "Wifi",
+                                    defaultValue = true,
+                                    dataProvider = dataProvider,
+                                ),
+                            ),
+                        ),
+                    ),
+                ),
+                KuteCategory(key = "display", title = "Display", description = "Theme and font size"),
+            ),
+        )
+        viewModel.navigateTo("network")
+
+        screenshot(
+            name = "themed_cards",
+            colors = {
+                val defaults = KutePreferencesThemeDefaults.defaultColors
+                defaults.copy(
+                    category = defaults.category.copy(
+                        selectedCardBackgroundColor = Color(0xFFFFCC80),
+                        shape = RectangleShape,
+                    ),
+                    section = defaults.section.copy(
+                        titleTextStyle = MaterialTheme.typography.titleMedium,
+                        shape = CutCornerShape(16.dp),
+                    ),
+                )
+            },
+        ) { KutePreferencesScreen(kuteViewModel = viewModel) }
+    }
 
     @Test
     fun searchWithoutResults() = screenshot("search_no_results") {
