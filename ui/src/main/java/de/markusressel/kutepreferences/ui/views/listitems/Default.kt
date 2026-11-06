@@ -7,7 +7,6 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -17,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -78,7 +78,7 @@ internal fun DefaultPreferenceListItem(
 @Composable
 internal fun DefaultPreferenceListItemCard(
     modifier: Modifier = Modifier,
-    shape: RoundedCornerShape = itemShape,
+    shape: Shape = LocalKuteColors.current.section.shape,
     onClick: () -> Unit,
     content: @Composable () -> Unit,
 ) {

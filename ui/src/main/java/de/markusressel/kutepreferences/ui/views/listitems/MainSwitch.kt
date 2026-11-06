@@ -22,7 +22,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import de.markusressel.kutepreferences.core.preference.bool.BooleanPreferenceBehavior
 import de.markusressel.kutepreferences.core.preference.bool.KuteMainSwitchPreference
 import de.markusressel.kutepreferences.ui.theme.KutePreferencesTheme
-import de.markusressel.kutepreferences.ui.theme.itemShape
+import de.markusressel.kutepreferences.ui.theme.LocalKuteColors
 import de.markusressel.kutepreferences.ui.theme.listItemMinHeight
 import de.markusressel.kutepreferences.ui.util.CombinedPreview
 import de.markusressel.kutepreferences.ui.util.clickAction
@@ -51,7 +51,8 @@ fun MainSwitchPreference(
         modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 8.dp),
-        shape = itemShape,
+        // NOTE: a card next to the sections, so it takes their shape
+        shape = LocalKuteColors.current.section.shape,
         colors = CardDefaults.cardColors(
             containerColor = containerColor,
             contentColor = contentColor,

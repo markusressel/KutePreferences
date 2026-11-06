@@ -371,9 +371,9 @@ KutePreferencesTheme(
 }
 ```
 
-Besides colors, the category and section cards take their `elevation` and `shape` from the theme, the section its
-`titleTextStyle`, and the category the color of its card while it is open next to the list on a large screen
-(`selectedCardBackgroundColor`).
+Besides colors, the category and section cards take their `elevation` and `shape` from the theme, and the section its
+`titleTextStyle`. The main switch card takes the shape of the sections. `selectedCardBackgroundColor` is the color of
+the category card while the category is open next to the list on a large screen.
 
 ## Implement custom preferences
 
