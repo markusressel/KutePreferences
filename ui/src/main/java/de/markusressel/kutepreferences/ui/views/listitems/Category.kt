@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.takeOrElse
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
@@ -38,9 +39,10 @@ fun KuteCategoryView(
 
     val selection = LocalCategorySelection.current
     val isSelected = selection?.selectedKey == behavior.preferenceItem.key
+    val theme = LocalKuteColors.current.category
     val containerColor = when {
-        isSelected -> MaterialTheme.colorScheme.secondaryContainer
-        else -> LocalKuteColors.current.category.cardBackgroundColor
+        isSelected -> theme.selectedCardBackgroundColor.takeOrElse { MaterialTheme.colorScheme.secondaryContainer }
+        else -> theme.cardBackgroundColor
     }
 
     Card(
@@ -50,8 +52,8 @@ fun KuteCategoryView(
             .highlightingShimmer(uiState.shimmering, behavior::clearHighlight)
             .padding(horizontal = 8.dp)
             .then(modifier),
-        elevation = CardDefaults.cardElevation(LocalKuteColors.current.category.elevation),
-        shape = itemShape,
+        elevation = CardDefaults.cardElevation(theme.elevation),
+        shape = theme.shape,
         colors = CardDefaults.cardColors(
             containerColor = containerColor
         ),
@@ -83,11 +85,11 @@ fun KuteCategoryView(
 
             DefaultPreferenceListItemCardContent(
                 icon = icon,
-                iconColor = LocalKuteColors.current.category.iconColor,
+                iconColor = theme.iconColor,
                 title = behavior.preferenceItem.title,
-                titleColor = LocalKuteColors.current.category.titleColor,
+                titleColor = theme.titleColor,
                 subtitle = behavior.preferenceItem.description,
-                subtitleColor = LocalKuteColors.current.category.subtitleColor,
+                subtitleColor = theme.subtitleColor,
             )
         }
     }

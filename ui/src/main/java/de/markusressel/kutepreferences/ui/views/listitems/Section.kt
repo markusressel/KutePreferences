@@ -46,10 +46,11 @@ fun KuteSectionView(
                     ),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
+                val theme = LocalKuteColors.current.section
                 Text(
                     text = behavior.preferenceItem.title,
-                    style = MaterialTheme.typography.headlineSmall.copy(
-                        color = LocalKuteColors.current.section.titleTextColor
+                    style = (theme.titleTextStyle ?: MaterialTheme.typography.headlineSmall).copy(
+                        color = theme.titleTextColor
                     ),
                 )
                 Spacer(modifier = Modifier.height(16.dp))
