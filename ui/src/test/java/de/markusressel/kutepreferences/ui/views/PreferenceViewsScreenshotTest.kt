@@ -417,6 +417,12 @@ class PreferenceViewsScreenshotTest {
                     title = "Network",
                     description = "Wifi and mobile data",
                     children = listOf(
+                        KuteMainSwitchPreference(
+                            key = "network_enabled",
+                            title = "Use the network",
+                            defaultValue = true,
+                            dataProvider = dataProvider,
+                        ),
                         KuteSection(
                             key = "connection",
                             title = "Connection",
