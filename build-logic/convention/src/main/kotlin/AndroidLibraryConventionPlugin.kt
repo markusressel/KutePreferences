@@ -28,7 +28,10 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
                 disableUnnecessaryAndroidTests(target)
             }
             val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
-            configurations.configureEach {
+            // Not on the lint configurations (androidLintTool and the like): lint brings its own
+            // kotlin-reflect, which must match its kotlin-stdlib, and a forced newer stdlib makes lint
+            // fail with "Can't initialize detector com.android.tools.lint.checks.InferredThreadDetector".
+            configurations.matching { !it.name.startsWith("androidLint") }.configureEach {
                 resolutionStrategy {
                     force(libs.findLibrary("kotlin-stdlib").get())
                     force(libs.findLibrary("kotlin-stdlib-jdk8").get())
