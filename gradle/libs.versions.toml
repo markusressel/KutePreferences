@@ -21,7 +21,7 @@ kotlinCoroutinesAndroid = "1.11.0"
 ksp = "2.3.13"
 robolectric = "4.17"
 detekt = "2.0.0-alpha.6"
-roborazzi = "1.78.0"
+roborazzi = "1.79.0"
 androidxTestCore = "1.7.0"
 
 [libraries]
