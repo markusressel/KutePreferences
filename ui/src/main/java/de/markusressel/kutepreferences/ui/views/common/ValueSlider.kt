@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
+import androidx.compose.material3.SliderState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -120,15 +121,16 @@ internal fun ValueSlider(
                 text = markerText,
             )
 
+            val sliderState = remember(steps, valueRange) { SliderState(sliderValue, steps, valueRange) }
+            sliderState.value = sliderValue
+
             Slider(
                 modifier = Modifier
                     .padding(top = 14.dp)
                     .onSizeChanged { sliderWidthPx = it.width }
                     .padding(horizontal = SliderTrackOverhang),
-                value = sliderValue,
+                state = sliderState,
                 enabled = isSliderAnimating.not(),
-                valueRange = valueRange,
-                steps = steps,
                 onValueChange = {
                     if (isSliderAnimating.not()) {
                         // NOTE: this also keeps a slider without steps in between its values on a valid value
@@ -151,7 +153,7 @@ internal fun ValueSlider(
                 track = {
                     KuteSliderTrack(
                         activeStart = null,
-                        activeEnd = sliderFraction(it.value, it.valueRange),
+                        activeEnd = sliderFraction(it.value, it.trackRange),
                         steps = it.steps,
                         enabled = isSliderAnimating.not(),
                     )

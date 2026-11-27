@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.RangeSlider
+import androidx.compose.material3.RangeSliderState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.PointerEventPass
@@ -237,15 +238,26 @@ private fun RangeSliderContent(
             text = text,
         )
 
+        val sliderState = remember(steps, valueRange) {
+            RangeSliderState(sliderValue.start, sliderValue.endInclusive, steps, valueRange)
+        }
+        // each value is coerced to the other one, so the one that moves away from the other goes first
+        if (sliderValue.start > sliderState.endValue) {
+            sliderState.endValue = sliderValue.endInclusive
+            sliderState.startValue = sliderValue.start
+        } else {
+            sliderState.startValue = sliderValue.start
+            sliderState.endValue = sliderValue.endInclusive
+        }
+
         RangeSlider(
             modifier = Modifier
                 .padding(top = 14.dp)
                 .onSizeChanged { sliderWidthPx = it.width }
                 .trackTouch { isTouched = it }
                 .padding(horizontal = SliderTrackOverhang),
-            value = sliderValue,
+            state = sliderState,
             enabled = animating.not(),
-            valueRange = valueRange,
             onValueChange = {
                 if (animating.not()) {
                     sliderPosition = when {
@@ -263,13 +275,12 @@ private fun RangeSliderContent(
 
                 onValueChangeFinished(sliderPosition)
             },
-            startInteractionSource = startInteractionSource,
-            endInteractionSource = endInteractionSource,
-            steps = steps,
+            startThumbInteractionSource = startInteractionSource,
+            endThumbInteractionSource = endInteractionSource,
             track = {
                 KuteSliderTrack(
-                    activeStart = sliderFraction(it.activeRangeStart, it.valueRange),
-                    activeEnd = sliderFraction(it.activeRangeEnd, it.valueRange),
+                    activeStart = sliderFraction(it.startValue, it.trackRange),
+                    activeEnd = sliderFraction(it.endValue, it.trackRange),
                     steps = it.steps,
                     enabled = animating.not(),
                     stopFractions = stops.takeIf { it.isNotEmpty() }?.map { stop -> sliderFraction(stop, valueRange) },
